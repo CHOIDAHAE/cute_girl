@@ -49,7 +49,7 @@
     position : absolute;
 }
 
-.btnStyle {
+.btnNew {
     position: relative;
     -webkit-box-flex: 0;
     -ms-flex: none;
@@ -64,4 +64,25 @@
     vertical-align: top;
     line-height: normal;
     color: #000;
+}
+
+.btnUpload {
+    position: relative;
+    -webkit-box-flex: 0;
+    -ms-flex: none;
+    flex: none;
+    height: 32px;
+    padding: 0 10px;
+    margin-left: 8px;
+    border: 0;
+    border-radius: 4px;
+    background-color: #4287f5;
+    font-weight: 700;
+    vertical-align: top;
+    line-height: normal;
+    color: rgb(255, 255, 255);
+}
+
+.btnArea {
+    text-align : right;
 }
