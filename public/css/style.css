@@ -1,33 +1,39 @@
 @charset "utf-8";
 
-/* 상단바 */
-.header-box {
-    margin-top:0.2em;
-    margin-left:10em;
-    margin-right:10em;
-    border:solid;
-    min-height:3em;
-    background-color: #507854;
+/* 전체화면 */
+.whole_body {
+    height:100%;
 }
 
-/* 메뉴 */
+/* 상단바 */
+.header-box {
+    /*min-height:3em;*/
+    height:55px;
+    background-color: gray;
+    max-width: 100%;
+    color:white;
+}
+
+.top_title {
+    font-size : 30px;
+    margin:0;
+    /*font-style*/
+}
+
+/* 메뉴 영역 */
 .menu-box{
-    margin-left:10em;
-    margin-top:4em;
-    width:15%;
-    height:82%;
-    float:left;
-    border:solid;
-    background-color: #82d18a;
+    width:242px;
+    height:100%;
+    background-color: #dadada;
+    float: left;
+    padding: 8px;
 }
 
 /* 메인화면 */
 .main-box{
-    margin-left:29em;
-    margin-right:10em;
-    margin-top:0.8em;
-    height:82%;
-    border:solid;
+    height:100%;
+    background-color:beige;
+    padding: 8px;
 }
 
 /* 메뉴 리스트 */
@@ -36,16 +42,25 @@
     margin-left: -25px;
 }
 
-.listSbBox {
-    top:10px;
-    float:right;
-}
-
 /* 정렬기준 */
 .formBox {
-    top:5.5em;
-    right:11em;
-    position : absolute;
+    width: 100px;
+    height: 32px;
+    display: inline-block;
+    float: right;
+    margin-right:10px;
+}
+
+.listSbBox {
+    width: 100%;
+    height: 100%;
+    font-weight: 700;
+    border-radius: 4px;
+    border: 1px solid;
+    box-sizing: border-box;
+    letter-spacing: -0.3px;
+    transition: 0.2s;
+    text-align: center;
 }
 
 .btnStyle {

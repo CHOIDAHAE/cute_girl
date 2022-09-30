@@ -18,31 +18,34 @@
         </script>
     </head>
     <body>
-        <div id="menu" class="menu-box">
-            메뉴 영역
-            <ul class="list">
-                <li><a href="/photo" target="iframe">사진</a></li>
-                <li><a href="/movie" target="iframe">동영상</a></li>
-                <li><a href="/document" target="iframe">문서</a></li>
-                <li><a href="/music" target="iframe">음악</a></li>
-                <li><a href="/trash" target="_blank">휴지통</a></li>
-            </ul>
-        </div>
-        <div id="header" class="header-box">
-            상단바
-            <div id="test_button">
-                <button id="testBtn" class="btnStyle">테스트</button>
+        <div class="whole_body">
+            <div id="header" class="header-box">
+                <p class="top_title">myDrive</p>
             </div>
-        </div>
-        <div>
-            <form class="formBox">
-                <select name="ListType" id="sortSbBox" class="listSbBox" onChange="selectNayeol()">
-                    <option value="none"> 정렬 기준 </option>
-                    <option value="name"> 이름순 </option>
-                    <option value="date"> 날짜순 </option>
-                </select>
-            </form>               
-            <div id="main" class="main-box">relative</div>
+            <div>            
+                <div id="main" class="main-box">
+                    <div id="menu" class="menu-box">
+                        메뉴 영역
+                        <ul class="list">
+                            <li><a href="/photo" target="iframe">사진</a></li>
+                            <li><a href="/movie" target="iframe">동영상</a></li>
+                            <li><a href="/document" target="iframe">문서</a></li>
+                            <li><a href="/music" target="iframe">음악</a></li>
+                            <li><a href="/trash" target="_blank">휴지통</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        메인 영역
+                    </div>
+                    <form class="formBox">
+                        <select name="ListType" id="sortSbBox" class="listSbBox" onChange="selectNayeol()">
+                            <option value="none"> 정렬 기준 </option>
+                            <option value="name"> 이름순 </option>
+                            <option value="date"> 날짜순 </option>
+                        </select>
+                    </form> 
+                </div>
+            </div>
         </div>
     </body>
     </html> 
