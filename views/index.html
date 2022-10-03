@@ -2,6 +2,7 @@
     <head>
         <meta charset="utf-8">    
         <link href="../css/style.css?after" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" />
         <script>
             /* 정렬기준 변경 이벤트 */
             function selectNayeol(){
@@ -20,22 +21,124 @@
     <body>
         <div class="whole_body">
             <div id="header" class="header-box">
-                <p class="top_title">myDrive</p>
+                <h1 class="top_title">
+                    <a href="/">myDrive</a>
+                </h1>
             </div>
-            <div>            
-                <div id="main" class="main-box">
-                    <div id="menu" class="menu-box">
-                        메뉴 영역
+            <div id="main" class="main-part">
+                <div id="menu" class="menu-area">
+                    <div class="menu-box">
                         <ul class="list">
-                            <li><a href="/photo" target="iframe">사진</a></li>
-                            <li><a href="/movie" target="iframe">동영상</a></li>
-                            <li><a href="/document" target="iframe">문서</a></li>
-                            <li><a href="/music" target="iframe">음악</a></li>
-                            <li><a href="/trash" target="_blank">휴지통</a></li>
+                            <li>
+                                <a class="menu-item">
+                                    <i class="fa-sharp fa-solid fa-chevron-down ico_down"></i>
+                                    <span>모든 파일</span>
+                                </a>
+                            </li>
+                            <div class="foldable_menu">
+                                <ul class="list">
+                                    <li>
+                                        <a href="/photo" target="iframe" class="tree_item">
+                                            사진
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/movie" target="iframe" class="tree_item">
+                                            동영상
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/document" target="iframe" class="tree_item">
+                                            문서
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/music" target="iframe" class="tree_item">
+                                            음악
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/trash" target="_blank" class="tree_item">
+                                            휴지통
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <li>
+                                <a class="menu-item" style="padding-left: 40px;">
+                                    <span>즐겨찾기</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="menu-item">
+                                    <i class="fa-sharp fa-solid fa-chevron-down ico_down"></i>
+                                    <span>사진</span>
+                                </a>
+                            </li>
+                            <div class="foldable_menu">
+                                <ul class="list">
+                                    <li>
+                                        <a href="/photo" target="iframe" class="tree_item">
+                                            사진
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/movie" target="iframe" class="tree_item">
+                                            동영상
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/document" target="iframe" class="tree_item">
+                                            문서
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/music" target="iframe" class="tree_item">
+                                            음악
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
                         </ul>
                     </div>
-                    <div>
+                    <div id="menu_bottom" class="menu_bottom">
+                        <div id="myinfo_area" class="myinfo_area">
+                            <div class="capacity_info">
+                                <p class="text">
+                                    <a>
+                                        <strong>22.8GB</strong>
+                                        <span>&nbsp;/&nbsp;</span>
+                                        <span>30GB</span>
+                                    </a>
+                                    <span class="status">
+                                        <a>여유 7.2GB</a>
+                                    </span>
+                                </p>
+                                <a class="graph">
+                                    <span class="bar" style="width: 77%;">
+                                    </span>
+                                </a>
+                            </div>
+                            <button type="button" class="btn_purchase">
+                                이용권구매
+                                <em> (월 1,650원부터)</em>
+                            </button>
+                        </div>
+                        <div class="trash_wrap">
+                            <a class="trash">
+                                휴지통
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="main-box">
+                    <span>
                         메인 영역
+                    </span>
+                    <div class="button-wrap">
+                        <button class="btnStyle">
+                            버튼
+                        </button>
                     </div>
                     <form class="formBox">
                         <select name="ListType" id="sortSbBox" class="listSbBox" onChange="selectNayeol()">
@@ -43,7 +146,7 @@
                             <option value="name"> 이름순 </option>
                             <option value="date"> 날짜순 </option>
                         </select>
-                    </form> 
+                    </form>
                 </div>
             </div>
         </div>
