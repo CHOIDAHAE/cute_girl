@@ -1,3 +1,7 @@
+var bodyParser = require('body-parser')
+
+var _ = require('underscore');
+
 var express = require('express');
 var app=express();
 var router = require('./router/main')(app);
