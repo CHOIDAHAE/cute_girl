@@ -1,0 +1,29 @@
+TCM_EMPLYR          사용자
+- EMPLYR_SN         사용자 일련번호
+- EMPLYR_NM         사용자명
+- EMPLYR_PASSWORD   사용자 비밀번호
+- PASSWORD_ERROR_CO 비밀번호 오류수
+- EMPLYR_ID         사용자ID
+
+
+TCM_EMPLYRBY_BKMK   사용자별 즐겨찾기
+- EMPLYR_SN         사용자 일련번호
+- SYS_ID            시스템ID
+- PROGRM_ID         프로그램ID
+
+
+TCM_ATCHMNFL        첨부파일
+- ATCHMNFL_SN       첨부파일 일련번호
+- USE_AT            사용여부(얘를 휴지통으로 써도 될듯)
+
+
+TCM_ATCHMNFL_DETAIL 첨부파일 상세
+ATCHMNFL_SN         첨부파일 일련번호
+FILE_SN             파일일련번호
+FILE_STRE_COURS_NM  파일저장경로명
+FILE_NM             파일명
+FILE_EXTSN_NM       파일확장자명
+FILE_MG             파일크기 (사이드의 용량바 관련해선 필요할지도)
+
+**이건 상수도 기준인데, 우리는 첨부파일에 사용자 일련번호도 넣어야 하지 않을까
+**
