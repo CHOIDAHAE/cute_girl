@@ -1,55 +1,254 @@
 @charset "utf-8";
 
+body, ul{
+    margin:0;
+    padding:0;
+}
+
+body{
+    height:100%;
+    overflow: hidden;
+}
+
+/* 전체화면 */
+.whole_body {
+    height:100%;
+}
+
 /* 상단바 */
+#header h1 > a{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 156px;
+    padding-left: 20px;
+    z-index: 30;
+    overflow: hidden;
+    margin:0;
+    text-decoration: none;
+    color: white;
+}
+
 .header-box {
-    margin-top:0.2em;
-    margin-left:10em;
-    margin-right:10em;
-    border:solid;
-    min-height:3em;
-    background-color: #507854;
+    background-color: #4078ff;
+    max-width: 100%;
+    color:white;
+    height:55px;
+    position:relative;
 }
 
-/* 메뉴 */
+.top_title {
+    /*font-style:;*/
+}
+
+/* 메뉴 영역 */
+.menu-area{
+    width:256px;
+    height:100%;
+    background-color: #F6F7FA;
+    float: left;
+    color: #000;
+}
+
 .menu-box{
-    margin-left:10em;
-    margin-top:4em;
-    width:15%;
-    height:82%;
-    float:left;
-    border:solid;
-    background-color: #82d18a;
-}
-
-/* 메인화면 */
-.main-box{
-    margin-left:29em;
-    margin-right:10em;
-    margin-top:0.8em;
-    height:82%;
-    border:solid;
+    padding: 13px 8px 0 8px;
 }
 
 /* 메뉴 리스트 */
 .list {
+    font-size: 16px;
+    line-height: 19px;
     list-style: none;
-    margin-left: -25px;
 }
 
-/* 정렬기준 */
-.listSbBox {
-    top:10px;
-    float:right;
+.list li {
+    cursor: pointer;
 }
+
+.list li:hover{
+    background-color: #ebeaeb;
+    border-radius: 4px;
+
+}
+
+.menu-box .list > li {
+    margin-top: 6px;
+}
+
+.menu-box .list > li > a {
+    text-decoration: none;
+    color: #000;
+}
+
+.menu-item{
+    display: block;
+    padding: 6px 22px;
+}
+
+.foldable_menu{
+    margin: 2px 25px 0;
+}
+
+.foldable_menu > ul> li > a {
+    text-decoration: none;
+    color: #000;
+    font-size: 13px;
+}
+
+.tree_item{
+    position: relative;
+    padding: 0 20px;
+    line-height: 28px;
+    cursor: pointer;
+}
+
+/************ 용량바 ************/
+.menu_bottom{
+    border-top: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    bottom: 50px;
+    width: 256px;
+    background-color: #F6F7FA;
+    line-height: normal;
+    box-sizing: border-box;
+}
+
+.myinfo_area{
+    padding: 25px 13px 10px 13px;
+}
+
+.capacity_info .text{
+    display: flex;
+    line-height: 17px;
+    letter-spacing: -0.25px;
+    display: inline-block;
+    margin: 0 4px;
+    color: #1e1e1e;
+    cursor: pointer;
+    width: 100%;
+}
+
+.status{
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-left: 5px;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 17px;
+    letter-spacing: -0.3px;
+    text-align: right;
+    color: #9398A0;
+    float:right;
+    margin-right:10px;
+}
+
+
+.capacity_info .graph{
+    display: block;
+    overflow: hidden;
+    position: relative;
+    height: 5px;
+    margin-top: 8px;
+    border-radius: 3px;
+    background-color: #dadde2;
+}
+
+.capacity_info .graph .bar{
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    border-radius: 3px;
+    background-color: #4078ff;
+}
+
+.btn_purchase{
+    width: 100%;
+    height: 31px;
+    margin-top: 15px;
+    padding: 0;
+    border: 1px solid #4078ff;
+    border-radius: 4px;
+    background-color: transparent;
+    font-weight: 700;
+    line-height: 30px;
+    letter-spacing: -0.3px;
+    color: #4078ff;
+    cursor: pointer;
+}
+
+.btn_purchase em{
+    font-size: 11px;
+    font-weight: 500;
+    vertical-align: top;
+    font-style: normal;
+}
+
+.trash_wrap{
+    padding: 0 17px;
+}
+
+.trash{
+    position: relative;
+    display: inline-block;
+    padding: 5px 10px 5px 7px;
+    border-radius: 4px;
+    line-height: 20px;
+    font-size: 13px;
+    letter-spacing: -0.5px;
+    color: #000;
+    margin-left: 8px;
+    cursor: pointer;
+}
+
+/************ 메인 ************/
+.main-part{
+    height:100%;
+    background-color:#fff;
+    /*padding: 8px;*/
+}
+
+/* 메인화면 */
+.main-box{
+    width:auto;
+    height:100%;
+    display: flow-root;
+    padding-top: 8px;
+}
+
 
 /* 정렬기준 */
 .formBox {
-    top:5.5em;
-    right:11em;
-    position : absolute;
+    width: 100px;
+    height: 32px;
+    display: inline-block;
+    float: right;
+    margin-right:10px;
 }
 
-.btnNew {
+.listSbBox {
+    width: 100%;
+    height: 100%;
+    font-weight: 700;
+    border-radius: 4px;
+    border: 1px solid;
+    box-sizing: border-box;
+    letter-spacing: -0.3px;
+    transition: 0.2s;
+    text-align: center;
+}
+
+/* 버튼스타일 */
+.button-wrap{
+    margin-right:10px;
+    float:right;
+}
+
+.btnStyle {
     position: relative;
     -webkit-box-flex: 0;
     -ms-flex: none;
@@ -66,7 +265,7 @@
     color: #000;
 }
 
-.btnUpload {
+.btn_UploadStyle {
     position: relative;
     -webkit-box-flex: 0;
     -ms-flex: none;
@@ -76,13 +275,15 @@
     margin-left: 8px;
     border: 0;
     border-radius: 4px;
-    background-color: #4287f5;
+    background-color: #4078ff;
     font-weight: 700;
     vertical-align: top;
     line-height: normal;
-    color: rgb(255, 255, 255);
+    color: #fff;
 }
 
-.btnArea {
-    text-align : right;
+/*************** 아이콘 ***************/
+.ico_down{
+    font-size:11px;
+    color:gray;
 }
