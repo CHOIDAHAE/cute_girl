@@ -29,11 +29,36 @@ module.exports = function(app){
 
     var array = [];
     for(var i =0; i < 5; i++){
-        array[i] = {
-            id : i,
-            value : i*i
-        };
-    }
+    array[i] = {
+        id : i,
+        value : i*i
+    };
+}
+
+// var output = _.filter(array, function(item){
+//     return item.value < 50;
+// });
+// console.log('filter', output);
+
+// var output = _.reject(array, function(item){
+//     return item.value < 50;
+// });
+// console.log('reject', output);
+
+// var output = _.map(array, function(item){
+//     return item.id + ':' + item.value;
+// });
+// console.log('map', output);
+
+// var output = _.find(array, function(item){
+//     return item.id == 5;
+// });
+// console.log('find', output);
+
+// var output = _.sordBy(array, function(item){
+//     return item.id;
+// });
+// console.log('sordBy', output);
 
     var files = [
         { Num : 1, fileSn : 1, fileNm : 'file1' }
