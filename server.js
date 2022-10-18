@@ -1,11 +1,15 @@
-var express = require('express');
-var app=express();
-var router = require('./router/main')(app);
+var bodyParser = require('body-parser')
+
+var _ = require('underscore');
 
 
 // app.get('/', function(req, res){
 //     res.send('Hello World');
 // })
+
+var express = require('express');
+var app=express();
+var router = require('./router/main')(app);
 
 app.set('views', './views');
 app.set('view engine', 'ejs');

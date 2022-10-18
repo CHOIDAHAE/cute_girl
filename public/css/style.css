@@ -216,7 +216,7 @@ details > summary {
 /************ 메인 ************/
 .main-part{
     height:100%;
-    background-color:beige;
+    background-color:#fff;
     /*padding: 8px;*/
 }
 
@@ -252,7 +252,8 @@ details > summary {
 
 /* 버튼스타일 */
 .button-wrap{
-    display: inline-block;
+    margin-right:10px;
+    float:right;
 }
 
 .btnStyle {
@@ -270,6 +271,23 @@ details > summary {
     vertical-align: top;
     line-height: normal;
     color: #000;
+}
+
+.btn_UploadStyle {
+    position: relative;
+    -webkit-box-flex: 0;
+    -ms-flex: none;
+    flex: none;
+    height: 32px;
+    padding: 0 10px;
+    margin-left: 8px;
+    border: 0;
+    border-radius: 4px;
+    background-color: #4078ff;
+    font-weight: 700;
+    vertical-align: top;
+    line-height: normal;
+    color: #fff;
 }
 
 /*************** 아이콘 ***************/
