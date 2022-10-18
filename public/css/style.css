@@ -95,6 +95,10 @@ body{
     font-size: 13px;
 }
 
+.pl40{
+    padding-left: 40px;
+}
+
 .tree_item{
     position: relative;
     padding: 0 20px;
