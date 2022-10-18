@@ -102,6 +102,10 @@ body{
     cursor: pointer;
 }
 
+details > summary {
+    list-style: none;
+}
+
 /************ 용량바 ************/
 .menu_bottom{
     border-top: 1px solid #ddd;
