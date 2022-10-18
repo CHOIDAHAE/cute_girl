@@ -116,7 +116,7 @@ details > summary {
     display: flex;
     flex-direction: column;
     position: absolute;
-    bottom: 50px;
+    bottom: 20px;
     width: 256px;
     background-color: #F6F7FA;
     line-height: normal;
@@ -196,11 +196,11 @@ details > summary {
     font-style: normal;
 }
 
-.trash_wrap{
+.bottom_wrap{
     padding: 0 17px;
 }
 
-.trash{
+.bottom{
     position: relative;
     display: inline-block;
     padding: 5px 10px 5px 7px;
@@ -212,6 +212,12 @@ details > summary {
     margin-left: 8px;
     cursor: pointer;
 }
+
+.bottom:hover{
+    background-color: #ebeaeb;
+    border-radius: 4px;
+}
+
 
 /************ 메인 ************/
 .main-part{
