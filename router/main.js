@@ -4,7 +4,7 @@ module.exports = function(app){
     })
 
     app.get('/photo', function(req, res){
-        res.render('photo.html');
+        res.render('photo.ejs');
     })
 
     app.get('/movie', function(req, res){
