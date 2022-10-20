@@ -8,6 +8,7 @@
         <link href="/css/ui.jqgrid.css" rel="stylesheet">
         <link href="../css/style.css?after" rel="stylesheet" type="text/css">
         <link href="../css/menu.css?after" rel="stylesheet" type="text/css">
+        <link href="../css/grid.css?after" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" />
 
         <!--<script type="text/javascript" src="/js/common/jquery/jquery-3.2.1.min.js"></script>
@@ -73,48 +74,49 @@
         <div class="whole_body">
             <div id="header" class="header-box">
                 <% include ./header %>
-            </div>            
+            </div>
             <div id="main" class="main-part">
+                <form class="formBox">
+                    <select name="ListType" id="sortSbBox" class="listSbBox" onChange="selectNayeol()">
+                        <option value="none"> 정렬 기준 </option>
+                        <option value="name"> 이름순 </option>
+                        <option value="date"> 날짜순 </option>
+                    </select>
+                </form>
+                <div class="button-wrap">
+                    <button class="btn_UploadStyle">
+                        <img src='../images/icon_download.png' width="20px" height="20px" alt="다운로드 아이콘">
+                        올리기
+                    </button>
+                    <button class="btnStyle">
+                        버튼
+                    </button>
+                </div>            
                 <% include ./menu %>
                 <div class="main-box">
-                    <div class="grid-wrap">
-                        <ul>
-                            <li title="test">
+                    <div>
+                        <ul class="item_data">
+                            <li title="test" class="item_fnc">
                                 <label for ="root">
-                                    <div></div>
                                     <a id="item">
                                         <div>
+                                            <!--
                                             <span id="file">
-                                                <img src="">
+                                                <i class="fa-regular fa-folder-open" width="150"></i>
+                                                <div class="item-name">
+                                                    test_folder
+                                                </div>
+                                            </span>-->
+                                            <span id="file">
+                                                <img src="../images/sample_image.jpg" class="img_item">
+                                                <div class="item-name">
+                                                    sample_image
+                                                </div>
                                             </span>
                                         </div>
-                                    </a>
-                                    <span class="checkbox">
-                                        <input id="" type="checkbox">
-                                        <label for="file">선택</label>
-                                    </span>
-                                    <button type="button" aria-pressed="false" title="즐겨찾기">
-                                        <i>즐겨찾기</i>
-                                    </button>
                                 </label>
                             </li>
                         </ul>
-                    </div>
-                    <form class="formBox">
-                        <select name="ListType" id="sortSbBox" class="listSbBox" onChange="selectNayeol()">
-                            <option value="none"> 정렬 기준 </option>
-                            <option value="name"> 이름순 </option>
-                            <option value="date"> 날짜순 </option>
-                        </select>
-                    </form>
-                    <div class="button-wrap">
-                        <button class="btn_UploadStyle">
-                            <img src='../images/icon_download.png' width="20px" height="20px" alt="다운로드 아이콘">
-                            올리기
-                        </button>
-                        <button class="btnStyle">
-                            버튼
-                        </button>
                     </div>
                 </div>
             </div>
