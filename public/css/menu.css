@@ -1,6 +1,8 @@
 
 /* 메뉴 영역 */
 .menu-area{
+    display: flex;
+    flex-direction: column;
     width:256px;
     height:100%;
     background-color: #F6F7FA;
@@ -10,6 +12,10 @@
 
 .menu-box{
     padding: 13px 8px 0 8px;
+    height: 75%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 76%;
 }
 
 /* 메뉴 리스트 */
@@ -17,6 +23,7 @@
     font-size: 16px;
     line-height: 19px;
     list-style: none;
+    padding-left: 0 !important;
 }
 
 .list li {
@@ -24,9 +31,8 @@
 }
 
 .list li:hover{
-    background-color: #ebeaeb;
+    background-color: #ebebeb;
     border-radius: 4px;
-
 }
 
 .menu-box .list > li {
@@ -38,7 +44,7 @@
     color: #000;
 }
 
-.menu-item{
+.menu_item{
     display: block;
     padding: 6px 22px;
 }
@@ -68,12 +74,60 @@ details > summary {
     list-style: none;
 }
 
+.lnb_box::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 25px;
+    right: 25px;
+    height: 1px;
+    background-color: #ebebeb;
+}
+
+.lnb_box {
+    margin-top: 14px;
+    padding-top: 14px;
+    position: relative;
+}
+
+.lnb_list {
+    font-size: 16px;
+    line-height: 19px;
+    list-style: none;
+    padding-left: 0 !important;
+}
+
+.lnb_list li:hover{
+    background-color: #ebebeb;
+    border-radius: 4px;
+}
+
+.setting{
+    padding-left:17px;
+    font-size: 13px;
+}
+
+.cursor_pointer{
+    cursor: pointer;
+}
+
+/***스크롤바***/
+::-webkit-scrollbar {
+    width: 8px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-thumb{
+    background-color: #d1d1d1;
+    border-radius: 8px;
+}
+
 /************ 용량바 ************/
 .menu_bottom{
     border-top: 1px solid #ddd;
-    display: flex;
+    /*display: flex;*/
     flex-direction: column;
-    position: absolute;
+    /*position: absolute;*/
     bottom: 20px;
     width: 256px;
     background-color: #F6F7FA;
