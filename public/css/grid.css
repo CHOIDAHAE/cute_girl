@@ -49,8 +49,30 @@ ul {
 }
 
 .img_item {
+    position : relative;
+    z-index: 1;
     border-radius: 5%;
     width: 150;
 }
 
 
+.btn_star::before {
+    content: '\f005';
+}
+
+.fa-star {
+    position : absolute;
+    z-index: 2;
+    opacity: 0;
+    border : none;
+    background-color: transparent;
+    color : white;
+    left : 26em;
+    top : 7em;
+    width:2em;
+}
+
+
+.file_item:hover .fa-star{
+    opacity: 1;
+}
