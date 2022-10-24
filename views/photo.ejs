@@ -1,0 +1,51 @@
+<html lang="ko">
+    <head>
+        <meta charset="utf-8">    
+    </head>
+    <style>
+        .list {
+            list-style: none;
+            margin-left: -25px;
+        }
+
+        .listSbBox {
+            top:10px;
+        }
+
+        .formBox {
+            border-style : solid;
+            text-align : right;
+        }
+    </style>
+    <body>
+        <table width="100%" height="100%" border="1px">
+            <tr height="15%">
+                <td rowspan="2" width="10%">
+                    메뉴 영역
+                    <ul class="list">
+                        <li><a href="/photo" target="iframe">사진</a></li>
+                        <li><a href="/movie" target="iframe">동영상</a></li>
+                        <li><a href="/document" target="iframe">문서</a></li>
+                        <li><a href="/music" target="iframe">음악</a></li>
+                        <li><a href="/trash" target="_blank">휴지통</a></li>
+                    </ul>
+                </td>
+                <td width="90%">
+                    상단바
+                </td>
+            </tr>
+            <tr height="85%">
+                <td>
+                    <form class="formBox">
+                        <select name="ListType" class="listSbBox">
+                            <option value="none"> 정렬 기준 </option>
+                            <option value="name"> 이름순 </option>
+                            <option value="date"> 날짜순 </option>
+                        </select>
+                    </form>               
+                    사진
+                </td>
+            </tr>
+        </table>
+    </body>
+    </html> 

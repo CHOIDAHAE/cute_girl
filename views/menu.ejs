@@ -1,0 +1,122 @@
+<div id="menu" class="menu-area">
+    <div class="menu-box">
+        <ul class="list">
+            <details>
+                <summary><li>
+                    <a class="menu_item">
+                        <i class="fa-sharp fa-solid fa-chevron-down ico_down"></i>
+                        <span>모든 파일</span>
+                    </a>
+                </li></summary>
+                <div class="foldable_menu">
+                    <ul class="list">
+                        <li>
+                            <a href="/photo" target="iframe" class="tree_item">
+                                사진
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/movie" target="iframe" class="tree_item">
+                                동영상
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/document" target="iframe" class="tree_item">
+                                문서
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/music" target="iframe" class="tree_item">
+                                음악
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </details>
+            <li>
+                <a class="menu_item pl40">
+                    <span>즐겨찾기</span>
+                </a>
+            </li>
+            <li>
+                <a href="/photo" target="iframe" class="menu_item pl40">
+                    사진
+                </a>
+            </li>
+            <li>
+                <a href="/movie" target="iframe" class="menu_item pl40">
+                    동영상
+                </a>
+            </li>
+            <li>
+                <a href="/document" target="iframe" class="menu_item pl40">
+                    문서
+                </a>
+            </li>
+            <li>
+                <a href="/music" target="iframe" class="menu_item pl40">
+                    음악
+                </a>
+            </li>
+        </ul>
+        <div class="lnb_box">
+            <ul class="lnb_list">
+                <li>
+                    <a class="menu_item setting cursor_pointer">
+                        <i class="fa-sharp fa-solid fa-gear"></i>
+                        환경설정
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div id="menu_bottom" class="menu_bottom">
+        <div id="myinfo_area" class="myinfo_area">
+            <div class="capacity_info">
+                <p class="text">
+                    <a>
+                        <strong>22.8GB</strong>
+                        <span>&nbsp;/&nbsp;</span>
+                        <span>30GB</span>
+                    </a>
+                    <span class="status">
+                        <a>여유 7.2GB</a>
+                    </span>
+                </p>
+                <a class="graph">
+                    <span class="bar" style="width: 77%;">
+                    </span>
+                </a>
+            </div>
+            <!--<div class="capacity_info">
+				<p class="text">
+					<a>
+					<span><strong><c:out value='${capacityInfo.capacity}' /></strong></span>
+					<span>&nbsp;/&nbsp;</span>
+					<span>200GB</span>
+					</a>
+					<span class="status">
+						<a>여유<c:out value='${capacityInfo.extra}' />GB</a>
+					</span>
+				</p>
+				<a class="graph">
+					<span class="bar" style="width: <c:out value='${capacityInfo.percentage}' />%;"></span>
+				</a>
+			</div>-->
+            <button type="button" class="btn_purchase">
+                이용권구매
+                <em> (월 1,650원부터)</em>
+            </button>
+        </div>
+        <div class="bottom_wrap">
+            <a class="bottom">
+                <i class="fa-solid fa-trash"></i>
+                휴지통
+            </a>
+            <a class="bottom">
+                <i class="fa-solid fa-folder-open"></i>
+                파일 정리하기
+            </a>
+        </div>
+    </div>
+</div>

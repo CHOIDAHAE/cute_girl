@@ -1,0 +1,231 @@
+
+/* 메뉴 영역 */
+.menu-area{
+    display: flex;
+    flex-direction: column;
+    width:256px;
+    height:100%;
+    background-color: #F6F7FA;
+    float: left;
+    color: #000;
+}
+
+.menu-box{
+    padding: 13px 8px 0 8px;
+    height: 75%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 76%;
+}
+
+/* 메뉴 리스트 */
+.list {
+    font-size: 16px;
+    line-height: 19px;
+    list-style: none;
+    padding-left: 0 !important;
+}
+
+.list li {
+    cursor: pointer;
+}
+
+.list li:hover{
+    background-color: #ebebeb;
+    border-radius: 4px;
+}
+
+.menu-box .list > li {
+    margin-top: 6px;
+}
+
+.menu-box .list > li > a {
+    text-decoration: none;
+    color: #000;
+}
+
+.menu_item{
+    display: block;
+    padding: 6px 22px;
+}
+
+.foldable_menu{
+    margin: 2px 25px 0;
+}
+
+.foldable_menu > ul> li > a {
+    text-decoration: none;
+    color: #000;
+    font-size: 13px;
+}
+
+.pl40{
+    padding-left: 40px;
+}
+
+.tree_item{
+    position: relative;
+    padding: 0 20px;
+    line-height: 28px;
+    cursor: pointer;
+}
+
+details > summary {
+    list-style: none;
+}
+
+.lnb_box::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 25px;
+    right: 25px;
+    height: 1px;
+    background-color: #ebebeb;
+}
+
+.lnb_box {
+    margin-top: 14px;
+    padding-top: 14px;
+    position: relative;
+}
+
+.lnb_list {
+    font-size: 16px;
+    line-height: 19px;
+    list-style: none;
+    padding-left: 0 !important;
+}
+
+.lnb_list li:hover{
+    background-color: #ebebeb;
+    border-radius: 4px;
+}
+
+.setting{
+    padding-left:17px;
+    font-size: 13px;
+}
+
+.cursor_pointer{
+    cursor: pointer;
+}
+
+/***스크롤바***/
+::-webkit-scrollbar {
+    width: 8px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-thumb{
+    background-color: #d1d1d1;
+    border-radius: 8px;
+}
+
+/************ 용량바 ************/
+.menu_bottom{
+    border-top: 1px solid #ddd;
+    /*display: flex;*/
+    flex-direction: column;
+    /*position: absolute;*/
+    bottom: 20px;
+    width: 256px;
+    background-color: #F6F7FA;
+    line-height: normal;
+    box-sizing: border-box;
+}
+
+.myinfo_area{
+    padding: 25px 13px 10px 13px;
+}
+
+.capacity_info .text{
+    display: flex;
+    line-height: 17px;
+    letter-spacing: -0.25px;
+    display: inline-block;
+    margin: 0 4px;
+    color: #1e1e1e;
+    cursor: pointer;
+    width: 100%;
+}
+
+.status{
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-left: 5px;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 17px;
+    letter-spacing: -0.3px;
+    text-align: right;
+    color: #9398A0;
+    float:right;
+    margin-right:10px;
+}
+
+
+.capacity_info .graph{
+    display: block;
+    overflow: hidden;
+    position: relative;
+    height: 5px;
+    margin-top: 8px;
+    border-radius: 3px;
+    background-color: #dadde2;
+}
+
+.capacity_info .graph .bar{
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    border-radius: 3px;
+    background-color: #4078ff;
+}
+
+.btn_purchase{
+    width: 100%;
+    height: 31px;
+    margin-top: 15px;
+    padding: 0;
+    border: 1px solid #4078ff;
+    border-radius: 4px;
+    background-color: transparent;
+    font-weight: 700;
+    line-height: 30px;
+    letter-spacing: -0.3px;
+    color: #4078ff;
+    cursor: pointer;
+}
+
+.btn_purchase em{
+    font-size: 11px;
+    font-weight: 500;
+    vertical-align: top;
+    font-style: normal;
+}
+
+.bottom_wrap{
+    padding: 0 17px;
+}
+
+.bottom{
+    position: relative;
+    display: inline-block;
+    padding: 5px 10px 5px 7px;
+    border-radius: 4px;
+    line-height: 20px;
+    font-size: 13px;
+    letter-spacing: -0.5px;
+    color: #000;
+    margin-left: 8px;
+    cursor: pointer;
+}
+
+.bottom:hover{
+    background-color: #ebeaeb;
+    border-radius: 4px;
+}

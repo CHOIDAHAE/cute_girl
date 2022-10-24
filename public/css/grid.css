@@ -1,0 +1,78 @@
+/* 그리드 영역 css */
+menu, ul, ol {
+    list-style: none;
+}
+
+ul {
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+}
+
+.item_data {
+    width:735px;
+}
+
+.item_fnc h3{
+    font-size: 24px;
+    color: #545454;
+    margin-top:60px;
+    margin-bottom: 60px;
+    text-align: center;
+}
+
+.item_fnc{
+    display: block;
+    width: 225px;
+    text-align: center;
+    text-decoration:none;
+    color: black;
+    float:left;
+    margin-left: 0.1em;
+    margin-right: 1em;
+}
+
+.item-name{
+    margin-top: 20px;
+    margin-bottom: 4px;
+}
+
+.checkbox {
+    display: none;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+.img_item {
+    position : relative;
+    z-index: 1;
+    border-radius: 5%;
+    width: 150;
+}
+
+
+.btn_star::before {
+    content: '\f005';
+}
+
+.fa-star {
+    position : absolute;
+    z-index: 2;
+    opacity: 0;
+    border : none;
+    background-color: transparent;
+    color : white;
+    left : 26em;
+    top : 7em;
+    width:2em;
+}
+
+
+.file_item:hover .fa-star{
+    opacity: 1;
+}
