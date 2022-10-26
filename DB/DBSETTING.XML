@@ -1,0 +1,9 @@
+ID : SYS AS SYSDBA
+PASSWORD : 1234 (예시)
+시스템사용자로 로그인 후 모든권한 주기
+GRANT CONNECT, DBA, RESOURCE TO MYDRIVE;
+
+/* 예시 암거나 만들어봄
+INSERT INTO MYDRIVE.TCM_EMPLYR
+VALUES ('19940305','최다혜','비밀번호',2,'otae5721','19940305',sysdate,'19940305',sysdate);
+*/
