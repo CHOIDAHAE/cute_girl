@@ -33,6 +33,36 @@ module.exports = function(app){
         id : i,
         value : i*i
     };
+
+    
+//클라이언트로부터 regist를 요청받으면
+app.post("/selectTest",function(request, response){
+    console.log("클라이언트로부터 regist 요청");
+    //쿼리문 실행 
+    conn.execute("SELECT EMPLYR_NM, PASSWORD_ERROR_CO FROM TCM_EMPLYR WHERE EMPLYR_SN = '19940305'",
+			function(err,result){
+				if(err){
+					console.log("에러가 발생했습니다.", err);
+                    doRelease(conn);
+		            return;
+				}
+                console.log("성공!");
+                console.log(result);
+
+                doRelease(conn, result.rows);
+        });
+        
+        function doRelease(conn, userlist){
+            console.log("doRelease");
+            conn.close(function(err){
+                if(err){
+                    console.error(err.message);
+                }
+            })
+            
+            response.send(userlist);
+        }
+    })
 }
 
 // var output = _.filter(array, function(item){

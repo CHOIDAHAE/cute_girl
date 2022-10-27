@@ -3,6 +3,7 @@
         <meta charset="utf-8">    
 <!--        <link rel="stylesheet" type="text/css" href="/js/common/jquery/jquery-ui.min.css"/>
         <link rel="stylesheet" type="text/css" href="/jqGrid/css/ui.jqgrid.css"/>-->
+        <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
         <script src="https://kit.fontawesome.com/ad41bee873.js" crossorigin="anonymous"></script>
         <link href="../css/style.css?after" rel="stylesheet" type="text/css">
         <link href="../css/menu.css?after" rel="stylesheet" type="text/css">
@@ -13,6 +14,11 @@
         <script src="/jqGrid/js/i18n/grid.locale-kr.js" type="text/javascript"></script>
         <script src="/jqGrid/js/minified/jquery.jqGrid.min.js" type="text/javascript"></script>-->
         <script>
+            /* 가능 */
+            $(document).ready(function(){
+                alert("제이쿼리");
+            });
+
             /* 정렬기준 변경 이벤트 */
             function selectNayeol(){
                 var sortSelect = document.getElementById("sortSbBox");
@@ -25,6 +31,49 @@
                 ibx_boonmoon.textContent = selectText;
                 
             }
+            
+            //됨
+            function selectTest(){
+                alert('click!');
+                $.ajax({
+                    url : "/selectTest",
+                    type : "POST",
+                    dataType : "JSON",
+                    data : {"data" : "test"}
+                })
+                .done(function (res) {
+                    console.log('ajax 성공');
+                    console.log(res);
+                })
+                .fail(function (xhr, textStatus, errorThrown) {
+                    console.log('ajax 실패');
+                    console.log('xhr'+xhr);
+                    console.log('textStatus'+textStatus);
+                    console.log('errorThrown'+errorThrown);
+                })
+            }
+            
+            /* 안됨 */
+            $("#ajaxSend").click(function(){
+                alert("ajaxSend 테스트");
+                $.ajax({
+                    url : "/selectTest",
+                    type : "POST",
+                    dataType : "JSON",
+                    data : {"data" : "test"}
+                })
+
+                .done(function (res) {
+                    console.log('제이쿼리 ajax 성공')
+                })
+
+                .fail(function (xhr, textStatus, errorThrown) {
+                    console.log('제이쿼리 ajax 실패');
+                    console.log('xhr'+xhr);
+                    console.log('textStatus'+textStatus);
+                    console.log('errorThrown'+errorThrown);
+                })
+            });
         </script>
     </head>
     <body>
@@ -45,9 +94,10 @@
                         <img src='../images/icon_download.png' width="20px" height="20px" alt="다운로드 아이콘">
                         올리기
                     </button>
-                    <button class="btnStyle">
+                    <button class="btnStyle" onclick="selectTest()">
                         버튼
                     </button>
+                    <button class="btnStyle" id="ajaxSend">ajaxSend</button>
                 </div>            
                 <% include ./menu %>
                 <div class="main-box">
