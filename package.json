@@ -6,6 +6,7 @@
         "ejs": "~2.4.1",
         "express": "~4.13.1",
         "jquery": "^3.6.1",
+        "mybatis-mapper": "^0.6.8",
         "oracledb": "^5.5.0",
         "underscore": "^1.13.6"
     }
