@@ -34,22 +34,23 @@ module.exports = function(app){
         value : i*i
     };
 
-    
-//클라이언트로부터 regist를 요청받으면
+ /*   
+//클라이언트로부터 selectTest를 요청받으면
 app.post("/selectTest",function(request, response){
-    console.log("클라이언트로부터 regist 요청");
-    //쿼리문 실행 
-    conn.execute("SELECT EMPLYR_NM, PASSWORD_ERROR_CO FROM TCM_EMPLYR WHERE EMPLYR_SN = '19940305'",
-			function(err,result){
+    console.log("클라이언트로부터 selectTest 요청(main.js)");
+    //쿼리문 실행
+    var sql = "SELECT EMPLYR_NM, PASSWORD_ERROR_CO FROM TCM_EMPLYR WHERE EMPLYR_SN = '1111111111118'";
+    conn.execute(sql, function(err,result){
 				if(err){
-					console.log("에러가 발생했습니다.", err);
-                    doRelease(conn);
+					console.log("에러가 발생했습니다-->", err);
+                    //doRelease(conn);
 		            return;
 				}
                 console.log("성공!");
-                console.log(result);
+                console.log(result.rows);
 
-                doRelease(conn, result.rows);
+                //doRelease(conn, result.rows);
+                response.send(result.rows);
         });
         
         function doRelease(conn, userlist){
@@ -63,7 +64,41 @@ app.post("/selectTest",function(request, response){
             response.send(userlist);
         }
     })
+
+    // 전체 파일 용량 읽어오기
+    app.post("/selectFileVolume", function(request, response){
+        console.log("selectFileVolume 요청(main.js)");
+        console.log(request);
+        console.log(response);
+        //쿼리문 실행
+        var sql = "SELECT SUM(FILE_MG) FILE_MG FROM TCM_ATCHMNFL_DETAIL WHERE LAST_UPDUSR_SN = '1111111111118'";
+        conn.execute(sql, function(err,result){
+                    if(err){
+                        console.log("에러가 발생했습니다.", err);
+                        //doRelease(conn);
+                        return;
+                    }
+                    console.log("성공!");
+                    console.log(result.rows);
+
+                    //doRelease(conn, result.rows);
+                    response.send(result.rows);
+            });
+            
+        function doRelease(conn, userlist){
+            console.log("doRelease");
+            conn.close(function(err){
+                if(err){
+                    console.error(err.message);
+                }
+            })
+            
+            response.send(userlist);
+        }
+    })*/
 }
+
+
 
 // var output = _.filter(array, function(item){
 //     return item.value < 50;
