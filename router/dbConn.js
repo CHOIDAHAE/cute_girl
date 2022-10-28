@@ -2,6 +2,12 @@ var oracledb = require("oracledb");
 var dbConfig = require("./dbConfig.js");
 oracledb.autoCommit = true;
 
+// mybatis-mapper 추가
+var mybatisMapper = require('mybatis-mapper');
+
+// Mapper Load(xml이 있는 디렉토리 주소&파일위치)
+mybatisMapper.createMapper( ['./mapper/IndexDAO_SQL.xml']);
+
 module.exports = function(app){
 	var bodyParser = require('body-parser');
 	app.use(bodyParser.urlencoded({extended:true}));
@@ -28,11 +34,18 @@ module.exports = function(app){
 
 	// 전체 파일 용량 읽어오기
 	app.post("/selectFileVolume", function(request, response){
-		var emplyrSn = request.body.emplyrSn;
+		var param = {
+			emplyrSn : request.body.emplyrSn
+		}
+
+		//query format
+		let format = {language: 'sql', indent: ''};
+
+		//getStatement(namespace명, queryId, parameter, format);
+		let query = mybatisMapper.getStatement('IndexDAO','selectFileVolume', param, format);
 
 		//쿼리문 실행
-		var sql = "SELECT CEIL(SUM(FILE_MG)/1000) FILE_MG FROM TCM_ATCHMNFL_DETAIL WHERE LAST_UPDUSR_SN = '"+emplyrSn+"'";
-		conn.execute(sql, function(err,result){
+		conn.execute(query, function(err,result){
 					if(err){
 						console.log("에러가 발생했습니다-->", err);
 						//doRelease(conn);
