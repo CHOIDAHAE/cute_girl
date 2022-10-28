@@ -1,3 +1,5 @@
+var fs = require('fs');
+
 module.exports = function(app){
     /* dbConn.js로 이동
     app.get('/', function(req, res){
@@ -5,27 +7,27 @@ module.exports = function(app){
     })*/
 
     app.get('/photo', function(req, res){
-        res.render('photo.ejs');
+        res.render('photo', {});
     })
 
     app.get('/movie', function(req, res){
-        res.render('movie.html');
+        res.render('movie.html', {});
     })
 
     app.get('/document', function(req, res){
-        res.render('document.html');
+        res.render('document.html', {});
     })
 
     app.get('/music', function(req, res){
-        res.render('music.html');
+        res.render('music.html', {});
     })
 
     app.get('/trash', function(req, res){
-        res.render('trash.html');
+        res.render('trash.html', {});
     })
     
     app.get('/about', function(req, res){
-        res.render('about.html');
+        res.render('about.html', {});
     })
 
     var array = [];

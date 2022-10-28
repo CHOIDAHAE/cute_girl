@@ -1,51 +1,96 @@
 <html lang="ko">
     <head>
-        <meta charset="utf-8">    
+        <meta charset="utf-8">
+        <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script src="https://kit.fontawesome.com/ad41bee873.js" crossorigin="anonymous"></script>
+        <link href="../css/style.css?after" rel="stylesheet" type="text/css">
+        <link href="../css/menu.css?after" rel="stylesheet" type="text/css">
+        <link href="../css/grid.css?after" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" />
+
+        <script>
+            /* 가능 */
+            $(document).ready(function(){                
+                file_Volume();  // 사용자별 총 파일용량 읽어오기
+            });
+
+            //파일용량 읽어오기
+            function file_Volume(){
+                $.ajax({
+                    url : "/selectFileVolume",
+                    type : "POST",
+                    dataType : "JSON", //"JSON"
+                    data : {"emplyrSn" : "1111111111119"}
+                })
+                .done(function (res) {
+                    $("#capacity").text(res[0]);            // 사용중 용량
+                    $("#rest_capacity").text(100-res[0]);   // 남은 용량
+
+                    var bar = document.getElementById('bar');
+                    bar.style.width = res[0]+'%';           // graph color control = 남은용량/100
+                })
+                .fail(function (xhr, textStatus, errorThrown) {
+                    console.log('selectFileVolume ajax 실패');
+                    console.log('xhr'+xhr);
+                    console.log('textStatus'+textStatus);
+                    console.log('errorThrown'+errorThrown);
+                })
+            }
+            
+            /* 정렬기준 변경 이벤트 */
+            function selectNayeol(){
+                var sortSelect = document.getElementById("sortSbBox");
+                var selectValue = sortSelect.options[sortSelect.selectedIndex].value;
+                var selectText = sortSelect.options[sortSelect.selectedIndex].text;
+                var ibx_boonmoon = document.getElementById("main");
+                
+                console.log(selectText);
+
+                ibx_boonmoon.textContent = selectText;
+                
+            }
+        </script>
     </head>
-    <style>
-        .list {
-            list-style: none;
-            margin-left: -25px;
-        }
-
-        .listSbBox {
-            top:10px;
-        }
-
-        .formBox {
-            border-style : solid;
-            text-align : right;
-        }
-    </style>
     <body>
-        <table width="100%" height="100%" border="1px">
-            <tr height="15%">
-                <td rowspan="2" width="10%">
-                    메뉴 영역
-                    <ul class="list">
-                        <li><a href="/photo" target="iframe">사진</a></li>
-                        <li><a href="/movie" target="iframe">동영상</a></li>
-                        <li><a href="/document" target="iframe">문서</a></li>
-                        <li><a href="/music" target="iframe">음악</a></li>
-                        <li><a href="/trash" target="_blank">휴지통</a></li>
-                    </ul>
-                </td>
-                <td width="90%">
-                    상단바
-                </td>
-            </tr>
-            <tr height="85%">
-                <td>
-                    <form class="formBox">
-                        <select name="ListType" class="listSbBox">
-                            <option value="none"> 정렬 기준 </option>
-                            <option value="name"> 이름순 </option>
-                            <option value="date"> 날짜순 </option>
-                        </select>
-                    </form>               
-                    사진
-                </td>
-            </tr>
-        </table>
+        <div class="whole_body">
+            <div id="header" class="header-box">
+                <% include ./header %>
+            </div>
+            <div id="main" class="main-part">
+                <form class="formBox">
+                    <select name="ListType" id="sortSbBox" class="listSbBox" onChange="selectNayeol()">
+                        <option value="none"> 정렬 기준 </option>
+                        <option value="name"> 이름순 </option>
+                        <option value="date"> 날짜순 </option>
+                    </select>
+                </form>
+                <div class="button-wrap">
+                    <button class="btn_UploadStyle">
+                        <img src='../images/icon_download.png' width="20px" height="20px" alt="다운로드 아이콘">
+                        올리기
+                    </button>
+                    <button class="btnStyle" onclick="selectTest()">
+                        버튼
+                    </button>
+                </div>            
+                <% include ./menu %>
+                <div class="main-box">
+                    <div>PHOTO.ejs 입니다.
+                        <ul class="item_data">
+                            <li title="test" class="item_fnc">
+                                <div class="file_item">
+                                    <img src="../images/sample_image.jpg" class="img_item">
+                                    <!--span class="checkbox"></span>-->
+                                    <button type="button" id="btn_start" class="fa-regular fa-star"></button>
+                                    <div class="item-name">
+                                        sample_image
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
     </html> 
