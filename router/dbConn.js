@@ -25,7 +25,7 @@ module.exports = function(app){
 			if(err){
 				console.log("Oracle Connection failed(dbConn.js)",err);
 			} else {
-				res.render('index.html');
+				res.render('index',{});
 				console.log("Oracle Connection success(dbConn.js)");
 			}
 			conn = con;

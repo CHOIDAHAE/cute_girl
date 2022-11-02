@@ -1,0 +1,101 @@
+<html lang="ko">
+    <head>
+        <meta charset="utf-8">    
+<!--        <link rel="stylesheet" type="text/css" href="/js/common/jquery/jquery-ui.min.css"/>
+        <link rel="stylesheet" type="text/css" href="/jqGrid/css/ui.jqgrid.css"/>-->
+        <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script src="https://kit.fontawesome.com/ad41bee873.js" crossorigin="anonymous"></script>
+        <link href="../css/style.css?after" rel="stylesheet" type="text/css">
+        <link href="../css/menu.css?after" rel="stylesheet" type="text/css">
+        <link href="../css/grid.css?after" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" />
+
+        <!--<script type="text/javascript" src="/js/common/jquery/jquery-3.2.1.min.js"></script>
+        <script src="/jqGrid/js/i18n/grid.locale-kr.js" type="text/javascript"></script>
+        <script src="/jqGrid/js/minified/jquery.jqGrid.min.js" type="text/javascript"></script>-->
+        <script>
+            /* 가능 */
+            $(document).ready(function(){                
+                file_Volume();  // 사용자별 총 파일용량 읽어오기
+            });
+
+            //파일용량 읽어오기
+            function file_Volume(){
+                $.ajax({
+                    url : "/selectFileVolume",
+                    type : "POST",
+                    dataType : "JSON", //"JSON"
+                    data : {"emplyrSn" : "1111111111119"}
+                })
+                .done(function (res) {
+                    $("#capacity").text(res[0]);            // 사용중 용량
+                    $("#rest_capacity").text(100-res[0]);   // 남은 용량
+
+                    var bar = document.getElementById('bar');
+                    bar.style.width = res[0]+'%';           // graph color control = 남은용량/100
+                })
+                .fail(function (xhr, textStatus, errorThrown) {
+                    console.log('selectFileVolume ajax 실패');
+                    console.log('xhr'+xhr);
+                    console.log('textStatus'+textStatus);
+                    console.log('errorThrown'+errorThrown);
+                })
+            }
+            
+            /* 정렬기준 변경 이벤트 */
+            function selectNayeol(){
+                var sortSelect = document.getElementById("sortSbBox");
+                var selectValue = sortSelect.options[sortSelect.selectedIndex].value;
+                var selectText = sortSelect.options[sortSelect.selectedIndex].text;
+                var ibx_boonmoon = document.getElementById("main");
+                
+                console.log(selectText);
+
+                ibx_boonmoon.textContent = selectText;
+                
+            }
+            
+            //됨
+            function selectTest(){
+                console.log('selectTest');
+                $.ajax({
+                    url : "/selectTest",
+                    type : "POST",
+                    dataType : "JSON" //"TEXT"
+                    //data : {"data" : "test"}
+                })
+                .done(function (res) {
+                    console.log('selectTest ajax 성공');
+                    console.log(res);
+                })
+                .fail(function (xhr, textStatus, errorThrown) {
+                    console.log('ajax 실패');
+                    console.log('xhr'+xhr);
+                    console.log('textStatus'+textStatus);
+                    console.log('errorThrown'+errorThrown);
+                })
+            }
+            
+            /* 안됨 */
+            $("#ajaxSend").click(function(){
+                alert("ajaxSend 테스트");
+                $.ajax({
+                    url : "/selectTest",
+                    type : "POST",
+                    dataType : "JSON",
+                    data : {"data" : "test"}
+                })
+
+                .done(function (res) {
+                    console.log('제이쿼리 ajax 성공');
+                })
+
+                .fail(function (xhr, textStatus, errorThrown) {
+                    console.log('제이쿼리 ajax 실패');
+                    console.log('xhr'+xhr);
+                    console.log('textStatus'+textStatus);
+                    console.log('errorThrown'+errorThrown);
+                })
+            });
+        </script>
+    </head>

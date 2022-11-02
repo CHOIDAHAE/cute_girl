@@ -7,27 +7,27 @@ module.exports = function(app){
     })*/
 
     app.get('/photo', function(req, res){
-        res.render('photo', {});
+        res.render('photo', {data:'photo'});
     })
 
     app.get('/movie', function(req, res){
-        res.render('movie.html', {});
+        res.render('movie', {data:'movie'});
     })
 
     app.get('/document', function(req, res){
-        res.render('document.html', {});
+        res.render('document', {data:'document'});
     })
 
     app.get('/music', function(req, res){
-        res.render('music.html', {});
+        res.render('music', {data:'music'});
     })
 
     app.get('/trash', function(req, res){
-        res.render('trash.html', {});
+        res.render('trash', {data:'trash'});
     })
     
     app.get('/about', function(req, res){
-        res.render('about.html', {});
+        res.render('about', {data:'about'});
     })
 
     var array = [];
