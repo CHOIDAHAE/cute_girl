@@ -7,7 +7,7 @@ module.exports = function(app){
     })*/
 
     app.get('/photo', function(req, res){
-        res.render('photo', {});
+        res.render('photo', {data:'photo'});
     })
 
     app.get('/movie', function(req, res){
