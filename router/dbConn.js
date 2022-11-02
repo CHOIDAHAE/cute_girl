@@ -52,7 +52,6 @@ module.exports = function(app){
 						return;
 					}
 					console.log("selectFileVolume success!");
-					console.log(result.rows);
 
 					//doRelease(conn, result.rows);
 					response.send(result.rows);
@@ -72,7 +71,6 @@ module.exports = function(app){
 					return;
 				}
 				console.log("selectTest success!");
-				console.log(result.rows);
 
 				//doRelease(conn, result.rows);
 				response.send(result.rows);
