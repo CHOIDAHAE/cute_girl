@@ -6,6 +6,14 @@ module.exports = function(app){
         res.render('index.html');
     })*/
 
+    app.get('/join', function(req, res){
+        res.render('join', {data:'join'});
+    })
+
+    app.get('/login', function(req, res){
+        res.render('login', {data:'login'});
+    })
+
     app.get('/photo', function(req, res){
         res.render('photo', {data:'photo'});
     })

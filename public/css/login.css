@@ -1,0 +1,223 @@
+body {
+    height: 100%;
+    color: #222;
+    background-color: #fff;
+}
+
+ul {
+    list-style: none;
+}
+
+input {
+    border-radius: 0;
+    border: none;
+    background: 0 0;
+    appearance: none;
+    outline: 0;
+    text-decoration: none;
+    cursor: pointer;
+    -webkit-text-size-adjust: none;
+    padding: 0;
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.wrap {
+    position: relative;
+    height: 100%;
+    letter-spacing: -.5px;
+}
+
+.header {
+    padding-bottom: 48px;
+    box-sizing: border-box;
+}
+
+.header .header_inner {
+    position: relative;
+    width: 743px;
+    margin: 0 auto;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.header  .logo_style {
+    color: #4078ff;
+    font-size: 40px;
+    font-weight: bold;
+    display: inline-block;
+    margin-top: 108px;
+    vertical-align: top;
+    background-position: 0 -51px;
+    background-repeat: no-repeat;
+    height: 50px;
+}
+
+.blind {
+    position: absolute;
+    clip: rect(0 0 0 0);
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+}
+
+.login_wrap {
+    box-sizing: border-box;
+    width: 460px;
+    margin: 0 auto;
+}
+
+.panel_wrap {
+    position: relative;
+    z-index: 3;
+    margin-top: -8px;
+}
+
+.panel_item {
+    border: 1px solid #c6c6c6;
+    border-radius: 6px;
+    background-color: #fff;
+    box-shadow: 0 5px 8px 0 rgb(68 68 68 / 4%);
+}
+
+.panel_inner {
+    padding: 20px 28px;
+}
+
+.id_pw_wrap .input_row:first-child {
+    border-radius: 6px 6px 0 0;
+    box-shadow: none;
+}
+
+.id_pw_wrap .input_row {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+    padding: 14px 17px 13px;
+    box-sizing: border-box;
+}
+
+.input_row {
+    position: relative;
+    display: block;
+    height: 100%;
+    border: 1px solid #dadada;
+    padding: 16px 18px 15px;
+    border-radius: 6px;
+    box-sizing: border-box;
+    text-align: left;
+}
+
+.id_pw_wrap .input_row .icon_cell {
+    display: table-cell;
+    width: 24px;
+    vertical-align: middle;
+}
+
+.id_pw_wrap .input_row .icon_cell .icon_id, .id_pw_wrap .input_row .icon_cell .icon_pw {
+    position: absolute;
+    top: 50%;
+    left: 17px;
+    margin-top: -8px;
+    background-position: -93px -203px;
+    background-repeat: no-repeat;
+    width: 16px;
+    height: 16px;
+}
+
+.id_pw_wrap .input_row .input_text {
+    display: table-cell;
+    padding-right: 30px;
+}
+
+.input_text {
+    position: relative;
+    display: block;
+    width: 100%;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 19px;
+    letter-spacing: -.5px;
+    color: #222;
+    box-sizing: border-box;
+    z-index: 4;
+}
+
+.btn_delete {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    width: 35px;
+    height: 35px;
+    z-index: 5;
+    background-color: #fff;
+}
+
+.icon_delete {
+    display: inline-block;
+    margin: 8px 0 0 8px;
+    background-position: -244px -187px;
+    background-repeat: no-repeat;
+    width: 18px;
+    height: 18px;
+}
+
+.id_pw_wrap .input_row:last-child {
+    border-radius: 0 0 6px 6px;
+}
+
+.id_pw_wrap .input_row {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+    padding: 14px 17px 13px;
+    box-sizing: border-box;
+}
+
+.input_row+.input_row {
+    margin-top: -1px;
+}
+
+.login_keep_wrap {
+    position: relative;
+    margin-top: 13px;
+    padding-right: 90px;
+}
+
+.find_wrap, .relogin_find_wrap {
+    padding: 20px 0 35px;
+    text-align: center;
+}
+
+.find_wrap li, .relogin_find_wrap li {
+    position: relative;
+    display: inline-block;
+}
+
+.find_wrap li+li, .relogin_find_wrap li+li {
+    padding-left: 28px;
+}
+
+.find_wrap .en_find_text, .find_wrap .find_text, .relogin_find_wrap .en_find_text, .relogin_find_wrap .find_text {
+    display: inline-block;
+    font-size: 14px;
+    line-height: 17px;
+    text-decoration: none;
+    color: #888;
+}
+
+.find_wrap li+li::before, .relogin_find_wrap li+li::before {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 12px;
+    width: 1px;
+    height: 12px;
+    border-radius: 0.5px;
+    background-color: #dadada;
+}
