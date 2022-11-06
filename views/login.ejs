@@ -21,7 +21,7 @@
             <div id="container" class="container">
                 <div class="content">
                     <div class="login_wrap">
-                       <form id="frmNIDLogin" name="" target="_top" autocomplete="off" action="" method="POST">
+                       <form id="frmNIDLogin" name="" target="_top" autocomplete="off" action="/frmNIDLogin" method="POST">
                             <ul class="panel_wrap">
                                 <li class="panel_item" style="display: block;">
                                     <div class="panel_inner" role="tabpanel">
@@ -29,7 +29,7 @@
                                             <div class="input_row" id="id_line">
                                                 <div class="icon_cell" id="id_cell">
                                                     <span class="icon_id">
-                                                        <span class="blind">아이디</span>
+                                                        <i class="fa-solid fa-user" style="font-weight:100 !important;"></i>
                                                     </span>
                                                 </div>
                                                 <input type="text" id="id" name="id" placeholder="아이디" title="아이디" class="input_text" maxlength="41" value>
@@ -41,8 +41,8 @@
                                             </div>
                                             <div class="input_row" id="pw_line">
                                                 <div class="icon_cell" id="pw_cell">
-                                                    <span class="ico_pw" >
-                                                        <span class="blind">비밀번호</span>
+                                                    <span class="icon_pw" >
+                                                        <i class="fa-solid fa-lock"></i>
                                                     </span>
                                                 </div>
                                                 <input type="password" id="pw" name="pw" placeholder="비밀번호" title="비밀번호" class="input_text" maxlength="16" value>
@@ -66,6 +66,11 @@
                                         <div class="login_error_wrap" id="err_id" style="display:none;"></div>
                                         <div class="login_error_wrap" id="err_pw" style="display:none;"></div>
                                         <div class="login_error_wrap" id="err_common" style="display:none;"></div>
+                                        <div class="btn_login_wrap">
+                                            <button type="submit" class="btn_login" id="log.login">
+                                                <span class="btn_text">로그인</span>
+                                            </button>
+                                        </div>
                                     </div>
                                 </li>
                             </ul>

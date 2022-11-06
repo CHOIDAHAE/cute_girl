@@ -6,6 +6,7 @@ var express = require('express');
 var app=express();
 var router = require('./router/main')(app);
 var dbRouter = require('./router/dbConn')(app);
+var dbRouter = require('./router/login')(app);
 
 app.set('views', './views');
 app.set('view engine', 'ejs');
