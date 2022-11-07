@@ -33,9 +33,9 @@ module.exports = function(app){
 	})
 
 	// 전체 파일 용량 읽어오기
-	app.post("/selectFileVolume", function(request, response){
+	app.post("/selectFileVolume", function(req, res){		
 		var param = {
-			emplyrSn : request.body.emplyrSn
+			emplyrSn : req.body.emplyrSn
 		}
 
 		//query format
@@ -48,20 +48,76 @@ module.exports = function(app){
 		conn.execute(query, function(err,result){
 					if(err){
 						console.log("에러가 발생했습니다-->", err);
-						//doRelease(conn);
+						doRelease(conn);
 						return;
 					}
 					console.log("selectFileVolume success!");
 
-					//doRelease(conn, result.rows);
-					response.send(result.rows);
-					//response.json({'name':'박문석', 'age':50});
-					//response.render('index', {test: 'test'});
+					doRelease(conn, result.rows);
+					res.send(result.rows);
 			});  
 	})
 
-	app.post("/selectTest",function(request, response){
-		console.log("selectTest request(dbConn.js)");
+	// 로그인
+	app.post("/frmNIDLogin", function(req, res, next){
+		if (req.body.id && req.body.pw) {
+
+			oracledb.getConnection({
+				user:dbConfig.user,
+				password:dbConfig.password,
+				connectString:dbConfig.connectString,
+				externalAuth  : dbConfig.externalAuth
+			},function(err,con){
+				if(err){
+					console.log("Oracle Connection failed(/frmNIDLogin)",err);
+				} else {
+					console.log("Oracle Connection success(/frmNIDLogin)");
+				}
+				conn = con;
+			});
+
+			var param = {
+				id : req.body.id,
+				pw : req.body.pw
+			}
+
+			//query format
+			let format = {language: 'sql', indent: ''};
+	
+			//getStatement(namespace명, queryId, parameter, format);
+			let query = mybatisMapper.getStatement('UserDAO','selectUser', param, format);
+
+			//쿼리문 실행
+			conn.execute(query, function(err,result){
+				if(err){
+					console.log("LOGIN failed");
+
+					res.send(
+						`<script type="text/javascript">
+							alert("로그인 정보가 일치하지 않습니다."); 
+							document.location.href="/login";
+						</script>`);
+					doRelease(conn, result.rows);
+				} else {
+					console.log("LOGIN success!");
+					res.send(
+					`<script type="text/javascript">
+						document.location.href="/";
+					</script>`);
+					doRelease(conn, result.rows);
+				}
+			});
+		} else {
+			res.send(
+				`<script type="text/javascript">
+					alert("아이디와 비밀번호를 입력하세요!");
+					document.location.href="/login";
+				</script>`);
+		}
+	})
+
+	app.post("/selectTest",function(req, res){
+		console.log("selectTest req(/selectTest)");
 		//쿼리문 실행
 		var sql = "SELECT EMPLYR_NM, PASSWORD_ERROR_CO FROM TCM_EMPLYR WHERE EMPLYR_SN = '1111111111118'";
 		conn.execute(sql, function(err,result){
@@ -73,7 +129,7 @@ module.exports = function(app){
 				console.log("selectTest success!");
 
 				//doRelease(conn, result.rows);
-				response.send(result.rows);
+				res.send(result.rows);
 		});
 	})
 
@@ -83,7 +139,6 @@ module.exports = function(app){
 			if(err){
 				console.error(err.message);
 			}
-		})    
-		response.send(userlist);
+		})
 	}
 }
