@@ -29,6 +29,10 @@ module.exports = function(app){
         res.render('about', {data:'about'});
     })
 
+    app.get('/main', function(req, res){
+        res.render('main', {data:'main'});
+    })
+
     var array = [];
     for(var i =0; i < 5; i++){
     array[i] = {

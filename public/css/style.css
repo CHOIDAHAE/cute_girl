@@ -58,6 +58,20 @@ body{
     padding-top: 8px;
 }
 
+.sideInfo-box{
+    width:20%;
+    height:100%;
+    float:right;
+    padding : 400px 5px;
+
+    border : rgb(161, 161, 161);
+    border-style: solid;
+    border-width: 0px 0px 0px 1px;
+
+    text-align: center;
+    color: rgb(161, 161, 161);
+}
+
 
 /* 정렬기준 */
 .formBox {
@@ -124,4 +138,11 @@ body{
 .ico_down{
     font-size:11px;
     color:gray;
+}
+
+/* 프레임박스 */
+.frameBox {
+    width :85%;
+    height : 85%;
+    margin : 5px;
 }
