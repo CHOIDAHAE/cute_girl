@@ -26,6 +26,8 @@ button, input, select, textarea {
     text-decoration: none;
     cursor: pointer;
     -webkit-text-size-adjust: none;
+    margin:0;
+    padding:0;
 }
 
 ul {
@@ -283,6 +285,8 @@ ul {
     height: 51px;
     border: solid 1px #dadada;
     padding: 10px 110px 10px 14px;
+    background: #fff;
+    box-sizing: border-box;
     vertical-align: top;
 }
 
@@ -307,6 +311,24 @@ ul {
     box-sizing: border-box;
 }
 
+.wa_blind {
+    position: absolute;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    margin: -1px;
+    width: 1px;
+    height: 1px;
+    font-size: 0;
+}
+
+.join_email .terms_choice {
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.terms_choice {
+    color: #8e8e8e;
+}
 
 /*****************footer*****************/
 

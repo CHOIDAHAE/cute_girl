@@ -1,11 +1,84 @@
 <!DOCTYPE html>
 <html lang="ko">
     <head>
+		<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 		<link href="../css/join.css?after" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" />
 		<meta charset="utf-8" />
 		<title>MYDRIVE : 회원가입</title>
 	</head>
+	<script>
+		function joinUser(){
+			if ($("#id").val() == "") {
+				alert("아이디를 입력해주세요.");
+				$("#id").focus();
+				return;
+			}
+
+			//비밀번호
+			if ($("#pswd1").val() == "") {
+				alert("비밀번호를 입력해주세요.");
+				$("#pswd1").focus();
+				return;
+			}
+
+			//비밀번호 재확인
+			if ($("#pswd2").val() == "") {
+				alert("비밀번호를 재확인을 해주세요.");
+				$("#pswd2").focus();
+				return;
+			}
+			
+			/*이름
+			if ($("name").val() == "") {
+				alert("이름을 입력해주세요.");
+				$("name").focus();
+				return;
+			}
+			
+			/*성별
+			if ($("gender").val() == "") {
+				alert("성별을 선택해주세요.");
+				$("gender").focus();
+				return;
+			}
+
+			// 이메일 선택사항
+			if ($("email").val() == "") {
+				alert("이메일을 입력해주세요.");
+				$("gender").focus();
+				return;
+			)
+			
+			//휴대전화
+			if ($("phoneNo").val() == "") {
+				alert("이름을 입력해주세요.");
+				$("phoneNo").focus();
+				return;
+			}*/
+
+			var dataInfo = {};
+			dataInfo.id			= $("#id").val();
+			dataInfo.pw			= $("#pswd1").val();
+			dataInfo.name		= $("#name").val();
+			dataInfo.gender		= $("#gender").val();
+			dataInfo.email		= $("#email").val();
+			dataInfo.phoneNo	= $("#phoneNo").val();
+			
+			$.ajax({
+				contentType : 'application/json; charset=utf-8', type : 'post', dataType : 'json', async : false,
+				url  : '/frmNIDJoin',
+				data : JSON.stringify(dataInfo),
+				success : function(data) {
+					console.log(data);
+					if(data ==="S"){
+						alert("정상적으로 회원가입 되었습니다.");
+						//document.location.href="/login";
+					}										
+				}
+			});
+		}
+	</script>
 	<body>
 		<div id="header" class="join_membership" role="banner">
 			<a href="/">
@@ -15,7 +88,7 @@
 				</span>
 			</a>
 		</div>
-		<form id="join_form" method="post" action="">
+		<form id="join_form" method="post" action="/frmNIDJoin">
 			<div id="container" role="main">
 				<div id="content">
 					<div class="join_content">
@@ -70,6 +143,7 @@
 									<label for="email">
 										본인 확인 이메일
 									</label>
+									<span class="terms_choice">(선택)</span>
 								</h3>
 								<span class="ps_box int_email box_right_space">
 									<input type="text" id="email" name="email" placeholder="선택입력" aria-label="선택입력" maxlength="100"/>
@@ -91,7 +165,7 @@
 									<span>인증번호 받기</span>
 								</a>
 							</div>
-							<div class="px_box_disable box_right_space" id="authNoBox">
+							<div class="ps_box_disable box_right_space" id="authNoBox">
 								<input type="tel" id="autoNo" name="authNo" placeholder="인증번호 입력하세요" class="int" disabled maxlength="4">
 								<label id="wa_verify" for="authNo" class="lbl">
 									<span class="wa_blind">인증받은 후 인증번호를 입력해야 합니다.</span>
@@ -100,7 +174,8 @@
 							</div>
 						</div>
 						<div class="btn_area">
-							<button type="button" id="btnJoin" class="btn_type btn_primary">
+							<!--<button type="submit" id="btnJoin" class="btn_type btn_primary">-->
+							<button type="button" id="btnJoin" class="btn_type btn_primary" onclick="joinUser()">
 								<span>가입하기</span>
 							</button>
 						</div>

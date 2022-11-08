@@ -15,8 +15,10 @@ module.exports = function(app){
 
 	var conn;
 
-	app.get('/', function(req, res, next){
-		oracledb.getConnection({
+	app.get('/', function(req, res, next){		
+		res.render('index',{data:'index'});
+		
+		/*oracledb.getConnection({
 			user:dbConfig.user,
 			password:dbConfig.password,
 			connectString:dbConfig.connectString,
@@ -29,33 +31,47 @@ module.exports = function(app){
 				console.log("Oracle Connection success(dbConn.js)");
 			}
 			conn = con;
-		});
+		});*/
 	})
 
 	// 전체 파일 용량 읽어오기
 	app.post("/selectFileVolume", function(req, res){		
-		var param = {
-			emplyrSn : req.body.emplyrSn
-		}
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(selectFileVolume)",err);
+			} else {
+				console.log("Oracle Connection success(selectFileVolume)");
+			}
+			conn = con;
 
-		//query format
-		let format = {language: 'sql', indent: ''};
+			var param = {
+				emplyrSn : req.body.emplyrSn
+			}
 
-		//getStatement(namespace명, queryId, parameter, format);
-		let query = mybatisMapper.getStatement('IndexDAO','selectFileVolume', param, format);
+			//query format
+			let format = {language: 'sql', indent: ''};
 
-		//쿼리문 실행
-		conn.execute(query, function(err,result){
-					if(err){
-						console.log("에러가 발생했습니다-->", err);
-						doRelease(conn);
-						return;
-					}
-					console.log("selectFileVolume success!");
+			//getStatement(namespace명, queryId, parameter, format);
+			let query = mybatisMapper.getStatement('IndexDAO','selectFileVolume', param, format);
 
-					doRelease(conn, result.rows);
-					res.send(result.rows);
+			//쿼리문 실행
+			conn.execute(query, function(err,result){
+				if(err){
+					console.log("에러가 발생했습니다(selectFileVolume)>", err);
+					doRelease(conn);
+					return;
+				}
+				console.log("selectFileVolume success!");
+				
+				res.send(result.rows);
+				doRelease(conn);					
 			});  
+		});
 	})
 
 	// 로그인
@@ -96,105 +112,102 @@ module.exports = function(app){
 								alert("로그인 정보가 일치하지 않습니다."); 
 								document.location.href="/login";
 							</script>`);
-						doRelease(conn, result.rows);
+							doRelease(conn);
 					} else {
 						console.log("LOGIN success!");
 						res.send(
 						`<script type="text/javascript">
 							document.location.href="/";
 						</script>`);
-						doRelease(conn, result.rows);
+						doRelease(conn);
 					}
 				});
 			});
 		} else {
-			res.send(
-				`<script type="text/javascript">
-					alert("아이디와 비밀번호를 입력하세요!");
-					document.location.href="/login";
-				</script>`);
+			console.log("LOGIN success!");
+			res.send("성공");
+			//res.render('login',{data:'login'});
 		}
 	})
 
 	// 회원가입
 	app.post("/frmNIDJoin", function(req, res, next){
-		if (req.body.id && req.body.pw) {
-			
-			oracledb.getConnection({
-				user:dbConfig.user,
-				password:dbConfig.password,
-				connectString:dbConfig.connectString,
-				externalAuth  : dbConfig.externalAuth
-			},function(err,con){
-				if(err){
-					console.log("Oracle Connection failed(/Join)",err);
-				} else {
-					console.log("Oracle Connection success(/Join)");
-				}
-				conn = con;
-			
-				var param = {
-					id : req.body.id,
-					pw : req.body.pw
-				}
-
-				//query format
-				let format = {language: 'sql', indent: ''};
+		console.log("회원가입 시작");
 		
-				//getStatement(namespace명, queryId, parameter, format);
-				let query = mybatisMapper.getStatement('UserDAO','selectUser', param, format);
+		var id = req.body.id;
+		var pw = req.body.pw;
+		var name = req.body.name;
+		var gender = req.body.gender;
+		var email = req.body.email;
+		var phoneNo = req.body.phoneNo;		
+		
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(/Join)",err);
+			} else {
+				console.log("Oracle Connection success(/Join)");
+			}
+			conn = con;
+				
+			//query format
+			let format = {language: 'sql', indent: ''};
+			
+			//emplyrSn MAX값 찾기
+			let query = mybatisMapper.getStatement('UserDAO','selectemplyrSn', {}, format);
 
-				//쿼리문 실행
-				conn.execute(query, function(err,result){
-					if(err){
-						console.log("LOGIN failed");
-
-						res.send(
-							`<script type="text/javascript">
-								alert("로그인 정보가 일치하지 않습니다."); 
-								document.location.href="/login";
-							</script>`);
-						doRelease(conn, result.rows);
-					} else {
-						console.log("LOGIN success!");
-						res.send(
-						`<script type="text/javascript">
-							document.location.href="/";
-						</script>`);
-						doRelease(conn, result.rows);
-					}
-				});
-			});
-		} else {
-			res.send(
-				`<script type="text/javascript">
-					alert("아이디와 비밀번호를 입력하세요!");
-					document.location.href="/login";
-				</script>`);
-		}
-	})
-
-	app.post("/selectTest",function(req, res){
-		console.log("selectTest req(/selectTest)");
-		//쿼리문 실행
-		var sql = "SELECT EMPLYR_NM, PASSWORD_ERROR_CO FROM TCM_EMPLYR WHERE EMPLYR_SN = '1111111111118'";
-		conn.execute(sql, function(err,result){
+			conn.execute(query, function(err,result){
 				if(err){
-					console.log("에러가 발생했습니다-->", err);
-					//doRelease(conn);
-					return;
-				}
-				console.log("selectTest success!");
+					console.log("selectin emplyrSn got failed");
+				} else {
+					var emplyrSn = result.rows[0][0];
+					console.log(result.rows[0][0]);
+					var param = {
+						id : id,
+						pw : pw,
+						name : name,
+						gender : gender,
+						email : email,
+						phoneNo : phoneNo,
+						emplyrSn: emplyrSn
+					}
 
-				//doRelease(conn, result.rows);
-				res.send(result.rows);
+					//insert
+					let InstQuery = mybatisMapper.getStatement('UserDAO','joinUser', param, format);
+					
+					console.log(InstQuery);
+
+					//쿼리문 실행(insert)
+					conn.execute(InstQuery, function(err,result){
+						if(err){
+							console.log("JOIN failed"+err);
+			
+							/*res.send(
+							`<script type="text/javascript">
+								alert("회원가입 중 오류가 발생했습니다."); 
+								document.location.href="/join";
+							</script>`);*/
+						} else {
+							console.log("JOIN success!");
+							res.send("S");
+							//res.render('login',{data:'login'});
+						}						
+						doRelease(conn);
+					});
+				}
+			});
 		});
 	})
 
-	function doRelease(conn, userlist){
-		console.log("doRelease");
+	function doRelease(conn){
+		console.log("******doRelease******");
 		conn.close(function(err){
 			if(err){
+				console.log("doRelease error!");
 				console.error(err.message);
 			}
 		})
