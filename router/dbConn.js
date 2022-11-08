@@ -124,16 +124,16 @@ module.exports = function(app){
 				});
 			});
 		} else {
-			console.log("LOGIN success!");
-			res.send("성공");
-			//res.render('login',{data:'login'});
+			res.send(
+			`<script type="text/javascript">
+				alert("아이디와 비밀번호를 입력하세요!");
+				document.location.href="/login";
+			</script>`);
 		}
 	})
 
 	// 회원가입
-	app.post("/frmNIDJoin", function(req, res, next){
-		console.log("회원가입 시작");
-		
+	app.post("/frmNIDJoin", function(req, res, next){		
 		var id = req.body.id;
 		var pw = req.body.pw;
 		var name = req.body.name;
@@ -162,10 +162,11 @@ module.exports = function(app){
 
 			conn.execute(query, function(err,result){
 				if(err){
-					console.log("selectin emplyrSn got failed");
+					console.log("selecting emplyrSn got failed");
+					doRelease(conn);
 				} else {
 					var emplyrSn = result.rows[0][0];
-					console.log(result.rows[0][0]);
+
 					var param = {
 						id : id,
 						pw : pw,
@@ -179,25 +180,25 @@ module.exports = function(app){
 					//insert
 					let InstQuery = mybatisMapper.getStatement('UserDAO','joinUser', param, format);
 					
-					console.log(InstQuery);
-
 					//쿼리문 실행(insert)
 					conn.execute(InstQuery, function(err,result){
 						if(err){
 							console.log("JOIN failed"+err);
-			
-							/*res.send(
+							/*res.redirect('/join');
+							res.send(
 							`<script type="text/javascript">
 								alert("회원가입 중 오류가 발생했습니다."); 
 								document.location.href="/join";
 							</script>`);*/
-						} else {
-							console.log("JOIN success!");
-							res.send("S");
-							//res.render('login',{data:'login'});
-						}						
+						}
+						console.log("JOIN success!");
 						doRelease(conn);
-					});
+						res.send(
+							`<script type="text/javascript">
+								alert("정상적으로 회원가입이 처리되었습니다.");
+								document.location.href="/login";
+							</script>`);
+					});					
 				}
 			});
 		});
