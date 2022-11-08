@@ -74,38 +74,96 @@ module.exports = function(app){
 					console.log("Oracle Connection success(/frmNIDLogin)");
 				}
 				conn = con;
-			});
-
-			var param = {
-				id : req.body.id,
-				pw : req.body.pw
-			}
-
-			//query format
-			let format = {language: 'sql', indent: ''};
-	
-			//getStatement(namespace명, queryId, parameter, format);
-			let query = mybatisMapper.getStatement('UserDAO','selectUser', param, format);
-
-			//쿼리문 실행
-			conn.execute(query, function(err,result){
-				if(err){
-					console.log("LOGIN failed");
-
-					res.send(
-						`<script type="text/javascript">
-							alert("로그인 정보가 일치하지 않습니다."); 
-							document.location.href="/login";
-						</script>`);
-					doRelease(conn, result.rows);
-				} else {
-					console.log("LOGIN success!");
-					res.send(
-					`<script type="text/javascript">
-						document.location.href="/";
-					</script>`);
-					doRelease(conn, result.rows);
+			
+				var param = {
+					id : req.body.id,
+					pw : req.body.pw
 				}
+
+				//query format
+				let format = {language: 'sql', indent: ''};
+		
+				//getStatement(namespace명, queryId, parameter, format);
+				let query = mybatisMapper.getStatement('UserDAO','selectUser', param, format);
+
+				//쿼리문 실행
+				conn.execute(query, function(err,result){
+					if(err){
+						console.log("LOGIN failed");
+
+						res.send(
+							`<script type="text/javascript">
+								alert("로그인 정보가 일치하지 않습니다."); 
+								document.location.href="/login";
+							</script>`);
+						doRelease(conn, result.rows);
+					} else {
+						console.log("LOGIN success!");
+						res.send(
+						`<script type="text/javascript">
+							document.location.href="/";
+						</script>`);
+						doRelease(conn, result.rows);
+					}
+				});
+			});
+		} else {
+			res.send(
+				`<script type="text/javascript">
+					alert("아이디와 비밀번호를 입력하세요!");
+					document.location.href="/login";
+				</script>`);
+		}
+	})
+
+	// 회원가입
+	app.post("/frmNIDJoin", function(req, res, next){
+		if (req.body.id && req.body.pw) {
+			
+			oracledb.getConnection({
+				user:dbConfig.user,
+				password:dbConfig.password,
+				connectString:dbConfig.connectString,
+				externalAuth  : dbConfig.externalAuth
+			},function(err,con){
+				if(err){
+					console.log("Oracle Connection failed(/Join)",err);
+				} else {
+					console.log("Oracle Connection success(/Join)");
+				}
+				conn = con;
+			
+				var param = {
+					id : req.body.id,
+					pw : req.body.pw
+				}
+
+				//query format
+				let format = {language: 'sql', indent: ''};
+		
+				//getStatement(namespace명, queryId, parameter, format);
+				let query = mybatisMapper.getStatement('UserDAO','selectUser', param, format);
+
+				//쿼리문 실행
+				conn.execute(query, function(err,result){
+					if(err){
+						console.log("LOGIN failed");
+
+						res.send(
+							`<script type="text/javascript">
+								alert("로그인 정보가 일치하지 않습니다."); 
+								document.location.href="/login";
+							</script>`);
+						doRelease(conn, result.rows);
+					} else {
+						console.log("LOGIN success!");
+						res.send(
+						`<script type="text/javascript">
+							document.location.href="/";
+						</script>`);
+						doRelease(conn, result.rows);
+					}
+				});
 			});
 		} else {
 			res.send(
