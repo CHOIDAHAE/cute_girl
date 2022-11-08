@@ -99,5 +99,14 @@
                     console.log('errorThrown'+errorThrown);
                 })
             });
+
+            function openMenu(menuNm){
+                var gridArea = document.getElementById("gridArea");
+                
+                console.log(gridArea);
+                console.log(menuNm);
+
+                document.getElementById("gridArea").src = menuNm;
+            }
         </script>
     </head>
