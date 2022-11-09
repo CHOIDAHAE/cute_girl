@@ -100,6 +100,18 @@ ul {
     outline: 0;
 }
 
+.error_next_box {
+    display: block;
+    margin: 9px 0 -2px;
+    font-size: 12px;
+    line-height: 14px;
+    color: red;
+}
+
+.blue {
+    color: #4078ff!important;
+}
+
 .ps_box {
     display: block;
     position: relative;
@@ -125,8 +137,37 @@ ul {
     z-index: 10;
 }
 
+.lbl {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 14px;
+    margin-top: -9px;
+    font-size: 15px;
+    line-height: 18px;
+    color: #8e8e8e;
+    z-index: 9;
+}
+
+.ps_box .lbl {
+    left: 0;
+    padding: 0 14px;
+    width: 100%;
+    box-sizing: border-box;
+    font-size:20px;
+}
+
+.txt_red {
+    color: red;
+}
+
 .ps_box.int_pass, .ps_box.int_pass_check, .ps_box.int_pass_check2 {
     padding-right: 40px;
+}
+
+.lbl_style{
+    text-align:right;
+    font-size:20px;
 }
 
 .ps_box.int_pass:after, .ps_box.int_pass_check2:after, .ps_box.int_pass_check:after, .ps_box.int_pass_step1:after, .ps_box.int_pass_step2:after, .ps_box.int_pass_step3:after, .ps_box.int_pass_step4:after {
@@ -138,7 +179,7 @@ ul {
     width: 24px;
     height: 24px;
     margin-top: -12px;
-    background-image: url(https://static.nid.naver.com/images/ui/join/m_icon_pw_step.png);
+    /*background-image: url(https://static.nid.naver.com/images/ui/join/m_icon_pw_step.png);*/
     background-repeat: no-repeat;
     background-position: 0 0;
     background-size: 125px 75px;

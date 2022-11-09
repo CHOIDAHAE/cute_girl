@@ -8,6 +8,12 @@
 		WHERE	EMPLYR_ID = #{id}
 	</select>
 
+	<select id="selectUserId">
+		SELECT	COUNT(*) CNT
+		FROM 	TCM_EMPLYR
+		WHERE	EMPLYR_ID = #{id}
+	</select>
+
 	<select id="selectemplyrSn">
 		SELECT
 				TO_CHAR(NVL(MAX(EMPLYR_SN), TO_CHAR(SYSDATE, 'YYYY')||'000000')+1) AS EMPLYR_SN

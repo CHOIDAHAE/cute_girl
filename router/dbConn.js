@@ -133,6 +133,44 @@ module.exports = function(app){
 		});
 	})
 
+	// 회원가입시 아이디 중복체크
+	app.post("/chkDuplId", function(req, res, next){	
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(/chkDuplId)",err);
+			} else {
+				console.log("Oracle Connection success(/chkDuplId)");
+			}
+			conn = con;
+				
+			//query format
+			let format = {language: 'sql', indent: ''};
+			
+			//아이디 중복 체크
+			let query = mybatisMapper.getStatement('UserDAO','selectUserId', {id : req.body.id}, format);
+
+			conn.execute(query, function(err,result){
+				console.log(result.rows[0][0]);
+				if(err){
+					console.log("chkDuplId failed");
+					res.json("F");
+				} else {
+					if(result.rows[0][0] == 0){	// 중복아이디가 없음
+						res.json("S");	//사용가능한 아이디
+					} else {	// 중복아이디 존재
+						res.json("N");	//사용중인 아이디
+					}
+				}
+				doRelease(conn);
+			});
+		});
+	})
+	
 	// 회원가입
 	app.post("/frmNIDJoin", function(req, res, next){		
 		var id = req.body.id;
@@ -163,8 +201,7 @@ module.exports = function(app){
 
 			conn.execute(query, function(err,result){
 				if(err){
-					console.log("selecting emplyrSn got failed");
-					doRelease(conn);
+					console.log(err);
 				} else {
 					var salt = Math.round((new Date().valueOf() * Math.random()))+"";
 					var hashPassword = crypto.createHash("sha256").update(pw + salt).digest("hex");
@@ -191,17 +228,15 @@ module.exports = function(app){
 							console.log("JOIN failed"+err);
 							res.json("F");
 						}
-						console.log("JOIN success!");
-						doRelease(conn);
 						res.json("S");
-					});					
+					});				
 				}
+				doRelease(conn);
 			});
 		});
 	})
 
 	function doRelease(conn){
-		console.log("******doRelease******");
 		conn.close(function(err){
 			if(err){
 				console.log("doRelease error!");
