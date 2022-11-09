@@ -1,11 +1,51 @@
 <!DOCTYPE html>
 <html lang="ko">
     <head>
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 		<link href="../css/login.css?after" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" />
 		<meta charset="utf-8" />
 		<title>MYDRIVE : 로그인</title>
 	</head>
+	<script>
+		function loginUser(){
+			var id = $("#id").val();
+			if (id == "") {
+				alert("아이디를 입력해주세요.");
+				$("#id").focus();
+				return;
+			}
+
+			var pw = $("#pw").val();
+			if (pw == "") {
+				alert("비밀번호를 입력해주세요.");
+				$("#pw").focus();
+				return;
+			}
+
+			var dataInfo = {};
+			dataInfo.id = id;
+			dataInfo.pw	= pw;
+			
+			$.ajax({
+				contentType : 'application/json; charset=utf-8', type : 'post', dataType : 'json', async : false,
+				url  : '/frmNIDLogin',
+				data : JSON.stringify(dataInfo),
+				success : function(data) {
+					if(data === "S"){
+                        alert("환영합니다.");
+						document.location.href="/";
+					} else if (data === "I"){
+						alert("존재하지 않는 아이디입니다.");
+                    } else if (data === "N"){
+						alert("로그인 정보가 일치하지 않습니다.");
+					} else if (data === "F"){
+                        alert("로그인 도중 오류가 발생하였습니다.");
+                    }
+				}
+			});
+		}
+	</script>
 	<body>
         <div id="wrap" class="wrap">
             <header class="header" role="banner">
@@ -68,7 +108,7 @@
                                         <div class="login_error_wrap" id="err_pw" style="display:none;"></div>
                                         <div class="login_error_wrap" id="err_common" style="display:none;"></div>
                                         <div class="btn_login_wrap">
-                                            <button type="submit" class="btn_login" id="log.login">
+                                            <button type="button" class="btn_login" id="login" onclick="loginUser()">
                                                 <span class="btn_text">로그인</span>
                                             </button>                                             
                                         </div>

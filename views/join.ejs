@@ -29,14 +29,14 @@
 				return;
 			}
 			
-			/*이름
+			/* 이름
 			if ($("name").val() == "") {
 				alert("이름을 입력해주세요.");
 				$("name").focus();
 				return;
 			}
 			
-			/*성별
+			// 성별
 			if ($("gender").val() == "") {
 				alert("성별을 선택해주세요.");
 				$("gender").focus();
@@ -73,8 +73,11 @@
 					console.log(data);
 					if(data ==="S"){
 						alert("정상적으로 회원가입 되었습니다.");
-						//document.location.href="/login";
-					}										
+						document.location.href="/login";
+					} else if (data==="F"){
+						alert("회원가입 도중 오류가 발생하였습니다.");
+						return;
+					}
 				}
 			});
 		}
@@ -122,7 +125,7 @@
 									<label for="name">이름</label>
 								</h3>
 								<span class="ps_box box_right_space">
-									<input type="text" id="name" name="name" title="이름" class="int" maxlength="40"/>
+									<input type="text" id="name" name="name" title="name" class="int" maxlength="40"/>
 								</span>
 							</div>
 							<div class="join_row join_sex">
@@ -130,7 +133,7 @@
 									<label for="name">성별</label>
 								</h3>
 								<div class="ps_box gender_code">
-									<select id="gender" name="gender" class="sel" aria-label="성별">
+									<select id="gender" name="gender" class="sel">
 										<option value selected>성별</option>
 										<option value="M">남자</option>
 										<option value="W">여자</option>
@@ -146,7 +149,7 @@
 									<span class="terms_choice">(선택)</span>
 								</h3>
 								<span class="ps_box int_email box_right_space">
-									<input type="text" id="email" name="email" placeholder="선택입력" aria-label="선택입력" maxlength="100"/>
+									<input type="text" id="email" name="email" placeholder="선택입력" maxlength="100"/>
 								</span>
 							</div>
 						</div>
