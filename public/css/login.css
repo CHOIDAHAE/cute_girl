@@ -256,3 +256,18 @@ button {
     line-height: 24px;
     color: #fff;
 }
+
+.font_weight {
+    font-weight:100 !important;
+}
+
+/*
+.keep_check {
+    position: relative;
+    padding-left: 23px;
+}*/
+
+.keep_text {
+    width: 53%;
+    cursor: pointer;
+}
