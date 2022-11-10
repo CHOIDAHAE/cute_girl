@@ -17,7 +17,11 @@ module.exports = function(app){
 
 	var conn;
 
-	app.get('/', function(req, res, next){		
+	app.get('/', function(req, res, next){
+		res.render('login',{data:'login'});
+	})
+
+	app.get('/index', function(req, res, next){		
 		res.render('index',{data:'index'});
 		
 		/*oracledb.getConnection({
