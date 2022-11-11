@@ -15,29 +15,37 @@ module.exports = function(app){
 	app.use(bodyParser.urlencoded({extended:true}));
 	app.use(bodyParser.json());
 
+	const session = require('express-session');
+	const MemoryStore = require('memorystore')(session);
+
+	const maxAge = 1000 * 60 * 5;
+
+	const sessionObj = {
+		secret: 'kong',
+		resave: false,
+		saveUninitialized: true,
+		store: new MemoryStore({ checkPeriod: maxAge }),
+		cookie: {
+			maxAge,
+		},
+	};
+
+	app.use(session(sessionObj));
+
 	var conn;
 
 	app.get('/', function(req, res, next){
-		res.render('login',{data:'login'});
+		res.render('login',{data:"login"});
 	})
 
-	app.get('/index', function(req, res, next){		
-		res.render('index',{data:'index'});
-		
-		/*oracledb.getConnection({
-			user:dbConfig.user,
-			password:dbConfig.password,
-			connectString:dbConfig.connectString,
-			externalAuth  : dbConfig.externalAuth
-		},function(err,con){
-			if(err){
-				console.log("Oracle Connection failed(dbConn.js)",err);
-			} else {
-				res.render('index',{data:'index'});
-				console.log("Oracle Connection success(dbConn.js)");
-			}
-			conn = con;
-		});*/
+	app.get('/index', function(req, res, next){
+		res.render('index',{"emplyrSn":req.session.user.emplyrSn});
+		/*
+		if(req.session.user.emplyrSn == "" || req.session.user.emplyrSn == null){
+			res.render('login',{data:"login"});
+		} else {
+			res.render('index',{"emplyrSn":req.session.user.emplyrSn});
+		}*/		
 	})
 
 	// 전체 파일 용량 읽어오기
@@ -102,7 +110,7 @@ module.exports = function(app){
 
 			//query format
 			let format = {language: 'sql', indent: ''};
-	
+
 			//comparePw
 			let comparePwQuery = mybatisMapper.getStatement('UserDAO','comparePw', param, format);
 			
@@ -119,13 +127,20 @@ module.exports = function(app){
 						return;
 					}
 					
-					var dbPw = result.rows[0][1];
+					var dbPw = result.rows[0][2];
 					var inputPw = req.body.pw;
-					var dbId = result.rows[0][0];
-					var salt = result.rows[0][2];
+					var dbId = result.rows[0][1];
+					var salt = result.rows[0][3];
 					let hashPassword = crypto.createHash("sha256").update(inputPw + salt).digest("hex");
 					
 					if (dbPw === hashPassword){
+
+						req.session.user = {
+							emplyrSn: result.rows[0][0],
+							name: 'test',
+							authorized: true
+						};
+
 						console.log("LOGIN success!");
 						res.json("S");
 					} else {

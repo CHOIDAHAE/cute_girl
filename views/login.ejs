@@ -28,7 +28,10 @@
 			dataInfo.pw	= pw;
 			
 			$.ajax({
-				contentType : 'application/json; charset=utf-8', type : 'post', dataType : 'json', async : false,
+				contentType : 'application/json; charset=utf-8', 
+                type : 'post', 
+                dataType : 'json', 
+                async : false,
 				url  : '/frmNIDLogin',
 				data : JSON.stringify(dataInfo),
 				success : function(data) {
@@ -45,6 +48,14 @@
 				}
 			});
 		}
+
+        // 엔터키 누르면 로그인 함수 작동
+        function enterKey(){
+            if(event.keyCode == 13){
+                loginUser();
+                return;
+	        }
+        }
 	</script>
 	<body>
         <div id="wrap" class="wrap">
@@ -69,7 +80,7 @@
                                             <div class="input_row" id="id_line">
                                                 <div class="icon_cell" id="id_cell">
                                                     <span class="icon_id">
-                                                        <i class="fa-solid fa-user" style="font-weight:100 !important;"></i>
+                                                        <i class="fa-solid fa-user font_weight"></i>
                                                     </span>
                                                 </div>
                                                 <input type="text" id="id" name="id" placeholder="아이디" title="아이디" class="input_text" maxlength="41" autocomplete="username" value>
@@ -85,7 +96,7 @@
                                                         <i class="fa-solid fa-lock"></i>
                                                     </span>
                                                 </div>
-                                                <input type="password" id="pw" name="pw" placeholder="비밀번호" title="비밀번호" class="input_text" maxlength="16"   autocomplete="current-password" value>
+                                                <input type="password" id="pw" name="pw" placeholder="비밀번호" title="비밀번호" class="input_text" maxlength="16"   autocomplete="current-password" onkeydown="enterKey()" value>
                                                 <span role="button" class="btn_delete" id="pw_clear" style="display: none;">
                                                     <span class="icon_delete">
                                                         <span class="blind">삭제</span>
@@ -95,11 +106,10 @@
                                         </div>
                                         <div class="login_keep_wrap" id="login_keep_wrap">
                                             <div class="keep_check">
-                                                <input type="checkbox" id="keep" name="nvlong" class="input_keep" value="off">
-                                                <label for="keep" class="keep_text">
-                                                    <i class="fa-solid fa-circle-check"></i>
+                                                <div class="keep_text"  id="keepChk" onclick="keepChk()">
+                                                    <i class="fa-solid fa-circle-check" id="keepIcon"></i>
                                                     로그인 상태 유지
-                                                </label>
+                                                </div>
                                             </div>
                                         </div>
                                         <!-- 나중에 개발 or 다른 방법으로 구현 -->

@@ -3,7 +3,7 @@
 
 <mapper namespace="UserDAO">
 	<select id="comparePw">
-		SELECT	EMPLYR_ID, EMPLYR_PASSWORD, SALT
+		SELECT	EMPLYR_SN, EMPLYR_ID, EMPLYR_PASSWORD, SALT
 		FROM	TCM_EMPLYR
 		WHERE	EMPLYR_ID = #{id}
 	</select>
