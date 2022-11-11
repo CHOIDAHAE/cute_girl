@@ -18,6 +18,21 @@ module.exports = function(app){
     })
 
 	app.get('/logout', function(req, res){
-        res.render('login', {data:'login'});
+		if (req.session.user) {
+            req.session.destroy(
+                function (err) {
+                    if (err) {
+                        console.log('세션 삭제시 에러');
+                        return;
+                    }
+                    console.log('세션 삭제 성공');
+                    res.redirect('/login');
+                }
+            );          //세션정보 삭제
+ 
+        } else {
+            console.log('로긴 안되어 있음');
+            res.redirect('/login');
+        }
     })	
 }
