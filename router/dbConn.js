@@ -115,9 +115,9 @@ module.exports = function(app){
 			let comparePwQuery = mybatisMapper.getStatement('UserDAO','comparePw', param, format);
 			
 			conn.execute(comparePwQuery, function(err,result){
-				var errorCnt = result.rows[0][4];
+				console.log(comparePwQuery);
 				if(err){
-					console.log("comparePwQuery failed");
+					console.log("comparePwQuery failed"+err);
 					res.json("F");
 				} else {
 					console.log("comparePwQuery success!");
@@ -126,11 +126,12 @@ module.exports = function(app){
 						console.log("LOGIN failed");
 						res.json("I");
 						return;
-					} else if (errorCnt >= 5){	// 비밀번호 오류 횟수
+					} else if (result.rows[0][4] > 1 && result.rows[0][4]%5 == 0 && result.rows[0][6] == 'Y'){	// 비밀번호 오류 횟수, 10분이내(Y)
 						res.json("O");
 						return;
 					}
-					
+					var errorCnt = result.rows[0][4];
+
 					var dbPw = result.rows[0][2];
 					var inputPw = req.body.pw;
 					var dbId = result.rows[0][1];
@@ -165,7 +166,7 @@ module.exports = function(app){
 							if(err){
 								console.log("updateErrorCo failed");
 								res.json("F");
-							} else if(errorCnt == 4){
+							} else if(errorCnt%5 == 4){
 								res.json("O");
 							} else {
 								res.json("N");
