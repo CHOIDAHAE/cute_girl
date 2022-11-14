@@ -22,17 +22,13 @@ module.exports = function(app){
             req.session.destroy(
                 function (err) {
                     if (err) {
-                        console.log('세션 삭제시 에러');
-                        return;
+                        return;//세션 삭제시 에러
                     }
-                    console.log('세션 삭제 성공');
-                    res.redirect('/login');
+                    res.redirect('/login');//세션 삭제 성공
                 }
-            );          //세션정보 삭제
- 
+            ); 
         } else {
-            console.log('로긴 안되어 있음');
-            res.redirect('/login');
+            res.redirect('/login');//로그인 안되어 있음
         }
     })	
 }

@@ -35,17 +35,19 @@ module.exports = function(app){
 	var conn;
 
 	app.get('/', function(req, res, next){
-		res.render('login',{data:"login"});
-	})
-
-	app.get('/index', function(req, res, next){
-		res.render('index',{"emplyrSn":req.session.user.emplyrSn});
-		/*
-		if(req.session.user.emplyrSn == "" || req.session.user.emplyrSn == null){
+		if(req.session.user == "" || req.session.user == null){
 			res.render('login',{data:"login"});
 		} else {
 			res.render('index',{"emplyrSn":req.session.user.emplyrSn});
-		}*/		
+		}
+	})
+
+	app.get('/index', function(req, res, next){
+		if(req.session.user == "" || req.session.user == null){
+			res.render('login',{data:"login"});
+		} else {
+			res.render('index',{"emplyrSn":req.session.user.emplyrSn});
+		}
 	})
 
 	// 전체 파일 용량 읽어오기
