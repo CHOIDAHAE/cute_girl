@@ -108,5 +108,19 @@
 
                 document.getElementById("gridArea").src = menuNm;
             }
+
+            //파일 선택시 사이드바 정보 띄우는 이벤트
+            function view_photoInfo(){
+                var sideInfo_box = document.getElementById("sideInfo_box");
+                var sideEle1 = document.querySelector("#file_click");
+                var sideEle2 = document.querySelector("#file_nonClick");
+
+                console.log(sideEle1);
+
+                //sideInfo_box.textContent = "사진을 선택하였습니다.";
+
+                sideEle1.classList.toggle("sideInfoClick");
+                sideEle2.classList.toggle("sideInfoClick");
+            }
         </script>
     </head>

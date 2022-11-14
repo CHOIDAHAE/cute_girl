@@ -271,8 +271,11 @@ module.exports = function(app){
 
 					//쿼리문 실행(insert)
 					conn.execute(InstQuery, function(err,result){
+						//22.11.14 쿼리문 출력때문에 추가
+						console.log(InstQuery);
+
 						if(err){
-							console.log("JOIN failed"+err);
+							console.log("JOIN failed "+err);
 							res.json("F");
 						}
 						res.json("S");

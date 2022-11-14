@@ -72,6 +72,10 @@ body{
     color: rgb(161, 161, 161);
 }
 
+.sideInfoClick{
+    display : none;
+}
+
 
 /* 정렬기준 */
 .formBox {

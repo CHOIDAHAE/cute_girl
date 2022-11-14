@@ -76,3 +76,19 @@ ul {
 .file_item:hover .fa-star{
     opacity: 1;
 }
+
+.photo_checkbox {
+    position : absolute;
+    z-index: 2;
+    opacity: 0;
+    border : none;
+    background-color: transparent;
+    color : white;
+    left : 26em;
+    top : 7em;
+    width:2em;
+}
+
+.file_item:hover .photo_checkbox{
+    opacity: 1;
+}
