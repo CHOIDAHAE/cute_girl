@@ -37,12 +37,14 @@
 				success : function(data) {
 					if(data === "S"){
                         alert("환영합니다.");
-						document.location.href="/index";
-					} else if (data === "I"){
-						alert("존재하지 않는 아이디입니다.");
+                        document.location.href="/index";
+                    } else if (data === "I"){
+                        alert("존재하지 않는 아이디입니다.");
                     } else if (data === "N"){
-						alert("로그인 정보가 일치하지 않습니다.");
-					} else if (data === "F"){
+                        alert("로그인 정보가 일치하지 않습니다. \n로그인 5회 실패 시 일정시간 로그인이 불가능합니다.");
+                    } else if (data === "O"){
+                        alert("비밀번호 오류 5회 \n5분간 로그인이 불가능합니다.");
+                    } else if (data === "F"){
                         alert("로그인 도중 오류가 발생하였습니다.");
                     }
 				}

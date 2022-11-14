@@ -115,6 +115,7 @@ module.exports = function(app){
 			let comparePwQuery = mybatisMapper.getStatement('UserDAO','comparePw', param, format);
 			
 			conn.execute(comparePwQuery, function(err,result){
+				var errorCnt = result.rows[0][4];
 				if(err){
 					console.log("comparePwQuery failed");
 					res.json("F");
@@ -124,6 +125,9 @@ module.exports = function(app){
 					if(result.rows == ""|| result.rows == null){
 						console.log("LOGIN failed");
 						res.json("I");
+						return;
+					} else if (errorCnt >= 5){	// 비밀번호 오류 횟수
+						res.json("O");
 						return;
 					}
 					
@@ -142,10 +146,31 @@ module.exports = function(app){
 						};
 
 						console.log("LOGIN success!");
-						res.json("S");
+						let updateErrorCoInit = mybatisMapper.getStatement('UserDAO','updateErrorCoInit', {'emplyrId':dbId}, format);
+				
+						conn.execute(updateErrorCoInit, function(err,result){
+							console.log(updateErrorCoInit);
+							if(err){
+								console.log("updateErrorCoInit failed");
+								res.json("F");
+							} else {
+								res.json("S");
+							}							
+						});
 					} else {
 						console.log("LOGIN failed");
-						res.json("N");
+						let updateErrorCo = mybatisMapper.getStatement('UserDAO','updatePasswordErrorCo', {'emplyrId':req.body.id}, format);
+				
+						conn.execute(updateErrorCo, function(err,result){
+							if(err){
+								console.log("updateErrorCo failed");
+								res.json("F");
+							} else if(errorCnt == 4){
+								res.json("O");
+							} else {
+								res.json("N");
+							}							
+						});
 					}
 				}
 			});

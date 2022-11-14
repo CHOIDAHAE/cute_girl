@@ -3,7 +3,7 @@
 
 <mapper namespace="UserDAO">
 	<select id="comparePw">
-		SELECT	EMPLYR_SN, EMPLYR_ID, EMPLYR_PASSWORD, SALT
+		SELECT	EMPLYR_SN, EMPLYR_ID, EMPLYR_PASSWORD, SALT, PASSWORD_ERROR_CO
 		FROM	TCM_EMPLYR
 		WHERE	EMPLYR_ID = #{id}
 	</select>
@@ -22,33 +22,52 @@
 	</select>
 
 	<insert id="joinUser">
-			INSERT INTO TCM_EMPLYR
-				(
-					EMPLYR_SN,
-					EMPLYR_NM,
-					EMPLYR_ID,
-					EMPLYR_PASSWORD,
-					SALT,
-					SEXDSTN_CODE,
-					EMAIL_ADRES,
-					EMPLYR_MBTLNUM,
-					FRST_REGISTER_SN,
-					FRST_REGIST_DT,
-					LAST_UPDUSR_SN,
-					LAST_UPDT_DT
-				)VALUES(
-					#{emplyrSn},
-					#{name},
-					#{id},
-					#{pw},
-					#{salt},
-					#{gender},
-					#{email},
-					#{phoneNo},
-					#{emplyrSn},
-					SYSDATE,
-					#{emplyrSn},
-					SYSDATE
-				)
-		</insert>
+		INSERT INTO TCM_EMPLYR
+			(
+				EMPLYR_SN,
+				EMPLYR_NM,
+				EMPLYR_ID,
+				EMPLYR_PASSWORD,
+				SALT,
+				SEXDSTN_CODE,
+				EMAIL_ADRES,
+				EMPLYR_MBTLNUM,
+				FRST_REGISTER_SN,
+				FRST_REGIST_DT,
+				LAST_UPDUSR_SN,
+				LAST_UPDT_DT
+			)VALUES(
+				#{emplyrSn},
+				#{name},
+				#{id},
+				#{pw},
+				#{salt},
+				#{gender},
+				#{email},
+				#{phoneNo},
+				#{emplyrSn},
+				SYSDATE,
+				#{emplyrSn},
+				SYSDATE
+			)
+	</insert>
+
+	<update id="updatePasswordErrorCo">
+		UPDATE
+			TCM_EMPLYR
+		SET
+			PASSWORD_ERROR_CO = PASSWORD_ERROR_CO + 1
+		WHERE
+			EMPLYR_ID = #{emplyrId}
+	</update>
+	
+	<update id="updateErrorCoInit">
+		UPDATE
+			TCM_EMPLYR
+		SET
+			PASSWORD_ERROR_CO 	= 0
+		WHERE
+			EMPLYR_ID = #{emplyrId}
+	</update>
+
 </mapper>
