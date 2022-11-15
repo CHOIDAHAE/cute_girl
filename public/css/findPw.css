@@ -12,7 +12,7 @@ menu, ul, ol {
 }
 
 #wrap {
-    position: relative;
+    /*position: relative;*/
     width: 100%;
     min-width: 1020px;
     min-height: 100%;
@@ -27,13 +27,18 @@ menu, ul, ol {
     background-color: #4078ff;
 }
 
+.logo {
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+}
 
 .top {
     height: 29px;
     margin: 0 0 0 auto;
 }
 
-#container, .lnb, .top {
+#container, .lnb {
     width: 980px;
 }
 
@@ -110,6 +115,7 @@ menu, ul, ol {
 }
 
 .content_header {
+    height: 30px;
     border-bottom: 2px solid #e5e5e5;
 }
 
@@ -117,15 +123,16 @@ menu, ul, ol {
     position: relative;
     float: left;
     clear: both;
-    height: 21px;
+    height: 30px;
     margin-bottom: -2px;
     padding: 0 2px 0 1px;
     border-bottom: 2px solid #4d4d4d;
 }
 
 .process {
+    font-size: 12px;
     position: absolute;
-    top: 2px;
+    top: 9px;
     right: -2px;
 }
 

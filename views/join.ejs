@@ -49,14 +49,28 @@
 				return;
 			}
 
-			/* 이메일(선택사항)
-			if ($("email").val() == "" || $("email").val() == null) {
-				alert("이메일을 입력해주세요.");
-				$("gender").focus();
-				return;
-			}*/
+			// 이메일(선택사항)
+			var email = document.getElementById("email").value;
+			var isEmail = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        	var isHan = /[ㄱ-ㅎ가-힣]/g;
 			
-			//휴대전화f
+			if(email != "" && email != null){
+				if (!isEmail.test(email) || isHan.test(email)) {
+					alert("이메일 주소를 다시 확인해주세요.");
+					$("email").focus();
+					return;
+				}
+			}			
+
+			//인증번호
+			var autoNo = document.getElementById("autoNo").value;
+			if (autoNo == "") {
+				alert("휴대전화번호 인증이 필요합니다.");
+				$("autoNo").focus();
+				return;
+			}
+
+			//휴대전화번호
 			var phoneNo = document.getElementById("phoneNo").value;
 			if (phoneNo == "") {
 				alert("휴대전화번호를 입력해주세요.");
@@ -222,6 +236,11 @@
 			});
 		}
 
+		// 휴대전화 숫자 이외의 문자는 없애기
+		function chkPhoneForm(){
+			document.getElementById("phoneNo").value = document.getElementById("phoneNo").value.replace(/[^0-9]/g, '');
+		}
+
 		// 인증번호 일치 확인
 		function chkPhoneNo(){
 			// 작성한 인증번호
@@ -341,7 +360,7 @@
 							</div>
 							<div class="int_mobile_area">
 								<span class="ps_box int_mobile">
-									<input type="tel" id="phoneNo" name="phoneNo" placeholder="전화번호 입력" class="int" maxlength="16" />
+									<input type="tel" id="phoneNo" name="phoneNo" placeholder="전화번호 입력" class="int" maxlength="16" onblur="chkPhoneForm()" />
 								</span>
 								<button type="button" id="btnSend" class="btn_verify btn_primary" onclick="sendMsg()">
 									<span>인증번호 받기</span>
