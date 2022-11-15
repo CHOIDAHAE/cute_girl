@@ -82,7 +82,6 @@ module.exports = function(app){
 					doRelease(conn);
 					return;
 				}
-				console.log("selectFileVolume success!");
 				
 				res.send(result.rows);
 				doRelease(conn);					
@@ -117,13 +116,10 @@ module.exports = function(app){
 			let comparePwQuery = mybatisMapper.getStatement('UserDAO','comparePw', param, format);
 			
 			conn.execute(comparePwQuery, function(err,result){
-				console.log(comparePwQuery);
 				if(err){
 					console.log("comparePwQuery failed"+err);
 					res.json("F");
-				} else {
-					console.log("comparePwQuery success!");
-					
+				} else {					
 					if(result.rows == ""|| result.rows == null){
 						console.log("LOGIN failed");
 						res.json("I");
@@ -148,11 +144,9 @@ module.exports = function(app){
 							authorized: true
 						};
 
-						console.log("LOGIN success!");
 						let updateErrorCoInit = mybatisMapper.getStatement('UserDAO','updateErrorCoInit', {'emplyrId':dbId}, format);
 				
 						conn.execute(updateErrorCoInit, function(err,result){
-							console.log(updateErrorCoInit);
 							if(err){
 								console.log("updateErrorCoInit failed");
 								res.json("F");
@@ -202,7 +196,6 @@ module.exports = function(app){
 			let query = mybatisMapper.getStatement('UserDAO','selectUserId', {id : req.body.id}, format);
 
 			conn.execute(query, function(err,result){
-				console.log(result.rows[0][0]);
 				if(err){
 					console.log("chkDuplId failed");
 					res.json("F");

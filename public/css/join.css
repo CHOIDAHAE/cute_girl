@@ -362,6 +362,15 @@ ul {
     font-size: 0;
 }
 
+.input_code {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    background: 0 0;
+    font-size: 12px;
+    z-index: 10;
+}
+
 .join_email .terms_choice {
     font-size: 12px;
     font-weight: 400;

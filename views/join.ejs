@@ -56,7 +56,7 @@
 				return;
 			}*/
 			
-			//휴대전화
+			//휴대전화f
 			var phoneNo = document.getElementById("phoneNo").value;
 			if (phoneNo == "") {
 				alert("휴대전화번호를 입력해주세요.");
@@ -74,19 +74,19 @@
 			
 			if (confirm("회원가입 하시겠습니까?")) {
 				$.ajax({
-						contentType : 'application/json; charset=utf-8', type : 'post', dataType : 'json', async : false,
-						url  : '/frmNIDJoin',
-						data : JSON.stringify(dataInfo),
-						success : function(data) {
-							if(data ==="S"){
-								alert("정상적으로 회원가입 되었습니다.");
-								document.location.href="/login";						
-							} else if (data==="F"){
-								alert("회원가입 도중 오류가 발생하였습니다.");
-								return;
-							}
+					contentType : 'application/json; charset=utf-8', type : 'post', dataType : 'json', async : false,
+					url  : '/frmNIDJoin',
+					data : JSON.stringify(dataInfo),
+					success : function(data) {
+						if(data ==="S"){
+							alert("정상적으로 회원가입 되었습니다.");
+							document.location.href="/login";						
+						} else if (data==="F"){
+							alert("회원가입 도중 오류가 발생하였습니다.");
+							return;
 						}
-					});
+					}
+				});
 			} else {
 				return;
 			}
@@ -95,7 +95,7 @@
 		// 아이디 중복체크
 		function chkDuplId(){
 			var idMsg = document.getElementById("idMsg");
-			var idRegExp = /^[a-z0-9_-]{5,20}$/;
+			var idRegExp = /^[a-z0-9][a-z0-9_\-]{4,19}$/;
 
 			if($("#id").val() == "" || $("#id").val() == null){	// 필수항목입니다.
 				idMsg1.style.display = "block";
@@ -140,7 +140,7 @@
 
 		//비밀번호 유효성 검사
 		function chkValidatePw(){
-			var idRegExp = /^[a-zA-Z\\d`~!@#$%^&*()-_=+]{8,16}$/;
+			var idRegExp = /^[A-Za-z0-9`\-=\\\[\];',\./~!@#\$%\^&\*\(\)_\+|\{\}:"<>\?]{8,16}$/;
 			var lockIcon = document.getElementById("lockIcon");
 
 			if($("#pswd1").val() == "" || $("#pswd1").val() == null){	// 필수항목입니다.
@@ -164,15 +164,16 @@
 
 		//비밀번호 재확인
 		function reChkPw(){
-			var pswd1 = document.getElementById("pswd1");
-			var pswd2 = document.getElementById("pswd2");
+			var pwChkMsg1 = document.getElementById("pwChkMsg1");
+			var pwChkMsg2 = document.getElementById("pwChkMsg2");
 
 			var lockChkIcon = document.getElementById("lockChkIcon");
 
 			if($("#pswd2").val() == "" || $("#pswd2").val() == null){
 				pwChkMsg1.style.display = "block";
 				pwChkMsg2.style.display = "none";
-			} else if($("#pswd1").val()===$("#pswd2").val()){
+				lockChkIcon.style.color = "#4078ff";
+			} else if($("#pswd1").val() === $("#pswd2").val()){
 				pwChkMsg1.style.display = "none";
 				pwChkMsg2.style.display = "none";
 				lockChkIcon.style.color = "#4078ff";
@@ -183,6 +184,69 @@
 			}
 		}
 
+		// 인증번호 받기
+		function sendMsg(){
+			var phoneNo = document.getElementById("phoneNo").value;
+			if (phoneNo == "") {
+				alert("휴대전화번호를 입력해주세요.");
+				$("phoneNo").focus();
+				return;
+			}
+
+			var dataInfo = {};
+			dataInfo.phoneNo	= phoneNo;
+
+			$.ajax({
+				contentType : 'application/json; charset=utf-8', type : 'post', dataType : 'json', async : false,
+				url  : '/sendMsg',
+				data : JSON.stringify(dataInfo),
+				success : function(data) {
+					var authNoCode = data; //인증번호
+					if(data != '' || data != null){
+						alert("인증번호를 보냈습니다.");
+
+						// 인증번호 입력창 제어
+						var autoNo = document.getElementById('autoNo');
+						autoNo.disabled = false;
+
+						var authNoBox = document.getElementById('authNoBox');
+						authNoBox.className = 'ps_box';
+
+						// 찐 인증번호 담기
+						$('#authNoCode').val(authNoCode);
+					} else {
+						alert("인증번호 전송 중 오류가 발생하였습니다.");
+						return;
+					}
+				}
+			});
+		}
+
+		// 인증번호 일치 확인
+		function chkPhoneNo(){
+			// 작성한 인증번호
+			var autoNo = document.getElementById("autoNo").value;
+			// 찐 인증번호
+			var authNoCode = document.getElementById("authNoCode").value;
+			// 문구
+			var authNoMsg = document.getElementById("authNoMsg"); //인증이 필요합니다.
+			var authNoMsg1 = document.getElementById("authNoMsg1"); //인증번호를 다시 확인해주세요.
+			var authNoMsg2 = document.getElementById("authNoMsg2"); //인증에 성공했습니다.
+			
+			if( autoNo == "" || authNoCode == "" ){
+				authNoMsg.style.display = "block";	//인증이 필요합니다.
+				authNoMsg1.style.display = "none";	//인증번호를 다시 확인해주세요.
+				authNoMsg2.style.display = "none";	//인증에 성공했습니다.
+			} else if( autoNo == authNoCode ){
+				authNoMsg.style.display = "none";	//인증이 필요합니다.
+				authNoMsg1.style.display = "none";	//인증번호를 다시 확인해주세요.
+				authNoMsg2.style.display = "block";	//인증에 성공했습니다.
+			} else {
+				authNoMsg.style.display = "none";	//인증이 필요합니다.
+				authNoMsg1.style.display = "block";	//인증번호를 다시 확인해주세요.
+				authNoMsg2.style.display = "none";	//인증에 성공했습니다.
+			}
+		}
 	</script>
 	<body>
 		<div id="header" class="join_membership" role="banner">
@@ -279,20 +343,23 @@
 								<span class="ps_box int_mobile">
 									<input type="tel" id="phoneNo" name="phoneNo" placeholder="전화번호 입력" class="int" maxlength="16" />
 								</span>
-								<a href="#" class="btn_verify btn_primary" id="btnSend" role="button">
+								<button type="button" id="btnSend" class="btn_verify btn_primary" onclick="sendMsg()">
 									<span>인증번호 받기</span>
-								</a>
+								</button>
 							</div>
 							<div class="ps_box_disable box_right_space" id="authNoBox">
-								<input type="tel" id="autoNo" name="authNo" placeholder="인증번호 입력하세요" class="int" disabled maxlength="4">
+								<input type="tel" id="autoNo" name="authNo" placeholder="인증번호 입력하세요" class="int" disabled maxlength="4" onblur="chkPhoneNo()">
 								<label id="wa_verify" for="authNo" class="lbl">
-									<span class="wa_blind">인증받은 후 인증번호를 입력해야 합니다.</span>
-									<span class="input_code" id="authNoCode" style="display:none;"></span>
+									<!--<span class="wa_blind">인증받은 후 인증번호를 입력해야 합니다.</span>-->
+									<!--<span class="input_code" id="authNoCode" style="display:none;"></span>-->
+									<span class="input_code" id="authNoCode"></span>
 								</label>
 							</div>
+							<span class="error_next_box" id="authNoMsg" style="display:none" aria-live="assertive">인증이 필요합니다.</span>
+							<span class="error_next_box" id="authNoMsg1" style="display:none" aria-live="assertive">인증번호를 다시 확인해주세요.</span>
+							<span class="error_next_box blue" id="authNoMsg2" style="display:none" aria-live="assertive">인증에 성공했습니다.</span>
 						</div>
 						<div class="btn_area">
-							<!--<button type="submit" id="btnJoin" class="btn_type btn_primary">-->
 							<button type="button" id="btnJoin" class="btn_type btn_primary" onclick="joinUser()">
 								<span>가입하기</span>
 							</button>

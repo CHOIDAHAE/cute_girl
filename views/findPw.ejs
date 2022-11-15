@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+		<link href="../css/findPw.css?after" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" />
+		<meta charset="utf-8" />
+		<title>MYDRIVE : 비밀번호 찾기</title>
+	</head>
+	<script>
+		
+	</script>
+	<body>
+        <div id="wrap" class="wrap_leave">
+			<div id="header" class="header_type2">
+				<div class="top">
+					<h1>
+						로고
+					</h1>
+					<div id="gnb" class="gnb_dark">
+						<ul class="gnb_lst" id="bng_lst" style="display:block;">
+							<li class="gnb_login_li" id="gnb_login_layer" style="display:inline-block;">
+								<a class="gnb_btn_login" href="https://nid.naver.com/nidlogin.login" id="gnb_login_button">
+									<span class="gnb_bg"></span>
+									<span class="gnb_bdr"></span>
+									<span class="gnb_txt">로그인</span>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div id="lnb" class="lnb_wrap">
+					<ul class="lnb lnb_type3"></ul>
+				</div>
+			</div>
+			<div id="container" style="height:853px;">
+				<form id="fm" name="fm" action="/" method="post">
+					<div id="content" class="non_sign inquiry">
+						<div class="content_header">
+							<h2><img src="https://static.nid.naver.com/images/web/user/h_find_pw2.gif" width="84" height="16" alt="비밀번호 찾기"></h2>
+							<ol class="process">
+								<li class="on">01. 아이디 입력<span>&gt;</span></li>
+								<li>02. 본인 확인<span>&gt;</span></li>
+								<li>03. 비밀번호 재설정</li>
+							</ol>
+						</div>
+						<p class="content_summary">비밀번호를 찾고자 하는 아이디를 입력해 주세요.</p>
+						<div class="section section_find">
+							<div class="box6">
+								<div id="divUserId" class="input_box">
+                                    <label id="lbUserId" for="userId">아이디 입력</label>
+									<input type="text" id="userId" name="userId" onfocus="" onblur="" maxlength="40" value="" title="네이버 아이디 또는 단체 아이디" class="input_txt">
+								</div>
+							</div>
+							<div class="btn_area">
+								<a href="#" onclick="mainSubmit();" class="btn_next2">
+									<span class="blind">다음</span>
+								</a>
+							</div>
+							<div class="find_dsc">
+								<h3>아이디가 기억나지 않는다면?
+									<a href="#">아이디 찾기 바로가기
+									</a>
+								</h3>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div id="footer">
+				<ul class="guides fl">
+					<li class="first">
+						<a href="#" target="_blank">전자금융거래 이용약관</a>
+					</li>
+					<li>
+						<a href="#" target="_blank"><strong>개인정보처리방침</strong></a>
+					</li>
+					<li>
+						<a href="#" target="_blank" >책임의 한계와 법적고지</a>
+					</li>
+				</ul>
+				<address class="copyright">
+					Copyright <em>©</em>
+					<a href="#" target="_blank">
+						<strong>MYDRIVE</strong>
+					</a>
+					All Rights Reserved.
+				</address>
+				<ul class="guides fr">
+					<li>
+						<a href="#" target="_blank" title="새창"> 회원정보 고객센터 </a>
+					</li>
+				</ul>
+			</div>
+		</div>     
+    </body>
+</html>

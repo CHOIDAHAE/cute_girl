@@ -1,0 +1,340 @@
+body, p, h1, h2, h3, h4, h5, h6, menu, ul, ol, li, dl, dt, dd, table, th, td, form, fieldset, legend, input, textarea, button, select {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+menu, ul, ol {
+    list-style: none;
+}
+
+#wrap {
+    position: relative;
+    width: 100%;
+    min-width: 1020px;
+    min-height: 100%;
+}
+
+#header.header_type2 {
+    height: 86px;
+    background-color: #333;
+}
+
+.lnb_wrap {
+    background-color: #4078ff;
+}
+
+
+.top {
+    height: 29px;
+    margin: 0 0 0 auto;
+}
+
+#container, .lnb, .top {
+    width: 980px;
+}
+
+.top h1 {
+    position: absolute;
+    top: 0;
+    left: 20px;
+    height: 25px;
+    margin-bottom: 12px;
+}
+
+.lnb {
+    position: relative;
+    height: 92px;
+    margin: 0 auto;
+}
+
+.header_type2 .lnb {
+    height: 57px;
+}
+
+.lnb_type3 {
+    width: 670px;
+    background-position: 0 -638px;
+}
+
+.wrap_leave #container {
+    background: 0 0;
+}
+
+#container {
+    position: relative;
+    margin: 0 auto;
+    padding-bottom: 30px;
+    height: auto!important;
+    background: url(https://static.nid.naver.com/images/web/user/bg_container.png) repeat-y 699px 0;
+    zoom: 1;
+}
+
+#container:after {
+    display: block;
+    clear: both;
+    content: '';
+}
+
+.wrap_leave #content {
+    float: none;
+    width: auto;
+    margin: 0;
+    padding: 25px 0 20px;
+}
+
+#content {
+    float: left;
+    position: relative;
+    width: 670px;
+    margin: 0 -252px 0 auto;
+    padding: 29px 29px 20px 0;
+    background-color: #fff;
+}
+
+.inquiry.non_sign {
+    width: 670px !important;
+    margin: 0 auto !important;
+}
+
+.non_sign {
+    padding-bottom: 50px !important;
+}
+
+.inquiry.non_sign .content_header {
+    position: relative;
+    margin: 10px 0;
+}
+
+.content_header {
+    border-bottom: 2px solid #e5e5e5;
+}
+
+.content_header h2 {
+    position: relative;
+    float: left;
+    clear: both;
+    height: 21px;
+    margin-bottom: -2px;
+    padding: 0 2px 0 1px;
+    border-bottom: 2px solid #4d4d4d;
+}
+
+.process {
+    position: absolute;
+    top: 2px;
+    right: -2px;
+}
+
+.process li {
+    float: left;
+    color: #8e8e8e;
+}
+
+.process li span {
+    padding: 0 2px;
+}
+
+.content_header:after {
+    font-size: 0;
+    line-height: 0;
+    display: block;
+    clear: both;
+    content: '';
+}
+
+.inquiry.non_sign .content_summary {
+    margin: 0;
+    padding: 2px 0 41px;
+    color: #666;
+}
+
+.content_summary {
+    font-size: 12px;
+    line-height: 17px;
+    margin-bottom: 30px;
+    color: #888;
+}
+
+.section_find {
+    margin-top: -19px;
+    padding-bottom: 80px;
+}
+
+.section {
+    position: relative;
+    padding-bottom: 40px;
+}
+
+.section:after {
+    font-size: 0;
+    line-height: 0;
+    display: block;
+    clear: both;
+    content: '';
+}
+
+.box6 {
+    position: relative;
+    z-index: 100;
+    padding: 39px 40px 20px;
+    border: 1px solid #e5e5e5;
+}
+
+.input_box {
+    position: relative;
+    width: 299px;
+    height: 34px;
+    margin: 0 auto 20px;
+    background: url(https://static.nid.naver.com/images/web/user/sp_sech_box.png) no-repeat 0 0;
+}
+
+.input_box label {
+    font-size: 14px;
+    font-weight: 700;
+    position: absolute;
+    top: 8px;
+    left: 10px;
+    cursor: auto;
+    color: #8e8e8e;
+}
+
+.input_box .input_txt {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 32px;
+    width: 288px;
+    height: 32px;
+    margin: 1px;
+    padding-left: 9px;
+    border: 0;
+    background: 0 0;
+}
+
+.section_find .btn_area {
+    padding: 17px 0 15px;
+}
+
+.btn_area {
+    text-align: center;
+}
+
+.btn_next2 {
+    width: 60px;
+    height: 33px;
+    background-position: 0 0;
+}
+
+.btn_checkid, .btn_confirm2, .btn_ct, .btn_findpw, .btn_login, .btn_login2, .btn_next2, .btn_prev, .dash, .edge, .ico_arr, .ico_arr2, .ico_help2 {
+    position: relative;
+    display: inline-block;
+    background: url(https://static.nid.naver.com/images/web/user/sp_find_idpw.png) no-repeat;
+}
+
+.find_dsc {
+    font-size: 12px;
+    padding-top: 15px;
+    color: #707070;
+}
+
+.find_dsc h3 {
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.find_dsc h3 a {
+    display: inline-block;
+    margin-left: 2px;
+    text-decoration: underline;
+    color: #707070;
+}
+
+#footer {
+    clear: both;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 14px;
+    margin: 0;
+    padding: 9px 0 6px;
+    border-top: 1px solid #e5e5e5;
+    background: #333 url(https://static.nid.naver.com/images/web/user/bg_footer.png) repeat-x 0 0;
+    text-align: center;
+    zoom: 1;
+}
+
+#footer {
+    overflow: hidden;
+    width: 100% !important;
+}
+
+.fl {
+    float: left;
+    z-index: 20;
+    margin: 0 auto 0 20px;
+}
+
+.guides {
+    position: relative;
+    letter-spacing: -1px;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.guides li.first {
+    padding: 0 3px 0 0;
+    background: 0 0;
+}
+
+.guides li {
+    display: inline;
+    padding: 0 5px 0 7px;
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+.guides a {
+    color: #9c9da1;
+}
+
+.guides li {
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+.copyright {
+    position: absolute;
+    top: 8px;
+    right: 0;
+    width: 100%;
+    padding-right: 0;
+    font-size: 9px;
+    font-family: verdana,monospace;
+    color: #838386;
+    zoom: 1;
+}
+
+em, address {
+    font-style: normal;
+}
+
+.copyright a {
+    position: relative;
+    z-index: 10;
+    font-family: tahoma,monospace;
+    color: #afafaf;
+}
+
+.fr {
+    float: right;
+    z-index: 10;
+    margin: 0 20px 0 auto;
+}
+
+.fr li:first-child {
+    background: 0 0;
+}
