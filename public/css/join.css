@@ -258,6 +258,11 @@ ul {
     -webkit-appearance: none;
 }
 
+.disabled{
+    background: #f7f7f7 !important;
+    cursor: auto !important;
+}
+
 .row_group+.join_mobile {
     margin-top: 20px;
 }
@@ -270,6 +275,8 @@ ul {
 .country_code {
     position: relative;
     overflow: hidden;
+    background: #f7f7f7 !important;
+    cursor: auto !important;
 }
 
 .join_mobile .int_mobile_area {
