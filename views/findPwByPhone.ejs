@@ -119,7 +119,7 @@
 			} else if (phoneAuthNo === authNoCode){
 				var emplyrSn = document.getElementById("emplyrSn").value;
 				var emplyrId = document.getElementById("emplyrId").value;
-				document.location.href="/reSettingPw?emplyrSn="+emplyrSn+"&emplyrId"+emplyrId;
+				document.location.href="/reSettingPw?emplyrSn="+emplyrSn+"&emplyrId="+emplyrId;
 			}
 		}
 
@@ -137,115 +137,117 @@
         <div id="wrap" class="wrap_leave">
 			<% include ./findHeader %>
 			<div id="container" style="height:853px;">
-
-		<div id="content" class="non_sign inquiry">
-			<div class="content_header">
-				<h2><img src="https://static.nid.naver.com/images/web/user/h_find_pw2.gif" width="84" height="16" alt="비밀번호 찾기"></h2>
-				<ol class="process">
-				<li>01. 아이디 입력<span>&gt;</span></li>
-				<li class="on">02. 본인 확인<span>&gt;</span></li>
-				<li>03. 비밀번호 재설정</li>
-				</ol>
-			</div>
-			<p class="content_summary">비밀번호를 찾을 방법을 선택해 주세요!!!</p>
-			
-			<form id="fm" name="fm" action="#" method="post">
-			<fieldset>
-				<div class="section section_find">
-					<% if (emplyrSn != "" && emplyrSn != null){ %>
-						<input type="hidden" id="emplyrSn" value=<%= emplyrSn %> />
-					<% } %>
-					<input type="hidden" id="realPhoneNo" value="" />
-					<input type="hidden" id="emplyrId" value="" />
-				<!--
-					<input type="hidden" name="authYn" id="authYn" value="">
-					<input type="hidden" name="mobileYn" id="mobileYn" value="N">
-					<input type="hidden" name="type" id="type" value="pwInquiry">
-					<input type="hidden" name="captchaCheckYn" id="captchaCheckYn" value="N">
-					<input type="hidden" id="captcha_type" name="captcha_type" value="image">
-					<input type="hidden" id="token_help" name="token_help" value="hutZbypJePIZzcl4">
-					<input type="hidden" id="autoValue" name="autoValue" value="">
-					<input type="hidden" id="chptchakey" name="chptchakey" value="5gblNaEEkTyWEZkm">-->
-						<div id="radioContent" class="box6">
-							<div id="div_regMobile" class="box_inn selected"> <!-- [D] 선택시 selected 클래스 추가 -->
-								<input type="radio" id="r_pn1" onclick="" class="input_rd" name="certification" checked>
-								<label for="r_pn1" class="label_rd">회원정보에 등록한 휴대전화로 인증
-									<span>
-										<input type="text" id="selectPhoneNo" name="selectPhoneNo" class="selectPhoneNo" disabled/>
-									</span>
-								</label>
-								<div class="box_inn_sub">
-									<p class="dsc">회원정보에 등록한 휴대전화 번호와 입력한 휴대전화 번호가 같아야, 인증번호를 받을 수 있습니다.</p>	
-									<dl>
-									<dt>
-										<label for="nm" class="label_txt">이름</label>
-									</dt>
-									<dd>
-										<input type="text" id="phoneNm" name="phoneNm" maxlength="40" class="input_txt" style="width:217px">
-									</dd>
-									<dt><label for="mob2" class="label_txt">휴대전화</label></dt>
-									<dd>
-										<label for="nationNo" class="blind">국가 번호</label>
-										<span class="country_code">
-											<span class="sel_value" id="input_internationalCode">+82</span>
-											<!--
-											<select id="internationalCode" name="internationalCode" title="국가코드" class="country_sel">
-												<option value="82">대한민국 +82</option>
-											</select>
-											-->
-										</span>									
-										
-										<span class="int_mob">
-											<input type="text" id="phoneNo" name="phoneNo" class="input_txt" style="width:147px" onblur="chkPhoneForm();" maxlength="11" placeholder="휴대전화번호">
-										</span>	
-										<!--
-										<a href="#" id="btnPhoneAuthNo" name="btnPhoneAuthNo" class="btn_ct" onclick="sendMsg()">
-											<span class="blind">인증번호 받기</span>
-										</a>
-										-->
-										<button type="button" id="btnPhoneAuthNo" name="btnPhoneAuthNo" class="btn_ct" onclick="sendMsg()">
-											인증번호 받기
-										</button>
-									</dd>
-									<dt><label for="t_ct1" class="blind">인증번호 입력</label></dt>
-									<dd class="ct">
-										<span class="input_box2">
-											<!--<span id="span_phoneAuthNo" class="phold">인증번호 6자리 숫자 입력</span>-->
-											<input type="text" id="phoneAuthNo" name="phoneAuthNo" maxlength="6" class="input_txt" style="width:217px" disabled="" placeholder="인증번호 6자리 입력" onkeydown="enterKey()">
-											<input type="hidden" id="authNoCode" name="authNoCode">
-										</span>
-										<div>인증번호가 오지 않나요
-											<span class="blind">도움말</span>
-											<div id="smsHelpTxt" class="help_tooltip2" style="display:none">
-												<p>1588 번호가 스팸 문자로 등록되어 있는 것은 아닌지<br>확인해주세요. 스팸 문자로 등록되어 있지 않다면,<br>다시 한 번 '인증번호 받기'를 눌러주세요.</p>
-												<span class="edge"></span>
-											</div>
-										</div>	
-									</dd>	
-									</dl>
-								</div>
-							</div>
-						</div>
-						<!--
-						<div class="box6">
-							<h3>등록한 회원정보로 찾기 어려우시면, 본인 확인 후 비밀번호를 찾아드립니다.</h3>
-							<div id="div_userMobile" class="box_inn">	[D] 선택시 selected 클래스 추가
-									<input type="radio" id="r_pn3" onclick="selectAuthType('userMobile');clickcr(this,'idf.myphone','','',event);" class="input_rd" name="certification">
-									<label for="r_pn3" class="label_rd">본인 명의 휴대전화로 인증<span>(본인 주민등록번호로 가입된 휴대전화)</span></label>
-									<div class="box_inn_sub">
-										<p class="dsc">내 명의(주민등록번호)의 휴대전화로 비밀번호를 재설정 할 수 있습니다.</p>
-									</div>		
-							</div>
-						</div>
-						-->
-					<div class="btn_area">
-						<button type="button" id="btnNext" class="btn_next2" onclick="chkPhoneNo()"></button>
+				<div id="content" class="non_sign inquiry">
+					<div class="content_header">
+						<h2><img src="https://static.nid.naver.com/images/web/user/h_find_pw2.gif" width="84" height="16" alt="비밀번호 찾기"></h2>
+						<ol class="process">
+						<li>01. 아이디 입력<span>&gt;</span></li>
+						<li class="on">02. 본인 확인<span>&gt;</span></li>
+						<li>03. 비밀번호 재설정</li>
+						</ol>
 					</div>
+					<p class="content_summary">비밀번호를 찾을 방법을 선택해 주세요!!!</p>
+					
+					<form id="fm" name="fm" action="#" method="post">
+					<fieldset>
+						<div class="section section_find">
+							<% if (emplyrSn != "" && emplyrSn != null){ %>
+								<input type="hidden" id="emplyrSn" value=<%= emplyrSn %> />
+							<% } %>
+							<input type="hidden" id="realPhoneNo" value="" />
+							<input type="hidden" id="emplyrId" value="" />
+						<!--
+							<input type="hidden" name="authYn" id="authYn" value="">
+							<input type="hidden" name="mobileYn" id="mobileYn" value="N">
+							<input type="hidden" name="type" id="type" value="pwInquiry">
+							<input type="hidden" name="captchaCheckYn" id="captchaCheckYn" value="N">
+							<input type="hidden" id="captcha_type" name="captcha_type" value="image">
+							<input type="hidden" id="token_help" name="token_help" value="hutZbypJePIZzcl4">
+							<input type="hidden" id="autoValue" name="autoValue" value="">
+							<input type="hidden" id="chptchakey" name="chptchakey" value="5gblNaEEkTyWEZkm">-->
+								<div id="radioContent" class="box6">
+									<div id="div_regMobile" class="box_inn selected"> <!-- [D] 선택시 selected 클래스 추가 -->
+										<input type="radio" id="r_pn1" onclick="" class="input_rd" name="certification" checked>
+										<label for="r_pn1" class="label_rd">회원정보에 등록한 휴대전화로 인증
+											<span>
+												<input type="text" id="selectPhoneNo" name="selectPhoneNo" class="selectPhoneNo" disabled/>
+											</span>
+										</label>
+										<div class="box_inn_sub">
+											<p class="dsc">회원정보에 등록한 휴대전화 번호와 입력한 휴대전화 번호가 같아야, 인증번호를 받을 수 있습니다.</p>	
+											<dl>
+											<dt>
+												<label for="nm" class="label_txt">이름</label>
+											</dt>
+											<dd>
+												<input type="text" id="phoneNm" name="phoneNm" maxlength="40" class="input_txt" style="width:217px">
+											</dd>
+											<dt><label for="mob2" class="label_txt">휴대전화</label></dt>
+											<dd>
+												<label for="nationNo" class="blind">국가 번호</label>
+												<span class="country_code">
+													<span class="sel_value" id="input_internationalCode">+82</span>
+													<!--
+													<select id="internationalCode" name="internationalCode" title="국가코드" class="country_sel">
+														<option value="82">대한민국 +82</option>
+													</select>
+													-->
+												</span>									
+												
+												<span class="int_mob">
+													<input type="text" id="phoneNo" name="phoneNo" class="input_txt" style="width:147px" onblur="chkPhoneForm();" maxlength="11" placeholder="휴대전화번호">
+												</span>	
+												<!--
+												<a href="#" id="btnPhoneAuthNo" name="btnPhoneAuthNo" class="btn_ct" onclick="sendMsg()">
+													<span class="blind">인증번호 받기</span>
+												</a>
+												-->
+												<button type="button" id="btnPhoneAuthNo" name="btnPhoneAuthNo" class="btn_ct" onclick="sendMsg()">
+													인증번호 받기
+												</button>
+											</dd>
+											<dt><label for="t_ct1" class="blind">인증번호 입력</label></dt>
+											<dd class="ct">
+												<span class="input_box2">
+													<!--<span id="span_phoneAuthNo" class="phold">인증번호 6자리 숫자 입력</span>-->
+													<input type="text" id="phoneAuthNo" name="phoneAuthNo" maxlength="6" class="input_txt" style="width:217px" disabled="" placeholder="인증번호 6자리 입력" onkeydown="enterKey()">
+													<input type="hidden" id="authNoCode" name="authNoCode">
+												</span>
+												<div>인증번호가 오지 않나요
+													<span class="blind">도움말</span>
+													<div id="smsHelpTxt" class="help_tooltip2" style="display:none">
+														<p>1588 번호가 스팸 문자로 등록되어 있는 것은 아닌지<br>확인해주세요. 스팸 문자로 등록되어 있지 않다면,<br>다시 한 번 '인증번호 받기'를 눌러주세요.</p>
+														<span class="edge"></span>
+													</div>
+												</div>	
+											</dd>	
+											</dl>
+										</div>
+									</div>
+								</div>
+								<!--
+								<div class="box6">
+									<h3>등록한 회원정보로 찾기 어려우시면, 본인 확인 후 비밀번호를 찾아드립니다.</h3>
+									<div id="div_userMobile" class="box_inn">	[D] 선택시 selected 클래스 추가
+											<input type="radio" id="r_pn3" onclick="selectAuthType('userMobile');clickcr(this,'idf.myphone','','',event);" class="input_rd" name="certification">
+											<label for="r_pn3" class="label_rd">본인 명의 휴대전화로 인증<span>(본인 주민등록번호로 가입된 휴대전화)</span></label>
+											<div class="box_inn_sub">
+												<p class="dsc">내 명의(주민등록번호)의 휴대전화로 비밀번호를 재설정 할 수 있습니다.</p>
+											</div>		
+									</div>
+								</div>
+								-->
+							<div class="btn_area">
+								<button type="button" id="btnNext" class="btn_next2" onclick="chkPhoneNo()"></button>
+							</div>
 
-					<p class="txt_help btn_pw_help">비밀번호 찾기 시 문제가 있나요? <a href="#" target="blank">바로가기<em class="ico_arr2"></em></a></p>
+							<p class="txt_help btn_pw_help">비밀번호 찾기 시 문제가 있나요? <a href="#" target="blank">바로가기<em class="ico_arr2"></em></a></p>
+						</div>
+					</fieldset>						
+					</form>
 				</div>
-			</fieldset>						
-			</form>
-		</div>			
+			</div>
+			<% include ./findFooter %>
+		</div>		
     </body>
 </html>

@@ -28,7 +28,11 @@
 					</div>
 					<p class="content_summary">비밀번호를 변경해 주세요.<br>다른 아이디나 사이트에서 사용한 적 없는 안전한 비밀번호로 변경해 주세요.</p>
 					<form id="fm" name="fm" action="/user2/help/pwInquiry?m=actionInputPasswd" method="post">
-					<!--
+                        <% if (emplyrSn != "" && emplyrSn != null){ %>
+                            <input type="hidden" id="emplyrSn" value=<%= emplyrSn %> />
+                            <input type="hidden" id="emplyrId" value=<%= emplyrId %> />
+                        <% } %>
+                    <!--                        
 					<input type="hidden" id="encNewPasswd" name="encNewPasswd" value="">
 					<input type="hidden" id="encNm" name="encNm" value="">
 					<input type="hidden" id="id" name="id" value="otae5721">
@@ -39,17 +43,16 @@
 					<div class="section section_find">
 						<div class="box6">
 							<dl class="n_id">
-							<dt>네이버 아이디 : </dt>
+							<dt>아이디 : </dt>
                             <% if(emplyrId){ %>
 							<dd>                                
-                                test : <%= emplyrId %>
+                                <%= emplyrId %>
                             </dd>
                             <% } %>
 							</dl>
 							<div id="div_new_pw" class="input_box">	
 								<!--<label id="lb_new_pw" for="new_pw" style="">새 비밀번호</label>-->
 								<input id="new_pw" name="new_pw" type="password" value="" maxlength="20" onkeyup="checkShiftUp(event);checkpwd_nologin('new_pw','id');" onkeypress="capslock(event);" onkeydown="checkShiftDown(event);" onfocus="checkpwd_nologin('new_pw','id');convertDiv('new_pw', 'new_conf_pw', 'none');" onblur="showhelpmsg(-1);convertDiv('new_pw', 'new_conf_pw','block')" title="새 비밀번호 입력" class="input_txt" placeholder="새 비밀번호">
-		<!-- ///////////////////////////////////////////////////////////////////////////////////////// -->	
 								<div id="help1_1" class="help left h32" style="left:305px;top:-1px; display: none;">
 									<!-- 비밀번호 안전도 -->
 									<div class="txt">
@@ -259,14 +262,8 @@
 					</div>
 					</form>
 				</div>
-		
-<!-- ********************************************************************************* -->
-			<% if (emplyrSn != "" && emplyrSn != null){ %>
-				test : <%= emplyrSn %>
-				<input type="hidden" id="emplyrSn" value=<%= emplyrSn %> />
-				<input type="hidden" id="emplyrId" value=<%= emplyrId %> />
-			<% } else {%>
-				none!
-			<% }%>
+            </div>
+            <% include ./findFooter %>
+        </div>
     </body>
 </html>

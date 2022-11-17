@@ -209,17 +209,13 @@ label {
     margin: 0 0 15px 145px;
 }
 
-box6 .n_id dd, .box6 .n_id dt {
+.box6 .n_id dd, .box6 .n_id dt {
     display: inline-block;
 }
 
 .box6 .n_id dd {
-    color: #390;
+    color: #4078ff;
 }
-
-
-
-
 
 .box_inn.selected {
     padding-bottom: 27px;
@@ -802,7 +798,7 @@ input[type=image], input[type=password], input[type=submit], input[type=text] {
 
 .find_dsc p a {
     text-decoration: underline;
-    color: #390;
+    color: #4078ff;
 }
 
 .txt_help.btn_pw_help {
