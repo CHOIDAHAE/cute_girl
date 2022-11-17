@@ -279,6 +279,83 @@ module.exports = function(app){
 		});
 	})
 
+	//비밀번호 찾기
+	app.post("/findPw", function(req, res, next){
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(/findPw)",err);
+			} else {
+				console.log("Oracle Connection success(/findPw)");
+			}
+			conn = con;
+
+			//query format
+			let format = {language: 'sql', indent: ''};
+
+			//comparePw
+			let comparePwQuery = mybatisMapper.getStatement('UserDAO','comparePw', {'id' : req.body.userId}, format);
+			
+			conn.execute(comparePwQuery, function(err,result){
+				if(err){
+					console.log("comparePwQuery failed"+err);
+					res.json("F");
+				} else {
+					if(result.rows == ""|| result.rows == null){
+						res.json("I");	//입력하신 아이디를 찾을 수 없습니다.
+						return;
+					}
+
+					res.json({"emplyrSn":result.rows[0][0], "phoneNo":result.rows[0][7]});
+					doRelease(conn);
+				}
+			});
+		});
+	})
+
+	//비밀번호 찾기시 휴대폰 번호 불러오기
+	app.post("/findPhoneNo", function(req, res, next){
+		console.log("findPhoneNo*********");
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(/findPw)",err);
+			} else {
+				console.log("Oracle Connection success(/findPw)");
+			}
+			conn = con;
+
+			//query format
+			let format = {language: 'sql', indent: ''};
+
+			//seletPhonNo
+			let seletPhonNo = mybatisMapper.getStatement('UserDAO','seletPhonNo', {'emplyrSn' : req.body.emplyrSn}, format);
+
+			conn.execute(seletPhonNo, function(err,result){
+				if(err){
+					console.log("seletPhonNo failed"+err);
+					res.json({"status":"F"});
+				} else {
+					var phoneNo = result.rows[0][0];
+					var secretPhNo = result.rows[0][1];
+					res.json({
+							"phoneNo":result.rows[0][0], 
+							"secretPhNo" : result.rows[0][1]
+						});
+					doRelease(conn);
+				}
+			});
+		});
+	});
+
 	function doRelease(conn){
 		conn.close(function(err){
 			if(err){

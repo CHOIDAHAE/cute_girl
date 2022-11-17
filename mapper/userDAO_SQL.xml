@@ -84,4 +84,11 @@
 			EMPLYR_ID = #{emplyrId}
 	</update>
 
+	<select id="seletPhonNo">
+		SELECT
+			EMPLYR_MBTLNUM,
+			'('||SUBSTR(EMPLYR_MBTLNUM, 1, 3) || '-' || SUBSTR(EMPLYR_MBTLNUM, 4, 1) ||'***-' || SUBSTR(EMPLYR_MBTLNUM, 8, 1) || '***' || ')' PHONE_NO
+		FROM TCM_EMPLYR
+		WHERE EMPLYR_SN = #{emplyrSn}
+	</select>
 </mapper>

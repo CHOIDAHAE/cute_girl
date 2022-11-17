@@ -41,15 +41,32 @@ module.exports = function(app){
         }
     })	
 
-    // 인증번호 전송
-    app.post("/sendMsg", function(req, res, next){
-        res.json(sendMsg(req.body.phoneNo));
+    // 비밀번호 찾기 휴대폰 인증화면
+    app.get('/findPwByPhone', function(req, res){
+        res.render('findPwByPhone', {'emplyrSn':req.query.emplyrSn});
     })
 
-    function sendMsg(phoneNo){
+    // 비밀번호 재설정 화면
+    app.get('/reSettingPw', function(req, res){
+        res.render('reSettingPw', {'emplyrSn':req.query.emplyrSn});
+    })
+
+    // 인증번호 전송
+    app.post("/sendMsg", function(req, res, next){
+        res.json(sendMsg(req.body.phoneNo, req.body.type));
+    })
+
+    function sendMsg(phoneNo, type){
         var user_phone_number = phoneNo;
         //var user_auth_number = Math.random().toString(36).slice(2);
-        var user_auth_number = Math.random().toString().substring(2,6)
+        var user_auth_number = "";
+        
+        if(type == 4){  //4자리 인증번호(회원가입)
+            user_auth_number = Math.random().toString().substring(2,6);
+        } else if (type == 6) { //6자리 인증번호(비밀번호 찾기)
+            user_auth_number = Math.random().toString().substring(2,8);
+        }
+        
         var resultCode = 404;
 
         const date = Date.now().toString();

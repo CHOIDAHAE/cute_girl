@@ -8,34 +8,39 @@
 		<title>MYDRIVE : 비밀번호 찾기</title>
 	</head>
 	<script>
-		
+		function findPw(){
+			var userId = document.getElementById("userId").value;
+			if (userId == "") {
+				alert("아이디를 입력해주세요.");
+				$("userId").focus();
+				return;
+			}
+
+			var dataInfo = {};
+			dataInfo.userId	= userId;
+
+			$.ajax({
+				contentType : 'application/json; charset=utf-8', type : 'post', dataType : 'json', async : false,
+				url  : '/findPw',
+				data : JSON.stringify(dataInfo),
+				success : function(data) {
+					var emplyrSn = data.emplyrSn;
+					if (emplyrSn != "" && emplyrSn != null){
+						document.location.href = '/findPwByPhone?emplyrSn='+emplyrSn;
+					} else if (data ==="I"){
+						alert("입력하신 아이디를 찾을 수 없습니다.");
+					} else {	//data=="F"
+						alert("처리 도중 오류가 발생하였습니다.");
+					}
+				}
+			});
+		}
 	</script>
 	<body>
         <div id="wrap" class="wrap_leave">
-			<div id="header" class="header_type2">
-				<div class="top">
-						<a href="/index" class="logo">
-							<i class="fa-solid fa-cloud"></i>
-							myDrive
-						</a>
-					<div id="gnb" class="gnb_dark">
-						<ul class="gnb_lst" id="bng_lst" style="display:block;">
-							<li class="gnb_login_li" id="gnb_login_layer" style="display:inline-block;">
-								<a class="gnb_btn_login" href="https://nid.naver.com/nidlogin.login" id="gnb_login_button">
-									<span class="gnb_bg"></span>
-									<span class="gnb_bdr"></span>
-									<span class="gnb_txt">로그인</span>
-								</a>
-							</li>
-						</ul>
-					</div>
-				</div>
-				<div id="lnb" class="lnb_wrap">
-					<ul class="lnb lnb_type3"></ul>
-				</div>
-			</div>
+			<% include ./findHeader %>
 			<div id="container" style="height:853px;">
-				<form id="fm" name="fm" action="/" method="post">
+				<form id="fm" name="fm" action="/findPw" method="post">
 					<div id="content" class="non_sign inquiry">
 						<div class="content_header">
 							<h2><img src="https://static.nid.naver.com/images/web/user/h_find_pw2.gif" width="84" height="16" alt="비밀번호 찾기"></h2>
@@ -49,12 +54,12 @@
 						<div class="section section_find">
 							<div class="box6">
 								<div id="divUserId" class="input_box">
-                                    <label id="lbUserId" for="userId">아이디 입력</label>
-									<input type="text" id="userId" name="userId" onfocus="" onblur="" maxlength="40" value="" title="네이버 아이디 또는 단체 아이디" class="input_txt">
+                                    <!--<label id="lbUserId" for="userId">아이디 입력</label>-->
+									<input type="text" id="userId" name="userId" onfocus="" onblur="" maxlength="40" value="" title="아이디" class="input_txt" placeholder="아이디 입력">
 								</div>
 							</div>
 							<div class="btn_area">
-								<a href="#" onclick="" class="btn_next2">
+								<a href="#" onclick="findPw()" class="btn_next2">
 									<!--<span class="blind">다음</span>-->
 								</a>
 							</div>

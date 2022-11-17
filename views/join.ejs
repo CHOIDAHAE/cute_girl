@@ -118,7 +118,7 @@
 					success : function(data) {
 						if(data ==="S"){
 							alert("정상적으로 회원가입 되었습니다.");
-							document.location.href="/login";						
+							document.location.href="/login";
 						} else if (data==="F"){
 							alert("회원가입 도중 오류가 발생하였습니다.");
 							return;
@@ -244,6 +244,7 @@
 
 			var dataInfo = {};
 			dataInfo.phoneNo	= phoneNo;
+			dataInfo.type		= 4;
 
 			$.ajax({
 				contentType : 'application/json; charset=utf-8', type : 'post', dataType : 'json', async : false,

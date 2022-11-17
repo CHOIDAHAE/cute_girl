@@ -11,6 +11,14 @@ menu, ul, ol {
     list-style: none;
 }
 
+img, fieldset {
+    border: 0;
+}
+
+label {
+    cursor: pointer;
+}
+
 #wrap {
     /*position: relative;*/
     width: 100%;
@@ -145,6 +153,10 @@ menu, ul, ol {
     padding: 0 2px;
 }
 
+.process .on {
+    color: #4078ff;
+}
+
 .content_header:after {
     font-size: 0;
     line-height: 0;
@@ -191,6 +203,33 @@ menu, ul, ol {
     border: 1px solid #e5e5e5;
 }
 
+.box_inn.selected {
+    padding-bottom: 27px;
+    height: 170px;
+}
+
+.selectPhoneNo {
+    border: 0;
+    background-color: white;
+}
+
+.box_inn {
+    position: relative;
+    padding: 0 0 17px 19px;
+}
+
+.box_inn .input_rd {
+    position: absolute;
+    top: 1px;
+    left: 0;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 18px;
+    margin-left: -2px;
+    letter-spacing: -1px;
+    color: #333;
+}
+
 .input_box {
     position: relative;
     width: 299px;
@@ -207,6 +246,229 @@ menu, ul, ol {
     left: 10px;
     cursor: auto;
     color: #8e8e8e;
+}
+
+.box_inn.selected .label_rd input {
+    color: #4078ff;
+}
+
+.box_inn .label_rd span {
+    padding-left: 5px;
+    letter-spacing: 0;
+    color: #8e8e8e;
+}
+
+.box_inn .label_rd {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 18px;
+    margin-left: -2px;
+    letter-spacing: -1px;
+    color: #333;
+}
+
+.selected .box_inn_sub {
+    display: block;
+}
+
+.box_inn_sub {
+    font-size: 12px;
+}
+
+.box_inn .dsc {
+    line-height: 18px;
+    padding-top: 4px;
+    color: #666;
+}
+
+.box_inn dl {
+    padding-top: 14px;
+}
+
+.box_inn dt {
+    font-weight: 700;
+    float: left;
+    width: 80px;
+    height: 25px;
+    margin-top: 6px;
+}
+
+.box_inn .label_txt {
+    line-height: 25px;
+    color: #333;
+}
+
+.box_inn dd {
+    position: relative;
+    float: left;
+    width: 488px;
+    height: 25px;
+    margin-top: 6px;
+    vertical-align: top;
+}
+
+.box_inn .input_txt {
+    line-height: 23px;
+    height: 23px;
+    padding-left: 3px;
+    vertical-align: top;
+    border: 1px solid #ccc;
+}
+
+.country_code {
+    display: inline-block;
+    overflow: hidden;
+    position: relative;
+    border: solid 1px #ccc;
+    vertical-align: top;
+}
+
+.country_code .sel_value {
+    display: block;
+    width: 54px;
+    padding: 3px 6px 3px 0;
+    margin-left: 4px;
+    height: 17px;
+    font-size: 12px;
+    line-height: 18px;
+    color: #000;
+    background: #fff url(https://static.nid.naver.com/images/web/user/ico_select_arr.png) no-repeat 100% 50%;
+}
+
+.country_code .sel_value+select {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 20;
+    opacity: 0;
+}
+
+.box_inn dd select {
+    line-height: 23px;
+    height: 25px;
+    padding: 4px 3px 3px 1px;
+    vertical-align: top;
+    border: 1px solid #ccc;
+}
+
+.box_inn dd select {
+    line-height: 23px;
+}
+
+/*
+.int_mob {
+    display: inline-block;
+    overflow: hidden;
+    position: relative;
+    vertical-align: top;
+	position: absolute;
+    top: 7px;
+    left: 4px;
+    font-size: 12px;
+    font-weight: normal;
+    color: #888;
+}*/
+
+.int_mob {
+    display: inline-block;
+    overflow: hidden;
+    position: relative;
+    /**margin: -1px 2px 0 3px;*/
+    vertical-align: top;
+}
+
+.lbl_mob {
+    position: absolute;
+    top: 5px;
+    left: 4px;
+    font-size: 12px;
+    font-weight: normal;
+    color: #888;
+}
+
+.btn_ct {
+    border: 1px solid #ccc;
+    height: 100%;
+    border-radius: 0;
+    font-size: 12px;
+    width: 100px;
+}
+
+.box_inn dd.ct {
+    height: auto;
+}
+
+.input_box2 {
+    position: relative;
+    display: inline-block;
+}
+
+/*
+.input_box2 .phold {
+    position: absolute;
+    top: 0;
+    left: 4px;
+    color: #888;
+    line-height: 25px;
+}*/
+
+.input_box2 .input_txt {
+    margin: 0;
+}
+
+.input_box2+div, .input_box2+p {
+    position: relative;
+    display: block;
+    margin: 5px 0 1px 3px;
+    color: #888;
+}
+
+.ico_help2 {
+    top: 3px;
+    left: 0;
+    width: 14px;
+    height: 14px;
+    background-position: -100px -210px;
+}
+
+.help_tooltip2 {
+    position: absolute;
+    z-index: 100;
+    top: 26px;
+    left: -2px;
+    background-color: #fff;
+}
+
+.help_tooltip2 p {
+    font-size: 11px;
+    line-height: 15px;
+    padding: 9px 9px 6px;
+    letter-spacing: -1px;
+    color: #777;
+    border: 1px solid #888;
+}
+
+.edge {
+    position: absolute;
+    top: -8px;
+    left: 141px;
+    width: 8px;
+    height: 9px;
+    background-position: -120px -220px;
+}
+
+
+.blind {
+    display: block;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border: 0;
+    background: none;
+    font-size: 0;
+    line-height: 0;
 }
 
 .input_box .input_txt {
@@ -233,9 +495,10 @@ menu, ul, ol {
     width: 60px;
     height: 33px;
     background-position: 0 0;
+    border: 0;
 }
 
-.btn_checkid, .btn_confirm2, .btn_ct, .btn_findpw, .btn_login, .btn_login2, .btn_next2, .btn_prev, .dash, .edge, .ico_arr, .ico_arr2, .ico_help2 {
+.btn_checkid, .btn_confirm2, .btn_findpw, .btn_login, .btn_login2, .btn_next2, .btn_prev, .dash, .edge, .ico_arr, .ico_arr2, .ico_help2 {
     position: relative;
     display: inline-block;
     background: url(https://static.nid.naver.com/images/web/user/sp_find_idpw.png) no-repeat;
@@ -259,6 +522,32 @@ menu, ul, ol {
     color: #707070;
 }
 
+.txt_help.btn_pw_help {
+    padding-top: 17px;
+}
+
+.txt_help {
+    font-size: 12px;
+    padding-top: 13px;
+    color: #707070;
+}
+
+.txt_help a {
+    padding-right: 5px;
+    text-decoration: underline;
+    color: #707070;
+}
+
+.ico_arr2 {
+    top: -3px;
+    left: 3px;
+    width: 2px;
+    height: 4px;
+    background-position: -140px -210px!important;
+}
+
+
+/*****************footer*****************/
 #footer {
     clear: both;
     position: absolute;
