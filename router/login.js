@@ -48,7 +48,7 @@ module.exports = function(app){
 
     // 비밀번호 재설정 화면
     app.get('/reSettingPw', function(req, res){
-        res.render('reSettingPw', {'emplyrSn':req.query.emplyrSn});
+        res.render('reSettingPw', {'emplyrSn':req.query.emplyrSn, 'emplyrId':req.query.emplyrId});
     })
 
     // 인증번호 전송

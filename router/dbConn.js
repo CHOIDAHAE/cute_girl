@@ -348,7 +348,8 @@ module.exports = function(app){
 					var secretPhNo = result.rows[0][1];
 					res.json({
 							"phoneNo":result.rows[0][0], 
-							"secretPhNo" : result.rows[0][1]
+							"secretPhNo" : result.rows[0][1],
+							"emplyrId" : result.rows[0][2]
 						});
 					doRelease(conn);
 				}

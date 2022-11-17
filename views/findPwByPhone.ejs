@@ -25,6 +25,8 @@
 				success : function(data) {
 					var secretPhNo = data.secretPhNo;
 					var phoneNo = data.phoneNo;
+					var emplyrId = data.emplyrId;
+					
 					if (secretPhNo != "" || secretPhNo != null){
 						//세팅
 						document.getElementById("selectPhoneNo").value = secretPhNo;
@@ -33,23 +35,15 @@
 						//실제 휴대폰번호 세팅(인증번호 전송시 비교)
 						document.getElementById("realPhoneNo").value = phoneNo;
 					}
+					if (emplyrId != "" || emplyrId != null){
+						//ID 담기
+						document.getElementById("emplyrId").value = emplyrId;
+					}
 					if (status === "F"){
 						alert("처리 도중 오류가 발생하였습니다.");
 					}
 				}
 			});
-		}
-
-		// 클래스 'on' 세팅 함수
-		function toggle(obj){
-			if(obj == "on"){
-				document.getElementById("lbl_phoneNo").className = "lbl_mob on";
-			} else {
-				phoneNo = document.getElementById("phoneNo").value;
-				if(phoneNo == "") {
-					document.getElementById("lbl_phoneNo").className = "lbl_mob";
-				}
-			}
 		}
 
 		// 휴대전화 숫자 이외의 문자는 없애기
@@ -104,20 +98,39 @@
 
 		// 인증번호 일치 확인
 		function chkPhoneNo(){
+			// 이름
+			var phoneNm = document.getElementById("phoneNm").value;
 			// 작성한 인증번호
 			var phoneAuthNo = document.getElementById("phoneAuthNo").value;
 			// 찐 인증번호
 			var authNoCode = document.getElementById("authNoCode").value;
 			
-			if( autoNo == "" || authNoCode == "" ){
+			if (phoneNm == ""){
+				alert("이름을 입력해주세요.");
+				return;
+			}
+
+			if( phoneAuthNo == "" || authNoCode == "" ){
 				alert("인증이 필요합니다.");
+				return;
 			} else if (phoneAuthNo != authNoCode) {
 				alert("인증번호를 다시 확인해주세요.");
+				return;
 			} else if (phoneAuthNo === authNoCode){
 				var emplyrSn = document.getElementById("emplyrSn").value;
-				document.location.href="/reSettingPw?emplyrSn="+emplyrSn;
+				var emplyrId = document.getElementById("emplyrId").value;
+				document.location.href="/reSettingPw?emplyrSn="+emplyrSn+"&emplyrId"+emplyrId;
 			}
 		}
+
+		// 엔터키 누르면 로그인 함수 작동
+        function enterKey(){
+            if(event.keyCode == 13){
+                chkPhoneNo();
+                return;
+	        }
+        }
+
 	</script>
 
 	<body>
@@ -139,6 +152,11 @@
 			<form id="fm" name="fm" action="#" method="post">
 			<fieldset>
 				<div class="section section_find">
+					<% if (emplyrSn != "" && emplyrSn != null){ %>
+						<input type="hidden" id="emplyrSn" value=<%= emplyrSn %> />
+					<% } %>
+					<input type="hidden" id="realPhoneNo" value="" />
+					<input type="hidden" id="emplyrId" value="" />
 				<!--
 					<input type="hidden" name="authYn" id="authYn" value="">
 					<input type="hidden" name="mobileYn" id="mobileYn" value="N">
@@ -178,8 +196,7 @@
 										</span>									
 										
 										<span class="int_mob">
-											<!--<label for="phoneNo" id="lbl_phoneNo" class="lbl_mob">휴대전화번호</label>-->
-											<input type="text" id="phoneNo" name="phoneNo" class="input_txt" style="width:147px" onfocus="toggle('on');" onblur="toggle('off');chkPhoneForm();" maxlength="11" placeholder="휴대전화번호">
+											<input type="text" id="phoneNo" name="phoneNo" class="input_txt" style="width:147px" onblur="chkPhoneForm();" maxlength="11" placeholder="휴대전화번호">
 										</span>	
 										<!--
 										<a href="#" id="btnPhoneAuthNo" name="btnPhoneAuthNo" class="btn_ct" onclick="sendMsg()">
@@ -194,7 +211,7 @@
 									<dd class="ct">
 										<span class="input_box2">
 											<!--<span id="span_phoneAuthNo" class="phold">인증번호 6자리 숫자 입력</span>-->
-											<input type="text" id="phoneAuthNo" name="phoneAuthNo" maxlength="6" class="input_txt" style="width:217px" disabled="" placeholder="인증번호 6자리 입력">
+											<input type="text" id="phoneAuthNo" name="phoneAuthNo" maxlength="6" class="input_txt" style="width:217px" disabled="" placeholder="인증번호 6자리 입력" onkeydown="enterKey()">
 											<input type="hidden" id="authNoCode" name="authNoCode">
 										</span>
 										<div>인증번호가 오지 않나요
@@ -229,14 +246,6 @@
 				</div>
 			</fieldset>						
 			</form>
-		</div>
-<!-- ********************************************************************************* -->
-			<% if (emplyrSn != "" && emplyrSn != null){ %>
-				test : <%= emplyrSn %>
-				<input type="hidden" id="emplyrSn" value=<%= emplyrSn %> />
-				<input type="hidden" id="realPhoneNo" value="" />
-			<% } else {%>
-				none!
-			<% }%>
+		</div>			
     </body>
 </html>

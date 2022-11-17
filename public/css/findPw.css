@@ -203,6 +203,24 @@ label {
     border: 1px solid #e5e5e5;
 }
 
+.box6 .n_id {
+    font-size: 14px;
+    font-weight: 700;
+    margin: 0 0 15px 145px;
+}
+
+box6 .n_id dd, .box6 .n_id dt {
+    display: inline-block;
+}
+
+.box6 .n_id dd {
+    color: #390;
+}
+
+
+
+
+
 .box_inn.selected {
     padding-bottom: 27px;
     height: 170px;
@@ -392,6 +410,7 @@ label {
     border-radius: 0;
     font-size: 12px;
     width: 100px;
+    cursor: pointer;
 }
 
 .box_inn dd.ct {
@@ -483,6 +502,247 @@ label {
     background: 0 0;
 }
 
+input[type=image], input[type=password], input[type=submit], input[type=text] {
+    -webkit-border-radius: 0;
+    -webkit-appearance: none;
+}
+
+.help {
+    position: absolute;
+    display: none;
+}
+
+.h32 {
+    height: 32px;
+}
+
+.help .txt {
+    position: relative;
+    z-index: 3;
+    letter-spacing: -1px;
+    color: #333;
+    border: 1px solid #919191;
+    background: #fff;
+}
+
+.help .txt p {
+    font-size: 11px;
+    line-height: 16px;
+    padding: 8px 14px 6px;
+    white-space: nowrap;
+}
+
+.help .txt p strong {
+    color: #ff6000;
+}
+
+.help .txt p * {
+    font-size: 11px;
+    line-height: 16px;
+}
+
+.help .txt p .ex {
+    font-weight: 700;
+    letter-spacing: -1px;
+    color: grey;
+}
+
+.left .arrow {
+    position: absolute;
+    z-index: 4;
+    top: 13px;
+    left: -3px;
+    display: block;
+    overflow: hidden;
+    width: 4px;
+    height: 6px;
+    background: url(https://static.nid.naver.com/images/user/images/join2/bu_help_left.gif) no-repeat;
+}
+
+.help .txt em {
+    display: inline;
+    padding: 0;
+}
+
+.input_box+.input_box {
+    margin-top: -14px;
+}
+
+.captcha {
+    width: 299px;
+    margin: 0 15px 0 145px;
+    border-top: 1px solid #e6e6e6;
+}
+
+.captcha .error_txt {
+    padding: 19px 0 7px;
+    text-align: left;
+    color: #666;
+}
+
+.error_v2 {
+    position: relative;
+    display: block;
+    width: 297px;
+    height: 80px;
+    margin-bottom: 6px;
+    text-align: left;
+    border: 1px solid #c6c9cc;
+    background: #fff;
+}
+
+.error_img {
+    display: inline-block;
+    width: 205px;
+    height: 80px;
+    text-align: center;
+    border-right: 1px solid #ededed;
+}
+
+.error_v2 a {
+    font-size: 11px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: block;
+    width: 91px;
+    height: 40px;
+    text-decoration: none!important;
+    letter-spacing: -1px;
+    color: #8e8e8e;
+}
+
+.error_v2 a.btn_refresh span {
+    margin-top: 14px;
+    padding-top: 1px;
+    text-align: left;
+}
+
+.error_v2 a span {
+    line-height: 16px;
+    display: block;
+    margin: 12px 0 0 7px;
+    padding-left: 13px;
+    cursor: pointer;
+    text-decoration: none;
+    color: #8e8e8e;
+    background: url(https://static.nid.naver.com/images/login/oauth_new/sp_ico.png) no-repeat -361px 1px;
+}
+
+.error_v2 a.btn_img, .error_v2 a.btn_sound {
+    top: 40px;
+    height: 39px;
+    border-top: 1px solid #ededed;
+}
+
+.error_v2 a.btn_sound span {
+    background-position: -361px -39px;
+}
+
+.error_sound .error_img {
+    font-size: 11px;
+    height: 26px;
+    padding-top: 54px;
+    letter-spacing: -1px;
+    color: #8e8e8e;
+    background: url(https://static.nid.naver.com/images/user/images/help/ico_sound.gif) no-repeat 93px 13px;
+}
+
+.error_v2 a.btn_img span {
+    margin-left: 5px;
+    padding-left: 16px;
+    background-position: -360px -79px;
+}
+
+:root .lbl_in {
+    line-height: 18px;
+    top: 9px;
+}
+
+.int_box {
+    display: block;
+    margin-bottom: 20px;
+}
+
+:root .int {
+    height: 32px;
+    padding-top: 2px;
+}
+
+.int {
+    font-size: 14px;
+    font-weight: 700;
+    width: 100%;
+    height: 24px;
+    padding: 10px 0 0 10px;
+    color: #333;
+    border: none;
+    background: url(https://static.nid.naver.com/images/user/images/help/sp_bg.png) no-repeat 0 -385px;
+}
+
+.find_notice {
+    margin: 35px 0 11px;
+    padding-top: 22px;
+    text-align: left;
+    border-top: 1px solid #f4f4f4;
+}
+
+.find_notice li {
+    font-size: 13px;
+    line-height: 16px;
+    padding: 0 0 6px 6px;
+    color: #666;
+    background: url(https://static.nid.naver.com/images/web/user/sp_find_idpw.png) no-repeat -155px -215px;
+}
+
+.find_notice .n_bu {
+    margin-top: 1px;
+    background-image: none;
+}
+
+.find_notice .n_bu .ico_help2 {
+    position: relative;
+    top: 3px;
+    left: 3px;
+}
+
+.find_notice .n_bu .ly_pop_ab {
+    position: absolute;
+    z-index: 100;
+    top: 8px;
+    left: 4px;
+    width: 418px;
+    height: 66px;
+    border: 1px solid #888d95;
+    background: #fff;
+}
+
+.find_notice .n_bu .ly_pop_ab span.edge {
+    top: -9px;
+    left: 264px;
+}
+
+.find_notice .n_bu .ly_pop_ab p {
+    font-size: 11px;
+    line-height: 15px;
+    margin: 8px 10px 0;
+    letter-spacing: -1px;
+    color: #777;
+}
+
+.find_notice .n_bu .ly_pop_ab p.desc {
+    margin-top: 6px;
+    color: #000;
+}
+
+.input_chk {
+    position: relative;
+    top: 1px;
+    width: 13px;
+    height: 13px;
+    vertical-align: top;
+}
+
 .section_find .btn_area {
     padding: 17px 0 15px;
 }
@@ -496,6 +756,7 @@ label {
     height: 33px;
     background-position: 0 0;
     border: 0;
+    cursor: pointer;
 }
 
 .btn_checkid, .btn_confirm2, .btn_findpw, .btn_login, .btn_login2, .btn_next2, .btn_prev, .dash, .edge, .ico_arr, .ico_arr2, .ico_help2 {
@@ -504,10 +765,23 @@ label {
     background: url(https://static.nid.naver.com/images/web/user/sp_find_idpw.png) no-repeat;
 }
 
+.btn_confirm2 {
+    width: 60px;
+    height: 33px;
+    background-position: -65px 0;
+}
+
 .find_dsc {
     font-size: 12px;
     padding-top: 15px;
     color: #707070;
+}
+
+.find_dsc p {
+    font-size: 12px;
+    line-height: 17px;
+    margin-top: -2px;
+    color: #888;
 }
 
 .find_dsc h3 {
@@ -520,6 +794,15 @@ label {
     margin-left: 2px;
     text-decoration: underline;
     color: #707070;
+}
+
+.find_dsc .btn_detail, .find_dsc .txt_help a {
+    color: #707070;
+}
+
+.find_dsc p a {
+    text-decoration: underline;
+    color: #390;
 }
 
 .txt_help.btn_pw_help {
