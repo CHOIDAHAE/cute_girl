@@ -12,6 +12,7 @@
         "memorystore": "^1.6.7",
         "mybatis-mapper": "^0.6.8",
         "oracledb": "^5.5.0",
+        "recaptcha2": "^1.3.3",
         "request": "^2.88.2",
         "underscore": "^1.13.6"
     }
