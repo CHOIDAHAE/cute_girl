@@ -10,4 +10,64 @@
 		WHERE LAST_UPDUSR_SN = #{emplyrSn}
 	</select>
 
+	<!-- 첨부파일 일련번호 찾아오기 -->
+	<select id="selectFileSn">
+		SELECT /*+ INDEX_DESC(PK_TCM_ATCH_FILE ATCHMNFL_SN) */
+			LPAD(NVL(MAX(ATCHMNFL_SN)+1, 1), 5, 0) FILE_SN
+		FROM
+			TCM_ATCHMNFL
+	</select>
+
+	<!-- 첨부파일 등록 -->
+	<insert id="insertAtchFile">
+		INSERT INTO TCM_ATCHMNFL
+		(
+			ATCHMNFL_SN
+			, USE_AT
+			, FRST_REGIST_DT
+			, FRST_REGISTER_SN
+			, LAST_UPDT_DT
+			, LAST_UPDUSR_SN
+		)
+		VALUES
+		(
+			#{fileSn}
+			, 'Y'
+			, SYSDATE
+			, #{emplyrSn}
+			, SYSDATE
+			, #{emplyrSn}
+		)
+	</insert>
+
+	<insert id="insertAtchFileDtl">
+		INSERT INTO TCM_ATCHMNFL_DETAIL
+		(
+			ATCHMNFL_SN
+			, FILE_SN
+			, FILE_STRE_COURS_NM
+			, ORGINL_FILE_NM
+			, FILE_EXTSN_NM
+			, FILE_MG
+			, DOWN_CO
+			, FRST_REGISTER_SN
+			, FRST_REGIST_DT
+			, LAST_UPDUSR_SN
+			, LAST_UPDT_DT
+		)
+		VALUES
+		(
+			#{fileSn}
+			, #{fileSn}
+			, #{filePath}
+			, #{fileNm}
+			, #{fileExtsnNm}
+			, #{fileSize}
+			, 0
+			, #{emplyrSn}
+			, SYSDATE
+			, #{emplyrSn}
+			, SYSDATE
+		)
+	</insert>
 </mapper>

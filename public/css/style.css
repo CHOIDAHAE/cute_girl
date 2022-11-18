@@ -83,6 +83,7 @@ body{
     height: 32px;
     display: inline-block;
     float: right;
+    margin-top : 5px;
     margin-right:10px;
 }
 
@@ -100,6 +101,7 @@ body{
 
 /* 버튼스타일 */
 .button-wrap{
+    margin-top : 5px;
     margin-right:10px;
     float:right;
 }
@@ -136,6 +138,11 @@ body{
     vertical-align: top;
     line-height: normal;
     color: #fff;
+}
+
+.button-wrap form,
+.button-wrap a{
+    display : inline;
 }
 
 /*************** 아이콘 ***************/

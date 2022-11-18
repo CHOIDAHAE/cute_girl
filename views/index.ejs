@@ -13,13 +13,18 @@
                     </select>
                 </form>
                 <div class="button-wrap">
-                    <button class="btn_UploadStyle" onclick="fileUpload()">
-                        <img src='../images/icon_download.png' width="20px" height="20px" alt="다운로드 아이콘">
-                        올리기
-                    </button>
+                    <form action="/uploadFile" enctype="multipart/form-data" method="post" target="formFrame">
+                        <input type="file" name="attachment" id="fileUpload">
+                        <!-- <button class="btn_UploadStyle" onclick="fileUpload()"> -->
+                        <button class="btn_UploadStyle">
+                            <img src='../images/icon_download.png' width="20px" height="20px" alt="다운로드 아이콘">
+                            올리기
+                        </button>
+                    </form>
+                    <!--
                     <button class="btnStyle" onclick="selectTest()">
                         버튼
-                    </button>
+                    </button>-->
                     <% if(emplyrSn){ %>
                         <a href="/logout" class="btnStyle" id="login">logout</a>
                     <% } else { %>
@@ -28,6 +33,7 @@
                 </div>            
                 <% include ./menu %>
                 <iframe class="frameBox" src="/main" id="gridArea" scrolling="yes"></iframe>
+                <iframe id="formFrame" name="formFrame" style="display:none"></iframe>
             </div>
         </div>
     </body>
