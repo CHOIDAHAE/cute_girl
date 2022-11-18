@@ -51,6 +51,11 @@ module.exports = function(app){
         res.render('reSettingPw', {'emplyrSn':req.query.emplyrSn, 'emplyrId':req.query.emplyrId});
     })
 
+    // 2022.11.18 캡챠 테스트(구글)
+    app.get('/test_google', function(req, res){
+        res.render('test');
+    })
+
     // 인증번호 전송
     app.post("/sendMsg", function(req, res, next){
         res.json(sendMsg(req.body.phoneNo, req.body.type));
@@ -125,4 +130,43 @@ module.exports = function(app){
         );
         return user_auth_number;
     }
+
+    //***************** Capchar OpenAPI(google) *****************
+	app.post('/captcha', function(req, res) {
+        if(req.body['g-recaptcha-response'] === undefined || req.body['g-recaptcha-response'] === '' || req.body['g-recaptcha-response'] === null){
+          return res.json({"responseError" : "captcha error"});
+        }
+        const secretKey = "6LdA1xYjAAAAAHQxxhzSSN5FMWeOttxsLcYZuU6r";
+        const verificationURL = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g-recaptcha-response'] + "&remoteip=" + req.connection.remoteAddress;
+        request(verificationURL,function(error,response,body) {
+          body = JSON.parse(body);
+          if(body.success !== undefined && !body.success) {
+            return res.json({"responseError" : "Failed captcha verification"});
+          }
+          res.json({"responseSuccess" : "Sucess"});
+        });
+      });
+
+    //***************** Capchar OpenAPI(naver) *****************
+    var client_id = 'VGunQCliPygIB0Acwut3';
+	var client_secret = 'rLb7gYZvSJ';
+
+	var code = "0";
+	app.get('/captcha/nkey', function (req, res) {
+		var api_url = 'https://naveropenapi.apigw.ntruss.com/captcha/v1/nkey?code=' + code;
+		var request = require('request');
+		var options = {
+			url: api_url,
+			headers: {'X-NCP-APIGW-API-KEY-ID':client_id, 'X-NCP-APIGW-API-KEY': client_secret}
+		};
+		request.get(options, function (error, response, body) {
+			if (!error && response.statusCode == 200) {
+				res.writeHead(200, {'Content-Type': 'text/json;charset=utf-8'});
+				res.end(body);
+			} else {
+				res.status(response.statusCode).end();
+				console.log('error = ' + response.statusCode);
+			}
+		});
+	});
 }
