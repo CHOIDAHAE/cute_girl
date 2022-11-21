@@ -13,6 +13,7 @@ module.exports = function(app){
     var SHA256 = require("crypto-js/sha256");
     var Base64 = require("crypto-js/enc-base64");
     var request = require("request");
+    var fs = require('fs');
 
 	app.get('/join', function(req, res){
         res.render('join', {data:'join'});
@@ -151,13 +152,14 @@ module.exports = function(app){
     var client_id = 'VGunQCliPygIB0Acwut3';
 	var client_secret = 'rLb7gYZvSJ';
 
-	var code = "0";
+    // 캡차 키 발급 요청
 	app.get('/captcha/nkey', function (req, res) {
-		var api_url = 'https://naveropenapi.apigw.ntruss.com/captcha/v1/nkey?code=' + code;
+		var code = "0";
+		var api_url = 'https://openapi.naver.com/v1/captcha/nkey?code=' + code;
 		var request = require('request');
 		var options = {
-			url: api_url,
-			headers: {'X-NCP-APIGW-API-KEY-ID':client_id, 'X-NCP-APIGW-API-KEY': client_secret}
+		url: api_url,
+			headers: {'X-Naver-Client-Id':client_id, 'X-Naver-Client-Secret': client_secret}
 		};
 		request.get(options, function (error, response, body) {
 			if (!error && response.statusCode == 200) {
@@ -168,5 +170,23 @@ module.exports = function(app){
 				console.log('error = ' + response.statusCode);
 			}
 		});
+	});
+
+    // 캡차 이미지 요청 
+    app.get('/captcha/image', function (req, res) {
+		var api_url = 'https://openapi.naver.com/v1/captcha/ncaptcha.bin?key=' + req.query.key;
+		var request = require('request');
+		var options = {
+		url: api_url,
+			headers: {'X-Naver-Client-Id':client_id, 'X-Naver-Client-Secret': client_secret}
+		};
+		var writeStream = fs.createWriteStream('./img/captcha.jpg');
+		var _req = request.get(options).on('response', function(response) {
+			//console.log(response); // 200
+            //console.log(response.statusCode) // 200
+			//console.log(response.headers['content-type'])
+		});
+		_req.pipe(writeStream); // file로 출력
+		_req.pipe(res); // 브라우저로 출력
 	});
 }

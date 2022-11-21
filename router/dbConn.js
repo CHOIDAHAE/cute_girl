@@ -18,7 +18,7 @@ module.exports = function(app){
 	const session = require('express-session');
 	const MemoryStore = require('memorystore')(session);
 
-	const maxAge = 1000 * 60 * 5;
+	const maxAge = 1000 * 60 * 5; // 쿠키의 maxAge를 이용해서 세션 유효기간 설정. 5분
 
 	const sessionObj = {
 		secret: 'kong',

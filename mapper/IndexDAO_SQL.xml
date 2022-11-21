@@ -5,7 +5,7 @@
 
 	<select id="selectFileVolume">
 		SELECT
-            CEIL(SUM(FILE_MG)/1000) FILE_MG
+            NVL(CEIL(SUM(FILE_MG)/1000),0) FILE_MG
 		FROM TCM_ATCHMNFL_DETAIL
 		WHERE LAST_UPDUSR_SN = #{emplyrSn}
 	</select>

@@ -9,8 +9,47 @@
 	</head>
 	<script>
 		$('document').ready(function(){
-			
+			requestkey();
         })
+
+		function requestkey(){    		
+			$.ajax({
+				/* 요청 시작 부분 */
+				url: "/captcha/nkey", //주소
+				data: {},
+				type: "GET", //전송 타입
+				async: true, //비동기 여부
+				dataType: "JSON", //응답받을 데이터 타입 (XML,JSON,TEXT,HTML)
+				success: function(data) {
+					captchaImage(data.key);
+				},
+				error: function(xhr) {
+					console.log("[error] : " + xhr);
+				}
+			});
+		};
+
+		function captchaImage(key){
+			$.ajax({
+				/* 요청 시작 부분 */
+				url: "/captcha/image", //주소
+				data: {"key":key},
+				type: "GET", //전송 타입
+				async: true, //비동기 여부
+				dataType: "TEXT", //응답받을 데이터 타입 (XML,JSON,TEXT,HTML)
+				success: function(data) {
+					console.log("captchaImage success!");
+					//id : chptchaimg, fildNm ; ./captcha.jpg
+					document.getElementById("chptchaimg").src = "./cute_girl/img/captcha.jpg";
+				},
+				error: function(request,status,error) {
+					console.log("error");
+					//console.log(request);
+					//console.log(status);
+					//console.log(error);
+				}
+			});
+		}
 	</script>
 
 	<body>
@@ -201,7 +240,7 @@
 								<p class="error_txt">아래 이미지를 보이는 대로 입력해주세요</p>
 								<div id="image_captcha_div" class="error_v2">
 									<span class="error_img">
-										<img name="captchaImage" id="chptchaimg" src="/login/image/captcha/nhncaptchav4.gif?key=ZFlOQpSo0dD4GZ8z&amp;1" width="205" height="80" alt="자동 가입 방지">
+										<img name="captchaImage" id="chptchaimg" src="" width="205" height="80" alt="자동 가입 방지">
 									</span>
 									<a href="javascript:reCaptcha('');" id="aReCaptcha" onclick="" class="btn_refresh"><span>새로고침</span></a>
 									<a href="javascript:changeCaptchaMode('', 'autoValue');" class="btn_sound"><span>음성으로 듣기</span></a>
