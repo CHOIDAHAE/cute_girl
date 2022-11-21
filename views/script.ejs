@@ -15,15 +15,21 @@
         <script src="/jqGrid/js/i18n/grid.locale-kr.js" type="text/javascript"></script>
         <script src="/jqGrid/js/minified/jquery.jqGrid.min.js" type="text/javascript"></script>-->
         <script>
-            /* 가능 */
+            window.onload = function(){
+                file_Volume();
+            }
+            
+            /*2022.11.21 window.onload로 수정
             $(document).ready(function(){                
                 file_Volume();  // 사용자별 총 파일용량 읽어오기
-            });
+            });*/
 
             //파일용량 읽어오기
             function file_Volume(){
                 var emplyrSn = document.getElementById('emplyrSn').value;
-                console.log(emplyrSn);
+                /* 2022.11.21 최다혜
+                  콘솔 Cannot read properties of null (reading 'value') 해결 예정
+                */
 
                 $.ajax({
                     url : "/selectFileVolume",
