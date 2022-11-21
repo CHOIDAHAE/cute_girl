@@ -27,6 +27,7 @@
                     </button>-->
                     <% if(emplyrSn){ %>
                         <a href="/logout" class="btnStyle" id="login">logout</a>
+                        <input type="hidden" id="emplyrSn" value=<%= emplyrSn %> />
                     <% } else { %>
                         <a href="/login" class="btnStyle" id="login">login</a>   
                     <% } %>

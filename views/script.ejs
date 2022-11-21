@@ -22,11 +22,14 @@
 
             //파일용량 읽어오기
             function file_Volume(){
+                var emplyrSn = document.getElementById('emplyrSn').value;
+                console.log(emplyrSn);
+
                 $.ajax({
                     url : "/selectFileVolume",
                     type : "POST",
                     dataType : "JSON", //"JSON"
-                    data : {"emplyrSn" : "1111111111118"}
+                    data : {"emplyrSn" : emplyrSn}
 
                 })
                 .done(function (res) {
