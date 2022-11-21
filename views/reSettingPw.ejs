@@ -12,6 +12,7 @@
 			requestkey();
         })
 
+		// 캡차 키 발급 요청
 		function requestkey(){    		
 			$.ajax({
 				/* 요청 시작 부분 */
@@ -21,7 +22,9 @@
 				async: true, //비동기 여부
 				dataType: "JSON", //응답받을 데이터 타입 (XML,JSON,TEXT,HTML)
 				success: function(data) {
-					captchaImage(data.key);
+					var key = data.key;
+					captchaImage(key);					
+					document.getElementById("chptchakey").value = key;
 				},
 				error: function(xhr) {
 					console.log("[error] : " + xhr);
@@ -29,18 +32,17 @@
 			});
 		};
 
+		// 캡차 이미지 요청
 		function captchaImage(key){
 			$.ajax({
-				/* 요청 시작 부분 */
-				url: "/captcha/image", //주소
+				url: "/captcha/image",
 				data: {"key":key},
-				type: "GET", //전송 타입
+				type: "GET",
 				async: true, //비동기 여부
 				dataType: "TEXT", //응답받을 데이터 타입 (XML,JSON,TEXT,HTML)
 				success: function(data) {
-					console.log("captchaImage success!");
-					//id : chptchaimg, fildNm ; ./captcha.jpg
-					document.getElementById("chptchaimg").src = "./cute_girl/img/captcha.jpg";
+					// 요청받아온 캡차 세팅
+					document.getElementById("chptchaimg").src = "../images/captcha.jpg";
 				},
 				error: function(request,status,error) {
 					console.log("error");
@@ -49,7 +51,60 @@
 					//console.log(error);
 				}
 			});
+		}		
+
+		// 다음 버튼 클릭시 확인
+		function main_submit(){
+			var newPw = document.getElementById("new_pw");
+			if(newPw.value == ""){
+				alert("새 비밀번호를 작성해주세요.");
+				newPw.focus();
+				return;
+			}
+
+			var newConfPw = document.getElementById("new_conf_pw");
+			if(newPw.value != newConfPw.value){
+				alert("새 비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+				return;
+			}
+
+			// 캡차 사용자 입력값 검증 요청
+			captchaResult();
 		}
+
+		// 캡차 사용자 입력값 검증 요청
+		function captchaResult(){
+			var key = document.getElementById("chptchakey").value;
+			var value = document.getElementById("autoValue").value;
+
+			$.ajax({
+				url: "/captcha/result",
+				data: {"key":key, "value" : value},
+				type: "GET", //전송 타입
+				async: true, //비동기 여부
+				dataType: "TEXT",
+				success: function(data) {
+					console.log(data);
+					if (data.result == "false"){
+						alert("다시 확인해주세요");
+						document.getElementById("autoValue").focus();
+					} else {	//true
+						// 비밀번호 업데이트
+						updatePw()
+					}					
+				},
+				error: function(request,status,error) {
+					console.log("error");
+					alert("자동 방지 가입 인증 중 오류가 발생했습니다.");
+				}
+			});
+		}
+
+		// 비밀번호 업데이트
+		function updatePw(){
+			// 자동방지 가입 확인이 true인 경우 비밀번호 업데이트
+			
+		};
 	</script>
 
 	<body>
@@ -77,8 +132,9 @@
 					<input type="hidden" id="id" name="id" value="otae5721">
 					<input type="hidden" id="token_help" name="token_help" value="lY4lbxorPPodlL44">
 					<input type="hidden" id="captcha_type" name="captcha_type" value="image">
-					<input type="hidden" id="chptchakey" name="chptchakey" value="ZFlOQpSo0dD4GZ8z">
 					-->
+					<input type="hidden" id="chptchakey" name="chptchakey" value="">
+					
 					<div class="section section_find">
 						<div class="box6">
 							<dl class="n_id">
@@ -240,7 +296,7 @@
 								<p class="error_txt">아래 이미지를 보이는 대로 입력해주세요</p>
 								<div id="image_captcha_div" class="error_v2">
 									<span class="error_img">
-										<img name="captchaImage" id="chptchaimg" src="" width="205" height="80" alt="자동 가입 방지">
+										<img name="captchaImage" id="chptchaimg" src="#" width="205" height="80" alt="자동 가입 방지">
 									</span>
 									<a href="javascript:reCaptcha('');" id="aReCaptcha" onclick="" class="btn_refresh"><span>새로고침</span></a>
 									<a href="javascript:changeCaptchaMode('', 'autoValue');" class="btn_sound"><span>음성으로 듣기</span></a>
@@ -264,7 +320,7 @@
 								<!--<label id="lbCapcha" for="autoValue" class="lbl_in" style="display: block;">자동입력 방지문자</label> -->
 								<span class="int_box" style="width:289px">
 									 <!-- 캡챠 어뷰징 방지를 위해 maxlength는 제거함 : 2014-02-11- euli0912 -->					    
-									<input type="text" id="autoValue" name="autoValue" onkeydown="checkNumber();" title="자동입력 방지문자" onfocus="hiddenText('lbCapcha');changeFocus('bdr_autoValue','on')" onblur="showText('lbCapcha','autoValue');changeFocus('bdr_autoValue','off')" class="int" style="width:289px" placeholder="자동입력 방지문자">
+									<input type="text" id="autoValue" name="autoValue" title="자동입력 방지문자" class="int" style="width:289px" placeholder="자동입력 방지문자">
 								</span>
 							</div>				
 							<!-- //자동입력 방지문자-->
@@ -290,7 +346,7 @@
 							</ul>
 						</div>
 						<div class="btn_area">
-							<a href="#" id="changeSubmit" onclick="input_submit();clickcr(this,'rst.ok','','',event);" class="btn_confirm2"><span class="blind">확인</span></a>
+							<a href="#" id="changeSubmit" onclick="main_submit()" class="btn_confirm2"><span class="blind">확인</span></a>
 						</div>
 						
 						<!-- [D] 상세내용 펼쳤을때 클래스 open 추가 -->
