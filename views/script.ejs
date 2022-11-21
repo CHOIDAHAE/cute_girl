@@ -17,6 +17,7 @@
         <script>
             window.onload = function(){
                 file_Volume();
+                fileSelect();
             }
             
             /*2022.11.21 window.onload로 수정
@@ -59,8 +60,6 @@
                 var selectValue = sortSelect.options[sortSelect.selectedIndex].value;
                 var selectText = sortSelect.options[sortSelect.selectedIndex].text;
                 var ibx_boonmoon = document.getElementById("main");
-                
-                console.log(selectText);
 
                 ibx_boonmoon.textContent = selectText;
                 
@@ -132,6 +131,7 @@
                 sideEle2.classList.toggle("sideInfoClick");
             }
 
+            /* 파일 업로드 */
             function fileUpload(){
                 console.log('file upload!');
                 const formData = new FormData();
@@ -150,6 +150,40 @@
                     error:function(){
                         console.log('fileUpload ajax error');
                     }
+                })
+            }
+
+            /* 파일 조회 */
+            function fileSelect(){
+                var emplyrSn = document.getElementById('emplyrSn').value;
+
+                $.ajax({
+                    url : "/selectFileList",
+                    type : "POST",
+                    dataType : "JSON", //"JSON"
+                    data : {"emplyrSn" : emplyrSn}
+
+                })
+                .done(function (res) {
+                    var fileArea = document.getElementById("fileList");
+                    
+                    var fileList = "";
+
+                    for(var i=0; i<res.length; i++){
+                        fileList += '<li><img src="./uploadedFiles/' + res[i][2] + '" class="img_item" onclick="view_photoInfo()">\n';
+                        fileList += '<div class="item-name"> ' + res[i][1] + ' </div></li>\n';
+                    }
+
+                    console.log(fileList);
+                    
+                    $("#fileList").append(fileList);      //파일 리스트
+                    console.log($("#fileList").html);
+                })
+                .fail(function (xhr, textStatus, errorThrown) {
+                    console.log('selectFileList ajax 실패');
+                    console.log('xhr'+xhr);
+                    console.log('textStatus'+textStatus);
+                    console.log('errorThrown'+errorThrown);
                 })
             }
         </script>

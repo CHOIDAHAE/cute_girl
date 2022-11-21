@@ -38,6 +38,7 @@ module.exports = function(app){
 
         var FILE_STRE_COURS_NM = '/uploadedFiles';
 		var ORGINL_FILE_NM = fileNm;
+		var FILE_NM = req.file.filename;
 		var FILE_EXTSN_NM = req.file.originalname.split(".")[1];
 		var FILE_MG = req.file.size;
 		var emplyrSn = req.session.user.emplyrSn;
@@ -71,7 +72,8 @@ module.exports = function(app){
 				} else {
 					var param = {
 						filePath : FILE_STRE_COURS_NM
-						, fileNm : ORGINL_FILE_NM
+						, fileNm : FILE_NM
+						, orgFileNm : ORGINL_FILE_NM
 						, fileExtsnNm : FILE_EXTSN_NM
 						, fileSize : FILE_MG
 						, emplyrSn : emplyrSn
@@ -107,6 +109,45 @@ module.exports = function(app){
 		console.log(req.session.user.emplyrSn);
 		res.render('index', {"emplyrSn":req.session.user.emplyrSn});
 	});
+
+	// 파일 리스트 읽어오기
+	app.post("/selectFileList", function(req, res){		
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(selectFileList)",err);
+			} else {
+				console.log("Oracle Connection success(selectFileList)");
+			}
+			conn = con;
+
+			var param = {
+				emplyrSn : req.body.emplyrSn
+			}
+
+			//query format
+			let format = {language: 'sql', indent: ''};
+
+			//getStatement(namespace명, queryId, parameter, format);
+			let query = mybatisMapper.getStatement('IndexDAO','selectFileList', param, format);
+
+			//쿼리문 실행
+			conn.execute(query, function(err,result){
+				if(err){
+					console.log("에러가 발생했습니다(selectFileList)>", err);
+					doRelease(conn);
+					return;
+				}
+				
+				res.send(result.rows);
+				doRelease(conn);					
+			});  
+		});
+	})
 
 	function doRelease(conn){
 		conn.close(function(err){

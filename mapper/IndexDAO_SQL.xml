@@ -47,6 +47,7 @@
 			, FILE_SN
 			, FILE_STRE_COURS_NM
 			, ORGINL_FILE_NM
+			, FILE_NM
 			, FILE_EXTSN_NM
 			, FILE_MG
 			, DOWN_CO
@@ -60,6 +61,7 @@
 			#{fileSn}
 			, #{fileSn}
 			, #{filePath}
+			, #{orgFileNm}
 			, #{fileNm}
 			, #{fileExtsnNm}
 			, #{fileSize}
@@ -70,4 +72,24 @@
 			, SYSDATE
 		)
 	</insert>
+
+	<!--첨부파일 목록 조회-->
+	<select id="selectFileList">
+		SELECT
+			tad.FILE_STRE_COURS_NM
+			, tad.ORGINL_FILE_NM
+			, tad.FILE_NM
+			, tad.FILE_EXTSN_NM
+			, tad.FILE_MG
+			, tad.DOWN_CO
+			, tad.FRST_REGIST_DT
+			, tad.FRST_REGISTER_SN 
+		FROM
+			TCM_ATCHMNFL ta
+			, TCM_ATCHMNFL_DETAIL tad
+		WHERE
+			TA.ATCHMNFL_SN = TAD.ATCHMNFL_SN
+			AND TA.USE_AT = 'Y'
+			AND TA.FRST_REGISTER_SN = #{emplyrSn}
+	</select>
 </mapper>
