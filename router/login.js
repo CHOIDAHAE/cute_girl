@@ -22,9 +22,14 @@ module.exports = function(app){
     app.get('/login', function(req, res){
         res.render('login', {data:'login'});
     })
-
+    
     app.get('/findPw', function(req, res){
         res.render('findPw', {data:'findPw'});
+    })
+
+    app.post('/nextFindPw', function(req, res){
+        console.log(req.body);
+        res.render('findPwByPhone', {"emplyrSn":req.body.emplyrSn, "emplyrId":req.body.userId});
     })
     
 	app.get('/logout', function(req, res){

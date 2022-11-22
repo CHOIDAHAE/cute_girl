@@ -350,7 +350,7 @@
 							<!-- [D]focus시 클래스 focus 추가, label은 display:none시켜주세요 -->
 							<div id="bdr_autoValue" class="input_box input_box_v2">
 								<span class="int_box" style="width:289px">
-									<input type="text" id="autoValue" name="autoValue" title="자동입력 방지문자" class="int" style="width:289px" placeholder="자동입력 방지문자">
+									<input type="text" id="autoValue" name="autoValue" title="자동입력 방지문자" class="int" style="width:289px" placeholder="자동입력 방지문자" onkeydown="enterKey()">
 								</span>
 							</div>				
 							<!-- //자동입력 방지문자-->
@@ -376,7 +376,7 @@
 							</ul>
 						</div>
 						<div class="btn_area">
-							<a href="#" id="changeSubmit" onclick="main_submit()" onkeydown="enterKey()" class="btn_confirm2"><span class="blind">확인</span></a>
+							<a href="#" id="changeSubmit" onclick="main_submit()" class="btn_confirm2"><span class="blind">확인</span></a>
 						</div>
 						
 						<!-- [D] 상세내용 펼쳤을때 클래스 open 추가 -->
