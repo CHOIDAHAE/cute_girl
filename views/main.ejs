@@ -1,4 +1,34 @@
-<% include ./script %>
+<html lang="ko">
+    <head>
+        <meta charset="utf-8">    
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="https://kit.fontawesome.com/ad41bee873.js" crossorigin="anonymous"></script>
+        <link href="../css/style.css?after" rel="stylesheet" type="text/css">
+        <link href="../css/grid.css?after" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" />
+
+        <script>
+            //파일 선택시 사이드바 정보 띄우는 이벤트
+            function view_photoInfo(e){
+                var fileIndex = e.id.substr(9);
+
+                console.log(fileIndex);
+                console.log($('#fileType'+fileIndex).val());
+
+                fileType.innerHTML = "종류 클릭";
+                
+                var sideInfo_box = document.getElementById("sideInfo_box");
+                var sideEle1 = document.querySelector("#file_click");
+                var sideEle2 = document.querySelector("#file_nonClick");
+
+
+                //sideInfo_box.textContent = "사진을 선택하였습니다.";
+
+                sideEle1.classList.toggle("sideInfoClick");
+                sideEle2.classList.toggle("sideInfoClick");
+            }
+        </script>
+    </head>
 <body>
 <div class="main-box">
     <div>
@@ -17,7 +47,7 @@
     </div>
     <div id="sideInfo_box" class="sideInfo-box">
         <div id="file_click" class="sideInfoClick">
-            <div id="file_type">종류</div>
+            <div id="file_type">종류</div><div id="fileType"></div>
             <div id="file_location">위치</div>
             <div id="file_size">크기</div>
         </div>

@@ -119,7 +119,10 @@
 
             //파일 선택시 사이드바 정보 띄우는 이벤트
             function view_photoInfo(){
-                console.log(this);
+                var fileInfoArea = $('#gridArea').contents().find('#file_type')
+
+                $('#gridArea').contents().find('#file_type').textContent = "종류 클릭";
+
                 var sideInfo_box = document.getElementById("sideInfo_box");
                 var sideEle1 = document.querySelector("#file_click");
                 var sideEle2 = document.querySelector("#file_nonClick");
@@ -171,8 +174,8 @@
 
                     for(var i=0; i<res.length; i++){
                         // $('#fileList').append('<li><img src="./uploadedFiles/' + res[i][2] + '" class="img_item" onclick="view_photoInfo()"><div class="item-name"> ' + res[i][1] + ' </div></li>');
-                        fileList += '<li class="item_fnc"><img src="./uploadedFiles/' + res[i][2] + '" class="img_item" onclick="view_photoInfo()">\n';
-                        fileList += '<input type="hidden" id="fileType' + [i] + '" value=' + res[i][3] + '>';
+                        fileList += '<li class="item_fnc" id="fileIndex' + [i] + '" onclick="view_photoInfo(this)"><img src="./uploadedFiles/' + res[i][2] + '" class="img_item">\n';
+                        fileList += '<input type="hidden" id="fileType' + [i] + ' value=' + res[i][3] + '>';
                         fileList += '<input type="hidden" id="fileLocation' + [i] + '" value=' + res[i][0] + '>';
                         fileList += '<input type="hidden" id="fileSize' + [i] + '" value=' + res[i][4] + '>';
                         fileList += '<input type="hidden" id="downNum' + [i] + '" value=' + res[i][5] + '>';
@@ -181,7 +184,6 @@
                     }
 
                     $(fileArea).append(fileList);      //파일 리스트
-                    console.log($('#fileList').innerHTML);
                 })
                 .fail(function (xhr, textStatus, errorThrown) {
                     console.log('selectFileList ajax 실패');
