@@ -319,7 +319,6 @@ module.exports = function(app){
 
 	//비밀번호 찾기시 휴대폰 번호 불러오기
 	app.post("/findPhoneNo", function(req, res, next){
-		console.log("findPhoneNo*********");
 		oracledb.getConnection({
 			user:dbConfig.user,
 			password:dbConfig.password,
@@ -327,9 +326,9 @@ module.exports = function(app){
 			externalAuth  : dbConfig.externalAuth
 		},function(err,con){
 			if(err){
-				console.log("Oracle Connection failed(/findPw)",err);
+				console.log("Oracle Connection failed(/findPhoneNo)",err);
 			} else {
-				console.log("Oracle Connection success(/findPw)");
+				console.log("Oracle Connection success(/findPhoneNo)");
 			}
 			conn = con;
 
@@ -351,11 +350,57 @@ module.exports = function(app){
 							"secretPhNo" : result.rows[0][1],
 							"emplyrId" : result.rows[0][2]
 						});
-					doRelease(conn);
 				}
+				doRelease(conn);
 			});
 		});
 	});
+
+	// 비밀번호 재설정
+	app.post("/updatePassword", function(req, res, next){		
+		var id = req.body.id;
+		var pw = req.body.pw;
+		
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(/updatePassword)",err);
+			} else {
+				console.log("Oracle Connection success(/updatePassword)");
+			}
+			conn = con;
+				
+			//query format
+			let format = {language: 'sql', indent: ''};			
+			
+			var salt = Math.round((new Date().valueOf() * Math.random()))+"";
+			var hashPassword = crypto.createHash("sha256").update(pw + salt).digest("hex");
+
+			var param = {
+				id : id,
+				pw : hashPassword,
+				salt : salt
+			}
+
+			//insert
+			let InstQuery = mybatisMapper.getStatement('UserDAO','updatePassword', param, format);
+
+			//쿼리문 실행(insert)
+			conn.execute(InstQuery, function(err,result){
+				if(err){
+					console.log("JOIN failed "+err);
+					res.json("F");
+				}
+				res.json("S");
+			});
+			
+			doRelease(conn);
+		});
+	})
 
 	function doRelease(conn){
 		conn.close(function(err){

@@ -13,7 +13,7 @@
         })
 
 		// 캡차 키 발급 요청
-		function requestkey(){    		
+		function requestkey(){
 			$.ajax({
 				/* 요청 시작 부분 */
 				url: "/captcha/nkey", //주소
@@ -23,7 +23,7 @@
 				dataType: "JSON", //응답받을 데이터 타입 (XML,JSON,TEXT,HTML)
 				success: function(data) {
 					var key = data.key;
-					captchaImage(key);					
+					captchaImage(key);
 					document.getElementById("chptchakey").value = key;
 				},
 				error: function(xhr) {
@@ -46,14 +46,11 @@
 				},
 				error: function(request,status,error) {
 					console.log("error");
-					//console.log(request);
-					//console.log(status);
-					//console.log(error);
 				}
 			});
 		}		
 
-		// 다음 버튼 클릭시 확인
+		// 확인 버튼 클릭
 		function main_submit(){
 			var newPw = document.getElementById("new_pw");
 			if(newPw.value == ""){
@@ -85,13 +82,12 @@
 				async: true, //비동기 여부
 				dataType: "TEXT",
 				success: function(data) {
-					console.log(data);
 					if (data.result == "false"){
 						alert("다시 확인해주세요");
 						document.getElementById("autoValue").focus();
 					} else {	//true
 						// 비밀번호 업데이트
-						updatePw()
+						updatePw();
 					}					
 				},
 				error: function(request,status,error) {
@@ -101,11 +97,46 @@
 			});
 		}
 
-		// 비밀번호 업데이트
+		// 자동방지 가입 확인이 true인 경우 비밀번호 업데이트
 		function updatePw(){
-			// 자동방지 가입 확인이 true인 경우 비밀번호 업데이트
 			
+			var dataInfo = {};
+			dataInfo.id = document.getElementById("emplyrId").value;
+			dataInfo.pw = document.getElementById("new_pw").value;;
+
+			$.ajax({
+					contentType : 'application/json; charset=utf-8', type : 'post', dataType : 'json', async : false,
+					url  : '/updatePassword',
+					data : JSON.stringify(dataInfo),
+					success : function(data) {
+						if(data ==="S"){
+							alert("비밀번호가 변경되었습니다. \n변경된 비밀번호로 로그인 해주세요.");
+							document.location.href="/login";
+						} else if (data==="F"){
+							alert("비밀번호 설정중 오류가 발생하였습니다.");
+							return;
+						}
+					}
+				});
 		};
+
+		// 새로고침 버튼
+		function reCaptcha(){
+			//document.getElementById("chptchaimg").src = "";
+			requestkey();
+		};
+
+		 // 엔터키
+		 function enterKey(){
+            if(event.keyCode == 13){
+                main_submit();
+	        }
+        }
+
+		// 네이버API 음성캡차 지원X
+		function notYet(){
+			alert("서비스 준비중입니다.");
+		}
 	</script>
 
 	<body>
@@ -148,7 +179,7 @@
 							</dl>
 							<div id="div_new_pw" class="input_box">	
 								<!--<label id="lb_new_pw" for="new_pw" style="">새 비밀번호</label>-->
-								<input id="new_pw" name="new_pw" type="password" value="" maxlength="20" onkeyup="checkShiftUp(event);checkpwd_nologin('new_pw','id');" onkeypress="capslock(event);" onkeydown="checkShiftDown(event);" onfocus="checkpwd_nologin('new_pw','id');convertDiv('new_pw', 'new_conf_pw', 'none');" onblur="showhelpmsg(-1);convertDiv('new_pw', 'new_conf_pw','block')" title="새 비밀번호 입력" class="input_txt" placeholder="새 비밀번호">
+								<input id="new_pw" name="new_pw" type="password" value="" maxlength="20" title="새 비밀번호 입력" class="input_txt" placeholder="새 비밀번호">
 								<div id="help1_1" class="help left h32" style="left:305px;top:-1px; display: none;">
 									<!-- 비밀번호 안전도 -->
 									<div class="txt">
@@ -201,7 +232,7 @@
 											<img src="https://static.nid.naver.com/images/user/images/help/safetybar1.gif" width="47" height="3" alt=""><br>
 											<span class="ex">이전에 사용하셨던 비밀번호입니다. <br>도용 예방을 위해 새로운 비밀번호 <br>사용을 권장합니다.</span>
 										</p>
-										<p class="topline">비밀번호는 네이버 관리자도 알 수 없도록 <br>암호화하여 기존 비밀번호와의 <br>일치 여부만을 확인하고 있습니다.</p>
+										<p class="topline">비밀번호는 관리자도 알 수 없도록 <br>암호화하여 기존 비밀번호와의 <br>일치 여부만을 확인하고 있습니다.</p>
 									</div>
 									<!-- //비밀번호 안전도 -->
 									<span class="arrow"></span>
@@ -220,7 +251,7 @@
 											<strong>사용불가</strong> : 비밀번호 재작성 필요<br>
 											<span>입력하신 비밀번호는 도용된 <br>비밀번호이므로 추가 도용 가능성이 <br>높아 사용하실 수 없습니다.</span>
 										</p>
-										<p class="topline">비밀번호는 네이버 관리자도 알 수 없도록 <br>암호화하여 기존 비밀번호와의 <br>일치 여부만을 확인하고 있습니다.</p>
+										<p class="topline">비밀번호는 관리자도 알 수 없도록 <br>암호화하여 기존 비밀번호와의 <br>일치 여부만을 확인하고 있습니다.</p>
 									</div>
 									<span class="arrow"></span>
 								</div>
@@ -268,7 +299,7 @@
 										<p>비밀번호 안전도<em>|</em> <strong>낮음</strong>
 											<img alt="" src="https://static.nid.naver.com/images/user/images/help/safetybar1.gif" width="47" height="3"><br><span class="ex">이전에 사용하셨던 비밀번호입니다. <br>도용 예방을 위해 새로운 비밀번호 <br>사용을 권장합니다.</span>
 										</p>
-										<p class="topline">비밀번호는 네이버 관리자도 알 수 없도록 <br>암호화하여 기존 비밀번호와의 <br>일치 여부만을 확인하고 있습니다.</p>
+										<p class="topline">비밀번호는 관리자도 알 수 없도록 <br>암호화하여 기존 비밀번호와의 <br>일치 여부만을 확인하고 있습니다.</p>
 									</div>
 									<span class="arrow"></span>
 								</div>
@@ -281,7 +312,7 @@
 								<div id="help2_7" class="help left h32" style="left:305px;top:-1px; display: none;">
 									<div class="txt">
 										<p><strong>사용불가</strong> : 비밀번호 재작성 필요<br><span>입력하신 비밀번호는 도용된 <br>비밀번호이므로 추가 도용 가능성이 <br>높아 사용하실 수 없습니다.</span></p>
-										<p class="topline">비밀번호는 네이버 관리자도 알 수 없도록 <br>암호화하여 기존 비밀번호와의 <br>일치 여부만을 확인하고 있습니다. 
+										<p class="topline">비밀번호는 관리자도 알 수 없도록 <br>암호화하여 기존 비밀번호와의 <br>일치 여부만을 확인하고 있습니다. 
 										<span class="ex2">키보드에<strong>CapsLock</strong>이 켜져 있습니다.</span></p>
 									</div>
 									<span class="arrow"></span>
@@ -290,7 +321,7 @@
 
 							<div id="div_new_conf_pw" class="input_box">	
 								<!--<label id="lb_new_conf_pw" for="new_conf_pw" style="">새 비밀번호 확인</label>-->
-								<input id="new_conf_pw" name="new_conf_pw" type="password" value="" maxlength="20" onfocus="convertDiv('new_conf_pw', 'new_pw', 'none')" onblur="convertDiv('new_conf_pw', 'new_pw','block')" title="새 비밀번호 확인" class="input_txt" placeholder="새 비밀번호 확인">
+								<input id="new_conf_pw" name="new_conf_pw" type="password" value="" maxlength="20" title="새 비밀번호 확인" class="input_txt" placeholder="새 비밀번호 확인">
 							</div>
 							<!-- 이미지로 보기 -->
 							<div id="captcha_image_legend" class="captcha" style="display:block">
@@ -299,8 +330,8 @@
 									<span class="error_img">
 										<img name="captchaImage" id="chptchaimg" src="#" width="205" height="80" alt="자동 가입 방지">
 									</span>
-									<a href="javascript:reCaptcha('');" id="aReCaptcha" onclick="" class="btn_refresh"><span>새로고침</span></a>
-									<a href="javascript:changeCaptchaMode('', 'autoValue');" class="btn_sound"><span>음성으로 듣기</span></a>
+									<a href="#" id="aReCaptcha" onclick="reCaptcha()" class="btn_refresh"><span>새로고침</span></a>
+									<a href="#" class="btn_sound" onclick="notYet()"><span>음성으로 듣기</span></a>
 									<span class="blind"> 자동입력방지문자 음성 안내입니다. 음성으로 듣기 버튼을 누르신 후 들려드리는 숫자 6자리를 자동입력 방지문자 입력창에 입력해 주세요. 다시 듣고 싶으면, 키보드 컨트롤키와 알트키를 누르고 알파벳 R을 눌러주세요.</span>
 								</div>
 							</div>				
@@ -318,16 +349,14 @@
 			
 							<!-- [D]focus시 클래스 focus 추가, label은 display:none시켜주세요 -->
 							<div id="bdr_autoValue" class="input_box input_box_v2">
-								<!--<label id="lbCapcha" for="autoValue" class="lbl_in" style="display: block;">자동입력 방지문자</label> -->
 								<span class="int_box" style="width:289px">
-									 <!-- 캡챠 어뷰징 방지를 위해 maxlength는 제거함 : 2014-02-11- euli0912 -->					    
-									<input type="text" id="autoValue" name="autoValue" title="자동입력 방지문자" class="int" style="width:289px" placeholder="자동입력 방지문자">
+									<input type="text" id="autoValue" name="autoValue" title="자동입력 방지문자" class="int" style="width:289px" placeholder="자동입력 방지문자" onkeydown="enterKey()">
 								</span>
 							</div>				
 							<!-- //자동입력 방지문자-->
 							<ul class="find_notice">
 							<li>영문, 숫자, 특수문자를 함께 사용하면(8자 이상 16자 이하)보다 안전합니다.</li>
-							<li>다른 사이트와 다른 <strong>네이버 아이디만의 비밀번호</strong>를 만들어 주세요.</li>
+							<li>다른 사이트와 다른 <strong>MYDRIVE 아이디만의 비밀번호</strong>를 만들어 주세요.</li>
 							<li class="n_bu">
 								<div id="divShowBlock" class="ip_che" style="display:none">
 									<input type="checkbox" id="chkBlockIp" name="chkBlockIp" onclick="clickcr(this,'rst.ipblock','','',event);" class="input_chk" checked="">

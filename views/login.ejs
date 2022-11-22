@@ -8,6 +8,12 @@
 		<title>MYDRIVE : 로그인</title>
 	</head>
 	<script>
+
+        $('document').ready(function(){
+            // 아이디 칸 자동 포커스
+            document.getElementById('id').focus();
+        })
+
 		function loginUser(){
 			var id = $("#id").val();
 			if (id == "") {
