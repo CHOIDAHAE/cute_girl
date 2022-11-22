@@ -92,4 +92,18 @@
 			AND TA.USE_AT = 'Y'
 			AND TA.FRST_REGISTER_SN = #{emplyrSn}
 	</select>
+
+	<!--첨부파일 상세정보 조회-->
+	<select id="selectFileDtlData">
+		SELECT
+			FILE_NM
+			, FILE_STRE_COURS_NM 
+			, FILE_EXTSN_NM 
+			, FILE_MG 
+			, DOWN_CO 
+		FROM TCM_ATCHMNFL_DETAIL TAD
+		WHERE
+			ATCHMNFL_SN  = #{AtchfileSn}
+			AND FILE_SN  = #{fileSn}
+	</select>
 </mapper>
