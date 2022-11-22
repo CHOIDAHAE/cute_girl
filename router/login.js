@@ -52,6 +52,11 @@ module.exports = function(app){
         res.render('reSettingPw', {'emplyrSn':req.query.emplyrSn, 'emplyrId':req.query.emplyrId});
     })
 
+    // 비밀번호 재설정 화면
+    app.post("/reSettingPw", function(req, res, next){
+        res.render('reSettingPw', {'emplyrSn':req.body.emplyrSn, 'emplyrId':req.body.emplyrId});
+    })
+
     // 2022.11.18 캡챠 테스트(구글)
     app.get('/test_google', function(req, res){
         res.render('test');
@@ -132,23 +137,7 @@ module.exports = function(app){
         return user_auth_number;
     }
 
-    //***************** Capchar OpenAPI(google) *****************
-	app.post('/captcha', function(req, res) {
-        if(req.body['g-recaptcha-response'] === undefined || req.body['g-recaptcha-response'] === '' || req.body['g-recaptcha-response'] === null){
-          return res.json({"responseError" : "captcha error"});
-        }
-        const secretKey = "6LdA1xYjAAAAAHQxxhzSSN5FMWeOttxsLcYZuU6r";
-        const verificationURL = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&response=" + req.body['g-recaptcha-response'] + "&remoteip=" + req.connection.remoteAddress;
-        request(verificationURL,function(error,response,body) {
-          body = JSON.parse(body);
-          if(body.success !== undefined && !body.success) {
-            return res.json({"responseError" : "Failed captcha verification"});
-          }
-          res.json({"responseSuccess" : "Sucess"});
-        });
-      });
-
-    //***************** Capchar OpenAPI(naver) *****************
+    //***************** Captcha OpenAPI(naver) *****************
     var client_id = 'VGunQCliPygIB0Acwut3';
 	var client_secret = 'rLb7gYZvSJ';
 
@@ -158,7 +147,7 @@ module.exports = function(app){
 		var api_url = 'https://openapi.naver.com/v1/captcha/nkey?code=' + code;
 		var request = require('request');
 		var options = {
-		url: api_url,
+		    url: api_url,
 			headers: {'X-Naver-Client-Id':client_id, 'X-Naver-Client-Secret': client_secret}
 		};
 		request.get(options, function (error, response, body) {
@@ -180,9 +169,9 @@ module.exports = function(app){
 		url: api_url,
 			headers: {'X-Naver-Client-Id':client_id, 'X-Naver-Client-Secret': client_secret}
 		};
+
 		var writeStream = fs.createWriteStream('./public/images/captcha.jpg');
 		var _req = request.get(options).on('response', function(response) {
-			//console.log(response); // 200
             //console.log(response.statusCode) // 200
 			//console.log(response.headers['content-type'])
 		});
@@ -193,7 +182,6 @@ module.exports = function(app){
     // 사용자 입력값 검증 요청
     app.get('/captcha/result', function (req, res) {
 		var code = "1";
-        console.log(req.query);
 		var api_url = 'https://openapi.naver.com/v1/captcha/nkey?code=' + code + '&key=' + req.query.key + '&value=' + req.query.value;
 		var request = require('request');
 		var options = {

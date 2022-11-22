@@ -117,9 +117,8 @@
 				alert("인증번호를 다시 확인해주세요.");
 				return;
 			} else if (phoneAuthNo === authNoCode){
-				var emplyrSn = document.getElementById("emplyrSn").value;
-				var emplyrId = document.getElementById("emplyrId").value;
-				document.location.href="/reSettingPw?emplyrSn="+emplyrSn+"&emplyrId="+emplyrId;
+				// 값 싣고 다음페이지로 이동
+				fm.submit();
 			}
 		}
 
@@ -146,16 +145,11 @@
 						<li>03. 비밀번호 재설정</li>
 						</ol>
 					</div>
-					<p class="content_summary">비밀번호를 찾을 방법을 선택해 주세요!!!</p>
+					<p class="content_summary">비밀번호를 찾을 방법을 선택해 주세요.</p>
 					
-					<form id="fm" name="fm" action="#" method="post">
+					<form id="fm" name="fm" action="/reSettingPw" method="post">
 					<fieldset>
 						<div class="section section_find">
-							<% if (emplyrSn != "" && emplyrSn != null){ %>
-								<input type="hidden" id="emplyrSn" value=<%= emplyrSn %> />
-							<% } %>
-							<input type="hidden" id="realPhoneNo" value="" />
-							<input type="hidden" id="emplyrId" value="" />
 						<!--
 							<input type="hidden" name="authYn" id="authYn" value="">
 							<input type="hidden" name="mobileYn" id="mobileYn" value="N">
@@ -212,6 +206,11 @@
 													<!--<span id="span_phoneAuthNo" class="phold">인증번호 6자리 숫자 입력</span>-->
 													<input type="text" id="phoneAuthNo" name="phoneAuthNo" maxlength="6" class="input_txt" style="width:217px" disabled="" placeholder="인증번호 6자리 입력" onkeydown="enterKey()">
 													<input type="hidden" id="authNoCode" name="authNoCode">
+													<% if (emplyrSn != "" && emplyrSn != null){ %>
+														<input type="hidden" id="emplyrSn" name="emplyrSn" value=<%= emplyrSn %> />
+													<% } %>
+													<input type="hidden" id="realPhoneNo" name="realPhoneNo" value="" />
+													<input type="hidden" id="emplyrId" name="emplyrId" value="" />
 												</span>
 												<div>인증번호가 오지 않나요
 													<span class="blind">도움말</span>

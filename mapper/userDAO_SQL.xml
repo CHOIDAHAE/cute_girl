@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="UserDAO">
+	<!-- 로그인 -->
 	<select id="comparePw">
 		SELECT	
 				EMPLYR_SN,
@@ -20,12 +21,14 @@
 		WHERE	EMPLYR_ID = #{id}
 	</select>
 
+	<!-- id 존재 여부 조회 -->
 	<select id="selectUserId">
 		SELECT	COUNT(*) CNT
 		FROM 	TCM_EMPLYR
 		WHERE	EMPLYR_ID = #{id}
 	</select>
 
+	<!-- 신규 고객등록을 위한 일련번호 조회 -->
 	<select id="selectemplyrSn">
 		SELECT
 				TO_CHAR(NVL(MAX(EMPLYR_SN), TO_CHAR(SYSDATE, 'YYYY')||'000000')+1) AS EMPLYR_SN
@@ -33,6 +36,7 @@
 		WHERE	EMPLYR_SN LIKE TO_CHAR(SYSDATE, 'YYYY') ||'%'
 	</select>
 
+	<!-- 회원가입 -->
 	<insert id="joinUser">
 		INSERT INTO TCM_EMPLYR
 			(
@@ -64,6 +68,7 @@
 			)
 	</insert>
 
+	<!-- 패스워드 오류 카운트 -->
 	<update id="updatePasswordErrorCo">
 		UPDATE
 			TCM_EMPLYR
@@ -74,6 +79,7 @@
 			EMPLYR_ID = #{emplyrId}
 	</update>
 	
+	<!-- 패스워드 오류 횟수 0으로 세팅(로그인 성공시) -->
 	<update id="updateErrorCoInit">
 		UPDATE
 			TCM_EMPLYR
@@ -84,6 +90,7 @@
 			EMPLYR_ID = #{emplyrId}
 	</update>
 
+	<!-- 휴대폰번호 일부 공개 -->
 	<select id="seletPhonNo">
 		SELECT
 			EMPLYR_MBTLNUM,
@@ -92,4 +99,17 @@
 		FROM TCM_EMPLYR
 		WHERE EMPLYR_SN = #{emplyrSn}
 	</select>
+
+	<!-- 비밀번호 재설정 -->
+	<update id="updatePassword">
+		UPDATE
+			TCM_EMPLYR
+		SET
+			EMPLYR_PASSWORD		= #{pw},
+			SALT				= #{salt},
+			LAST_UPDUSR_SN		= #{id},
+			LAST_UPDT_DT		= SYSDATE
+		WHERE
+			EMPLYR_ID = #{id}
+	</update>
 </mapper>
