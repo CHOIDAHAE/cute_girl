@@ -27,6 +27,10 @@ module.exports = function(app){
         res.render('./user/findPw', {data:'findPw'});
     })
 
+    app.get('/findId', function(req, res){
+        res.render('./user/findId', {data:'findId'});
+    })
+
     app.post('/nextFindPw', function(req, res){
         res.render('./user/findPwByPhone', {"emplyrSn":req.body.emplyrSn, "emplyrId":req.body.userId});
     })
@@ -46,6 +50,11 @@ module.exports = function(app){
         }
     })	
 
+    // 아이디 찾기 휴대폰 인증화면
+    app.get('/findIdByPhone', function(req, res){
+        res.render('./user/findIdByPhone');
+    })
+
     // 비밀번호 찾기 휴대폰 인증화면
     app.get('/findPwByPhone', function(req, res){
         res.render('./user/findPwByPhone', {'emplyrSn':req.query.emplyrSn});
@@ -56,9 +65,18 @@ module.exports = function(app){
         res.render('./user/reSettingPw', {'emplyrSn':req.query.emplyrSn, 'emplyrId':req.query.emplyrId});
     })
 
-    // 비밀번호 재설정 화면
-    app.post("/reSettingPw", function(req, res, next){
-        res.render('./user/reSettingPw', {'emplyrSn':req.body.emplyrSn, 'emplyrId':req.body.emplyrId});
+    /* 조회된 아이디 선택 화면
+    app.get('/findId', function(req, res){
+        res.render('./user/findId', {'emplyrSn':req.query.emplyrSn, 'emplyrId':req.query.emplyrId});
+    })*/    
+
+    // 조회된 아이디 선택 화면
+    app.post("/findId", function(req, res, next){
+        //여기서 id 찾아서 넘겨주어야함. (휴대폰 번호로 찾음)
+        var phonNo = req.body.realPhoneNo;
+        
+
+        res.render('./user/findId', {'emplyrSn':req.body.emplyrSn, 'emplyrId':req.body.emplyrId});
     })
 
     // 인증번호 전송
