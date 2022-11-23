@@ -149,6 +149,47 @@ module.exports = function(app){
 		});
 	})
 
+	// 파일 정보 읽어오기
+	app.post("/selectFileDtlData", function(req, res){		
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(selectFileDtlData)",err);
+			} else {
+				console.log("Oracle Connection success(selectFileDtlData)");
+			}
+			conn = con;
+
+			var param = {
+				AtchfileSn : req.body.AtchfileSn
+				, fileSn : req.body.fileSn
+			}
+
+			//query format
+			let format = {language: 'sql', indent: ''};
+
+			//getStatement(namespace명, queryId, parameter, format);
+			let query = mybatisMapper.getStatement('IndexDAO','selectFileDtlData', param, format);
+
+			//쿼리문 실행
+			conn.execute(query, function(err,result){
+				console.log(query);
+				if(err){
+					console.log("에러가 발생했습니다(selectFileDtlData)>", err);
+					doRelease(conn);
+					return;
+				}
+				
+				res.send(result.rows);
+				doRelease(conn);					
+			});  
+		});
+	})
+
 	function doRelease(conn){
 		conn.close(function(err){
 			if(err){

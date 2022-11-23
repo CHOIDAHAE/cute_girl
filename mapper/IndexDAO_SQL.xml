@@ -84,6 +84,8 @@
 			, tad.DOWN_CO
 			, tad.FRST_REGIST_DT
 			, tad.FRST_REGISTER_SN 
+			, tad.ATCHMNFL_SN
+			, tad.FILE_SN
 		FROM
 			TCM_ATCHMNFL ta
 			, TCM_ATCHMNFL_DETAIL tad
