@@ -16,20 +16,23 @@ module.exports = function(app){
     var fs = require('fs');
 
 	app.get('/join', function(req, res){
-        res.render('join', {data:'join'});
+        res.render('./user/join', {data:'join'});
     })
 
     app.get('/login', function(req, res){
-        res.render('login', {data:'login'});
+        res.render('./user/login', {data:'login'});
     })
     
     app.get('/findPw', function(req, res){
-        res.render('findPw', {data:'findPw'});
+        res.render('./user/findPw', {data:'findPw'});
+    })
+
+    app.get('/findId', function(req, res){
+        res.render('./user/findId', {data:'findId'});
     })
 
     app.post('/nextFindPw', function(req, res){
-        console.log(req.body);
-        res.render('findPwByPhone', {"emplyrSn":req.body.emplyrSn, "emplyrId":req.body.userId});
+        res.render('./user/findPwByPhone', {"emplyrSn":req.body.emplyrSn, "emplyrId":req.body.userId});
     })
     
 	app.get('/logout', function(req, res){
@@ -39,32 +42,41 @@ module.exports = function(app){
                     if (err) {
                         return;//세션 삭제시 에러
                     }
-                    res.redirect('/login');//세션 삭제 성공
+                    res.redirect('./user/login');//세션 삭제 성공
                 }
             ); 
         } else {
-            res.redirect('/login');//로그인 안되어 있음
+            res.redirect('./user/login');//로그인 안되어 있음
         }
     })	
 
+    // 아이디 찾기 휴대폰 인증화면
+    app.get('/findIdByPhone', function(req, res){
+        res.render('./user/findIdByPhone');
+    })
+
     // 비밀번호 찾기 휴대폰 인증화면
     app.get('/findPwByPhone', function(req, res){
-        res.render('findPwByPhone', {'emplyrSn':req.query.emplyrSn});
+        res.render('./user/findPwByPhone', {'emplyrSn':req.query.emplyrSn});
     })
 
     // 비밀번호 재설정 화면
     app.get('/reSettingPw', function(req, res){
-        res.render('reSettingPw', {'emplyrSn':req.query.emplyrSn, 'emplyrId':req.query.emplyrId});
+        res.render('./user/reSettingPw', {'emplyrSn':req.query.emplyrSn, 'emplyrId':req.query.emplyrId});
     })
 
-    // 비밀번호 재설정 화면
-    app.post("/reSettingPw", function(req, res, next){
-        res.render('reSettingPw', {'emplyrSn':req.body.emplyrSn, 'emplyrId':req.body.emplyrId});
-    })
+    /* 조회된 아이디 선택 화면
+    app.get('/findId', function(req, res){
+        res.render('./user/findId', {'emplyrSn':req.query.emplyrSn, 'emplyrId':req.query.emplyrId});
+    })*/    
 
-    // 2022.11.18 캡챠 테스트(구글)
-    app.get('/test_google', function(req, res){
-        res.render('test');
+    // 조회된 아이디 선택 화면
+    app.post("/findId", function(req, res, next){
+        //여기서 id 찾아서 넘겨주어야함. (휴대폰 번호로 찾음)
+        var phonNo = req.body.realPhoneNo;
+        
+
+        res.render('./user/findId', {'emplyrSn':req.body.emplyrSn, 'emplyrId':req.body.emplyrId});
     })
 
     // 인증번호 전송

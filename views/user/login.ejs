@@ -75,17 +75,26 @@
                 return;
 	        }
         }
+
+        // 인덱스
+        function goIndex(){
+            document.location.href="/";
+        }
+
+        //로그인 상태 유지 버튼 클릭
+        function keepChk(){
+            console.log("로그인 상태 유지");
+        }
+
 	</script>
 	<body>
         <div id="wrap" class="wrap">
             <header class="header" role="banner">
                 <div class="header_inner">
-                    <a href="/">
-                        <span class="logo_style">
-                            <i class="fa-solid fa-cloud"></i>
-                            MYDRIVE
-                        </span>
-                    </a>
+                    <span class="logo_style" onclick="goIndex()">
+                        <i class="fa-solid fa-cloud"></i>
+                        MYDRIVE
+                    </span>
                 </div>
             </header>
             <div id="container" class="container">
@@ -149,12 +158,9 @@
                     <ul class="find_wrap" id="find_wrap">
                         <li>
                             <a href="/findPw" class="find_text">비밀번호 찾기</a>
-                            <!-- 2022.11.18 구글 reCaptchar 테스트
-                                <a href="/test" class="find_text">비밀번호 찾기</a>
-                            -->
                         </li>
                         <li>
-                            <a href="/" class="find_text">아이디 찾기</a>
+                            <a href="/findIdByPhone" class="find_text">아이디 찾기</a>
                         </li>
                         <li>
                             <a href="/join" class="find_text">회원가입</a>

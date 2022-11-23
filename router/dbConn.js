@@ -18,7 +18,7 @@ module.exports = function(app){
 	const session = require('express-session');
 	const MemoryStore = require('memorystore')(session);
 
-	const maxAge = 1000 * 60 * 5; // 쿠키의 maxAge를 이용해서 세션 유효기간 설정. 5분
+	const maxAge = 1000 * 60 * 120; // 쿠키의 maxAge를 이용해서 세션 유효기간 설정. 120분
 
 	const sessionObj = {
 		secret: 'kong',
@@ -36,7 +36,7 @@ module.exports = function(app){
 
 	app.get('/', function(req, res, next){
 		if(req.session.user == "" || req.session.user == null){
-			res.render('login',{data:"login"});
+			res.render('./user/login',{data:"login"});
 		} else {
 			res.render('index',{"emplyrSn":req.session.user.emplyrSn});
 		}
@@ -44,7 +44,7 @@ module.exports = function(app){
 
 	app.get('/index', function(req, res, next){
 		if(req.session.user == "" || req.session.user == null){
-			res.render('login',{data:"login"});
+			res.render('./user/login',{data:"login"});
 		} else {
 			res.render('index',{"emplyrSn":req.session.user.emplyrSn});
 		}
