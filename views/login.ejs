@@ -75,17 +75,26 @@
                 return;
 	        }
         }
+
+        // 인덱스
+        function goIndex(){
+            document.location.href="/";
+        }
+
+        //로그인 상태 유지 버튼 클릭
+        function keepChk(){
+            console.log("로그인 상태 유지");
+        }
+
 	</script>
 	<body>
         <div id="wrap" class="wrap">
             <header class="header" role="banner">
                 <div class="header_inner">
-                    <a href="/">
-                        <span class="logo_style">
-                            <i class="fa-solid fa-cloud"></i>
-                            MYDRIVE
-                        </span>
-                    </a>
+                    <span class="logo_style" onclick="goIndex()">
+                        <i class="fa-solid fa-cloud"></i>
+                        MYDRIVE
+                    </span>
                 </div>
             </header>
             <div id="container" class="container">
