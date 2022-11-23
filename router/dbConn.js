@@ -36,7 +36,7 @@ module.exports = function(app){
 
 	app.get('/', function(req, res, next){
 		if(req.session.user == "" || req.session.user == null){
-			res.render('login',{data:"login"});
+			res.render('./user/login',{data:"login"});
 		} else {
 			res.render('index',{"emplyrSn":req.session.user.emplyrSn});
 		}
@@ -44,7 +44,7 @@ module.exports = function(app){
 
 	app.get('/index', function(req, res, next){
 		if(req.session.user == "" || req.session.user == null){
-			res.render('login',{data:"login"});
+			res.render('./user/login',{data:"login"});
 		} else {
 			res.render('index',{"emplyrSn":req.session.user.emplyrSn});
 		}
