@@ -755,7 +755,7 @@ input[type=image], input[type=password], input[type=submit], input[type=text] {
     cursor: pointer;
 }
 
-.btn_checkid, .btn_confirm2, .btn_findpw, .btn_login, .btn_login2, .btn_next2, .btn_prev, .dash, .edge, .ico_arr, .ico_arr2, .ico_help2 {
+.btn_checkid, .btn_confirm2, .btn_login, .btn_next2, .btn_prev, .dash, .edge, .ico_arr, .ico_arr2, .ico_help2 {
     position: relative;
     display: inline-block;
     background: url(https://static.nid.naver.com/images/web/user/sp_find_idpw.png) no-repeat;
@@ -826,6 +826,59 @@ input[type=image], input[type=password], input[type=submit], input[type=text] {
 }
 
 
+/********************************아이디 찾기*****************************/
+
+.list_id {
+    display: inline-block;
+    padding-bottom: 11px;
+}
+
+.list_id li {
+    padding-bottom: 8px;
+    text-align: left;
+}
+
+.list_id strong {
+    display: inline-block;
+    min-width: 208px;
+    padding-right: 31px;
+}
+
+.list_id .label_rd {
+    font-size: 14px;
+    color: #333;
+}
+
+label {
+    cursor: pointer;
+}
+
+.list_id span {
+    color: #333;
+    font-size: 13px;
+}
+
+.list_id li {
+    padding-bottom: 8px;
+    text-align: left;
+}
+
+.btn_login2 {
+    background-color: #4078ff;
+    border: 1px solid #888d95;
+    padding: 7px 30px;
+    font-size: 12px;
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+.btn_findpw {
+    background-color: white !important;
+    color : #777;
+}
+
+
 /*****************footer*****************/
 #footer {
     clear: both;
@@ -851,13 +904,17 @@ input[type=image], input[type=password], input[type=submit], input[type=text] {
     float: left;
     z-index: 20;
     margin: 0 auto 0 20px;
+    text-align: left;
 }
 
 .guides {
-    position: relative;
+    position: absolute;
     letter-spacing: -1px;
-    text-align: right;
     white-space: nowrap;
+    top: 8px;
+    right: 0;
+    width: 100%;
+    font-size: 9px;
 }
 
 .guides li.first {
@@ -908,6 +965,7 @@ em, address {
     float: right;
     z-index: 10;
     margin: 0 20px 0 auto;
+    text-align: right;
 }
 
 .fr li:first-child {
