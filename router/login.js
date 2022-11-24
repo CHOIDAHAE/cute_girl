@@ -42,11 +42,11 @@ module.exports = function(app){
                     if (err) {
                         return;//세션 삭제시 에러
                     }
-                    res.redirect('./user/login');//세션 삭제 성공
+                    res.redirect('/login');//세션 삭제 성공
                 }
             ); 
         } else {
-            res.redirect('./user/login');//로그인 안되어 있음
+            res.redirect('/login');//로그인 안되어 있음
         }
     })	
 
@@ -74,7 +74,7 @@ module.exports = function(app){
     app.post("/findId", function(req, res, next){
         //여기서 id 찾아서 넘겨주어야함. (휴대폰 번호로 찾음)
         var phonNo = req.body.realPhoneNo;
-        
+
 
         res.render('./user/findId', {'emplyrSn':req.body.emplyrSn, 'emplyrId':req.body.emplyrId});
     })
