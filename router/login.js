@@ -60,6 +60,11 @@ module.exports = function(app){
         res.render('./user/findPwByPhone', {'emplyrSn':req.query.emplyrSn});
     })
 
+    //비밀번호 재설정 화면
+    app.post('/reSettingPw', function(req, res){
+        res.render('./user/reSettingPw', {'emplyrSn':req.body.emplyrSn, 'emplyrId':req.body.emplyrId});
+    })
+
     // 비밀번호 재설정 화면
     app.get('/reSettingPw', function(req, res){
         res.render('./user/reSettingPw', {'emplyrSn':req.query.emplyrSn, 'emplyrId':req.query.emplyrId});
