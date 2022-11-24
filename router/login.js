@@ -79,8 +79,7 @@ module.exports = function(app){
     app.post("/findId", function(req, res, next){
         //여기서 id 찾아서 넘겨주어야함. (휴대폰 번호로 찾음)
         var phonNo = req.body.realPhoneNo;
-
-
+        
         res.render('./user/findId', {'emplyrSn':req.body.emplyrSn, 'emplyrId':req.body.emplyrId});
     })
 
