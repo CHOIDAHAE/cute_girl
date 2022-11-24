@@ -9,9 +9,34 @@
 	</head>
 	<script>
 		$('document').ready(function(){
-			// 아이디 세팅
-			
+			choiceIdList();
         })
+
+		// 넘어온 휴대폰 번호에 해당하는 id 추출하기
+		function choiceIdList(){
+			var phoneNo = document.getElementById('phoneNo').value;
+
+			var dataInfo = {};
+			dataInfo.phoneNo = phoneNo;
+
+			$.ajax({
+				contentType : 'application/json; charset=utf-8', 
+				type : 'post', 
+				dataType : 'json', 
+				async : false,
+				url  : '/choiceIdList',
+				data : JSON.stringify(dataInfo),
+				success : function(data) {
+					console.log(data);
+				}
+			});
+
+		}
+
+		// 비밀번호 찾기 클릭 시 reSetting로 바로 넘어가기
+		function findPw(){
+			fm1.submit();		
+		}
 	</script>
 
 	<body>
@@ -22,31 +47,29 @@
 					<div class="content_header">
 						<h2><img src="https://static.nid.naver.com/images/user/images/user/h_find_id.gif" width="67" height="16" alt="아이디 찾기"></h2>
 					</div>
-					
-					
 					<p class="content_summary">고객님의 정보와 일치하는 아이디 목록입니다.</p>
-					<form name="fm1" action="" method="POST">
-					<input type="hidden" name="nv_id" value="">
+					<form name="fm1" action="/directSetPw" method="POST">
+					<!--<input type="hidden" name="nv_id" value="">
 					<input type="hidden" name="token_help" value="aOgSbD7kHTqWOOW1">
-					<input type="hidden" id="authType" name="authType" value="RM">
+					<input type="hidden" id="authType" name="authType" value="RM">-->
 					<div class="section section_find">
 						<div class="box6" style="text-align:center">
 							<ul class="list_id">
 								<li>
 									<strong>
-										<input type="radio" name="select" id="select0" value="77654576bb4b23035cccd1a2b74f10cf"> 
-										<label for="select0" class="label_rd">otae5721</label>
+										<input type="radio" name="select" id="select0" value="" checked>
+										<label for="select0" class="label_rd"></label>
 									</strong>
-									<span>가입 : 2005.06.14</span>
-									<input type="hidden" name="nv_id0" value="otae5721">
+									<span>가입 : </span>
+									<input type="hidden" id="phoneNo" name="phoneNo" value=<%= phoneNo%>>
 								</li>
 							</ul>
 						</div>
 
 						<!-- 버튼 영역 -->
 						<div class="btn_area">
-							<a href="/login" class="btn_login2"><span class="blind">로그인하기</span></a>
-							<a href="/findPw" class="btn_findpw"><span class="blind">비밀번호 찾기</span></a>
+							<a href="/login" class="btn_login2">로그인하기</a>
+							<a href="#" class="btn_login2 btn_findpw" onclick="findPw()">비밀번호 찾기</a>
 						</div>
 						<!-- 버튼 영역 -->
 
@@ -54,14 +77,14 @@
 							<h3>가입한 아이디가 보이지 않나요? <a href="#">상세내용 펼치기<em class="ico_arr"></em></a></h3>
 							<div class="find_dsc_sub">
 								<p>다른 방법으로 아이디 찾기를 해 보세요.<br>아이핀, 본인 명의 휴대전화를 이용하면 본인 명의로 가입된 아이디를 찾을 수 있고,<br>회원정보에 등록된 정보로 아이디 찾기를 하면, 명의와는 관계 없이 등록한 정보가 일치하는 아이디를 찾을 수 있습니다.</p>
-								<p>다른 방법으로도 아이디를 찾지 못했다면 아이디가 원래 없었을 수 있습니다. <a target="_blank" href="/join" >아이디를 새로 만드세요.</a></p>
+								<p>다른 방법으로도 아이디를 찾지 못했다면 아이디가 원래 없었을 수 있습니다. <a href="/join" >아이디를 새로 만드세요.</a></p>
 							</div>
 						</div>
 						<div id="div_joinGuide_open" class="find_dsc open" style="display:none">
 							<h3>가입한 아이디가 보이지 않나요? <a href="#">상세내용 접기<em class="ico_arr"></em></a></h3>
 							<div class="find_dsc_sub">
 								<p>다른 방법으로 아이디 찾기를 해 보세요.<br>아이핀, 본인 명의 휴대전화를 이용하면 본인 명의로 가입된 아이디를 찾을 수 있고,<br>회원정보에 등록된 정보로 아이디 찾기를 하면, 명의와는 관계 없이 등록한 정보가 일치하는 아이디를 찾을 수 있습니다.</p>
-								<p>다른 방법으로도 아이디를 찾지 못했다면 아이디가 원래 없었을 수 있습니다. <a target="_blank" href="/join" >아이디를 새로 만드세요.</a></p>
+								<p>다른 방법으로도 아이디를 찾지 못했다면 아이디가 원래 없었을 수 있습니다. <a href="/join" >아이디를 새로 만드세요.</a></p>
 							</div>
 						</div>
 

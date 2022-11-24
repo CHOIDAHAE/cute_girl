@@ -78,7 +78,7 @@ module.exports = function(app){
 			//쿼리문 실행
 			conn.execute(query, function(err,result){
 				if(err){
-					console.log("에러가 발생했습니다(selectFileVolume)>", err);
+					console.log("selectFileVolume failed>", err);
 					doRelease(conn);
 					return;
 				}
@@ -357,7 +357,7 @@ module.exports = function(app){
 	});
 
 	// 비밀번호 재설정
-	app.post("/updatePassword", function(req, res, next){		
+	app.post("/updatePassword", function(req, res, next){
 		var id = req.body.id;
 		var pw = req.body.pw;
 		
@@ -401,6 +401,78 @@ module.exports = function(app){
 			doRelease(conn);
 		});
 	})
+	
+	// id존재여부 쿼리 (아이디찾기 휴대폰인증 시 필요)
+	app.post("/findId", function(req, res, next){		
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(/updatePassword)",err);
+			} else {
+				console.log("Oracle Connection success(/updatePassword)");
+			}
+			conn = con;
+				
+			//query format
+			let format = {language: 'sql', indent: ''};
+
+			//select
+			let selectQuery = mybatisMapper.getStatement('UserDAO','selectId', {"phoneNo":req.body.phoneNo}, format);
+
+			//쿼리문 실행(select)
+			conn.execute(selectQuery, function(err,result){
+				if(err){
+					console.log("JOIN failed "+err);
+					res.json("F");
+				} else if (result.rows[0][0] == "" || result.rows[0][0] == null){
+					res.json("N");
+				} else {
+					res.json("Y");
+				}
+				
+			});
+			
+			doRelease(conn);
+		});
+	})
+
+	// 휴대폰번호에 해당하는 아이디 리스트
+	app.post("/choiceIdList", function(req, res, next){		
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(/updatePassword)",err);
+			} else {
+				console.log("Oracle Connection success(/updatePassword)");
+			}
+			conn = con;
+				
+			//query format
+			let format = {language: 'sql', indent: ''};
+
+			//select
+			let selectQuery = mybatisMapper.getStatement('UserDAO','selectId', {"phoneNo":req.body.phoneNo}, format);
+
+			//쿼리문 실행(select)
+			conn.execute(selectQuery, function(err,result){
+				if(err){
+					console.log("JOIN failed "+err);
+					res.json("F");
+				}
+				res.json(result.rows);
+			});
+			doRelease(conn);
+		});
+	})
+
 
 	function doRelease(conn){
 		conn.close(function(err){
