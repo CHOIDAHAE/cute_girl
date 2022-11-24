@@ -80,14 +80,16 @@
 				data: {"key":key, "value" : value},
 				type: "GET", //전송 타입
 				async: true, //비동기 여부
-				dataType: "TEXT",
+				dataType: "JSON",
 				success: function(data) {
-					if (data.result == "false"){
+					console.log(data);
+					console.log(data.result);
+					if (data.result == true){
+						// 비밀번호 업데이트
+						// updatePw();
+					} else {	//false
 						alert("다시 확인해주세요");
 						document.getElementById("autoValue").focus();
-					} else {	//true
-						// 비밀번호 업데이트
-						updatePw();
 					}					
 				},
 				error: function(request,status,error) {
