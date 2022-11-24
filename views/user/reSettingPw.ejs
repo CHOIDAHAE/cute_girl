@@ -82,18 +82,17 @@
 				async: true, //비동기 여부
 				dataType: "JSON",
 				success: function(data) {
-					console.log(data);
-					console.log(data.result);
 					if (data.result == true){
 						// 비밀번호 업데이트
-						// updatePw();
+						updatePw();
 					} else {	//false
+						window.location.reload();
 						alert("다시 확인해주세요");
 						document.getElementById("autoValue").focus();
-					}					
+					}
 				},
-				error: function(request,status,error) {
-					console.log("error");
+				error: function(request,status,error) {					
+					window.location.reload();
 					alert("자동 방지 가입 인증 중 오류가 발생했습니다.");
 				}
 			});
@@ -125,7 +124,8 @@
 		// 새로고침 버튼
 		function reCaptcha(){
 			//document.getElementById("chptchaimg").src = "";
-			requestkey();
+			//window.location.reload(); //페이지 전체 새로고침
+			requestkey();			
 		};
 
 		 // 엔터키
