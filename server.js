@@ -9,6 +9,7 @@ var router = require('./router/main')(app);
 var dbRouter = require('./router/dbConn')(app);
 var dbRouter = require('./router/login')(app);
 var fileRouter = require('./router/file')(app);
+var settingRouter = require('./router/setting')(app);
 
 var fs = require('fs');
 
