@@ -27,14 +27,49 @@
 				url  : '/choiceIdList',
 				data : JSON.stringify(dataInfo),
 				success : function(data) {
-					console.log(data);
+					for( var i=0; i<data.length; i++){
+						var emplyrSn = data[i][0];	//일련번호(emplyrSn)
+						var emplyrId = data[i][1];	//아이디(emplyrId)
+						var frstRgstDt = data[i][2];//최초가입일자
+
+						var list_id = $("#list_id"); //list_id 선언
+
+						list_id.append(
+							"<li>"
+								+"<strong>"
+								+"	<input type='radio' name='select' id='select"+i+"'>"
+								+"	<label for='select"+i+"' class='label_rd'>"+emplyrId+"</label>"
+								+"</strong>"
+								+"<span>가입 :"+frstRgstDt+"</span>"
+								+"<input type='hidden' name='emplyrSn' id='emplyrSn"+i+"' value='"+emplyrSn+"'>"
+								+"<input type='hidden' name='emplyrId' id='emplyrId"+i+"' value='"+emplyrId+"'>"
+							+"</li>"
+						); //ul_list안쪽에 li추가
+					}
 				}
 			});
-
 		}
 
 		// 비밀번호 찾기 클릭 시 reSetting로 바로 넘어가기
 		function findPw(){
+			var length = document.getElementsByName("select").length;
+			var cnt = 0;
+			var index = 0;
+
+			for(var i=0; i<length; i++){
+				if (document.getElementsByName("select")[i].checked == true) {
+					cnt++;
+					index = i;
+				}
+			}
+
+			if(cnt == 0){
+				alert("아이디를 선택해주세요.");
+				return;
+			} else {
+				document.getElementById('index').value = index;
+			}
+
 			fm1.submit();		
 		}
 	</script>
@@ -52,17 +87,11 @@
 					<!--<input type="hidden" name="nv_id" value="">
 					<input type="hidden" name="token_help" value="aOgSbD7kHTqWOOW1">
 					<input type="hidden" id="authType" name="authType" value="RM">-->
+					<input type="hidden" id="phoneNo" name="phoneNo" value=<%= phoneNo%>>
+					<input type="hidden" id="index" name="index" value="">
 					<div class="section section_find">
 						<div class="box6" style="text-align:center">
-							<ul class="list_id">
-								<li>
-									<strong>
-										<input type="radio" name="select" id="select0" value="" checked>
-										<label for="select0" class="label_rd"></label>
-									</strong>
-									<span>가입 : </span>
-									<input type="hidden" id="phoneNo" name="phoneNo" value=<%= phoneNo%>>
-								</li>
+							<ul id="list_id" class="list_id">
 							</ul>
 						</div>
 

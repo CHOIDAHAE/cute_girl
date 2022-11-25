@@ -84,8 +84,8 @@ module.exports = function(app){
      // 조회된 아이디로 바로 비밀번호 찾기 화면 이동
      app.post("/directSetPw", function(req, res, next){
 		res.render('./user/reSettingPw', {
-                                            "emplyrId" : req.body.emplyrId,
-                                            "emplyrSn" : req.body.emplyrSn
+                                            "emplyrId" : req.body.emplyrId[req.body.index],
+                                            "emplyrSn" : req.body.emplyrSn[req.body.index]
                                         });
 	})
 
