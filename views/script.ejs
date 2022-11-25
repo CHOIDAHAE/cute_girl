@@ -3,7 +3,6 @@
         <meta charset="utf-8">    
 <!--        <link rel="stylesheet" type="text/css" href="/js/common/jquery/jquery-ui.min.css"/>
         <link rel="stylesheet" type="text/css" href="/jqGrid/css/ui.jqgrid.css"/>-->
-        <!--<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>-->
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://kit.fontawesome.com/ad41bee873.js" crossorigin="anonymous"></script>
         <link href="../css/style.css?after" rel="stylesheet" type="text/css">
@@ -48,9 +47,6 @@
                 })
                 .fail(function (xhr, textStatus, errorThrown) {
                     console.log('selectFileVolume ajax 실패');
-                    console.log('xhr'+xhr);
-                    console.log('textStatus'+textStatus);
-                    console.log('errorThrown'+errorThrown);
                 })
             }
             
@@ -64,49 +60,6 @@
                 ibx_boonmoon.textContent = selectText;
                 
             }
-            
-            //됨
-            function selectTest(){
-                console.log('selectTest');
-                $.ajax({
-                    url : "/selectTest",
-                    type : "POST",
-                    dataType : "JSON" //"TEXT"
-                    //data : {"data" : "test"}
-                })
-                .done(function (res) {
-                    console.log('selectTest ajax 성공');
-                    console.log(res);
-                })
-                .fail(function (xhr, textStatus, errorThrown) {
-                    console.log('ajax 실패');
-                    console.log('xhr'+xhr);
-                    console.log('textStatus'+textStatus);
-                    console.log('errorThrown'+errorThrown);
-                })
-            }
-            
-            /* 안됨 */
-            $("#ajaxSend").click(function(){
-                alert("ajaxSend 테스트");
-                $.ajax({
-                    url : "/selectTest",
-                    type : "POST",
-                    dataType : "JSON",
-                    data : {"data" : "test"}
-                })
-
-                .done(function (res) {
-                    console.log('제이쿼리 ajax 성공');
-                })
-
-                .fail(function (xhr, textStatus, errorThrown) {
-                    console.log('제이쿼리 ajax 실패');
-                    console.log('xhr'+xhr);
-                    console.log('textStatus'+textStatus);
-                    console.log('errorThrown'+errorThrown);
-                })
-            });
 
             function openMenu(menuNm){
                 var gridArea = document.getElementById("gridArea");
