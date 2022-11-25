@@ -1,1 +1,130 @@
-setting 화면 입니다.
+<html lang="ko">
+    <head>
+        <meta charset="utf-8">    
+
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="https://kit.fontawesome.com/ad41bee873.js" crossorigin="anonymous"></script>
+        <link href="../css/setting.css?after" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" />
+
+        <script>
+            window.onload = function(){
+                document.getElementById('emplyrSn').value = opener.$("#emplyrSn").val();
+                // 일련번호에 해당하는 내 정보 값 가져오기
+                myInfo_setting();
+            }
+
+            function myInfo_setting(){
+               var emplyrSn = document.getElementById('emplyrSn').val;
+               console.log(emplyrSn);
+            }
+        </script>
+    </head>
+    <body>
+        <input type="hidden" name="emplyrSn" id="emplyrSn" value=""/>
+        <div class="wrap_pop wrap_pop_manage w790" style="min-height: 630px;">
+            <fieldset>
+                <div class="header">
+                    <h1 class="mana_header_title">
+                        MYDRIVE 환경설정
+                    </h1>
+                </div>
+                <div class="content manage">
+                    <ul class="tabmenu" id="pop_tabmenu">
+                        <li class="on"><a class="m1" href="/mycapacity?openerType=main">사용 용량</a></li>
+                        <li><a class="m2" href="/contentSearchOption?openerType=main">마이 페이지</a></li>
+                        <li class="ban"><a class="btn_set_banner" href="/about/product" onclick="clickcr(this,'set.add','','');" target="notice_pop">
+                            <img src="https://ssl.pstatic.net/static/pwe/cloud/promotion/bn_upgrade_212x100_210616.png" width="106" height="50" alt="용량 추가"></a>
+                        </li>
+                    </ul>
+                    <div class="manage_size" id="pop_content">
+                        <h3 class="blind">사용 용량</h3>
+                        <div class="_managePop_holder">
+                            <div class="sub tab">
+                                <a href="#myCapacity" class="toggle _tab on">
+                                    <strong>내 용량 보기</strong>
+                                </a>
+                            </div>
+                            <div class="_myFolderCapacity_holder"></div>
+                            <div class="mycapacity_cont tab_cont _tab_cont" style="padding:15px 0">
+                                <div class="tab_container" style="clear: both;float: left;margin: 0px 30px 0px 60px;width: 175px;">
+                                    <div class="tab_content" id="canvas-holder">
+                                        <div class="_chart_holder"><canvas id="_graph" width="193" height="193" style="position: relative; width: 155px; height: 155px;"></canvas></div>
+                                        <div id="chart_percent" style="left: 261px; top: 170.316px; position: absolute; z-index: 100;"><div style="text-align:center;width:60px"><span id="percent" style="width:10px;font-size: 25px;font-weight:normal;">76</span><span style="font-size:13px;font-weight:normal;">%</span></div></div>
+                                    </div>
+                                </div>
+                                <div class="mycapacity_tbl_wrap _legend_holder" id="_legend_holder" style="padding:15px 0">
+                                    <table cellspacing="0" class="mycapacity_tbl" style="float: right;width: 90%;"> 
+                                        <caption>내 용량 정보</caption> 
+                                        <colgroup>
+                                            <col class="group"> 
+                                            <col class="gigabyte">  
+                                        </colgroup>
+                                        <tbody>
+                                            <tr class="_legend_item" data-legendid="myUsedQuota" data-idx="0"> 
+                                                <th scope="row" class="group fst"> 
+                                                    <div class="thcell">  
+                                                        <span class="txt_tit">사용 중</span>
+                                                    </div> 
+                                                </th> 
+                                                <td class=" gigabyte fst"> 
+                                                    <div class="tdcell">22.9GB</div> 
+                                                </td> 
+                                            </tr>  
+                                            <tr class="_legend_item" data-legendid="myUsedQuota" data-idx="0"> 
+                                                <th scope="row" class="group "> 
+                                                    <div class="thcell">  
+                                                        <span class="rect" style="background-color:rgb(152,166,190)">&nbsp;</span>  
+                                                        <span class="txt_tit">내 MYBOX</span>
+                                                    </div> 
+                                                </th> 
+                                                <td class=" gigabyte "> 
+                                                    <div class="tdcell">22.9GB</div> 
+                                                </td> 
+                                            </tr>  
+                                            <tr class="_legend_item" data-legendid="myUsedQuota" data-idx="0"> 
+                                                <th scope="row" class="group "> 
+                                                    <div class="thcell">  
+                                                        <span class="rect">&nbsp;</span>
+                                                        <span class="txt_tit">폴더 및 파일</span>
+                                                    </div> 
+                                                </th> 
+                                                <td class=" gigabyte "> 
+                                                    <div class="tdcell">22.9GB</div> 
+                                                </td> 
+                                            </tr>  
+                                            <tr class="_legend_item" data-legendid="myUsedQuota" data-idx="0"> 
+                                                <th scope="row" class="group "> 
+                                                    <div class="thcell">  
+                                                        <span class="rect">&nbsp;</span>  
+                                                        <span class="txt_tit">휴지통</span>
+                                                    </div> 
+                                                </th> 
+                                                <td class=" gigabyte "> 
+                                                    <div class="tdcell">
+                                                        0KB
+                                                    </div> 
+                                                </td> 
+                                            </tr>  
+                                            <tr class="_legend_item" data-legendid="unusedQuota" data-idx="1"> 
+                                                <th scope="row" class="group "> 
+                                                    <div class="thcell">  
+                                                        <span class="rect" style="background-color:rgb(0,110,246)">&nbsp;</span>  
+                                                        <span class="txt_tit">사용 가능</span>
+                                                    </div> 
+                                                </th> 
+                                                <td class=" gigabyte "> 
+                                                    <div class="tdcell">7.1GB</div> 
+                                                </td> 
+                                            </tr>  
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </body>
+</html>

@@ -12,6 +12,7 @@ mybatisMapper.createMapper( ['./mapper/IndexDAO_SQL.xml']);
 
 module.exports = function(app){
     app.get('/setting', function(req, res, next){
-        res.render('./setting/setting',{data:"setting"});
+        console.log(req.body);
+        res.render('./setting/setting',{"emplyrSn":"emplyrSn"});
     })
 }
