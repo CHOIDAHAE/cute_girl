@@ -19,6 +19,11 @@
 }
 
 /* 메뉴 리스트 */
+.selected {
+    background-color: #ebebeb;
+    border-radius: 4px;
+}
+
 .list {
     font-size: 16px;
     line-height: 19px;
@@ -63,11 +68,15 @@
     padding-left: 40px;
 }
 
+.mt0{
+    margin-top : 0 !important;
+}
 .tree_item{
     position: relative;
     padding: 0 20px;
     line-height: 28px;
     cursor: pointer;
+    font-size: 14px;
 }
 
 details > summary {
@@ -102,9 +111,11 @@ details > summary {
     border-radius: 4px;
 }
 
-.setting{
+.setting {
     padding-left:17px;
     font-size: 13px;
+    text-decoration: none;
+    color: #000;
 }
 
 .cursor_pointer{

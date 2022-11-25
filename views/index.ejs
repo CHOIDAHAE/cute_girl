@@ -21,16 +21,6 @@
                             올리기
                         </button>
                     </form>
-                    <!--
-                    <button class="btnStyle" onclick="selectTest()">
-                        버튼
-                    </button>-->
-                    <% if(emplyrSn){ %>
-                        <a href="/logout" class="btnStyle" id="login">logout</a>
-                        <input type="hidden" id="emplyrSn" value=<%= emplyrSn %> />
-                    <% } else { %>
-                        <a href="/login" class="btnStyle" id="login">login</a>   
-                    <% } %>
                 </div>            
                 <% include ./menu %>
                 <iframe class="frameBox" src="/main" id="gridArea" scrolling="yes"></iframe>

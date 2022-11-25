@@ -26,10 +26,7 @@
 
             //파일용량 읽어오기
             function file_Volume(){
-                var emplyrSn = document.getElementById('emplyrSn').value;
-                /* 2022.11.21 최다혜
-                  콘솔 Cannot read properties of null (reading 'value') 해결 예정
-                */
+                var emplyrSn = $('#emplyrSn').val();
 
                 $.ajax({
                     url : "/selectFileVolume",
@@ -65,11 +62,11 @@
                 var gridArea = document.getElementById("gridArea");
                 
                 console.log(gridArea);
-                console.log(menuNm);
+                console.log(menuNm);                
 
                 document.getElementById("gridArea").src = menuNm;
             }
-
+            
             //파일 선택시 사이드바 정보 띄우는 이벤트
             function view_photoInfo(){
                 var fileInfoArea = $('#gridArea').contents().find('#file_type')
@@ -85,6 +82,31 @@
 
                 sideEle1.classList.toggle("sideInfoClick");
                 sideEle2.classList.toggle("sideInfoClick");
+            }
+
+            // 대메뉴, 소메뉴 선택시 클래스 삭제
+            function unselected(gbn){
+                /* 
+                 * 대메뉴 id 명명규칙 : dMenu0, dMenu1..
+                 * 소메뉴 id 명명규칙 : sMenu00, sMenu01 (대메뉴 dMenu0아래의 소메뉴) / sMenu10, sMenu11 (대메뉴 dMenu1아래의 소메뉴)
+                */
+                // 하드코딩, 메뉴 코드관리?
+                for( var i=0; i<4; i++){    //대메뉴 4개
+                        document.getElementById('dMenu'+i).classList.remove('selected');
+                    }
+
+                for( var i=0; i<4; i++){    //소메뉴(모든파일) 4개
+                    document.getElementById('sMenu0'+i).classList.remove('selected');
+                }
+
+                for( var i=0; i<1; i++){    //소메뉴(내 그룹) 2개
+                    document.getElementById('sMenu3'+i).classList.remove('selected');
+                }
+            };
+
+            // 대메뉴, 소메뉴 선택시 클래스 추가
+            function selected(menuId){
+                document.getElementById(menuId).classList.add('selected');
             }
 
             /* 파일 업로드 */
@@ -109,7 +131,7 @@
                 })
             }
 
-            /* 파일 조회 */
+            /* 파일 조회 
             function fileSelect(){
                 var emplyrSn = document.getElementById('emplyrSn').value;
 
@@ -144,6 +166,6 @@
                     console.log('textStatus'+textStatus);
                     console.log('errorThrown'+errorThrown);
                 })
-            }
+            }*/
         </script>
     </head>

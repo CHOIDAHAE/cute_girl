@@ -2,31 +2,33 @@
     <div class="menu-box">
         <ul class="list">
             <details>
-                <summary><li>
-                    <a class="menu_item">
-                        <i class="fa-sharp fa-solid fa-chevron-down ico_down"></i>
-                        <span>모든 파일</span>
-                    </a>
-                </li></summary>
+                <summary>
+                    <li id="dMenu0" onclick="unselected('dMenu0'); selected('dMenu0');">
+                        <a class="menu_item">
+                            <i class="fa-sharp fa-solid fa-chevron-down ico_down"></i>
+                            <span>모든 파일</span>
+                        </a>
+                    </li>
+                </summary>
                 <div class="foldable_menu">
-                    <ul class="list">
-                        <li>
-                            <div onclick="openMenu('photo')" class="tree_item">
+                    <ul class="list mt0">
+                        <li id="photo" name="menu">
+                            <div id="sMenu00" onclick="unselected('sMenu00'); selected('sMenu00'); openMenu('photo');" class="tree_item">
                                 사진
                             </div>
                         </li>
-                        <li>
-                            <div onclick="openMenu('movie')" class="tree_item">
+                        <li id="movie" name="menu">
+                            <div id="sMenu01" onclick="unselected('sMenu01'); selected('sMenu01'); openMenu('movie')" class="tree_item">
                                 동영상
                             </div>
                         </li>
-                        <li>
-                            <div onclick="openMenu('document')" class="tree_item">
+                        <li id="document" name="menu">
+                            <div id="sMenu02" onclick="unselected('sMenu02'); selected('sMenu02'); openMenu('document')" class="tree_item">
                                 문서
                             </div>
                         </li>
-                        <li>
-                            <div onclick="openMenu('music')" class="tree_item">
+                        <li id="music" name="menu">
+                            <div id="sMenu03" onclick="unselected('sMenu03'); selected('sMenu03'); openMenu('music')" class="tree_item">
                                 음악
                             </div>
                         </li>
@@ -34,31 +36,40 @@
                 </div>
             </details>
             <li>
-                <a href="#" class="menu_item pl40">
+                <a href="#" id="dMenu1" onclick="unselected('dMenu1'); selected('dMenu1');" class="menu_item pl40">
+                    <span>최근</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" id="dMenu2" onclick="unselected('dMenu2'); selected('dMenu2');" class="menu_item pl40">
                     <span>즐겨찾기</span>
                 </a>
             </li>
-            <li>
-                <a href="/photo" target="iframe" class="menu_item pl40">
-                    사진
-                </a>
-            </li>
-            <li>
-                <a href="/movie" target="iframe" class="menu_item pl40">
-                    동영상
-                </a>
-            </li>
-            <li>
-                <a href="/document" target="iframe" class="menu_item pl40">
-                    문서
-                </a>
-            </li>
-            <li>
-                <a href="/music" target="iframe" class="menu_item pl40">
-                    음악
-                </a>
-            </li>
         </ul>
+        <div class="lnb_box">
+            <ul class="lnb_list list">
+                <details>
+                    <summary>
+                        <li id="dMenu3" onclick="unselected('dMenu3'); selected('dMenu3');">
+                            <a class="menu_item">
+                                <i class="fa-sharp fa-solid fa-chevron-down ico_down"></i>
+                                <span>내 그룹</span>
+                            </a>
+                        </li>
+                    </summary>
+                    <div class="foldable_menu">
+                        <ul class="list mt0">
+                            <!-- 사용자가 속해있는 모임의 개수만큼 li가 늘어나야 함 -->
+                            <li id="sMenu30" name="menu" onclick="unselected('sMenu30'); selected('sMenu30'); openMenu('new')" >                                
+                                <div class="tree_item">
+                                    새모임 만들기
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </details>
+            </ul>
+        </div>
         <div class="lnb_box">
             <ul class="lnb_list">
                 <li>
@@ -67,6 +78,17 @@
                         환경설정
                     </a>
                 </li>
+                <% if(emplyrSn){ %>
+                    <li>
+                        <a href="/logout" class="menu_item setting cursor_pointer" id="login">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                            로그아웃
+                        <input type="hidden" id="emplyrSn" value=<%= emplyrSn %> />
+                        </a>
+                    </li>
+                <% } else { %>
+                    <a href="/login" class="btnStyle" id="login">login</a>   
+                <% } %>
             </ul>
         </div>
     </div>
