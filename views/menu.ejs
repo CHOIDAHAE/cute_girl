@@ -60,9 +60,9 @@
                     <div class="foldable_menu">
                         <ul class="list mt0">
                             <!-- 사용자가 속해있는 모임의 개수만큼 li가 늘어나야 함 -->
-                            <li id="sMenu30" name="menu" onclick="unselected('sMenu30'); selected('sMenu30'); openMenu('new')" >                                
+                            <li id="sMenu30" name="menu" onclick="unselected('sMenu30'); selected('sMenu30'); openMenu('myGroup')" >
                                 <div class="tree_item">
-                                    새모임 만들기
+                                    새 모임 만들기
                                 </div>
                             </li>
                         </ul>
@@ -80,14 +80,18 @@
                 </li>
                 <% if(emplyrSn){ %>
                     <li>
-                        <a href="/logout" class="menu_item setting cursor_pointer" id="login">
+                        <a href="/logout" class="menu_item setting cursor_pointer" id="logout">
                             <i class="fa-solid fa-right-from-bracket"></i>
                             로그아웃
                         <input type="hidden" id="emplyrSn" value=<%= emplyrSn %> />
                         </a>
                     </li>
                 <% } else { %>
-                    <a href="/login" class="btnStyle" id="login">login</a>   
+                    <li>
+                        <a href="/login" class="menu_item setting cursor_pointer" id="login">
+                            로그인
+                        </a> 
+                    </li>  
                 <% } %>
             </ul>
         </div>
