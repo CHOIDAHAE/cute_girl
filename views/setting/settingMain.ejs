@@ -11,8 +11,11 @@
         <script>
             window.onload = function(){
                 graph();
+                
+                console.log(opener.document.getElementById("emplyrSn").value);
             }
 
+            // 용량 그래프
             function graph(){
                 // chart colors
                 var colors = ['#E6E6E6', '#F5D0A9', '#F5A9A9'];
@@ -44,6 +47,29 @@
                     options: donutOptions
                 });
                 }
+            }
+
+            //파일용량 읽어오기
+            function file_Volume(){
+                var emplyrSn = $('#emplyrSn').val();
+
+                $.ajax({
+                    url : "/selectFileVolume",
+                    type : "POST",
+                    dataType : "JSON", //"JSON"
+                    data : {"emplyrSn" : opener.$("#emplyrSn").val()}
+
+                })
+                .done(function (res) {
+                    $("#capacity").text(res[0]);            // 사용중 용량
+                    $("#rest_capacity").text(100-res[0]);   // 남은 용량
+
+                    var bar = document.getElementById('bar');
+                    bar.style.width = res[0]+'%';           // graph color control = 남은용량/100
+                })
+                .fail(function (xhr, textStatus, errorThrown) {
+                    console.log('selectFileVolume ajax 실패');
+                })
             }
         </script>
     </head>
@@ -103,18 +129,7 @@
                                     <td class=" gigabyte "> 
                                         <div class="tdcell">22.9GB</div> 
                                     </td> 
-                                </tr>  
-                                <tr class="_legend_item" data-legendid="myUsedQuota" data-idx="0"> 
-                                    <th scope="row" class="group "> 
-                                        <div class="thcell">  
-                                            <span class="rect">&nbsp;</span>
-                                            <span class="txt_tit">폴더 및 파일</span>
-                                        </div> 
-                                    </th> 
-                                    <td class=" gigabyte "> 
-                                        <div class="tdcell">22.9GB</div> 
-                                    </td> 
-                                </tr>  
+                                </tr>
                                 <tr class="_legend_item" data-legendid="myUsedQuota" data-idx="0"> 
                                     <th scope="row" class="group "> 
                                         <div class="thcell">  
@@ -138,7 +153,7 @@
                                     <td class=" gigabyte "> 
                                         <div class="tdcell">7.1GB</div> 
                                     </td> 
-                                </tr>  
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -147,7 +162,7 @@
             <div class="myvolumn">
                 <p class="volumn">
                     사용 중 MYDRIVE 용량 
-                    <strong class="point3">22.87GB</strong>/30GB
+                    <strong class="point3">22.87GB</strong>/100GB
                 </p>
                 <p class="dsc">
                     <a href="#">이용권을 구매하고 용량 걱정없이 MYDRIVE를 이용해보세요.
