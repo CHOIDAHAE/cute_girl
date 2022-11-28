@@ -1,6 +1,12 @@
+body, p, ul {
+    margin : 0;
+}
+
 fieldset, img {
     border: 0;
     vertical-align: top;
+    padding: 0;
+    margin: 0;
 }
 
 menu, ol, ul {
@@ -9,6 +15,10 @@ menu, ol, ul {
 
 address, caption, hr {
     display: none;
+}
+
+select {
+    color: #333;
 }
 
 .wrap_pop {
@@ -26,7 +36,7 @@ address, caption, hr {
 }
 
 .wrap_pop .header {
-    height: 44px;
+    height: 37px;
     text-align: left;
     border-bottom: 1px solid #ededed;
 }
@@ -36,7 +46,7 @@ address, caption, hr {
     color: #fff;
     font-size: 12px;
     letter-spacing: -1px;
-    padding: 10px 0 0 5px;
+    padding: 13px 0 0 5px;
 }
 
 .wrap_pop_manage .header h1 {
@@ -71,18 +81,19 @@ address, caption, hr {
 }
 
 .wrap_pop_manage ul.tabmenu {
-    position: absolute;
     left: 0;
-    top: 36px;
+    top: 39px;
     bottom: 0;
     margin: 0;
     width: 130px;
     border-right: 1px solid #e6e6e6;
     background: #fbfbfb;
     overflow: hidden;
+    padding: 0;
+    display: inline-block;
 }
 
-.wrap_pop_manage ul.tabmenu li.on {
+.wrap_pop_manage ul.tabmenu li {
     background: 0 0;
 }
 
@@ -97,12 +108,17 @@ address, caption, hr {
     zoom: 1;
 }
 
-.wrap_pop_manage ul.tabmenu li a, .wrap_pop_manage ul.tabmenu li a.m1, .wrap_pop_manage ul.tabmenu li a.m2 {
+.wrap_pop_manage ul.tabmenu a li, .wrap_pop_manage ul.tabmenu a.m1 li, .wrap_pop_manage ul.tabmenu a.m2 li {
     width: auto;
     padding-left: 24px;
+    width: 110px;
 }
 
-.wrap_pop_manage ul.tabmenu li a {
+.m1, .m2 {
+    cursor: pointer;
+}
+
+.wrap_pop_manage ul.tabmenu a li {
     display: block;
     position: relative;
     height: 31px;
@@ -113,20 +129,23 @@ address, caption, hr {
     text-decoration: none;
 }
 
-.wrap_pop_manage ul.tabmenu li.on a {
+.wrap_pop_manage ul.tabmenu a li.on {
     padding: 0 0 0 24px;
     background: 0 0;
     color: #157efb;
     font-weight: 700;
 }
 
-.wrap_pop ul.tabmenu li {
+.wrap_pop ul.tabmenu a li {
     display: inline;
     float: left;
     margin-right: -1px;
     background: url(https://ssl.pstatic.net/static/pwe/ndrive/deskhome/bg.gif) no-repeat 0 -44px;
     letter-spacing: -1px;
     text-align: left;
+    font-size: 13px;
+    font-weight: bold;
+    width: 130px;
 }
 
 .tabmenu .ban {
@@ -135,6 +154,40 @@ address, caption, hr {
     height: auto;
     padding: 0;
     text-align: center!important;
+}
+
+/**********************settingMain**********************/
+.manage_size .sub {
+    position: relative;
+    height: 31px;
+    padding-left: 1px;
+    border-bottom: 1px solid #c9c9c9;
+}
+
+.manage_size .sub .on {
+    border-color: #c9c9c9;
+    border-bottom-color: #fff;
+    background-color: #fff;
+    z-index: 20;
+}
+
+.manage_size .sub a {
+    display: inline-block;
+    position: relative;
+    z-index: 10;
+    float: left;
+    margin: 0 0 -1px -1px;
+    padding: 9px 16px 9px 17px;
+    border: 1px solid #e7e7e7;
+    border-bottom-color: #c9c9c9;
+    background: #fbfbfb;
+    font-weight: 700;
+    color: #222;
+    letter-spacing: -1px;
+    line-height: 12px;
+    vertical-align: top;
+    text-decoration: none;
+    font-size: 13px;
 }
 
 .mycapacity_cont {
@@ -206,6 +259,7 @@ address, caption, hr {
 .mycapacity_tbl .group {
     width: 136px;
     color: #666;
+    font-size: 13px;
 }
 
 .mycapacity_tbl .gigabyte {
@@ -265,5 +319,128 @@ address, caption, hr {
 .mycapacity_tbl .tdcell {
     line-height: 17px;
     vertical-align: top;
+    font-size: 13px;
 }
 
+/* 용량 그래프 하단 */
+.myvolumn {
+    position: relative;
+    zoom: 1;
+    padding: 20px 9px 17px;
+    border-bottom: 1px solid #e9e9ec;
+    font-size: 13px;
+}
+
+.myvolumn .volumn {
+    color: #333;
+}
+
+.myvolumn {
+    position: relative;
+    zoom: 1;
+    padding: 20px 9px 17px;
+    border-bottom: 1px solid #e9e9ec;
+}
+
+.myvolumn .dsc {
+    display: inline-block;
+    position: relative;
+    width: auto;
+    margin-top: 7px;
+    color: #888;
+}
+
+.myvolumn .dsc a {
+    color: #888;
+    text-decoration: none;
+}
+
+.myvolumn .dsc a {
+    color: #888;
+    text-decoration: none;
+}
+
+.manage_size .basket {
+    overflow: hidden;
+    clear: both;
+    padding: 15px 0 0 9px;
+    color: #666;
+    letter-spacing: -1px;
+    zoom: 1;
+    font-size: 13px;
+}
+
+.manage_size .basket label {
+    vertical-align: middle;
+}
+
+.manage_size .basket select {
+    margin: 0 3px 0 10px;
+    vertical-align: middle;
+}
+
+html:first-child select {
+    height: 20px;
+    padding-right: 6px;
+}
+
+.manage_size .basket button {
+    height: 20px;
+    font-size: 11px;
+}
+
+button {
+    display: inline-block;
+    overflow: visible;
+    border-radius: 0;
+    height: 23px;
+    padding: 1px 4px 0;
+    border: 1px solid #c3c3c3;
+    background-color: #fff;
+    color: #333;
+    line-height: 100%;
+    letter-spacing: 0;
+    vertical-align: bottom;
+    white-space: nowrap;
+    cursor: pointer;
+    -webkit-appearance: none;
+    -webkit-text-size-adjust: none;
+}
+
+button .tx {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.manage_size .basket_info {
+    padding: 14px 0 0;
+}
+
+.manage_size .basket_info .lst {
+    padding: 12px 0 0 10px;
+    border-top: 1px solid #f2f2f4;
+}
+
+.manage_size .basket_info .lst li {
+    height: auto;
+    padding: 1px 0 1px 7px;
+    background: url(https://ssl.pstatic.net/static/pwe/ndrive/2011/bu_basket_dot.gif) no-repeat 0 6px;
+    font-size: 11px;
+    color: #8e949d;
+    line-height: 16px;
+    vertical-align: top;
+}
+
+/* 프레임박스 */
+.frameBox {
+    width: 655px;
+    min-height: 594px;
+    border-width: 0;
+    float: left;
+    position: absolute;
+    display: inline-block;
+}
+
+iframe {
+    margin: 0;
+}
