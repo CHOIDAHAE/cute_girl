@@ -105,7 +105,8 @@
             }
 
             /* 파일 업로드 */
-            function fileUpload(){
+            function fileUpload(e){
+                console.log(e);
                 console.log('file upload!');
                 const formData = new FormData();
                 formData.append('file', $('#fileUpload')[0].files[0]);
@@ -120,7 +121,7 @@
                     success:function(r){
                         console.log('file success');
                     },
-                    error:function(){
+                    error:function(e){
                         console.log('fileUpload ajax error');
                     }
                 })

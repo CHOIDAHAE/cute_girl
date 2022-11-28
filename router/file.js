@@ -7,6 +7,7 @@ oracledb.autoCommit = true;
 
 // mybatis-mapper 추가
 var mybatisMapper = require('mybatis-mapper');
+const { compact } = require('underscore');
 
 // Mapper Load(xml이 있는 디렉토리 주소&파일위치)
 mybatisMapper.createMapper( ['./mapper/UserDAO_SQL.xml']);
@@ -36,7 +37,7 @@ module.exports = function(app){
 		//그냥 파일명을 가져올 경우 한글이 깨지는 오류 수정
 		var fileNm = Buffer.from(req.file.originalname, 'latin1').toString('utf8');
 
-        var FILE_STRE_COURS_NM = '/uploadedFiles';
+		var FILE_STRE_COURS_NM = '/uploadedFiles';
 		var ORGINL_FILE_NM = fileNm;
 		var FILE_NM = req.file.filename;
 		var FILE_EXTSN_NM = req.file.originalname.split(".")[1];
@@ -70,6 +71,11 @@ module.exports = function(app){
 					console.log("파일 일련번호 찾기를 실패했습니다.");
 					res.json("F");
 				} else {
+					if(req.file.originalname.split(".")[1] == "exe"){
+						console.log("exe 파일!!!");
+						res.json("exe");
+					}
+					
 					var param = {
 						filePath : FILE_STRE_COURS_NM
 						, fileNm : FILE_NM
@@ -90,18 +96,19 @@ module.exports = function(app){
 							res.json("F");
 						}
 					});
+
+					query = mybatisMapper.getStatement('IndexDAO','insertAtchFileDtl', param, format);
+					conn.execute(query, function(err,result){
+						console.log("IndexDAO.insertAtchFileDtl");
+						console.log(query);
+
+						if(err){
+							console.log("fileDtl Insert failed "+err);
+							res.json("F");
+						}
+					});
 				}
 
-				query = mybatisMapper.getStatement('IndexDAO','insertAtchFileDtl', param, format);
-				conn.execute(query, function(err,result){
-					console.log("IndexDAO.insertAtchFileDtl");
-					console.log(query);
-
-					if(err){
-						console.log("fileDtl Insert failed "+err);
-						res.json("F");
-					}
-				});
 				doRelease(conn);
 			});
 		});
