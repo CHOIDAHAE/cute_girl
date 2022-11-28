@@ -9,23 +9,22 @@
 
         <script>
             window.onload = function(){
+                // 로그인한 사용자의 일련번호 저장(hidden)
                 document.getElementById('emplyrSn').value = opener.$("#emplyrSn").val();
-                // 일련번호에 해당하는 내 정보 값 가져오기
-                myInfo_setting();
-            }
-
-            function myInfo_setting(){
-               var emplyrSn = opener.$("#emplyrSn").val();
             }
 
             // 사용용량 탭
             function goMyCapacity(){
-                document.getElementById("settingArea").src = '/settingMain';
+                //document.getElementById("settingArea").src = '/settingMain';
+                const runframe = document.getElementById('settingArea');
+                runframe.addEventListener('load', function(e){ 
+                    console.log(e.target + ' iframe loaded!');
+                    console.log(e.target.contentDocument);
+                });
             }
 
             // 마이페이지 탭
             function goMyPage(){
-                //alert("서비스 준비중입니다.");
                 document.getElementById("settingArea").src = '/settingMyPage';
             }
         </script>
