@@ -15,12 +15,12 @@ mybatisMapper.createMapper( ['./mapper/UserDAO_SQL.xml']);
 
 var storage = multer.diskStorage({
     destination(req, file, cb){
-        cb(null, 'uploadedFiles/');
+        cb(null, './public/uploadedFiles/');
     },
 
     //파일 이름 지정 (저장시 파일명이 깨지는 경우가 있는데 다시 불러올 때 DB에 저장해둔 오리지널 파일명 가져오기)
     filename(req, file, cb){
-        cb(null, `${file.originalname}_${Date.now()}`);
+        cb(null, `${Date.now()}_${file.originalname}`);
     },
 });
 
@@ -49,14 +49,15 @@ module.exports = function(app){
         res.render('upload');
     });
     
-    app.post('/uploadFile', upload.single('attachment'), function(req, res){
+    app.post('/uploadFile', upload.single('attachment'), function(req, res, next){
 		console.log("uploadFiles");
-		console.log(req);
+		
 		if(req.fileValidationError != null){
-			res.json("F");
+			console.log("exe!!");
+			res.json("exe");
 			return;
 		}
-
+		
 		//그냥 파일명을 가져올 경우 한글이 깨지는 오류 수정
 		var fileNm = Buffer.from(req.file.originalname, 'latin1').toString('utf8');
 

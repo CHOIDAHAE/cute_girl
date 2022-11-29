@@ -20,7 +20,7 @@ app.engine('html', require('ejs').renderFile);
 
 var server = app.listen(3000, function(){
     //existsSync() 폴더가 있는지 확인 후 없으면 mkdirSync() 통해 폴더 생성
-    var dir = './uploadedFiles';
+    var dir = './public/uploadedFiles';
     if (!fs.existsSync(dir)) fs.mkdirSync(dir);
     console.log("Express server has started on port 3000")
 });

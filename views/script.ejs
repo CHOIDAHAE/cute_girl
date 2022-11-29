@@ -110,7 +110,9 @@
                 formData.append('file', $('#fileUpload')[0].files[0]);
 
                 $.ajax({
+                    contentType : 'application/json; charset=utf-8',
                     type:"POST",
+                    async : false,
                     processData : false,
                     contentType : false,
                     enctype: 'multipart/form-data',
@@ -144,12 +146,8 @@
 
                     for(var i=0; i<res.length; i++){
                         // $('#fileList').append('<li><img src="./uploadedFiles/' + res[i][2] + '" class="img_item" onclick="view_photoInfo()"><div class="item-name"> ' + res[i][1] + ' </div></li>');
-                        fileList += '<li class="item_fnc" id="' + res[i][8] + '_' + res[i][9] + '" ondblclick="view_photoInfo(this)"><img src="./uploadedFiles/' + res[i][2] + '" class="img_item">\n';
-                        fileList += '<input type="hidden" id="fileType' + [i] + ' value=' + res[i][3] + '>';
-                        fileList += '<input type="hidden" id="fileLocation' + [i] + '" value=' + res[i][0] + '>';
-                        fileList += '<input type="hidden" id="fileSize' + [i] + '" value=' + res[i][4] + '>';
-                        fileList += '<input type="hidden" id="downNum' + [i] + '" value=' + res[i][5] + '>';
-                        fileList += '<input type="hidden" id="frstDt' + [i] + '" value=' + res[i][6] + '>';
+                        fileList += '<li class="item_fnc" id="' + res[i][8] + '_' + res[i][9] + '" ondblclick="view_photoInfo(this)">';
+                        fileList += '<img src="../uploadedFiles/' + res[i][2] + '" class="img_item"/>\n';
                         fileList += '<div class="item-name"> ' + res[i][1] + ' </div></li>\n';
                     }
 
