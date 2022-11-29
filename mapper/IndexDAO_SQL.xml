@@ -12,8 +12,8 @@
 
 	<!-- 첨부파일 일련번호 찾아오기 -->
 	<select id="selectFileSn">
-		SELECT /*+ INDEX_DESC(PK_TCM_ATCH_FILE ATCHMNFL_SN) */
-			TO_CHAR(SYSDATE, 'YYYYMMDD')||LPAD(NVL(MAX(ATCHMNFL_SN)+1, 1), 5, 0) FILE_SN
+		SELECT
+			TO_NUMBER(NVL(MAX(ATCHMNFL_SN), TO_CHAR(SYSDATE, 'YYYYMMDD') || '00000')) + 1 FILE_SN
 		FROM
 			TCM_ATCHMNFL
 	</select>

@@ -8,6 +8,7 @@ oracledb.autoCommit = true;
 // mybatis-mapper 추가
 var mybatisMapper = require('mybatis-mapper');
 const { compact } = require('underscore');
+const { Callbacks } = require('jquery');
 
 // Mapper Load(xml이 있는 디렉토리 주소&파일위치)
 mybatisMapper.createMapper( ['./mapper/UserDAO_SQL.xml']);
@@ -23,7 +24,23 @@ var storage = multer.diskStorage({
     },
 });
 
-var upload = multer({storage: storage});
+var fileFilter = (req, file, cb) => {
+	console.log("fileFilter >>>> ");
+	console.log(file);
+	var fileType = file.originalname.split(".")[1];
+
+	if(fileType == "exe"){
+		req.fileValidationError = "exe 파일은 업로드가 불가능합니다."
+		return cb(null, false);
+	}else{
+		cb(null, true);
+	}
+}
+
+var upload = multer({
+	storage: storage,
+	fileFilter : fileFilter
+});
 
 module.exports = function(app){
 	var conn;
@@ -33,7 +50,13 @@ module.exports = function(app){
     });
     
     app.post('/uploadFile', upload.single('attachment'), function(req, res){
+		console.log("uploadFiles");
 		console.log(req);
+		if(req.fileValidationError != null){
+			res.json("F");
+			return;
+		}
+
 		//그냥 파일명을 가져올 경우 한글이 깨지는 오류 수정
 		var fileNm = Buffer.from(req.file.originalname, 'latin1').toString('utf8');
 
@@ -71,11 +94,6 @@ module.exports = function(app){
 					console.log("파일 일련번호 찾기를 실패했습니다.");
 					res.json("F");
 				} else {
-					if(req.file.originalname.split(".")[1] == "exe"){
-						console.log("exe 파일!!!");
-						res.json("exe");
-					}
-					
 					var param = {
 						filePath : FILE_STRE_COURS_NM
 						, fileNm : FILE_NM
