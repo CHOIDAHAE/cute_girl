@@ -29,7 +29,8 @@ var fileFilter = (req, file, cb) => {
 	console.log(file);
 	var fileType = file.originalname.split(".")[1];
 
-	if(fileType == "exe"){
+	if(file.mimetype == "application/x-msdownload"){
+		console.log("exe");
 		req.fileValidationError = "exe 파일은 업로드가 불가능합니다."
 		return cb(null, false);
 	}else{
@@ -49,8 +50,9 @@ module.exports = function(app){
         res.render('upload');
     });
     
-    app.post('/uploadFile', upload.single('attachment'), function(req, res, next){
+    app.post('/uploadFile', upload.single('attachment'), function(req, res){
 		console.log("uploadFiles");
+		console.log(req);
 		
 		if(req.fileValidationError != null){
 			console.log("exe!!");

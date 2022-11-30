@@ -13,14 +13,11 @@
                     </select>
                 </form>
                 <div class="button-wrap">
-                    <form action="/uploadFile" enctype="multipart/form-data" method="post" target="formFrame">
-                        <input type="file" name="attachment" id="fileUpload">
-                        <!-- <button class="btn_UploadStyle" onclick="fileUpload()"> -->
-                        <button class="btn_UploadStyle">
-                            <img src='../images/icon_download.png' width="20px" height="20px" alt="다운로드 아이콘">
-                            올리기
-                        </button>
-                    </form>
+                    <input type="file" name="attachment" id="fileUpload">
+                    <button class="btn_UploadStyle" onclick="fileUpload();">
+                        <img src='../images/icon_download.png' width="20px" height="20px" alt="다운로드 아이콘">
+                        올리기
+                    </button>
                 </div>            
                 <% include ./menu %>
                 <iframe class="frameBox" src="/main" id="gridArea" scrolling="yes"></iframe>

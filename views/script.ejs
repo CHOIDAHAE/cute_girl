@@ -105,27 +105,40 @@
             }
 
             /* 파일 업로드 */
-            function fileUpload(e){
-                const formData = new FormData();
-                formData.append('file', $('#fileUpload')[0].files[0]);
+            function fileUpload(){
+                // debugger;
+                var formData = new FormData();
+                formData.append('attachment', $('#fileUpload')[0].files[0]);
+                console.log(formData);
 
                 $.ajax({
-                    contentType : 'application/json; charset=utf-8',
+                    url : '/uploadFile',
                     type:"POST",
-                    async : false,
                     processData : false,
                     contentType : false,
+                    async : false,
                     enctype: 'multipart/form-data',
-                    url : '/uploadFile',
+                    dataType : "JSON",
                     data : formData,
-                    success:function(r){
-                        console.log('file success');
-                        console.log(r);
+                    success:function(result){
+                        if(result == "exe"){
+                            alert("exe 파일은 업로드할 수 없습니다!");
+                        }else{
+                            alert("업로드가 완료되었습니다.");
+                        }
+                        // if ($.browser.msie) {
+                            // ie 일때 input[type=file] init.
+                            // $("#fileUpload").replaceWith( $("#filename").clone(true) );
+                        // } else {
+                            // other browser 일때 input[type=file] init.
+                            $("#fileUpload").val("");
+                        // }
                     },
                     error:function(e){
                         console.log('fileUpload ajax error');
+                        console.log(e);
                     }
-                })
+                });
             }
 
             // 파일 조회 
