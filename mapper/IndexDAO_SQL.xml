@@ -108,4 +108,15 @@
 			ATCHMNFL_SN  = #{AtchfileSn}
 			AND FILE_SN  = #{fileSn}
 	</select>
+
+	<!-- 파일 휴지통으로 이동 / 복원 -->
+	<update id="updateFileUseAt">
+		UPDATE TCM_ATCHMNFL
+		SET
+			USE_AT = #{useAt},
+			LAST_UPDT_DT = SYSDATE,
+			LAST_UPDUSR_SN = #{emplyrSn}
+		WHERE 
+			ATCHMNFL_SN = #{AtchfileSn}
+	</update>
 </mapper>

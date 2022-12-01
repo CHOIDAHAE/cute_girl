@@ -154,17 +154,19 @@
                 })
                 .done(function (res) {
                     var fileArea = $('#gridArea').contents().find('#fileList');
+                    var emplyrSnArea = $('#gridArea').contents().find('#emplyrSn');
                     
                     var fileList = "";
 
                     for(var i=0; i<res.length; i++){
-                        // $('#fileList').append('<li><img src="./uploadedFiles/' + res[i][2] + '" class="img_item" onclick="view_photoInfo()"><div class="item-name"> ' + res[i][1] + ' </div></li>');
                         fileList += '<li class="item_fnc" id="' + res[i][8] + '_' + res[i][9] + '" ondblclick="view_photoInfo(this)">';
-                        fileList += '<img src="../uploadedFiles/' + res[i][2] + '" class="img_item"/>\n';
+                        fileList += '<img src="../uploadedFiles/' + res[i][2] + '" id="img_' + res[i][8] + '_' + res[i][9] + '" class="img_item"/>\n';
                         fileList += '<div class="item-name"> ' + res[i][1] + ' </div></li>\n';
                     }
 
                     $(fileArea).append(fileList);      //파일 리스트
+                    $(emplyrSnArea).value = emplyrSn;
+                    console.log(emplyrSnArea);
                 })
                 .fail(function (xhr, textStatus, errorThrown) {
                     console.log('selectFileList ajax 실패');

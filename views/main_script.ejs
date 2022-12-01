@@ -1,0 +1,135 @@
+<head>
+    <meta charset="utf-8">    
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.9.2/jquery.contextMenu.js" integrity="sha512-2ABKLSEpFs5+UK1Ol+CgAVuqwBCHBA0Im0w4oRCflK/n8PUVbSv5IY7WrKIxMynss9EKLVOn1HZ8U/H2ckimWg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.9.2/jquery.ui.position.js" integrity="sha512-vBR2rismjmjzdH54bB2Gx+xSe/17U0iHpJ1gkyucuqlTeq+Q8zwL8aJDIfhQtnWMVbEKMzF00pmFjc9IPjzR7w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://kit.fontawesome.com/ad41bee873.js" crossorigin="anonymous"></script>
+    <link href="../css/style.css?after" rel="stylesheet" type="text/css">
+    <link href="../css/grid.css?after" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" />
+
+    <script>
+        var contextFileInfo = "";
+        $(document).ready(function(){
+            $(document).contextmenu(function(e){
+                console.log(e.target);
+                //항목의 이미지 영역만 메뉴 띄우도록 설정
+                if(e.target.tagName != "IMG"){
+                    $(".contextmenu").hide();
+                    return;
+                }
+                //get window size
+                var winWidth = $(document).width();
+                var winHeight = $(document).height();
+                //get pointer position
+                var posX = e.pageX;
+                var posY = e.pageY;
+                
+                var menuWidth = $(".contextmenu").width();
+                var menuHeight = $(".contextmenu").height();
+                //Security margin:
+                var secMargin = 10;
+                //Prevent page overflow:
+                if(posX + menuWidth + secMargin >= winWidth
+                && posY + menuHeight + secMargin >= winHeight){
+                //Case 1: right-bottom overflow:
+                posLeft = posX - menuWidth - secMargin + "px";
+                posTop = posY - menuHeight - secMargin + "px";
+                }
+                else if(posX + menuWidth + secMargin >= winWidth){
+                //Case 2: right overflow:
+                posLeft = posX - menuWidth - secMargin + "px";
+                posTop = posY + secMargin + "px";
+                }
+                else if(posY + menuHeight + secMargin >= winHeight){
+                //Case 3: bottom overflow:
+                posLeft = posX + secMargin + "px";
+                posTop = posY - menuHeight - secMargin + "px";
+                }
+                else {
+                //Case 4: default values:
+                posLeft = posX + secMargin + "px";
+                posTop = posY + secMargin + "px";
+                };
+                //Display contextmenu:
+                $(".contextmenu").css({
+                "left": posLeft,
+                "top": posTop
+                }).show();
+                //Prevent browser default contextmenu.
+                contextFileInfo = e.target.id;
+                return false;
+            });
+            //Hide contextmenu:
+            $(document).click(function(){
+                $(".contextmenu").hide();
+            });
+        });
+        //파일 선택시 사이드바 정보 띄우는 이벤트
+        function view_photoInfo(e){
+            var fileInfo = e.id.split("_");
+            var AtchfileSn = fileInfo[0];
+            var fileSn = fileInfo[1];
+
+            $.ajax({
+                url : "/selectFileDtlData",
+                type : "POST",
+                dataType : "JSON", //"JSON"
+                data : {"AtchfileSn" : AtchfileSn, "fileSn" : fileSn}
+
+            })
+            .done(function (res) {
+                console.log(res);
+                var sideInfo_box = document.getElementById("sideInfo_box");
+                var sideEle1 = document.querySelector("#file_click");
+                var sideEle2 = document.querySelector("#file_nonClick");
+
+                if(res.length > 0){
+                    fileType.innerHTML = "종류 : " + res[0][2];
+                    fileLocation.innerHTML = "위치 : " + res[0][1];
+                    fileSize.innerHTML = "크기 : " + res[0][3];
+
+                    sideEle1.classList.remove("sideInfoClick");
+                    sideEle2.classList.add("sideInfoClick");
+                }else{
+                    sideEle1.classList.add("sideInfoClick");
+                    sideEle2.classList.remove("sideInfoClick");
+                }
+            })
+            .fail(function (xhr, textStatus, errorThrown) {
+                console.log('selectFileDtlData ajax 실패');
+                console.log('xhr'+xhr);
+                console.log('textStatus'+textStatus);
+                console.log('errorThrown'+errorThrown);
+            })
+        }
+
+        function fn_fileDelete(){
+            console.log(contextFileInfo);
+            var AtchfileSn = contextFileInfo.split("_")[1];
+            var emplyrSn = window.parent.$('#emplyrSn').val();
+            console.log("file Delete!");
+        //     $.ajax({
+        //         url : "/updateFileUseAt",
+        //         type : "POST",
+        //         dataType : "JSON", //"JSON"
+        //         data : {"AtchfileSn" : AtchfileSn, "emplyrSn" : emplyrSn, "useAt":"N"}
+
+        //     })
+        //     .done(function (res) {
+        //         console.log(res);
+        //     })
+        //     .fail(function (xhr, textStatus, errorThrown) {
+        //         console.log('selectFileDtlData ajax 실패');
+        //         console.log('xhr'+xhr);
+        //         console.log('textStatus'+textStatus);
+        //         console.log('errorThrown'+errorThrown);
+        //     })
+        }
+
+        function fn_addFavor(e){
+            console.log(contextFileInfo);
+            console.log("file Favorite!");
+        }
+    </script>
+</head>

@@ -218,6 +218,55 @@ module.exports = function(app){
 		});
 	})
 
+	//파일 휴지통으로 보내기 / 복원
+	app.post('/updateFileUseAt', upload.single('attachment'), function(req, res){
+		console.log("updateFileUseAt");
+		console.log(req);
+		
+		var useAt = req.session.user.useAt;
+		var AtchfileSn = req.session.user.AtchfileSn;
+		var emplyrSn = req.session.user.emplyrSn;
+		
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(/updateFileUseAt)",err);
+			} else {
+				console.log("Oracle Connection success(/updateFileUseAt)");
+			}
+			conn = con;
+				
+			//query format
+			let format = {language: 'sql', indent: ''};
+			
+			//fileSn 찾아오기
+			var param = {
+				useAt : useAt
+				, emplyrSn : emplyrSn
+				, AtchfileSn : AtchfileSn
+			}
+
+			//파일 등록
+			let query = mybatisMapper.getStatement('IndexDAO','updateFileUseAt', param, format);
+			conn.execute(query, function(err,result){
+				console.log("IndexDAO.updateFileUseAt");
+				console.log(query);
+				if(err){
+					console.log(err);
+					res.json("F");
+				}
+			});
+
+			doRelease(conn);
+		});
+
+		res.render('index', {"emplyrSn":req.session.user.emplyrSn});
+	});
+
 	function doRelease(conn){
 		conn.close(function(err){
 			if(err){
