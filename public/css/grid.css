@@ -1,132 +1,132 @@
 /* 그리드 영역 css */
 menu, ul, ol {
-    list-style: none;
+	list-style: none;
 }
 
 ul {
-    display: block;
-    list-style-type: disc;
-    margin-block-start: 1em;
-    margin-block-end: 1em;
-    margin-inline-start: 0px;
-    margin-inline-end: 0px;
-    padding-inline-start: 40px;
+	display: block;
+	list-style-type: disc;
+	margin-block-start: 1em;
+	margin-block-end: 1em;
+	margin-inline-start: 0px;
+	margin-inline-end: 0px;
+	padding-inline-start: 40px;
 }
 
 .item_data {
-    width:80%;
+	width:80%;
 }
 
 .item_fnc h3{
-    font-size: 24px;
-    color: #545454;
-    margin-top:60px;
-    margin-bottom: 60px;
-    text-align: center;
+	font-size: 24px;
+	color: #545454;
+	margin-top:60px;
+	margin-bottom: 60px;
+	text-align: center;
 }
 
 .item_fnc{
-    display: block;
-    width: 225px;
-    text-align: center;
-    text-decoration:none;
-    color: black;
-    float:left;
-    margin-left: 0.1em;
-    margin-right: 1em;
+	display: block;
+	width: 225px;
+	text-align: center;
+	text-decoration:none;
+	color: black;
+	float:left;
+	margin-left: 0.1em;
+	margin-right: 1em;
 }
 
 .item-name{
-    margin-top: 20px;
-    margin-bottom: 4px;
+	margin-top: 20px;
+	margin-bottom: 4px;
 }
 
 .checkbox {
-    display: none;
-    position: absolute;
-    top: 10px;
-    left: 10px;
+	display: none;
+	position: absolute;
+	top: 10px;
+	left: 10px;
 }
 
 .img_item {
-    position : relative;
-    z-index: 1;
-    border-radius: 5%;
-    width: 150;
+	position : relative;
+	z-index: 1;
+	border-radius: 5%;
+	width: 150;
 }
 
 
 .btn_star::before {
-    content: '\f005';
+	content: '\f005';
 }
 
 .fa-star {
-    position : absolute;
-    z-index: 2;
-    opacity: 0;
-    border : none;
-    background-color: transparent;
-    color : white;
-    left : 26em;
-    top : 7em;
-    width:2em;
+	position : absolute;
+	z-index: 2;
+	opacity: 0;
+	border : none;
+	background-color: transparent;
+	color : white;
+	left : 26em;
+	top : 7em;
+	width:2em;
 }
 
 
 .file_item:hover .fa-star{
-    opacity: 1;
+	opacity: 1;
 }
 
 .photo_checkbox {
-    position : absolute;
-    z-index: 2;
-    opacity: 0;
-    border : none;
-    background-color: transparent;
-    color : white;
-    left : 26em;
-    top : 7em;
-    width:2em;
+	position : absolute;
+	z-index: 2;
+	opacity: 0;
+	border : none;
+	background-color: transparent;
+	color : white;
+	left : 26em;
+	top : 7em;
+	width:2em;
 }
 
 .file_item:hover .photo_checkbox{
-    opacity: 1;
+	opacity: 1;
 }
 
 .contextmenu {
-    display: none;
-    position: absolute;
-    width: 200px;
-    margin: 0;
-    padding: 0;
-    background: #FFFFFF;
-    border-radius: 5px;
-    list-style: none;
-    box-shadow:
-      0 15px 35px rgba(50,50,90,0.1),
-      0 5px 15px rgba(0,0,0,0.07);
-    overflow: hidden;
-    z-index: 999999;
+	display: none;
+	position: absolute;
+	width: 200px;
+	margin: 0;
+	padding: 0;
+	background: #FFFFFF;
+	border-radius: 5px;
+	list-style: none;
+	box-shadow:
+	  0 15px 35px rgba(50,50,90,0.1),
+	  0 5px 15px rgba(0,0,0,0.07);
+	overflow: hidden;
+	z-index: 999999;
   }
   
   .contextmenu li {
-    border-left: 3px solid transparent;
-    transition: ease .2s;
+	border-left: 3px solid transparent;
+	transition: ease .2s;
   }
   
   .contextmenu li a {
-    display: block;
-    padding: 10px;
-    color: #B0BEC5;
-    text-decoration: none;
-    transition: ease .2s;
+	display: block;
+	padding: 10px;
+	color: #B0BEC5;
+	text-decoration: none;
+	transition: ease .2s;
   }
   
   .contextmenu li:hover {
-    background: #CE93D8;
-    border-left: 3px solid #9C27B0;
+	background: #CE93D8;
+	border-left: 3px solid #9C27B0;
   }
   
   .contextmenu li:hover a {
-    color: #FFFFFF;
+	color: #FFFFFF;
   }

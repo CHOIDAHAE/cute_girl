@@ -165,6 +165,7 @@ module.exports = function(app){
 
 			//쿼리문 실행
 			conn.execute(query, function(err,result){
+				console.log(query);
 				if(err){
 					console.log("에러가 발생했습니다(selectFileList)>", err);
 					doRelease(conn);
@@ -221,10 +222,10 @@ module.exports = function(app){
 	//파일 휴지통으로 보내기 / 복원
 	app.post('/updateFileUseAt', upload.single('attachment'), function(req, res){
 		console.log("updateFileUseAt");
-		console.log(req);
+		console.log(req.session.user);
 		
-		var useAt = req.session.user.useAt;
-		var AtchfileSn = req.session.user.AtchfileSn;
+		var useAt = req.body.useAt;
+		var AtchfileSn = req.body.AtchfileSn;
 		var emplyrSn = req.session.user.emplyrSn;
 		
 		oracledb.getConnection({
@@ -243,14 +244,12 @@ module.exports = function(app){
 			//query format
 			let format = {language: 'sql', indent: ''};
 			
-			//fileSn 찾아오기
 			var param = {
 				useAt : useAt
 				, emplyrSn : emplyrSn
 				, AtchfileSn : AtchfileSn
 			}
 
-			//파일 등록
 			let query = mybatisMapper.getStatement('IndexDAO','updateFileUseAt', param, format);
 			conn.execute(query, function(err,result){
 				console.log("IndexDAO.updateFileUseAt");
@@ -260,11 +259,10 @@ module.exports = function(app){
 					res.json("F");
 				}
 			});
-
+			console.log(res);
+			res.json({"emplyrSn":req.session.user.emplyrSn});
 			doRelease(conn);
 		});
-
-		res.render('index', {"emplyrSn":req.session.user.emplyrSn});
 	});
 
 	function doRelease(conn){
