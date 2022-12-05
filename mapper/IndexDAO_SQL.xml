@@ -119,4 +119,28 @@
 		WHERE 
 			ATCHMNFL_SN = #{AtchfileSn}
 	</update>
+
+	<!-- 첨부파일 즐겨찾기 추가 -->
+	<insert id="insertBmFavorite">
+		INSERT INTO TCM_EMPLYRBY_BKMK
+		(
+			EMPLYR_SN,
+			ATCHMNFL_SN,
+			FILE_SN,
+			FRST_REGISTER_SN,
+			FRST_REGIST_DT
+			LAST_UPDUSR_SN,
+			LAST_UPDT_DT
+		)
+		VALUES
+		(
+			#{sEmplyrSn},
+			#{atchmnflSn},
+			#{fileSn},
+			#{sEmplyrSn},
+			SYSDATE
+			#{sEmplyrSn},
+			SYSDATE
+		)
+	</insert>
 </mapper>
