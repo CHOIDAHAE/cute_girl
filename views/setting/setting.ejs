@@ -1,27 +1,21 @@
 <html lang="ko">
     <head>
-        <meta charset="utf-8">    
-
+        <meta charset="utf-8">
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://kit.fontawesome.com/ad41bee873.js" crossorigin="anonymous"></script>
         <link href="../css/setting.css?after" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" />
 
-        <script>
-            window.onload = function(){
+        <script type="text/javascript">
+            $(document).ready(function(){
                 // 로그인한 사용자의 일련번호 저장(hidden)
-                document.getElementById('emplyrSn').value = opener.$("#emplyrSn").val();
-            }
+                var emplyrSn = opener.$("#emplyrSn").val();
+                document.getElementById('emplyrSn').value = emplyrSn;
+            });
 
             // 사용용량 탭
             function goMyCapacity(){
                 document.getElementById("settingArea").src = '/settingMain';
-                /*
-                const runframe = document.getElementById('settingArea');
-                runframe.addEventListener('load', function(e){ 
-                    console.log(e.target + ' iframe loaded!');
-                    console.log(e.target.contentDocument);
-                });*/
             }
 
             // 마이페이지 탭
@@ -39,12 +33,13 @@
                         MYDRIVE 환경설정
                     </h1>
                 </div>
-                <input type="hidden" name="emplyrSn" id="emplyrSn" value=""/>
                 <div class="content manage">
                     <ul class="tabmenu" id="pop_tabmenu">
                         <a class="m1" onclick="goMyCapacity()"><li class="on" style="border-bottom-width: 0px;">사용 용량</li></a>
                         <a class="m2" onclick="goMyPage()"><li>마이 페이지</li></a>
                     </ul>
+                    <input type="hidden" id="capacity" name="capacity" value=""/>
+                    <input type="hidden" name="emplyrSn" id="emplyrSn" value=""/>
                     <iframe class="frameBox" src="/settingMain" id="settingArea" scrolling="yes"></iframe>
                     <!--<iframe id="formFrame" name="formFrame" style="display:none"></iframe>-->
                 </div>

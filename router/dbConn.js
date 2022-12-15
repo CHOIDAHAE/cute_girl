@@ -74,7 +74,7 @@ module.exports = function(app){
 
 			//getStatement(namespace명, queryId, parameter, format);
 			let query = mybatisMapper.getStatement('IndexDAO','selectFileVolume', param, format);
-
+			
 			//쿼리문 실행
 			conn.execute(query, function(err,result){
 				if(err){
