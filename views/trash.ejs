@@ -1,44 +1,145 @@
-<% include ./script %>
-    <body>
-        <div class="whole_body">
-            <div id="header" class="header-box">
-                <% include ./header %>
-            </div>
-            <div id="main" class="main-part">
-                <form class="formBox">
-                    <select name="ListType" id="sortSbBox" class="listSbBox" onChange="selectNayeol()">
-                        <option value="none"> 정렬 기준 </option>
-                        <option value="name"> 이름순 </option>
-                        <option value="date"> 날짜순 </option>
-                    </select>
-                </form>
-                <div class="button-wrap">
-                    <button class="btn_UploadStyle">
-                        <img src='../images/icon_download.png' width="20px" height="20px" alt="다운로드 아이콘">
-                        올리기
-                    </button>
-                    <button class="btnStyle" onclick="selectTest()">
-                        버튼
-                    </button>
-                </div>            
-                <% include ./menu %>
-                <div class="main-box">
-                    <div><%- data %>.ejs 입니다.
-                        <ul class="item_data">
-                            <li title="test" class="item_fnc">
-                                <div class="file_item">
-                                    <img src="../images/sample_image.jpg" class="img_item">
-                                    <!--span class="checkbox"></span>-->
-                                    <button type="button" id="btn_start" class="fa-regular fa-star"></button>
-                                    <div class="item-name">
-                                        sample_image
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </body>
-    </html> 
+<html lang="ko">
+	<head>
+		<meta charset="utf-8">    
+		<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.9.2/jquery.contextMenu.js" integrity="sha512-2ABKLSEpFs5+UK1Ol+CgAVuqwBCHBA0Im0w4oRCflK/n8PUVbSv5IY7WrKIxMynss9EKLVOn1HZ8U/H2ckimWg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.9.2/jquery.ui.position.js" integrity="sha512-vBR2rismjmjzdH54bB2Gx+xSe/17U0iHpJ1gkyucuqlTeq+Q8zwL8aJDIfhQtnWMVbEKMzF00pmFjc9IPjzR7w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="https://kit.fontawesome.com/ad41bee873.js" crossorigin="anonymous"></script>
+		<link href="../css/style.css?after" rel="stylesheet" type="text/css">
+		<link href="../css/grid.css?after" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" />
+	
+		<script>
+			var contextFileInfo = "";
+			$(document).ready(function(){
+				trashFileSelect();
+				$(document).contextmenu(function(e){
+					console.log(e.target);
+					//항목의 이미지 영역만 메뉴 띄우도록 설정
+					if(e.target.tagName != "IMG"){
+						$(".contextmenu").hide();
+						return;
+					}
+					//get window size
+					var winWidth = $(document).width();
+					var winHeight = $(document).height();
+					//get pointer position
+					var posX = e.pageX;
+					var posY = e.pageY;
+					
+					var menuWidth = $(".contextmenu").width();
+					var menuHeight = $(".contextmenu").height();
+					//Security margin:
+					var secMargin = 10;
+					//Prevent page overflow:
+					if(posX + menuWidth + secMargin >= winWidth
+					&& posY + menuHeight + secMargin >= winHeight){
+					//Case 1: right-bottom overflow:
+					posLeft = posX - menuWidth - secMargin + "px";
+					posTop = posY - menuHeight - secMargin + "px";
+					}
+					else if(posX + menuWidth + secMargin >= winWidth){
+					//Case 2: right overflow:
+					posLeft = posX - menuWidth - secMargin + "px";
+					posTop = posY + secMargin + "px";
+					}
+					else if(posY + menuHeight + secMargin >= winHeight){
+					//Case 3: bottom overflow:
+					posLeft = posX + secMargin + "px";
+					posTop = posY - menuHeight - secMargin + "px";
+					}
+					else {
+					//Case 4: default values:
+					posLeft = posX + secMargin + "px";
+					posTop = posY + secMargin + "px";
+					};
+					//Display contextmenu:
+					$(".contextmenu").css({
+					"left": posLeft,
+					"top": posTop
+					}).show();
+					//Prevent browser default contextmenu.
+					contextFileInfo = e.target.id;
+					return false;
+				});
+				//Hide contextmenu:
+				$(document).click(function(){
+					$(".contextmenu").hide();
+				});
+			});
+
+			function trashFileSelect(){
+				console.log('trash select');
+				var emplyrSn = window.parent.$('#emplyrSn').val();
+				console.log(emplyrSn);
+				//var emplyrSn = document.getElementById('emplyrSn').value;
+
+				$.ajax({
+					url : "/selectFileList",
+					type : "POST",
+					dataType : "JSON", //"JSON"
+					data : {"emplyrSn" : emplyrSn, 
+						useAt : "N"}
+
+				})
+				.done(function (res) {
+					var fileArea = $('#fileList');
+					var emplyrSnArea = $('#emplyrSn');
+					
+					var fileList = "";
+
+					for(var i=0; i<res.length; i++){
+						fileList += '<li class="item_fnc" id="' + res[i][8] + '_' + res[i][9] + '" ondblclick="view_photoInfo(this)">';
+						fileList += '<img src="../uploadedFiles/' + res[i][2] + '" id="img_' + res[i][8] + '_' + res[i][9] + '" class="img_item"/>\n';
+						fileList += '<div class="item-name"> ' + res[i][1] + ' </div></li>\n';
+					}
+
+					$(fileArea).html(fileList);      //파일 리스트
+					$(emplyrSnArea).value = emplyrSn;
+					console.log(emplyrSnArea);
+				})
+				.fail(function (xhr, textStatus, errorThrown) {
+					console.log('selectTrashFileList ajax 실패');
+					console.log('xhr'+xhr);
+					console.log('textStatus'+textStatus);
+					console.log('errorThrown'+errorThrown);
+				})
+			}
+		</script>
+	</head>
+<body>
+<div class="main-box">
+	<div>
+		<ul class="item_data" id="fileList">
+			<li title="test" class="item_fnc">
+				<!--<div class="file_item">
+					
+					<img src="../uploadedFiles/1669722669212_bbf58e7fd46d70aa593cf39072f6c5f0.jpg" id="itemList" class="img_item" onclick="view_photoInfo()"/>
+					<input type="checkbox" class="photo_checkbox">
+					<button type="button" id="btn_start" class="fa-regular fa-star"></button>
+					<div class="item-name" id="item_nm">
+						sample_image
+					</div>
+				</div>-->
+			</li>
+		</ul>
+	</div>
+	<div id="contextMenuArea">
+		<ul class="contextmenu">
+			<li><a href="#">파일명 수정</a></li>
+			<li><a href="javascript:void(0);" onclick="fn_fileDelete();">파일 삭제</a></li>
+			<li><a href="javascript:void(0);" onclick="fn_addFavor();">즐겨찾기 추가</a></li>
+		  </ul>
+	</div>
+	<div id="sideInfo_box" class="sideInfo-box">
+		<div id="file_click" class="sideInfoClick">
+			<div id="fileType"></div>
+			<div id="fileLocation"></div>
+			<div id="fileSize"></div>
+		</div>
+		<div id="file_nonClick">
+			사진을 클릭하면 정보를 볼 수 있습니다.
+		</div>
+	</div>
+</div>
+</body>

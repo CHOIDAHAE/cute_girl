@@ -130,7 +130,26 @@
 
 		function fn_addFavor(e){
 			console.log(contextFileInfo);
-			console.log("file Favorite!");
+			var AtchfileSn = contextFileInfo.split("_")[1];
+			var emplyrSn = window.parent.$('#emplyrSn').val();
+			console.log("file Favor!");
+			$.ajax({
+				url : "/insertBmFavorite",
+				type : "POST",
+				dataType : "JSON", //"JSON"
+				data : {"AtchfileSn" : AtchfileSn, "emplyrSn" : emplyrSn}
+
+			})
+			.done(function (res) {
+				console.log(res);
+				window.parent.fileSelect();
+			})
+			.fail(function (xhr, textStatus, errorThrown) {
+				console.log('insertBmFavorite ajax 실패');
+				console.log('xhr'+xhr);
+				console.log('textStatus'+textStatus);
+				console.log('errorThrown'+errorThrown);
+			})
 		}
 	</script>
 </head>

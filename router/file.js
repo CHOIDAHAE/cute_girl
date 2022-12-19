@@ -155,6 +155,7 @@ module.exports = function(app){
 
 			var param = {
 				emplyrSn : req.body.emplyrSn
+				, useAt : req.body.useAt
 			}
 
 			//query format
@@ -264,6 +265,48 @@ module.exports = function(app){
 			doRelease(conn);
 		});
 	});
+
+	// 파일 정보 읽어오기
+	app.post("/insertBmFavorite", function(req, res){		
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(insertBmFavorite)",err);
+			} else {
+				console.log("Oracle Connection success(insertBmFavorite)");
+			}
+			conn = con;
+
+			var param = {
+				atchmnflSn : req.body.AtchfileSn
+				, fileSn : req.body.AtchfileSn
+				, sEmplyrSn : req.body.emplyrSn
+			}
+
+			//query format
+			let format = {language: 'sql', indent: ''};
+
+			//getStatement(namespace명, queryId, parameter, format);
+			let query = mybatisMapper.getStatement('IndexDAO','insertBmFavorite', param, format);
+
+			//쿼리문 실행
+			conn.execute(query, function(err,result){
+				console.log(query);
+				if(err){
+					console.log("에러가 발생했습니다(insertBmFavorite)>", err);
+					doRelease(conn);
+					return;
+				}
+				
+				res.send(result.rows);
+				doRelease(conn);					
+			});  
+		});
+	})
 
 	function doRelease(conn){
 		conn.close(function(err){

@@ -94,7 +94,7 @@
 			, TCM_ATCHMNFL_DETAIL tad
 		WHERE
 			TA.ATCHMNFL_SN = TAD.ATCHMNFL_SN
-			AND TA.USE_AT = 'Y'
+			AND TA.USE_AT = #{useAt}
 			AND TA.FRST_REGISTER_SN = #{emplyrSn}
 	</select>
 
@@ -131,7 +131,7 @@
 			ATCHMNFL_SN,
 			FILE_SN,
 			FRST_REGISTER_SN,
-			FRST_REGIST_DT
+			FRST_REGIST_DT,
 			LAST_UPDUSR_SN,
 			LAST_UPDT_DT
 		)
@@ -141,7 +141,7 @@
 			#{atchmnflSn},
 			#{fileSn},
 			#{sEmplyrSn},
-			SYSDATE
+			SYSDATE,
 			#{sEmplyrSn},
 			SYSDATE
 		)
