@@ -241,3 +241,222 @@ details > summary {
     background-color: #ebeaeb;
     border-radius: 4px;
 }
+
+/***********************모달창************************/
+.modal_wrap {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+/*
+#wrap {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-width: 1130px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}*/
+
+.dh_layer {
+    position: relative;
+    z-index: 50;
+    display: inline-block;
+    line-height: 1.5;
+    vertical-align: middle;
+    text-align: left;
+    top: 20%;
+}
+
+.pop_pht_wrap {
+    overflow: hidden;
+    /*position: absolute;*/
+    border-style: solid;
+    border-width: 1px;
+    border-color: #d9d9d9 #bfbfbf #b6b6b6 #d5d5d5;
+    -webkit-box-shadow: 1px 1px 1px rgb(0 0 0 / 10%);
+    box-shadow: 1px 1px 1px rgb(0 0 0 / 10%);
+    background-color: #fff;
+}
+
+.pop_pht_wrap .pop_header {
+    overflow: hidden;
+    position: relative;
+    height: 44px;
+    padding: 0 19px;
+    border-bottom: 1px solid #e5e5e5;
+    line-height: 45px;
+}
+
+.pop_pht_wrap .pop_header h1 {
+    float: left;
+    height: 44px;
+    margin-right: 9px;
+    padding: 0;
+    font-size: 14px;
+    color: #333;
+    line-height: 45px;
+}
+
+.ly_toge_content {
+    margin-bottom: 20px;
+}
+
+.toge_add_group {
+    position: relative;
+    padding: 0 20px;
+}
+
+.toge_add_thum {
+    position: relative;
+    padding: 35px 0 31px 0;
+}
+
+.toge_add_thum .add_pho.none_thum {
+    background-image: url(https://ssl.pstatic.net/static/pwe/ndrive/new_ndrive/group_cover_none.png);
+    background-repeat: no-repeat;
+}
+
+.toge_add_thum .add_pho {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+    border-radius: 60px;
+    background-color: #c9c9c9;
+}
+
+.add_pho_v2 .add_photo_ic {
+    display: none;
+}
+
+.add_photo_ic {
+    overflow: hidden;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 40px;
+    height: 42px;
+    margin: -21px 0 0 -20px;
+    background-position: 0 -260px;
+    text-indent: -500px;
+    background-image: url(https://ssl.pstatic.net/static/pwe/cloud/img/sprite/sprite_1704.png);
+    background-repeat: no-repeat;
+}
+
+.toge_add_thum .add_pho label {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.toge_add_thum .add_pho input {
+    position: absolute;
+    left: -300px;
+    top: -200px;
+}
+
+.toge_add_text {
+    text-align: center;
+    padding: 0 0 31px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.toge_add_text .txt {
+    padding: 0 0 11px 0;
+    line-height: 18px;
+    font-size : 13px;
+}
+
+.toge_add_text .txt_input {
+    position: relative;
+    padding: 0 0 0 0;
+}
+
+.toge_add_text .txt_input input {
+    width: 251px;
+    height: 27px;
+    border: 1px solid #438ddd;
+    line-height: 27px;
+    text-indent: 8px;
+}
+
+.pop_pht_wrap .pop_footer {
+    clear: both;
+}
+
+.pop_pht_wrap .pop_footer .btn_area {
+    margin: 0 20px 20px;
+    font-size: 0;
+    line-height: 0;
+    text-align: center;
+}
+
+.pop_pht_wrap .pop_footer .btn_area button {
+    height: 29px;
+    padding: 0 11px;
+    margin: 0 3px;
+}
+
+button.diable, button[disabled] {
+    color: #999;
+    cursor: default;
+}
+
+.void_btn {
+    opacity: .3;
+    filter: alpha(opacity=30);
+    pointer-events: none;
+    cursor: default;
+    outline: none;
+    -webkit-user-select: none;
+}
+
+button {
+    display: inline-block;
+    overflow: visible;
+    height: 23px;
+    padding: 1px 4px 0;
+    border: 1px solid #c3c3c3;
+    background-color: #fff;
+    color: #333;
+    line-height: 100%;
+    letter-spacing: 0;
+    vertical-align: top;
+    white-space: nowrap;
+    cursor: pointer;
+    -webkit-appearance: none;
+    -webkit-text-size-adjust: none;
+    border-radius: 0;
+}
+
+.pop_pht_wrap .btn_clse {
+    overflow: hidden;
+    text-indent: -500px;
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    width: 13px;
+    height: 13px;
+    background-image: url(https://ssl.pstatic.net/static/pwe/ndrive/new_ndrive/layer_sp_cls2.png);
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    z-index: 50;
+}
+
