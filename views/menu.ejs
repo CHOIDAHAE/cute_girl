@@ -50,7 +50,7 @@
 			<ul class="lnb_list list">
 				<details>
 					<summary>
-						<li id="dMenu3" onclick="unselected('dMenu3'); selected('dMenu3');">
+						<li id="dMenu3" onclick="unselected('dMenu3'); selected('dMenu3'); mygroup();">
 							<a class="menu_item">
 								<i class="fa-sharp fa-solid fa-chevron-down ico_down"></i>
 								<span>내 그룹</span>
@@ -60,9 +60,42 @@
 					<div class="foldable_menu">
 						<ul class="list mt0">
 							<!-- 사용자가 속해있는 모임의 개수만큼 li가 늘어나야 함 -->
-							<li id="sMenu30" name="menu" onclick="unselected('sMenu30'); selected('sMenu30'); openMenu('myGroup')" >
+							<li id="sMenu30" name="menu" onclick="unselected('sMenu30'); selected('sMenu30'); openModal();" >
 								<div class="tree_item">
 									새 모임 만들기
+								</div>
+								<!--<div class="modal_wrap" style="z-index: 10012; display: block; user-select: none; line-height: 611px; transition: line-height 100ms ease-out 0s;">-->
+								<div class="modal_wrap" id="modal_wrap" style="display: block;">
+									<div class="dh_layer pop_pht_wrap" style="width: 412px;">
+										<div class="pop_header">
+											<h1>새 모임 만들기</h1>
+										</div>
+										<div class="ly_toge_content">
+											<div class="toge_add_group">
+												<div class="toge_add_thum">
+													<span class="add_pho add_pho_v2 none_thum">
+														<span class="add_photo_ic">사진</span>
+														<label for="file-input-view102">
+															<span class="blind">사진 선택</span>
+														</label>
+														<input type="file" id="file-input-view102">
+													</span>
+												</div>
+												<div class="toge_add_text">
+													<p class="txt">MYDRIVE 사진, 동영상을 함께 볼 모임을 만들어 보세요.</p>
+													<div class="txt_input">
+														<input type="text" placeholder="모임명을 입력하세요" maxlength="25" value="">
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="pop_footer">
+											<div class="btn_area">
+												<button type="button" class="void_btn" disabled="">다음</button>
+											</div>
+										</div>
+										<a class="btn_clse" onclick="closeModal()">닫기</a>
+									</div>
 								</div>
 							</li>
 						</ul>
