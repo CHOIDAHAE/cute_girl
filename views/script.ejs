@@ -159,7 +159,7 @@
 					var fileList = "";
 
 					for(var i=0; i<res.length; i++){
-						fileList += '<li class="item_fnc" id="' + res[i][8] + '_' + res[i][9] + '" ondblclick="view_photoInfo(this)">';
+						fileList += '<li class="item_fnc" id="' + res[i][8] + '_' + res[i][9] + '" onclick="view_photoInfo(this)">';
 						fileList += '<img src="../uploadedFiles/' + res[i][2] + '" id="img_' + res[i][8] + '_' + res[i][9] + '" class="img_item"/>\n';
 						fileList += '<div class="item-name"> ' + res[i][1] + ' </div></li>\n';
 					}
