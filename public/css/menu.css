@@ -411,6 +411,7 @@ details > summary {
     height: 29px;
     padding: 0 11px;
     margin: 0 3px;
+    cursor: pointer;
 }
 
 button.diable, button[disabled] {
@@ -457,5 +458,15 @@ button {
     background-repeat: no-repeat;
     background-position: 0 0;
     z-index: 50;
+}
+
+.blind {
+    position: absolute;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    margin: -1px;
+    width: 1px;
+    height: 1px;
+    font-size: 0;
 }
 

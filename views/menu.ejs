@@ -85,17 +85,34 @@
 											<div class="toge_add_text">
 												<p class="txt">MYDRIVE 사진, 동영상을 함께 볼 모임을 만들어 보세요.</p>
 												<div class="txt_input">
-													<input type="text" placeholder="모임명을 입력하세요" maxlength="25" value="">
+													<input type="text" id="input_group" placeholder="모임명을 입력하세요" maxlength="25" value="" onkeyup="nextBtn();">
 												</div>
 											</div>
 										</div>
 									</div>
 									<div class="pop_footer">
 										<div class="btn_area">
-											<button type="button" class="void_btn" disabled="">다음</button>
+											<button type="button" class="void_btn" id="void_btn" onclick="nextModal()">다음</button>
 										</div>
 									</div>
 									<a class="btn_clse" onclick="closeModal()">닫기</a>
+								</div>
+							</div>
+							<!--<div class="modal_wrap" style="z-index: 10010; display: block; user-select: none; line-height: 949px; transition: line-height 100ms ease-out 0s;">-->
+							<div class="next_modal">
+								<div class="dh_layer pop_pht_wrap" style="width: 312px; height: 258px;">
+									<div class="ly1 ly_w1">
+										<div class="ly _dialog_type ly_info">
+											<div class="ly_content">
+												<p>'test' 모임이 만들어졌습니다!</p>
+												<div class="mes">혼자만 보기 아까웠던 사진들<br>이제 친구,가족들과 모임에서 함께보세요!</div>
+											</div>
+											<div class="ly_act">
+												<button><strong>모임가기</strong></button>&nbsp;
+											</div>
+											<p class="ly_close"><a href="#" onclick="closeFinalModal();">닫기</a></p>
+										</div>
+									</div>
 								</div>
 							</div>
 						</ul>

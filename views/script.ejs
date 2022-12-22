@@ -18,6 +18,7 @@
 				file_Volume();	// 파일 용량 조회
 				fileSelect();	// 파일 조회
 				closeModal();	//모임만들기 모달 닫기
+				document.getElementById('void_btn').disabled = true;
 			}
 
 			//파일용량 읽어오기
@@ -185,18 +186,37 @@
 			// 모임만들기 모달 열기
 			function openModal() {
 				$('.modal_wrap').show();
+				$('.next_modal').hide();
 			};
 
 			// 모임만들기 모달 닫기
 			function closeModal() {
 				$('.modal_wrap').hide();
+				$('.next_modal').hide();
+				document.getElementById('input_group').value = "";
+			};
+
+			// 모임만들기 완료 모달 열기
+			function nextModal(){
+				console.log("모임만들기 완료 모달 열기1");
+				$('.modal_wrap').hide();
+				$('.next_modal').show();				
+				console.log("모임만들기 완료 모달 열기2");
+			}
+
+			// 모임만들기 완료 모달 닫기
+			function closeFinalModal() {
+				console.log("모임만들기 완료 모달 닫기1");
+				$('.modal_wrap').hide();
+				$('.next_modal').hide();
+				console.log("모임만들기 완료 모달 닫기2");
 			};
 
 			// 다음버튼 활성화/비활성화
 			function nextBtn(){
 				var input = document.getElementById('input_group').value;
 				var nextBtn = document.getElementById('void_btn');
-				
+
 				if(input.length > 0){
 					nextBtn.disabled = false;
 				} else {
