@@ -244,7 +244,6 @@ details > summary {
 
 /***********************모달창************************/
 .modal_wrap {
-    display: none;
     position: fixed;
     top: 0;
     left: 0;
@@ -254,7 +253,7 @@ details > summary {
     overflow-y: auto;
     overflow-x: hidden;
 }
-/*
+
 #wrap {
     overflow: hidden;
     position: relative;
@@ -265,7 +264,7 @@ details > summary {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-}*/
+}
 
 .dh_layer {
     position: relative;
@@ -420,7 +419,7 @@ button.diable, button[disabled] {
 }
 
 .void_btn {
-    opacity: .3;
+    /*opacity: .3; --투명도 */
     filter: alpha(opacity=30);
     pointer-events: none;
     cursor: default;

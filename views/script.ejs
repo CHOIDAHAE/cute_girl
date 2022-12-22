@@ -17,7 +17,7 @@
 			window.onload = function(){
 				file_Volume();	// 파일 용량 조회
 				fileSelect();	// 파일 조회
-				closeModal();	// 모임만들기 모달창 닫기
+				closeModal();	//모임만들기 모달 닫기
 			}
 
 			//파일용량 읽어오기
@@ -184,15 +184,25 @@
 
 			// 모임만들기 모달 열기
 			function openModal() {
-				//$('.modal_wrap').show();
+				$('.modal_wrap').show();
 			};
 
 			// 모임만들기 모달 닫기
 			function closeModal() {
-				console.log("모달 닫기");
-				//$('.modal_wrap').hide();
-				console.log("모달 닫기2");
+				$('.modal_wrap').hide();
 			};
+
+			// 다음버튼 활성화/비활성화
+			function nextBtn(){
+				var input = document.getElementById('input_group').value;
+				var nextBtn = document.getElementById('void_btn');
+				
+				if(input.length > 0){
+					nextBtn.disabled = false;
+				} else {
+					nextBtn.disabled = true;
+				}
+			}
 
 			// 사용자마다 내 그룹을 찾아서 메뉴에 추가하여 보여줘야함 (동적 li생성)
 			function mygroup(){
