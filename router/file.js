@@ -155,6 +155,7 @@ module.exports = function(app){
 
 			var param = {
 				emplyrSn : req.body.emplyrSn
+				, useAt : req.body.useAt
 			}
 
 			//query format

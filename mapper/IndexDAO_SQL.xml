@@ -6,7 +6,10 @@
 	<select id="selectFileVolume">
 		/* IndexDAO.selectFileVolume */
 		SELECT
-            NVL(CEIL(SUM(FILE_MG)/1000),0) FILE_MG
+			NVL(CEIL(SUM(FILE_MG)/100000),0) FILE_MG,
+			NVL(CEIL(SUM(DECODE(USE_AT, 'Y', FILE_MG))/100000), 0) FILE_MG_Y,
+			NVL(CEIL(SUM(DECODE(USE_AT, 'N', FILE_MG))/100000), 0) FILE_MG_N,
+			1000-NVL(CEIL(SUM(FILE_MG)/100000),0) REMAIN
 		FROM TCM_ATCHMNFL_DETAIL
 		WHERE LAST_UPDUSR_SN = #{emplyrSn}
 	</select>
@@ -96,7 +99,7 @@
 			, TCM_ATCHMNFL_DETAIL tad
 		WHERE
 			TA.ATCHMNFL_SN = TAD.ATCHMNFL_SN
-			AND TA.USE_AT = 'Y'
+			AND TA.USE_AT = #{useAt}
 			AND TA.FRST_REGISTER_SN = #{emplyrSn}
 	</select>
 
