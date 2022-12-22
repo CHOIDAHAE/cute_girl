@@ -2,7 +2,7 @@
 <% include ./main_script %>
 <body>
 <div class="main-box">
-	<div>
+	<div class="grid_Area">
 		<ul class="item_data" id="fileList">
 			<li title="test" class="item_fnc">
 				<!--<div class="file_item">
@@ -19,7 +19,7 @@
 	</div>
 	<div id="contextMenuArea">
 		<ul class="contextmenu">
-			<li><a href="#">파일명 수정</a></li>
+			<li><a onclick="fn_updateFileNm();">파일명 수정</a></li>
 			<li><a href="javascript:void(0);" onclick="fn_fileDelete();">파일 삭제</a></li>
 			<li><a href="javascript:void(0);" onclick="fn_addFavor();">즐겨찾기 추가</a></li>
 		  </ul>

@@ -160,8 +160,8 @@
 
 					for(var i=0; i<res.length; i++){
 						fileList += '<li class="item_fnc" id="' + res[i][8] + '_' + res[i][9] + '" ondblclick="view_photoInfo(this)">';
-						fileList += '<img src="../uploadedFiles/' + res[i][2] + '" id="img_' + res[i][8] + '_' + res[i][9] + '" class="img_item"/>\n';
-						fileList += '<div class="item-name"> ' + res[i][1] + ' </div></li>\n';
+						fileList += '<img src="../uploadedFiles/' + res[i][1] + '" id="img_' + res[i][8] + '_' + res[i][9] + '" class="img_item"/>\n';
+						fileList += '<div class="item-name" id="dv_' + res[i][8] + '"> ' + res[i][2] + ' </div></li>\n';
 					}
 
 					$(fileArea).html(fileList);      //파일 리스트
@@ -180,6 +180,40 @@
 			function openWindowPop(url, name){
 				var options = 'top=100, left=650, width=790, height=635, status=no, menubar=no, toolbar=no, resizable=no';
 				window.open(url, name, options);
+			}
+
+			/* 즐겨찾기 조회 */
+			function selectBkmk(){
+				var emplyrSn = document.getElementById('emplyrSn').value;
+
+				$.ajax({
+					url : "/selectBkmkList",
+					type : "POST",
+					dataType : "JSON", //"JSON"
+					data : {"emplyrSn" : emplyrSn}
+
+				})
+				.done(function (res) {
+					var fileArea = $('#gridArea').contents().find('#fileList');
+					var emplyrSnArea = $('#gridArea').contents().find('#emplyrSn');
+					
+					var fileList = "";
+
+					for(var i=0; i<res.length; i++){
+						fileList += '<li class="item_fnc" id="' + res[i][0] + '_' + res[i][1] + '" ondblclick="view_photoInfo(this)">';
+						fileList += '<img src="../uploadedFiles/' + res[i][3] + '" id="img_' + res[i][0] + '_' + res[i][1] + '" class="img_item"/>\n';
+						fileList += '<div class="item-name" id="dv_' + res[i][0] + '"> ' + res[i][6] + ' </div></li>\n';
+					}
+
+					$(fileArea).html(fileList);      //파일 리스트
+					$(emplyrSnArea).value = emplyrSn;
+				})
+				.fail(function (xhr, textStatus, errorThrown) {
+					console.log('selectBkmkList ajax 실패');
+					console.log('xhr'+xhr);
+					console.log('textStatus'+textStatus);
+					console.log('errorThrown'+errorThrown);
+				})
 			}
 		</script>
 	</head>

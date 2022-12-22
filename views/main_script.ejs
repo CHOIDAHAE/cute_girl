@@ -129,8 +129,63 @@
 		}
 
 		function fn_addFavor(e){
-			console.log(contextFileInfo);
+			var AtchfileSn = contextFileInfo.split("_")[1];
+			var emplyrSn = window.parent.$('#emplyrSn').val();
 			console.log("file Favorite!");
+			$.ajax({
+				url : "/insertBmFavorite",
+				type : "POST",
+				dataType : "JSON", //"JSON"
+				data : {"AtchfileSn" : AtchfileSn, "emplyrSn" : emplyrSn}
+
+			})
+			.done(function (res) {
+				console.log(res);
+				window.parent.fileSelect();
+			})
+			.fail(function (xhr, textStatus, errorThrown) {
+				console.log('insertBmFavorite ajax 실패');
+				console.log('xhr'+xhr);
+				console.log('textStatus'+textStatus);
+				console.log('errorThrown'+errorThrown);
+			})
+		}
+
+		function fn_updateFileNm(){
+			var AtchfileSn = contextFileInfo.split("_")[1];
+			var dvId = "dv_" + AtchfileSn;
+			var dvHtml = document.getElementById(dvId)
+
+			var dvName = dvHtml.innerHTML;
+			
+			var nameHtml = "";
+			nameHtml += '<input type="text" id="txt_name" onfocusout = "fn_updateFileNmCb();" value="' + dvName + '"/>';
+
+			dvHtml.innerHTML = nameHtml;
+		}
+
+		function fn_updateFileNmCb(){
+			var updateNm = $('#txt_name').val();
+			var AtchfileSn = contextFileInfo.split("_")[1];
+			var emplyrSn = window.parent.$('#emplyrSn').val();
+
+			$.ajax({
+				url : "/updateFileNm",
+				type : "POST",
+				dataType : "JSON", //"JSON"
+				data : {"atchmnflSn" : AtchfileSn, "fileNm" : updateNm, "sEmplyrSn" : emplyrSn}
+
+			})
+			.done(function (res) {
+				console.log(res);
+				window.parent.fileSelect();
+			})
+			.fail(function (xhr, textStatus, errorThrown) {
+				console.log('updateFileNm ajax 실패');
+				console.log('xhr'+xhr);
+				console.log('textStatus'+textStatus);
+				console.log('errorThrown'+errorThrown);
+			})
 		}
 	</script>
 </head>

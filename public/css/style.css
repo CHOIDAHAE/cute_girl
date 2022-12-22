@@ -59,8 +59,13 @@ body{
     padding-top: 8px;
 }
 
+/* 그리드 영역 */
+.grid_Area {
+    width : 90%;
+}
+
 .sideInfo-box{
-    width:20%;
+    width:16%;
     height:100%;
     float:right;
     padding : 400px 5px;
@@ -157,5 +162,4 @@ body{
 .frameBox {
     width :85%;
     height : 85%;
-    margin : 5px;
 }

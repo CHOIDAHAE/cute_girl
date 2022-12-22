@@ -64,8 +64,8 @@ module.exports = function(app){
 		var fileNm = Buffer.from(req.file.originalname, 'latin1').toString('utf8');
 
 		var FILE_STRE_COURS_NM = '/uploadedFiles';
-		var ORGINL_FILE_NM = fileNm;
-		var FILE_NM = req.file.filename;
+		var FILE_NM = fileNm;
+		var ORGINL_FILE_NM = req.file.filename;
 		var FILE_EXTSN_NM = req.file.originalname.split(".")[1];
 		var FILE_MG = req.file.size;
 		var emplyrSn = req.session.user.emplyrSn;
@@ -264,6 +264,139 @@ module.exports = function(app){
 			doRelease(conn);
 		});
 	});
+
+	//파일명 수정
+	app.post('/updateFileNm', function(req, res){
+		console.log("updateFileNm");
+		console.log(req.session.user);
+
+		var atchmnflSn = req.body.atchmnflSn;
+		var fileNm = req.body.fileNm;
+		var sEmplyrSn = req.body.sEmplyrSn;
+		
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(/updateFileNm)",err);
+			} else {
+				console.log("Oracle Connection success(/updateFileNm)");
+			}
+			conn = con;
+				
+			//query format
+			let format = {language: 'sql', indent: ''};
+			
+			var param = {
+				sEmplyrSn : sEmplyrSn
+				, atchmnflSn : atchmnflSn
+				, fileSn : atchmnflSn
+				, fileNm : fileNm
+			}
+
+			let query = mybatisMapper.getStatement('IndexDAO','updateFileNm', param, format);
+			conn.execute(query, function(err,result){
+				console.log("IndexDAO.updateFileNm");
+				console.log(query);
+				if(err){
+					console.log(err);
+					res.json("F");
+				}
+			});
+			console.log(res);
+			res.json({"emplyrSn":req.session.user.emplyrSn});
+			doRelease(conn);
+		});
+	});
+
+	//즐겨찾기 추가
+	app.post('/insertBmFavorite', function(req, res){
+		console.log("insertBmFavorite");
+		console.log(req.session.user);
+		
+		var AtchfileSn = req.body.AtchfileSn;
+		var emplyrSn = req.session.user.emplyrSn;
+		
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(/insertBmFavorite)",err);
+			} else {
+				console.log("Oracle Connection success(/insertBmFavorite)");
+			}
+			conn = con;
+				
+			//query format
+			let format = {language: 'sql', indent: ''};
+			
+			var param = {
+				sEmplyrSn : emplyrSn
+				, atchmnflSn : AtchfileSn
+				, fileSn : AtchfileSn
+			}
+
+			let query = mybatisMapper.getStatement('IndexDAO','insertBmFavorite', param, format);
+			conn.execute(query, function(err,result){
+				console.log("IndexDAO.insertBmFavorite");
+				console.log(query);
+				if(err){
+					console.log(err);
+					res.json("F");
+				}
+			});
+			console.log(res);
+			res.json({"emplyrSn":req.session.user.emplyrSn});
+			doRelease(conn);
+		});
+	});
+
+	// 즐겨찾기 목록 조회
+	app.post("/selectBkmkList", function(req, res){		
+		var emplyrSn = req.session.user.emplyrSn;
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(selectBkmkList)",err);
+			} else {
+				console.log("Oracle Connection success(selectBkmkList)");
+			}
+			conn = con;
+
+			var param = {
+				sEmplyrSn : emplyrSn
+			}
+
+			//query format
+			let format = {language: 'sql', indent: ''};
+
+			//getStatement(namespace명, queryId, parameter, format);
+			let query = mybatisMapper.getStatement('IndexDAO','selectBkmkList', param, format);
+
+			//쿼리문 실행
+			conn.execute(query, function(err,result){
+				console.log(query);
+				if(err){
+					console.log("에러가 발생했습니다(selectBkmkList)>", err);
+					doRelease(conn);
+					return;
+				}
+				
+				res.send(result.rows);
+				doRelease(conn);					
+			});  
+		});
+	})
 
 	function doRelease(conn){
 		conn.close(function(err){

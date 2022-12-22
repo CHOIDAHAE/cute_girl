@@ -3,7 +3,7 @@
 .menu-area{
     display: flex;
     flex-direction: column;
-    width:256px;
+    width:14%;
     height:100%;
     background-color: #F6F7FA;
     float: left;
