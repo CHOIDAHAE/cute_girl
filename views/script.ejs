@@ -19,7 +19,7 @@
 				fileSelect();	// 파일 조회
 				closeModal();	//모임만들기 모달 닫기
 				document.getElementById('void_btn').disabled = true;
-			}
+			};
 
 			//파일용량 읽어오기
 			function file_Volume(){
@@ -41,7 +41,7 @@
 				.fail(function (xhr, textStatus, errorThrown) {
 					console.log('selectFileVolume ajax 실패');
 				})
-			}
+			};
 			
 			/* 정렬기준 변경 이벤트 */
 			function selectNayeol(){
@@ -52,7 +52,7 @@
 
 				ibx_boonmoon.textContent = selectText;
 				
-			}
+			};
 
 			function openMenu(menuNm){
 				var gridArea = document.getElementById("gridArea");
@@ -61,7 +61,7 @@
 				console.log(menuNm);                
 
 				document.getElementById("gridArea").src = menuNm;
-			}
+			};
 			
 			//파일 선택시 사이드바 정보 띄우는 이벤트
 			function view_photoInfo(){
@@ -78,7 +78,7 @@
 
 				sideEle1.classList.toggle("sideInfoClick");
 				sideEle2.classList.toggle("sideInfoClick");
-			}
+			};
 
 			// 대메뉴, 소메뉴 선택시 클래스 삭제
 			function unselected(gbn){
@@ -103,7 +103,7 @@
 			// 대메뉴, 소메뉴 선택시 클래스 추가
 			function selected(menuId){
 				document.getElementById(menuId).classList.add('selected');
-			}
+			};
 
 			/* 파일 업로드 */
 			function fileUpload(){
@@ -140,7 +140,7 @@
 						console.log(e);
 					}
 				});
-			}
+			};
 
 			// 파일 조회 
 			function fileSelect(){
@@ -150,7 +150,7 @@
 					url : "/selectFileList",
 					type : "POST",
 					dataType : "JSON", //"JSON"
-					data : {"emplyrSn" : emplyrSn}
+					data : {"emplyrSn" : emplyrSn, "useAt" : "Y"}	// 2022.12.23 최다혜 : 오류가 나길래 임시 수정(useAt : "Y" 추가)
 
 				})
 				.done(function (res) {
@@ -175,13 +175,13 @@
 					console.log('textStatus'+textStatus);
 					console.log('errorThrown'+errorThrown);
 				})
-			}
+			};
 
 			// 환경설정 팝업
 			function openWindowPop(url, name){
 				var options = 'top=100, left=650, width=790, height=635, status=no, menubar=no, toolbar=no, resizable=no';
 				window.open(url, name, options);
-			}
+			};
 
 			/* 즐겨찾기 조회 */
 			function selectBkmk(){
@@ -215,7 +215,7 @@
 					console.log('textStatus'+textStatus);
 					console.log('errorThrown'+errorThrown);
 				})
-			}
+			};
 				
 			// 모임만들기 모달 열기
 			function openModal() {
@@ -232,22 +232,32 @@
 
 			// 모임만들기 완료 모달 열기
 			function nextModal(){
-				console.log("모임만들기 완료 모달 열기1");
 				$('.modal_wrap').hide();
-				$('.next_modal').show();				
-				console.log("모임만들기 완료 모달 열기2");
-			}
+				$('.next_modal').show();
+
+				// 이 시점에서 그룹을 만든다.
+				$.ajax({
+					url : "/insertNewGroup",
+					type : "POST",
+					dataType : "JSON", //"JSON"
+					//data : {"emplyrSn" : emplyrSn} //일련번호, 그룹명, 사용여부 필요
+				})
+				.done(function (res) {
+					console.log(res);
+				})
+				.fail(function (xhr, textStatus, errorThrown) {
+					console.log('insertNewGroup ajax 실패');
+				})
+			};
 
 			// 모임만들기 완료 모달 닫기
 			function closeFinalModal() {
-				console.log("모임만들기 완료 모달 닫기1");
 				$('.modal_wrap').hide();
 				$('.next_modal').hide();
-				console.log("모임만들기 완료 모달 닫기2");
 			};
 
 			// 다음버튼 활성화/비활성화
-			function nextBtn(){
+			function nextBtn(){				
 				var input = document.getElementById('input_group').value;
 				var nextBtn = document.getElementById('void_btn');
 
@@ -256,11 +266,11 @@
 				} else {
 					nextBtn.disabled = true;
 				}
-			}
+			};
 
 			// 사용자마다 내 그룹을 찾아서 메뉴에 추가하여 보여줘야함 (동적 li생성)
 			function mygroup(){
 
-			}
+			};
 		</script>
 	</head>

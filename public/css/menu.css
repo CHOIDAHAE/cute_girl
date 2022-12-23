@@ -242,7 +242,7 @@ details > summary {
     border-radius: 4px;
 }
 
-/***********************모달창************************/
+/***********************모달창(1)************************/
 .modal_wrap {
     position: fixed;
     top: 0;
@@ -419,15 +419,6 @@ button.diable, button[disabled] {
     cursor: default;
 }
 
-.void_btn {
-    /*opacity: .3; --투명도 */
-    filter: alpha(opacity=30);
-    pointer-events: none;
-    cursor: default;
-    outline: none;
-    -webkit-user-select: none;
-}
-
 button {
     display: inline-block;
     overflow: visible;
@@ -470,3 +461,4 @@ button {
     font-size: 0;
 }
 
+/***********************모달창(2)************************/

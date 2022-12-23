@@ -122,4 +122,28 @@
 		FROM TCM_EMPLYR
 		WHERE EMPLYR_MBTLNUM = #{phoneNo}
 	</select>
+
+	<!-- myGroup 만들기-->
+	<insert id="joinUser">
+		INSERT INTO TCM_AUTHOR_GROUP
+			(
+				AUTHOR_GROUP_SN,
+				AUTHOR_GROUP_NM,
+				AUTHOR_GROUP_DC,
+				USE_AT,
+				FRST_REGISTER_SN,
+				FRST_REGIST_DT,
+				LAST_UPDUSR_SN,
+				LAST_UPDT_DT
+			) VALUES (
+				#{authorGroupSn},
+				#{authorGroupNm},
+				#{authorGroupDc},
+				NVL(#{useAt}, 'N'),
+				#{sEmplyrSn},
+				SYSDATE,
+				#{sEmplyrSn},
+				SYSDATE
+			)
+	</insert>
 </mapper>
