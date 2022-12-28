@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="GroupDAO">
+    <select id="selectGroupSn">
+        SELECT
+            NVL(MAX(AUTHOR_GROUP_SN) + 1,1) AS AUTHOR_GROUP_SN
+        FROM
+            TCM_AUTHOR_GROUP
+        WHERE
+            ROWNUM = 1
+    </select>
+
+    <insert id="insertBmFavorite">
+        INSERT INTO TCM_AUTHOR_GROUP
+		(
+			AUTHOR_GROUP_SN,
+			AUTHOR_GROUP_NM,
+			AUTHOR_GROUP_DC,
+			USE_AT,
+			FRST_REGISTER_SN,
+			FRST_REGIST_DT,
+			LAST_UPDUSR_SN,
+			LAST_UPDT_DT
+		) 
+		VALUES
+		(
+			#{authorGroupSn},
+			#{authorGroupNm},
+			#{authorGroupDc},
+			#{authorGroupDeptId},
+			#{sEmplyrSn},
+			SYSDATE,
+			#{sEmplyrSn},
+			SYSDATE
+		)
+    </insert>
+</mapper>

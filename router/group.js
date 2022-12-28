@@ -1,0 +1,52 @@
+var crypto = require('crypto');
+
+var oracledb = require("oracledb");
+var dbConfig = require("./dbConfig.js");
+oracledb.autoCommit = true;
+
+// mybatis-mapper 추가
+var mybatisMapper = require('mybatis-mapper');
+
+// Mapper Load(xml이 있는 디렉토리 주소&파일위치)
+mybatisMapper.createMapper( ['./mapper/GroupDAO_SQL.xml']);
+
+module.exports = function(app){
+   // 전체 파일 용량 읽어오기
+	app.post("/insertNewGroup", function(req, res){		
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(insertNewGroup)",err);
+			} else {
+				console.log("Oracle Connection success(insertNewGroup)");
+			}
+			conn = con;
+
+			var param = {
+				emplyrSn : req.body.emplyrSn
+			}
+
+			//query format
+			let format = {language: 'sql', indent: ''};
+
+			//getStatement(namespace명, queryId, parameter, format);
+			let query = mybatisMapper.getStatement('GroupDAO','selectFileVolume', param, format);
+
+			//쿼리문 실행
+			conn.execute(query, function(err,result){
+				if(err){
+					console.log("selectFileVolume failed>", err);
+					doRelease(conn);
+					return;
+				}
+				
+				res.send(result.rows);
+				doRelease(conn);					
+			});  
+		});
+	})
+}
