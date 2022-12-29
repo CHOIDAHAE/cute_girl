@@ -13,10 +13,23 @@
 		$(document).ready(function(){
 			$(document).contextmenu(function(e){
 				console.log(e.target);
+				console.log(e);
 				//항목의 이미지 영역만 메뉴 띄우도록 설정
 				if(e.target.tagName != "IMG"){
 					$(".contextmenu").hide();
 					return;
+				}
+				var targetId = e.target.id;
+				if(targetId.split("_")[2] == "Y"){
+					var innerHtml = "";
+					innerHtml = '<a href="javascript:void(0);" onclick="fn_delFavor();">즐겨찾기 삭제</a>';
+
+					$('#listFavorAt').html(innerHtml);
+				}else{
+					var innerHtml = "";
+					innerHtml = '<a href="javascript:void(0);" onclick="fn_addFavor();">즐겨찾기 추가</a>';
+
+					$('#listFavorAt').html(innerHtml);
 				}
 				//get window size
 				var winWidth = $(document).width();
@@ -65,6 +78,7 @@
 				$(".contextmenu").hide();
 			});
 		});
+
 		//파일 선택시 사이드바 정보 띄우는 이벤트
 		function view_photoInfo(e){
 			var fileInfo = e.id.split("_");
@@ -104,6 +118,7 @@
 			})
 		}
 
+		//파일 삭제 (휴지통으로 이동)
 		function fn_fileDelete(){
 			console.log(contextFileInfo);
 			var AtchfileSn = contextFileInfo.split("_")[1];
@@ -128,6 +143,7 @@
 			})
 		}
 
+		//즐겨찾기 추가
 		function fn_addFavor(e){
 			var AtchfileSn = contextFileInfo.split("_")[1];
 			var emplyrSn = window.parent.$('#emplyrSn').val();
@@ -151,6 +167,31 @@
 			})
 		}
 
+		//즐겨찾기 삭제
+		function fn_delFavor(e){
+			var AtchfileSn = contextFileInfo.split("_")[1];
+			var emplyrSn = window.parent.$('#emplyrSn').val();
+			console.log("file Favorite!");
+			$.ajax({
+				url : "/deleteBmFavorite",
+				type : "POST",
+				dataType : "JSON", //"JSON"
+				data : {"AtchfileSn" : AtchfileSn, "emplyrSn" : emplyrSn}
+
+			})
+			.done(function (res) {
+				console.log(res);
+				window.parent.fileSelect();
+			})
+			.fail(function (xhr, textStatus, errorThrown) {
+				console.log('deleteBmFavorite ajax 실패');
+				console.log('xhr'+xhr);
+				console.log('textStatus'+textStatus);
+				console.log('errorThrown'+errorThrown);
+			})
+		}
+
+		//파일명 수정
 		function fn_updateFileNm(){
 			var AtchfileSn = contextFileInfo.split("_")[1];
 			var dvId = "dv_" + AtchfileSn;
