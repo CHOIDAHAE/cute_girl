@@ -33,4 +33,25 @@
 			SYSDATE
 		)
     </insert>
+
+	<insert id="insertPersonalGroup">
+		INSERT INTO TCM_EMPLYRBY_GROUP_AUTHOR
+			(
+				EMPLYR_SN,
+				AUTHOR_GROUP_SN,
+				FRST_REGISTER_SN,
+				FRST_REGIST_DT,
+				LAST_UPDUSR_SN,
+				LAST_UPDT_DT
+			) 
+			VALUES
+			(
+				#{emplyrSn},
+				#{authorGroupSn},
+				#{sEmplyrSn},
+				SYSDATE
+				#{sEmplyrSn},
+				SYSDATE
+			)
+	</insert>
 </mapper>

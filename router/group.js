@@ -2,7 +2,7 @@ var crypto = require('crypto');
 
 var oracledb = require("oracledb");
 var dbConfig = require("./dbConfig.js");
-oracledb.autoCommit = true;
+//oracledb.autoCommit = true;
 
 // mybatis-mapper 추가
 var mybatisMapper = require('mybatis-mapper');
@@ -31,10 +31,10 @@ module.exports = function(app){
 			var sample = { "test" : "1" };
 
 			//getStatement(namespace명, queryId, parameter, format);
-			let query = mybatisMapper.getStatement('GroupDAO','selectGroupSn', sample, format);
+			let selectGroupSn = mybatisMapper.getStatement('GroupDAO','selectGroupSn', sample, format);
 
 			//쿼리문 실행
-			conn.execute(query, function(err,result){
+			conn.execute(selectGroupSn, function(err,result){
 				if(err){
 					console.log("selectGroupSn failed :", err);
 					doRelease(conn);
@@ -48,10 +48,11 @@ module.exports = function(app){
 					useAt : req.body.useAt
 				}
 
-				let query = mybatisMapper.getStatement('GroupDAO','insertNewGroup', param, format);
+				let NewGroupQ = mybatisMapper.getStatement('GroupDAO','insertNewGroup', param, format);
+				let personalGroupQ = mybatisMapper.getStatement('GroupDAO','insertPersonalGroup', param, format);
 
 				//쿼리문 실행
-				conn.execute(query, function(err,result){
+				conn.execute(NewGroupQ, function(err,result){
 					if(err){
 						console.log("insertNewGroup failed :", err);
 						res.json("F");
