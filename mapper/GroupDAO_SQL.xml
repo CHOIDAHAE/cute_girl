@@ -11,12 +11,11 @@
             ROWNUM = 1
     </select>
 
-    <insert id="insertBmFavorite">
+    <insert id="insertNewGroup">
         INSERT INTO TCM_AUTHOR_GROUP
 		(
 			AUTHOR_GROUP_SN,
 			AUTHOR_GROUP_NM,
-			AUTHOR_GROUP_DC,
 			USE_AT,
 			FRST_REGISTER_SN,
 			FRST_REGIST_DT,
@@ -25,13 +24,12 @@
 		) 
 		VALUES
 		(
-			#{authorGroupSn},
-			#{authorGroupNm},
-			#{authorGroupDc},
-			#{authorGroupDeptId},
-			#{sEmplyrSn},
+			#{groupSn},
+			#{groupNm},
+			#{useAt},
+			#{emplyrSn},
 			SYSDATE,
-			#{sEmplyrSn},
+			#{emplyrSn},
 			SYSDATE
 		)
     </insert>

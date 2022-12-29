@@ -26,27 +26,51 @@ module.exports = function(app){
 			}
 			conn = con;
 
-			var param = {
-				emplyrSn : req.body.emplyrSn
-			}
-
 			//query format
 			let format = {language: 'sql', indent: ''};
+			var sample = { "test" : "1" };
 
 			//getStatement(namespace명, queryId, parameter, format);
-			let query = mybatisMapper.getStatement('GroupDAO','selectFileVolume', param, format);
+			let query = mybatisMapper.getStatement('GroupDAO','selectGroupSn', sample, format);
 
 			//쿼리문 실행
 			conn.execute(query, function(err,result){
 				if(err){
-					console.log("selectFileVolume failed>", err);
+					console.log("selectGroupSn failed :", err);
 					doRelease(conn);
 					return;
 				}
-				
-				res.send(result.rows);
-				doRelease(conn);					
+
+				var param = {
+					groupSn	: result.rows[0][0],
+					emplyrSn : req.body.emplyrSn,
+					groupNm : req.body.groupNm,
+					useAt : req.body.useAt
+				}
+
+				let query = mybatisMapper.getStatement('GroupDAO','insertNewGroup', param, format);
+
+				//쿼리문 실행
+				conn.execute(query, function(err,result){
+					if(err){
+						console.log("insertNewGroup failed :", err);
+						res.json("F");
+						doRelease(conn);
+						return;
+					}
+					res.json("S");
+					doRelease(conn);					
+				});
 			});  
 		});
 	})
+
+	function doRelease(conn){
+		conn.close(function(err){
+			if(err){
+				console.log("doRelease error!");
+				console.error(err.message);
+			}
+		})
+	}
 }

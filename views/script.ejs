@@ -233,27 +233,27 @@
 			// 모임만들기 완료 모달 열기
 			function nextModal(){
 				$('.modal_wrap').hide();
-				$('.next_modal').show();
+
+				var emplyrSn = $('#emplyrSn').val();
+				var groupNm = $('#input_group').val();
 
 				// 이 시점에서 그룹을 만든다.
 				$.ajax({
 					url : "/insertNewGroup",
 					type : "POST",
-					dataType : "JSON", //"JSON"
-					//data : {"emplyrSn" : emplyrSn} //일련번호, 그룹명, 사용여부 필요
+					dataType : "JSON",
+					data : {"emplyrSn" : emplyrSn, "groupNm" : groupNm, "useAt" : "Y"},
+					success:function(result){
+						if(result == "S"){
+							$('.next_modal').show();
+						} else {
+							alert("새 모임 만들기 중 오류가 발생하였습니다.(ajax성공)");
+						}
+					},
+					error:function(e){
+						alert("새 모임 만들기 중 오류가 발생하였습니다.(ajax실패)");
+					}
 				})
-				.done(function (res) {
-					console.log(res);
-				})
-				.fail(function (xhr, textStatus, errorThrown) {
-					console.log('insertNewGroup ajax 실패');
-				})
-			};
-
-			// 모임만들기 완료 모달 닫기
-			function closeFinalModal() {
-				$('.modal_wrap').hide();
-				$('.next_modal').hide();
 			};
 
 			// 다음버튼 활성화/비활성화
