@@ -94,11 +94,15 @@
 			, tad.FRST_REGISTER_SN 
 			, tad.ATCHMNFL_SN
 			, tad.FILE_SN
+			, DECODE(TEB.FILE_SN, '', 'N', 'Y') BKMK_AT
 		FROM
 			TCM_ATCHMNFL ta
 			, TCM_ATCHMNFL_DETAIL tad
+			, TCM_EMPLYRBY_BKMK TEB 
 		WHERE
 			TA.ATCHMNFL_SN = TAD.ATCHMNFL_SN
+			AND TAD.ATCHMNFL_SN  = TEB.ATCHMNFL_SN(+)
+			AND TAD.FILE_SN  = TEB.FILE_SN(+)
 			AND TA.USE_AT = #{useAt}
 			AND TA.FRST_REGISTER_SN = #{emplyrSn}
 	</select>
@@ -155,6 +159,15 @@
 		)
 	</insert>
 
+	<!-- 첨부파일 즐겨찾기 삭제 -->
+	<delete id="deleteBmFavorite">
+		/* IndexDAO.deleteBmFavorite */
+		DELETE FROM TCM_EMPLYRBY_BKMK
+		WHERE EMPLYR_SN = #{sEmplyrSn}
+		AND FILE_SN = #{fileSn}
+		AND ATCHMNFL_SN = #{atchmnflSn}
+	</delete>
+
 	<!--즐겨찾기 목록 조회-->
 	<select id="selectBkmkList">
 		/* IndexDAO.selectBkmkList */
@@ -178,7 +191,7 @@
 	<!-- 첨부파일명 수정 -->
 	<update id="updateFileNm">
 		/* IndexDAO.updateFileNm */
-		UPDATE TCM_ATCHMNFL_DETAIL
+		UPDATE TCM_ATCHMNFL_DETAIL		/* 첨부파일 상세 */
 		SET FILE_NM = #{fileNm}
 			, LAST_UPDT_DT = SYSDATE
 			, LAST_UPDUSR_SN = #{sEmplyrSn}
@@ -186,4 +199,29 @@
 			ATCHMNFL_SN = #{atchmnflSn}
 			AND FILE_SN = #{fileSn}
 	</update>
+
+	<!-- 파일 자동삭제 정보 수정 -->
+	<update id="updateAutoFileInfo">
+		/* IndexDAO.updateAutoFileInfo */
+		UPDATE TCM_EMPLYR		/* 사용자 */
+		SET AUTO_DELETE_INFO = #{autoDeleteInfo}
+			, LAST_UPDUSR_SN = #{sEmplyrSn}
+			, LAST_UPDT_DT = SYSDATE
+		WHERE EMPLYR_SN = #{sEmplyrSn}
+	</update>
+
+	<!-- 파일 자동삭제 -->
+	<delete id="deleteAutoFile">
+		/* IndexDAO.deleteAutoFile */
+		DELETE FROM TCM_ATCHMNFL TA		/* 첨부파일 */
+		WHERE FRST_REGISTER_SN = #{sEmplyrSn}
+		AND FRST_REGIST_DT < SYSDATE - #{autoDeleteInfo}
+	</delete>
+
+	<delete id="deleteAutoFileDtl">
+		/* IndexDAO.deleteAutoFileDtl */
+		DELETE FROM TCM_ATCHMNFL_DETAIL TAD		/* 첨부파일 상세 */
+		WHERE FRST_REGISTER_SN = #{sEmplyrSn}
+		AND FRST_REGIST_DT < SYSDATE - #{autoDeleteInfo}
+	</delete>
 </mapper>

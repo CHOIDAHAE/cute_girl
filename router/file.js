@@ -358,6 +358,51 @@ module.exports = function(app){
 		});
 	});
 
+	//즐겨찾기 삭제
+	app.post('/deleteBmFavorite', function(req, res){
+		console.log("deleteBmFavorite");
+		console.log(req.session.user);
+		
+		var AtchfileSn = req.body.AtchfileSn;
+		var emplyrSn = req.session.user.emplyrSn;
+		
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(/deleteBmFavorite)",err);
+			} else {
+				console.log("Oracle Connection success(/deleteBmFavorite)");
+			}
+			conn = con;
+				
+			//query format
+			let format = {language: 'sql', indent: ''};
+			
+			var param = {
+				sEmplyrSn : emplyrSn
+				, atchmnflSn : AtchfileSn
+				, fileSn : AtchfileSn
+			}
+
+			let query = mybatisMapper.getStatement('IndexDAO','deleteBmFavorite', param, format);
+			conn.execute(query, function(err,result){
+				console.log("IndexDAO.deleteBmFavorite");
+				console.log(query);
+				if(err){
+					console.log(err);
+					res.json("F");
+				}
+			});
+			console.log(res);
+			res.json({"emplyrSn":req.session.user.emplyrSn});
+			doRelease(conn);
+		});
+	});
+
 	// 즐겨찾기 목록 조회
 	app.post("/selectBkmkList", function(req, res){		
 		var emplyrSn = req.session.user.emplyrSn;
