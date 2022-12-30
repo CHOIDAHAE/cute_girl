@@ -270,7 +270,29 @@
 
 			// 사용자마다 내 그룹을 찾아서 메뉴에 추가하여 보여줘야함 (동적 li생성)
 			function mygroup(){
+				var emplyrSn = $('#emplyrSn').val();
 
+				$.ajax({
+					url : "/selectMyGroup",
+					type : "POST",
+					dataType : "JSON", //"JSON"
+					data : {"emplyrSn" : emplyrSn},
+					success:function(result){
+						console.log(result);
+						if(result=="S"){
+							//li 동적생성
+							//var text_add = $("#text_add").val(); //입력할 글씨
+							//var ul_list = $("#ul_list"); //ul_list선언
+							//ul_list.append("<li>"+text_add+"</li>"); //ul_list안쪽에 li추가
+						} else {
+							alert("내 그룹 불러오는 도중 오류가 발생하였습니다.");
+						}
+					},
+					error:function(e){
+						console.log(e);
+						alert("내 그룹 불러오는 도중 오류가 발생하였습니다.(ajax에러)");
+					}
+				})
 			};
 		</script>
 	</head>

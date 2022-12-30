@@ -11,7 +11,7 @@ var mybatisMapper = require('mybatis-mapper');
 mybatisMapper.createMapper( ['./mapper/GroupDAO_SQL.xml']);
 
 module.exports = function(app){
-   // 전체 파일 용량 읽어오기
+  	// 새 모임 추가하기
 	app.post("/insertNewGroup", function(req, res){		
 		oracledb.getConnection({
 			user:dbConfig.user,
@@ -49,7 +49,7 @@ module.exports = function(app){
 				}
 
 				let NewGroupQ = mybatisMapper.getStatement('GroupDAO','insertNewGroup', param, format);
-				let personalGroupQ = mybatisMapper.getStatement('GroupDAO','insertPersonalGroup', param, format);
+				//let personalGroupQ = mybatisMapper.getStatement('GroupDAO','insertPersonalGroup', param, format);
 
 				//쿼리문 실행
 				conn.execute(NewGroupQ, function(err,result){
@@ -65,6 +65,44 @@ module.exports = function(app){
 			});  
 		});
 	})
+
+	app.post("/selectMyGroup", function(req, res, next){		
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(selectMyGroup)",err);
+			} else {
+				//console.log("Oracle Connection success(selectMyGroup)");
+			}
+			conn = con;
+
+			//query format
+			let format = {language: 'sql', indent: ''};
+
+			//내 그룹 조회
+			let selectMyGroup = mybatisMapper.getStatement('GroupDAO','selectMyGroup', {"emplyrSn":req.body.emplyrSn}, format);
+			
+			console.log(selectMyGroup);
+			//쿼리문 실행
+			conn.execute(selectMyGroup, function(err,result){
+				if(err){
+					console.log("selectMyGroup failed :", err);
+					//res.json("F");
+					return;
+				}
+				console.log(result);
+				console.log(result.rows);
+				
+				doRelease(conn);
+			});
+		});
+	})
+
+
 
 	function doRelease(conn){
 		conn.close(function(err){

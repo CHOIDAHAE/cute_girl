@@ -49,9 +49,21 @@
 				#{emplyrSn},
 				#{authorGroupSn},
 				#{sEmplyrSn},
-				SYSDATE
+				SYSDATE,
 				#{sEmplyrSn},
 				SYSDATE
 			)
 	</insert>
+
+	<select id="selectMyGroup">
+        SELECT
+			PERSONAL.AUTHOR_GROUP_SN GROUP_SN, GRP.AUTHOR_GROUP_NM GROUP_NM
+		FROM
+			TCM_EMPLYRBY_GROUP_AUTHOR PERSONAL, TCM_AUTHOR_GROUP GRP
+		WHERE
+			PERSONAL.AUTHOR_GROUP_SN = GRP.AUTHOR_GROUP_SN
+		AND GRP.USE_AT = 'Y'
+		AND	PERSONAL.EMPLYR_SN = #{emplyrSn}
+		ORDER BY GROUP_SN
+    </select>
 </mapper>
