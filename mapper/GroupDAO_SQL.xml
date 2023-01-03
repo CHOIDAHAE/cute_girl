@@ -47,10 +47,10 @@
 			VALUES
 			(
 				#{emplyrSn},
-				#{authorGroupSn},
-				#{sEmplyrSn},
+				#{groupSn},
+				#{emplyrSn},
 				SYSDATE,
-				#{sEmplyrSn},
+				#{emplyrSn},
 				SYSDATE
 			)
 	</insert>

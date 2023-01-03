@@ -2,7 +2,7 @@ var crypto = require('crypto');
 
 var oracledb = require("oracledb");
 var dbConfig = require("./dbConfig.js");
-//oracledb.autoCommit = true;
+oracledb.autoCommit = false;
 
 // mybatis-mapper 추가
 var mybatisMapper = require('mybatis-mapper');
@@ -49,7 +49,6 @@ module.exports = function(app){
 				}
 
 				let NewGroupQ = mybatisMapper.getStatement('GroupDAO','insertNewGroup', param, format);
-				//let personalGroupQ = mybatisMapper.getStatement('GroupDAO','insertPersonalGroup', param, format);
 
 				//쿼리문 실행
 				conn.execute(NewGroupQ, function(err,result){
@@ -59,13 +58,29 @@ module.exports = function(app){
 						doRelease(conn);
 						return;
 					}
+
+					let personalGroupQ = mybatisMapper.getStatement('GroupDAO','insertPersonalGroup', param, format);
+
+					//쿼리문 실행
+					conn.execute(personalGroupQ, function(err,result){
+						if(err){
+							console.log("insertPersonalGroup failed :", err);
+							res.json("F");
+							doRelease(conn);
+							return;
+						}
+						// 커밋
+						conn.commit();
+					})
 					res.json("S");
-					doRelease(conn);					
+					
+					//doRelease(conn);	
 				});
-			});  
+			});
 		});
 	})
 
+	// 내 모임 조회하기
 	app.post("/selectMyGroup", function(req, res, next){		
 		oracledb.getConnection({
 			user:dbConfig.user,
@@ -91,11 +106,10 @@ module.exports = function(app){
 			conn.execute(selectMyGroup, function(err,result){
 				if(err){
 					console.log("selectMyGroup failed :", err);
-					//res.json("F");
+					res.json({"Status":"F"});
 					return;
 				}
-				console.log(result);
-				console.log(result.rows);
+				res.json(result.rows);
 				
 				doRelease(conn);
 			});
