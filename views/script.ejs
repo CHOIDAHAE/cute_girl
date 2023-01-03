@@ -1,18 +1,14 @@
 <html lang="ko">
 	<head>
-		<meta charset="utf-8">    
-<!--        <link rel="stylesheet" type="text/css" href="/js/common/jquery/jquery-ui.min.css"/>
-		<link rel="stylesheet" type="text/css" href="/jqGrid/css/ui.jqgrid.css"/>-->
+		<meta charset="utf-8">
 		<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+		<!--<script  src="http://code.jquery.com/jquery-latest.min.js"></script>-->
 		<script src="https://kit.fontawesome.com/ad41bee873.js" crossorigin="anonymous"></script>
 		<link href="../css/style.css?after" rel="stylesheet" type="text/css">
 		<link href="../css/menu.css?after" rel="stylesheet" type="text/css">
 		<link href="../css/grid.css?after" rel="stylesheet" type="text/css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" />
 
-		<!--<script type="text/javascript" src="/js/common/jquery/jquery-3.2.1.min.js"></script>
-		<script src="/jqGrid/js/i18n/grid.locale-kr.js" type="text/javascript"></script>
-		<script src="/jqGrid/js/minified/jquery.jqGrid.min.js" type="text/javascript"></script>-->
 		<script>
 			window.onload = function(){
 				file_Volume();	// 파일 용량 조회
@@ -284,13 +280,15 @@
 								var num = result.length-1;
 								var last_add = result[num][1];
 								var ul_list = $("#ul_list");
-								ul_list.append("<li id='add_li_"+num+"'> <div class='tree_item'> "+last_add+"</div> </li>"); //ul_list안쪽에 li추가
+								//ul_list.append("<li id='add_li_"+num+"'> <div class='tree_item'> "+last_add+"</div> </li>");
+								ul_list.append("<li id='add_li'> <div class='tree_item'> "+last_add+"</div> </li>"); //ul_list안쪽에 li추가
 							} else {	// 그냥 메뉴에서 내 그룹 연경우
 								for(var i=0; i<result.length; i++){
 									//li 동적생성
 									var text_add = result[i][1];
 									var ul_list = $("#ul_list");
-									ul_list.append("<li id='add_li_"+i+"'> <div class='tree_item'> "+text_add+"</div> </li>"); //ul_list안쪽에 li추가
+									//ul_list.append("<li id='add_li_"+i+"'> <div class='tree_item'> "+text_add+"</div> </li>");
+									ul_list.append("<li id='add_li'> <div class='tree_item'> "+text_add+"</div> </li>"); //ul_list안쪽에 li추가
 								}
 							}							
 						} else if(result.Status == "F"){
@@ -302,5 +300,10 @@
 					}
 				})
 			};
+
+			// 각 그룹 오픈
+			$(document).on("click","#add_li",function(){
+				openMenu('group');
+			})
 		</script>
 	</head>

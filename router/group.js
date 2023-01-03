@@ -116,7 +116,9 @@ module.exports = function(app){
 		});
 	})
 
-
+	app.get('/group', function(req, res, next){
+        res.render('./group/group');
+    })
 
 	function doRelease(conn){
 		conn.close(function(err){
