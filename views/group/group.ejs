@@ -6,7 +6,9 @@
 		<link href="../css/group.css?after" rel="stylesheet" type="text/css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" />
 		<script>
-			
+            function setting(){
+                console.log('setting');
+            }
 		</script>
 	</head>
 	<body>
@@ -46,17 +48,52 @@
                                 </div>
                                 <div class="together_my">
                                     <a class="my_task photo" title="사진 추가하기">
-                                        <span class="blind">사진 추가하기</span>
+                                        <i class="fa-sharp fa-solid fa-camera"></i>
                                     </a>
                                     <div style="display: inline-block;">
                                         <a class="my_task member" title="멤버">
-                                            <span class="blind">멤버</span>
+                                            <i class="fa-solid fa-user-group"></i>
                                         </a>
                                     </div>
                                     <div style="display: inline-block;">
-                                        <a class="my_task set" title="설정">
-                                            <span class="blind">설정</span>
+                                        <a class="my_task set" title="설정" onclick="setting()">
+                                            <i class="fa-solid fa-gear"></i>
                                         </a>
+                                        <div class="my_layer my_layer_set" style="display: block;">
+                                            <h4 class="my_tit">
+                                                <span class="tit_txt">
+                                                    <span class="txt">모임설정</span>
+                                                </span>
+                                            </h4>
+                                            <div class="ly_toge_content">
+                                                <div class="toge_add_group">
+                                                    <div class="toge_add_thum">
+                                                        <span class="add_pho add_pho_v2">
+                                                            <img src="https://nphotogroup-phinf.pstatic.net/20221123_287/4555084_1669186348727S1Vmq_PNG/group_cover_a.png?type=ff120_120" height="120">
+                                                            <span class="add_photo_ic">사진</span>
+                                                            <label for="file-input-view357">
+                                                                <span class="blind">사진 선택</span>
+                                                            </label>
+                                                            <input type="file" id="file-input-view357">
+                                                        </span>
+                                                    </div>
+                                                    <div class="toge_add_edit">
+                                                        <div class="edit_box">
+                                                            <span class="title_text">가족<em class="ic_edit"></em></span>
+                                                            <span class="input_title">
+                                                                <textarea maxlength="25">가족</textarea>
+                                                                <span class="line"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <a class="btn_mem_out">모임 나가기</a>
+                                                </div>
+                                                <div class="btn_area">
+                                                <button type="button"><strong>확인</strong></button>
+                                                <button type="button">취소</button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
