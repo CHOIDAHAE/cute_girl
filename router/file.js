@@ -507,7 +507,7 @@ module.exports = function(app){
 			conn = con;
 
 			var param = {
-				sEmplyrSn : req.session.user.emplyrSn;
+				sEmplyrSn : req.session.user.emplyrSn
 			}
 
 			//query format
