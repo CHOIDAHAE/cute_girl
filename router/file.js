@@ -444,6 +444,93 @@ module.exports = function(app){
 		});
 	})
 
+	//자동삭제 추가
+	app.post('/updateAutoFileInfo', function(req, res){
+		console.log("updateAutoFileInfo");
+		console.log(req.session.user);
+		
+		var sEmplyrSn = req.session.user.emplyrSn;
+		var autoDeleteInfo = req.body.autoDeleteInfo;
+
+		
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(/updateAutoFileInfo)",err);
+			} else {
+				console.log("Oracle Connection success(/updateAutoFileInfo)");
+			}
+			conn = con;
+				
+			//query format
+			let format = {language: 'sql', indent: ''};
+			
+			var param = {
+				sEmplyrSn : sEmplyrSn
+				, autoDeleteInfo : autoDeleteInfo
+			}
+
+			console.log(param);
+
+			let query = mybatisMapper.getStatement('IndexDAO','updateAutoFileInfo', param, format);
+			conn.execute(query, function(err,result){
+				console.log("IndexDAO.updateAutoFileInfo");
+				console.log(query);
+				if(err){
+					console.log(err);
+					res.json("F");
+				}
+			});
+			console.log(res);
+			res.json({"emplyrSn":req.session.user.emplyrSn});
+			doRelease(conn);
+		});
+	});
+
+	//자동삭제여부 조회
+	app.post("/selectAutoFileInfo", function(req, res){		
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(selectAutoFileInfo)",err);
+			} else {
+				console.log("Oracle Connection success(selectAutoFileInfo)");
+			}
+			conn = con;
+
+			var param = {
+				sEmplyrSn : req.session.user.emplyrSn;
+			}
+
+			//query format
+			let format = {language: 'sql', indent: ''};
+
+			//getStatement(namespace명, queryId, parameter, format);
+			let query = mybatisMapper.getStatement('IndexDAO','selectAutoFileInfo', param, format);
+
+			//쿼리문 실행
+			conn.execute(query, function(err,result){
+				console.log(query);
+				if(err){
+					console.log("에러가 발생했습니다(selectAutoFileInfo)>", err);
+					doRelease(conn);
+					return;
+				}
+				
+				res.send(result.rows);
+				doRelease(conn);					
+			});  
+		});
+	})
+
 	function doRelease(conn){
 		conn.close(function(err){
 			if(err){
