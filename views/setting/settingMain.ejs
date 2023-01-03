@@ -14,6 +14,7 @@
         <script type="text/javascript">
            $(document).ready(function(){
                 file_Volume();  // 파일용량 읽어오기
+                set_autoDeleteInfo();
                 const emplyrSn = window.parent.$('#emplyrSn').val();
             });
             //파일용량 읽어오기
@@ -72,6 +73,38 @@
             // 이용권 구매하기
             function preparing(){
                 alert("준비중입니다.");
+            }
+
+            function set_autoDeleteInfo(){
+                var basketTerm = $('#basket_term option:selected').val();
+                $.ajax({
+					url : "/updateAutoFileInfo",
+					type : "POST",
+					dataType : "JSON", //"JSON"
+					data : {"autoDeleteInfo" : basketTerm}
+
+				})
+				.done(function (res) {
+					alert("적용이 완료되었습니다.");
+				})
+				.fail(function (xhr, textStatus, errorThrown) {
+					console.log('updateAutoFileInfo ajax 실패');
+				})
+            }
+
+            function fn_selected_basket_term(){
+                $.ajax({
+					url : "/selectAutoFileInfo",
+					type : "POST",
+					dataType : "JSON", //"JSON"
+				})
+				.done(function (res) {
+                    console.log(res);
+					$('#basket_term option:selected').val(res[0]);
+				})
+				.fail(function (xhr, textStatus, errorThrown) {
+					console.log('updateAutoFileInfo ajax 실패');
+				})
             }
             
         </script>
@@ -183,7 +216,7 @@
                         <option value="30">삭제 30일 후 영구 삭제</option>
                         <option value="50">삭제 50일 후 영구 삭제</option>
                     </select>
-                    <button id="basketButton">
+                    <button id="basketButton" onclick="fn_selected_basket_term();">
                         <span class="tx">적용하기</span>
                     </button>
                 </div>

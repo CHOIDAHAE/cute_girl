@@ -200,6 +200,14 @@
 			AND FILE_SN = #{fileSn}
 	</update>
 
+	<!-- 파일 자동삭제 정보 조회 -->
+	<select id="selectAutoFileInfo">
+		/* IndexDAO.selectAutoFileInfo */
+		SELECT AUTO_DELETE_INFO
+		FROM TCM_EMPLYR
+		WHERE EMPLYR_SN = #{sEmplyrSn}
+	</select>
+
 	<!-- 파일 자동삭제 정보 수정 -->
 	<update id="updateAutoFileInfo">
 		/* IndexDAO.updateAutoFileInfo */
