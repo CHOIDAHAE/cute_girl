@@ -68,4 +68,27 @@
 		ORDER BY
 			PERSONAL.AUTHOR_GROUP_SN
     </select>
+
+	<!-- 리더 여부 -->
+	<select id="selectGropLeaderAt">
+		SELECT
+			DECODE(COUNT(EMPLYR_SN), 1, 'Y', 'N') leadAt
+		FROM
+			TCM_EMPLYRBY_GROUP_AUTHOR
+		WHERE
+			FRST_REGISTER_SN = #{emplyrSn}
+		AND AUTHOR_GROUP_SN = #{groupSn}
+	</select>
+
+	<!-- 그룹 사용 여부 업데이트 (그룹 삭제) -->
+	<update id="updateGroupUseAt">
+		UPDATE
+			TCM_AUTHOR_GROUP
+		SET
+			USE_AT = 'N'
+			LAST_UPDUSR_SN #{emplyrSn}
+			LAST_UPDT_DT = SYSDATE
+		WHERE
+			AUTHOR_GROUP_SN = #{groupSn}
+	</update>
 </mapper>
