@@ -278,17 +278,13 @@
 						if(result.length > 0){
 							if(data == "add"){	// 내 모임 만들기 이후 재 조회가 필요한 경우
 								var num = result.length-1;
-								var last_add = result[num][1];
 								var ul_list = $("#ul_list");
-								//ul_list.append("<li id='add_li_"+num+"'> <div class='tree_item'> "+last_add+"</div> </li>");
-								ul_list.append("<li id='add_li'> <div class='tree_item'> "+last_add+"</div> </li>"); //ul_list안쪽에 li추가
+								ul_list.append("<li id='add_li_"+num+"' class='add_li'> <div class='tree_item'> "+result[num][1]+"</div> </li>"); //ul_list안쪽에 li추가
 							} else {	// 그냥 메뉴에서 내 그룹 연경우
 								for(var i=0; i<result.length; i++){
 									//li 동적생성
-									var text_add = result[i][1];
 									var ul_list = $("#ul_list");
-									//ul_list.append("<li id='add_li_"+i+"'> <div class='tree_item'> "+text_add+"</div> </li>");
-									ul_list.append("<li id='add_li'> <div class='tree_item'> "+text_add+"</div> </li>"); //ul_list안쪽에 li추가
+									ul_list.append("<li id='add_li_"+i+"' class='add_li'> <div class='tree_item'> "+result[i][1]+"</div> </li>"); //ul_list안쪽에 li추가
 								}
 							}							
 						} else if(result.Status == "F"){
@@ -302,8 +298,31 @@
 			};
 
 			// 각 그룹 오픈
-			$(document).on("click","#add_li",function(){
-				openMenu('group');
+			$(document).on("click",".add_li", function(){
+				var id_check = $(this).attr("id");
+				var idNum = id_check.substr(7);
+				var emplyrSn = $('#emplyrSn').val();
+
+				var data = {
+					"emplyrSn" : emplyrSn,
+					"num" : idNum
+				}
+				// 내가 클릭한 그룹의 일련번호를 갖고와야 함.				
+				$.ajax({
+					url : "/selectedGouprSn",
+					type : "POST",
+					dataType : "JSON", //"JSON"
+					data : data,
+					success:function(result){
+						console.log(result);
+						//openMenu('group');
+					},
+					error:function(e){
+						alert("그룹의 일련번호 조회 도중 오류가 발생하였습니다.(ajax에러)");
+					}
+				})
+
+				//openMenu('group');
 			})
 		</script>
 	</head>

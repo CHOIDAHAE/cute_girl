@@ -85,10 +85,46 @@
 		UPDATE
 			TCM_AUTHOR_GROUP
 		SET
-			USE_AT = 'N'
-			LAST_UPDUSR_SN #{emplyrSn}
+			USE_AT = 'N',
+			LAST_UPDUSR_SN #{emplyrSn},
 			LAST_UPDT_DT = SYSDATE
 		WHERE
 			AUTHOR_GROUP_SN = #{groupSn}
+	</update>
+
+	<!-- 현재 클릭한 모임의 일련번호 구하기 -->
+	<select id="selectedGouprSn">
+		SELECT GROUP_SN
+		FROM (
+			SELECT	
+					ROWNUM-1 NUM,
+					PERSONAL.AUTHOR_GROUP_SN GROUP_SN,	--그룹일련번호
+					GRP.AUTHOR_GROUP_NM GROUP_NM		--그룹명
+				FROM
+					TCM_EMPLYRBY_GROUP_AUTHOR PERSONAL, TCM_AUTHOR_GROUP GRP
+				WHERE
+					PERSONAL.AUTHOR_GROUP_SN = GRP.AUTHOR_GROUP_SN
+				AND GRP.USE_AT = 'Y'
+				AND	PERSONAL.EMPLYR_SN = #{emplyrSn}
+				ORDER BY
+					PERSONAL.AUTHOR_GROUP_SN
+					)
+		WHERE NUM = #{num}
+	</select>
+
+	<!-- 모임나가기 -->
+	<delete id="outGroup">
+		DELETE
+		FROM TCM_EMPLYRBY_GROUP_AUTHOR
+		WHERE EMPLYR_SN = #{emplyrSn}
+		AND AUTHOR_GROUP_SN = #{groupSn}
+	</delete>
+
+	<!-- 모임나가기(그룹 리더인경우)-->
+	<update id="outGroupLeader">
+		UPDATE 
+		SET USE_AT = 'N'
+		FROM TCM_AUTHOR_GROUP
+		WHERE AUTHOR_GROUP_SN = #{groupSn}
 	</update>
 </mapper>

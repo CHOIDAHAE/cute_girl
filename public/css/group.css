@@ -994,6 +994,10 @@ a.btn_mem_out {
     font-size: 11px;
 }
 
+.btn_mem_out:hover {
+    border-bottom : 1px solid;
+}
+
 .my_layer_set .btn_area {
     padding: 13px 0;
 }
