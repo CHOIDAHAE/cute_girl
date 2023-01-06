@@ -14,7 +14,7 @@
         <script type="text/javascript">
            $(document).ready(function(){
                 file_Volume();  // 파일용량 읽어오기
-                set_autoDeleteInfo();
+                fn_selected_basket_term();
                 const emplyrSn = window.parent.$('#emplyrSn').val();
             });
             //파일용량 읽어오기
@@ -100,7 +100,7 @@
 				})
 				.done(function (res) {
                     console.log(res);
-					$('#basket_term option:selected').val(res[0]);
+					$('#basket_term').val(res[0]);
 				})
 				.fail(function (xhr, textStatus, errorThrown) {
 					console.log('updateAutoFileInfo ajax 실패');
@@ -216,7 +216,7 @@
                         <option value="30">삭제 30일 후 영구 삭제</option>
                         <option value="50">삭제 50일 후 영구 삭제</option>
                     </select>
-                    <button id="basketButton" onclick="fn_selected_basket_term();">
+                    <button id="basketButton" onclick="set_autoDeleteInfo();">
                         <span class="tx">적용하기</span>
                     </button>
                 </div>

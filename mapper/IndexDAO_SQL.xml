@@ -223,13 +223,23 @@
 		/* IndexDAO.deleteAutoFile */
 		DELETE FROM TCM_ATCHMNFL TA		/* 첨부파일 */
 		WHERE FRST_REGISTER_SN = #{sEmplyrSn}
-		AND FRST_REGIST_DT < SYSDATE - #{autoDeleteInfo}
+		AND FRST_REGIST_DT < SYSDATE - 
+			(
+				SELECT AUTO_DELETE_INFO
+				FROM TCM_EMPLYR
+				WHERE EMPLYR_SN = #{sEmplyrSn}
+			)
 	</delete>
 
 	<delete id="deleteAutoFileDtl">
 		/* IndexDAO.deleteAutoFileDtl */
 		DELETE FROM TCM_ATCHMNFL_DETAIL TAD		/* 첨부파일 상세 */
 		WHERE FRST_REGISTER_SN = #{sEmplyrSn}
-		AND FRST_REGIST_DT < SYSDATE - #{autoDeleteInfo}
+		AND FRST_REGIST_DT < SYSDATE - 
+			(
+				SELECT AUTO_DELETE_INFO
+				FROM TCM_EMPLYR
+				WHERE EMPLYR_SN = #{sEmplyrSn}
+			)
 	</delete>
 </mapper>

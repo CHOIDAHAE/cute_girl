@@ -228,5 +228,27 @@
 				console.log('errorThrown'+errorThrown);
 			})
 		}
+
+		function fn_fileAutoDelete(){
+			var emplyrSn = window.parent.$('#emplyrSn').val();
+
+			$.ajax({
+				url : "/deleteAutoFile",
+				type : "POST",
+				dataType : "JSON", //"JSON"
+				data : {"sEmplyrSn" : emplyrSn}
+
+			})
+			.done(function (res) {
+				console.log(res);
+				window.parent.fileSelect();
+			})
+			.fail(function (xhr, textStatus, errorThrown) {
+				console.log('updateFileNm ajax 실패');
+				console.log('xhr'+xhr);
+				console.log('textStatus'+textStatus);
+				console.log('errorThrown'+errorThrown);
+			})
+		}
 	</script>
 </head>

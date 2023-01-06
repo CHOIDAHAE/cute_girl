@@ -485,7 +485,6 @@ module.exports = function(app){
 					res.json("F");
 				}
 			});
-			console.log(res);
 			res.json({"emplyrSn":req.session.user.emplyrSn});
 			doRelease(conn);
 		});
@@ -526,10 +525,67 @@ module.exports = function(app){
 				}
 				
 				res.send(result.rows);
+				console.log(result.rows);
 				doRelease(conn);					
 			});  
 		});
-	})
+	});
+
+	//자동삭제
+	app.post('/deleteAutoFile', function(req, res){
+		console.log("deleteAutoFile");
+		console.log(req.session.user);
+		
+		var sEmplyrSn = req.session.user.emplyrSn;
+		var autoDeleteInfo = req.body.autoDeleteInfo;
+
+		
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(/deleteAutoFile)",err);
+			} else {
+				console.log("Oracle Connection success(/deleteAutoFile)");
+			}
+			conn = con;
+				
+			//query format
+			let format = {language: 'sql', indent: ''};
+			
+			var param = {
+				sEmplyrSn : sEmplyrSn
+			}
+
+			console.log(param);
+
+			let query = mybatisMapper.getStatement('IndexDAO','deleteAutoFile', param, format);
+			conn.execute(query, function(err,result){
+				console.log("IndexDAO.deleteAutoFile");
+				console.log(query);
+				if(err){
+					console.log(err);
+					res.json("F");
+				}else{
+					let query = mybatisMapper.getStatement('IndexDAO','deleteAutoFileDtl', param, format);
+					conn.execute(query, function(err,result){
+						console.log("IndexDAO.deleteAutoFileDtl");
+						console.log(query);
+						if(err){
+							console.log(err);
+							res.json("F");
+						}
+					});
+				}
+			});
+			
+			res.json({"emplyrSn":req.session.user.emplyrSn});
+			doRelease(conn);
+		});
+	});
 
 	function doRelease(conn){
 		conn.close(function(err){
