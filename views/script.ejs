@@ -314,15 +314,13 @@
 					dataType : "JSON", //"JSON"
 					data : data,
 					success:function(result){
-						console.log(result);
-						//openMenu('group');
+						document.getElementById('groupSn').value = result.groupSn;
+						openMenu('group');
 					},
 					error:function(e){
 						alert("그룹의 일련번호 조회 도중 오류가 발생하였습니다.(ajax에러)");
 					}
 				})
-
-				//openMenu('group');
 			})
 		</script>
 	</head>

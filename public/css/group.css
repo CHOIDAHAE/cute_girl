@@ -1013,4 +1013,192 @@ a.btn_mem_out {
     height: 27px;
 }
 
+/****************모달창(모임나가기)******************/
+label {
+    cursor: default;
+}
+
+.out_modal_wrap {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.dh_layer {
+    position: relative;
+    z-index: 50;
+    display: inline-block;
+    line-height: 1.5;
+    vertical-align: middle;
+    text-align: left;
+}
+
+.dh_layer .type_c {
+    position: relative;
+}
+
+.dh_layer .type_c .wrap_pop {
+    background: #fff;
+}
+
+.wrap_pop {
+    border-width: 1px;
+    border-style: solid;
+    border-color: #d9d9d9 #bfbfbf #b6b6b6 #d5d5d5;
+    -webkit-box-shadow: 1px 1px 1px rgb(0 0 0 / 10%);
+    box-shadow: 1px 1px 1px rgb(0 0 0 / 10%);
+    text-align: center;
+}
+
+.wrap_pop fieldset {
+    *position: relative;
+}
+
+.wrap_pop .content {
+    padding: 20px 20px 0;
+}
+
+.dh_layer .bu_q {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    margin-top: 20px;
+    background-position: -385px -121px;
+}
+
+.bu_q{
+    background-image: url(https://ssl.pstatic.net/static/pwe/ndrive/deskhome/icon_201611.png);
+    background-repeat: no-repeat;
+}
+
+.wrap_pop .content h1 {
+    padding: 19px 0 0;
+    color: #333;
+    font-size: 14px;
+    letter-spacing: -0.5px;
+    line-height: 22px;
+    vertical-align: top;
+    word-break: break-all;
+}
+
+.wrap_pop .content h1 .ellipsis {
+    vertical-align: top;
+    max-width: 113px;
+}
+
+.ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+}
+
+.wrap_pop .desc3 {
+    padding: 6px 0 0;
+    color: #666;
+    line-height: 18px;
+    font-size: 13px;
+}
+
+.wrap_pop .desc4 {
+    padding-top: 9px;
+    color: #666;
+    line-height: 18px;
+    font-size: 14px;
+}
+
+.input_check, .input_radio {
+    width: 13px;
+    height: 13px;
+    vertical-align: middle;
+}
+
+.dh_layer .wrap_pop .footer {
+    width: auto;
+    padding: 26px 20px 12px;
+}
+
+.wrap_pop .footer {
+    height: 40px;
+    padding: 12px 20px 0;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.dh_layer .wrap_pop .footer button {
+    height: 29px;
+    padding: 0 11px 0 10px;
+    margin: 0 2px;
+    border-radius: 0;
+}
+
+button.diable, button[disabled] {
+    color: #999;
+    cursor: default;
+}
+
+button {
+    display: inline-block;
+    overflow: visible;
+    height: 23px;
+    padding: 1px 4px 0;
+    border: 1px solid #c3c3c3;
+    background-color: #fff;
+    color: #333;
+    line-height: 100%;
+    letter-spacing: 0;
+    vertical-align: top;
+    white-space: nowrap;
+    cursor: pointer;
+    /*-webkit-appearance: none;*/
+    -webkit-text-size-adjust: none;
+    border-radius: 0;
+}
+
+button .tx {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.wrap_pop .pop_close {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.wrap_pop .pop_close a {
+    cursor: pointer;
+}
+
+.bu_close_p {
+    display: inline-block;
+    width: 18px;
+    height: 19px;
+    background-position: -202px -76px;
+}
+
+.bu_close_p {
+    background-image: url(https://ssl.pstatic.net/static/pwe/ndrive/deskhome/icon_201611.png);
+    background-repeat: no-repeat;
+}
+
+.bu_close_p, .bu_close_p2 {
+    overflow: hidden;
+    text-indent: -500px;
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    width: 13px;
+    height: 13px;
+    background-image: url(https://ssl.pstatic.net/static/pwe/ndrive/new_ndrive/layer_sp_cls2.png);
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    z-index: 50;
+}
 

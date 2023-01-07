@@ -121,8 +121,9 @@ module.exports = function(app){
 		});
 	})
 
-	// 내 모임 조회하기
+	// 선택된 그룹 일련번호
 	app.post("/selectedGouprSn", function(req, res, next){
+		console.log('내 모임 조회하기');
 		oracledb.getConnection({
 			user:dbConfig.user,
 			password:dbConfig.password,
@@ -130,17 +131,14 @@ module.exports = function(app){
 			externalAuth  : dbConfig.externalAuth
 		},function(err,con){
 			if(err){
-				console.log("Oracle Connection failed(selectMyGroup)",err);
+				console.log("Oracle Connection failed(selectedGouprSn)",err);
 			} else {
-				//console.log("Oracle Connection success(selectMyGroup)");
+				//console.log("Oracle Connection success(selectedGouprSn)");
 			}
 			conn = con;
 
 			//query format
 			let format = {language: 'sql', indent: ''};
-			console.log(req.body);
-			console.log(req.body.emplyrSn);
-			console.log(req.body.num);
 
 			var param = {
 				"emplyrSn"	: req.body.emplyrSn,
@@ -158,9 +156,8 @@ module.exports = function(app){
 					return;
 				}
 				
-				var groupSn = result.rows[0][0];
-				// 요거 update해야함.
-
+				// 그룹 일련번호 넘기기
+				res.json({"groupSn":result.rows[0][0]});
 				doRelease(conn);
 			});
 		});

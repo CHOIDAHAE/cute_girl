@@ -10,39 +10,31 @@
                 console.log('setting');
             }
 
+            //모임 나가기 버튼 클릭 시 확인 창
+            function outGroupBtn(){
+                console.log('모달..');
+            };
+            
             // 모임나가기
             function outGroup(){
-                const emplyrSn = window.parent.$('#emplyrSn').val();
-                console.log(emplyrSn);
+                var emplyrSn = window.parent.$('#emplyrSn').val();
+                var groupSn = window.parent.$('#groupSn').val();
+                
                 /*
                 $.ajax({
-					url : "/selectMyGroup",
+					url : "/updateGroupUseAt",
 					type : "POST",
 					dataType : "JSON", //"JSON"
-					data : {"emplyrSn" : emplyrSn},
+					data : {"emplyrSn" : emplyrSn, "groupSn" : groupSn},
 					success:function(result){
-						if(result.length > 0){
-							if(data == "add"){	// 내 모임 만들기 이후 재 조회가 필요한 경우
-								var num = result.length-1;
-								var last_add = result[num][1];
-								var ul_list = $("#ul_list");
-								//ul_list.append("<li id='add_li_"+num+"'> <div class='tree_item'> "+last_add+"</div> </li>");
-								ul_list.append("<li id='add_li'> <div class='tree_item'> "+last_add+"</div> </li>"); //ul_list안쪽에 li추가
-							} else {	// 그냥 메뉴에서 내 그룹 연경우
-								for(var i=0; i<result.length; i++){
-									//li 동적생성
-									var text_add = result[i][1];
-									var ul_list = $("#ul_list");
-									//ul_list.append("<li id='add_li_"+i+"'> <div class='tree_item'> "+text_add+"</div> </li>");
-									ul_list.append("<li id='add_li'> <div class='tree_item'> "+text_add+"</div> </li>"); //ul_list안쪽에 li추가
-								}
-							}							
+						if(result.Status == "S"){
+							//메뉴리스트 업데이트
 						} else if(result.Status == "F"){
-							alert("내 그룹 불러오는 도중 오류가 발생하였습니다.");
+							alert("모임 나가기 중 오류가 발생하였습니다.");
 						}
 					},
 					error:function(e){
-						alert("내 그룹 불러오는 도중 오류가 발생하였습니다.(ajax에러)");
+						alert("모임 나가기 중 오류가 발생하였습니다.(ajax에러)");
 					}
 				})*/
             }
@@ -223,6 +215,46 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="out_modal_wrap" style="z-index: 10020; display: block; user-select: none; line-height: 716px; transition: line-height 100ms ease-out 0s;">
+            <div class="dh_layer" style="min-width: 300px;">
+                <div class="type_c">
+                    <div class="wrap_pop">
+                        <form>
+                            <fieldset>
+                                <legend>안내 메세지</legend>
+                                <div class="content">
+                                    <span class="bu_q">
+                                    </span>
+                                    <h1>
+                                        <span class="ellipsis" title="test">test</span> 모임에서 정말 나가시겠습니까?
+                                    </h1>
+                                    <div class="desc3">다행이당(otae****) 님이<br>우리 가족 모임에 올린<br>모든 파일과 게시글이 삭제되고,
+                                        <br>더 이상 이 모임에 들어오실 수 없습니다.<br>댓글은 삭제되지 않습니다.
+                                    </div>
+                                    <div class="desc4">
+                                        <input type="checkbox" class="input_check" id="confirm_apply">
+                                        <label for="confirm_apply">내용을 확인했습니다.</label>
+                                    </div>
+                                </div>
+                                <div class="footer">
+                                    <button type="button" class="" disabled="">
+                                        <span class="tx">확인</span>
+                                    </button>&nbsp;
+                                    <button type="button">
+                                        <span class="tx">취소</span>
+                                    </button>
+                                </div>
+                                <div class="pop_close">
+                                    <a class="bu_close_p">
+                                        <span class="blind">닫기</span>
+                                    </a>
+                                </div>
+                            </fieldset>
+                        </form>
                     </div>
                 </div>
             </div>
