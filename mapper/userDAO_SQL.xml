@@ -124,7 +124,7 @@
 	</select>
 
 	<!-- myGroup 만들기-->
-	<insert id="joinUser">
+	<insert id="joinGroup">
 		INSERT INTO TCM_AUTHOR_GROUP
 			(
 				AUTHOR_GROUP_SN,
