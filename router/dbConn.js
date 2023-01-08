@@ -272,9 +272,11 @@ module.exports = function(app){
 							res.json("F");
 						}
 						res.json("S");
+						// 커밋
+						conn.commit();
 					});				
 				}
-				doRelease(conn);
+				//doRelease(conn);
 			});
 		});
 	})
