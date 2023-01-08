@@ -55,6 +55,7 @@
 			)
 	</insert>
 
+	<!-- 내 그룹 리스트 -->
 	<select id="selectMyGroup">
         SELECT
 			PERSONAL.AUTHOR_GROUP_SN GROUP_SN,	--그룹일련번호
@@ -92,24 +93,32 @@
 			AUTHOR_GROUP_SN = #{groupSn}
 	</update>
 
-	<!-- 현재 클릭한 모임의 일련번호 구하기 -->
+	<!-- 현재 클릭한 모임의 정보 구하기 -->
 	<select id="selectedGouprSn">
-		SELECT GROUP_SN
+		SELECT	
+			A.GROUP_SN,
+			A.GROUP_NM,
+			EMP.EMPLYR_NM,
+			EMP.EMPLYR_ID
 		FROM (
 			SELECT	
 					ROWNUM-1 NUM,
 					PERSONAL.AUTHOR_GROUP_SN GROUP_SN,	--그룹일련번호
-					GRP.AUTHOR_GROUP_NM GROUP_NM		--그룹명
+					GRP.AUTHOR_GROUP_NM GROUP_NM,		--그룹명
+					EMPLYR_SN
 				FROM
-					TCM_EMPLYRBY_GROUP_AUTHOR PERSONAL, TCM_AUTHOR_GROUP GRP
+					TCM_EMPLYRBY_GROUP_AUTHOR PERSONAL,
+					TCM_AUTHOR_GROUP GRP
 				WHERE
 					PERSONAL.AUTHOR_GROUP_SN = GRP.AUTHOR_GROUP_SN
 				AND GRP.USE_AT = 'Y'
 				AND	PERSONAL.EMPLYR_SN = #{emplyrSn}
 				ORDER BY
 					PERSONAL.AUTHOR_GROUP_SN
-					)
-		WHERE NUM = #{num}
+					) A,
+			TCM_EMPLYR EMP
+		WHERE EMP.EMPLYR_SN = A.EMPLYR_SN
+		AND NUM = #{num}
 	</select>
 
 	<!-- 모임나가기 -->
