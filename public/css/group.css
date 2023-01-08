@@ -881,6 +881,7 @@ a.more_invitation .more_invitation_bg{
     padding: 0 0 0 0;
     font-size: 14px;
     font-weight: normal;
+    height: 28px;
 }
 
 .edit_box .title_text {
@@ -929,8 +930,8 @@ a.more_invitation .more_invitation_bg{
 .edit_box .input_title {
     display: block;
     overflow: hidden;
-    height: 0;
     position: relative;
+    height: 28px;
 }
 
 .toge_add_edit .edit_box textarea {
@@ -942,7 +943,7 @@ a.more_invitation .more_invitation_bg{
 }
 
 .edit_box .input_title textarea {
-    height: 21px;
+    height: 28px;
     border: 0 none;
     width: 100%;
     outline: none;
@@ -952,6 +953,7 @@ a.more_invitation .more_invitation_bg{
     color: #222;
     vertical-align: top;
     font-weight: bold;
+    padding: 0;
 }
 
 .edit_box .input_title .line {
@@ -964,26 +966,6 @@ a.more_invitation .more_invitation_bg{
     background-color: #3798cf \9;
 }
 
-.edit_box .input_title .line:before {
-    left: 50%;
-}
-
-.edit_box .input_title .line:after {
-    right: 50%;
-}
-
-.edit_box .input_title .line:before, .edit_box .input_title .line:after {
-    content: '';
-    height: 1px;
-    width: 0;
-    bottom: 0;
-    position: absolute;
-    background: #3798cf;
-    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1) all;
-    -webkit-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1) all;
-    z-index: 100;
-}
-
 a.btn_mem_out {
     position: absolute;
     right: 14px;
@@ -994,7 +976,7 @@ a.btn_mem_out {
     font-size: 11px;
 }
 
-.btn_mem_out:hover {
+.btn_mem_out:hover, .edit_box:hover {
     border-bottom : 1px solid;
 }
 
