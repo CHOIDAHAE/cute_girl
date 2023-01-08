@@ -156,11 +156,22 @@ module.exports = function(app){
 					return;
 				}
 				
-				// 그룹 일련번호 넘기기
-				res.json({"groupSn":result.rows[0][0]});
+				// 그룹정보 넘기기
+				res.json({
+							"groupSn"	: result.rows[0][0],
+							"groupNm"	: result.rows[0][1],
+							"emplyrNm"	: result.rows[0][2],
+							"emplyrId"	: result.rows[0][3]
+						});
+
 				doRelease(conn);
 			});
 		});
+	})
+
+	// 그룹 삭제(해당 사용자가 올린 모든 파일은 삭제됨, 리더-그룹사용여부N, 모든사용자-그룹사용여부Y)
+	app.post("/updateGroupUseAt", function(req, res){	
+
 	})
 
 	function doRelease(conn){

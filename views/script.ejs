@@ -304,10 +304,10 @@
 				var emplyrSn = $('#emplyrSn').val();
 
 				var data = {
-					"emplyrSn" : emplyrSn,
-					"num" : idNum
+					"emplyrSn"	: emplyrSn,
+					"num"		: idNum
 				}
-				// 내가 클릭한 그룹의 일련번호를 갖고와야 함.				
+				// 내가 클릭한 그룹의 정보를 갖고와야 함.				
 				$.ajax({
 					url : "/selectedGouprSn",
 					type : "POST",
@@ -315,6 +315,9 @@
 					data : data,
 					success:function(result){
 						document.getElementById('groupSn').value = result.groupSn;
+						document.getElementById('groupNm').value = result.groupNm;
+						document.getElementById('emplyrNm').value = result.emplyrNm;
+						document.getElementById('emplyrId').value = result.emplyrId;
 						openMenu('group');
 					},
 					error:function(e){

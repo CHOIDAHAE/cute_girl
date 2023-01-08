@@ -6,13 +6,36 @@
 		<link href="../css/group.css?after" rel="stylesheet" type="text/css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" />
 		<script>
+            $(document).ready(function(){
+                // 모달 제어 (깜빡이는거 나중에 해결 예정)
+                $('.my_layer').hide(); // 설정
+                $('.out_modal_wrap').hide(); // 모임나가기
+
+                // 수정버튼 누르기전 까진 안보임
+                document.getElementById('input_title').style.display = "none";
+
+                // 해당 그룹의 정보 세팅
+                selectedGroupInfo();
+            });
+
+            // 해당 그룹의 정보 세팅
+            function selectedGroupInfo(){
+                $(".groupNm").text(window.parent.$('#groupNm').val());
+                $(".emplyrNm").text(window.parent.$('#emplyrNm').val());
+                $(".emplyrId").text(window.parent.$('#emplyrId').val());
+            }
+
+            //설정 아이콘
             function setting(){
-                console.log('setting');
+                //설정 모달
+                $('.my_layer').show();
+                // 모임나가기 모달
+                $('.out_modal_wrap').hide();
             }
 
             //모임 나가기 버튼 클릭 시 확인 창
             function outGroupBtn(){
-                console.log('모달..');
+                $('.out_modal_wrap').show();
             };
             
             // 모임나가기
@@ -36,7 +59,38 @@
 					error:function(e){
 						alert("모임 나가기 중 오류가 발생하였습니다.(ajax에러)");
 					}
-				})*/
+				})
+                */
+            }
+
+            // 확인 체크박스 변경 이벤트
+            function chkBtn(){
+                var chkBtn = document.getElementById('confirm_apply').checked;
+                if(chkBtn == true){   // 확인버튼 활성화
+                    document.getElementById('okBtn').disabled = false;
+                } else {    // 확인버튼 비활성화
+                    document.getElementById('okBtn').disabled = true;
+                }
+            }
+
+            // 취소 버튼 클릭 이벤트
+            function cancelBtn(data){
+                if(data == "out"){
+                    // 모임나가기 모달 닫기
+                    $('.out_modal_wrap').hide();
+                } else if (data == "setting") {
+                    // 설정 모달 닫기
+                    $('.my_layer').hide();
+                    
+                    document.getElementById('input_title').style.display = "none";
+                    document.getElementById('title_text').style.display = "block";
+                }
+            }
+
+            // 수정 아이콘 클릭이벤트
+            function edit_box(){
+                document.getElementById('input_title').style.display = "block";
+                document.getElementById('title_text').style.display = "none";
             }
 		</script>
 	</head>
@@ -107,19 +161,19 @@
                                                         </span>
                                                     </div>
                                                     <div class="toge_add_edit">
-                                                        <div class="edit_box">
-                                                            <span class="title_text">가족<em class="ic_edit"></em></span>
-                                                            <span class="input_title">
-                                                                <textarea maxlength="25">가족</textarea>
+                                                        <div class="edit_box" onclick="edit_box()">
+                                                            <span class="title_text" id="title_text"><span class="groupNm"></span><em class="ic_edit"></em></span>
+                                                            <span class="input_title" id="input_title">
+                                                                <textarea maxlength="25"></textarea>
                                                                 <span class="line"></span>
                                                             </span>
                                                         </div>
                                                     </div>
-                                                    <a class="btn_mem_out" onclick="outGroup()">모임 나가기</a>
+                                                    <a class="btn_mem_out" onclick="outGroupBtn()">모임 나가기</a>
                                                 </div>
                                                 <div class="btn_area">
-                                                <button type="button"><strong>확인</strong></button>
-                                                <button type="button">취소</button>
+                                                    <button type="button"><strong>확인</strong></button>
+                                                    <button type="button" onclick="cancelBtn('setting')">취소</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -144,7 +198,7 @@
                                                             <div class="textarea_input">
                                                                 <label for="write_area">글입력</label>
                                                                 <div class="textarea">
-                                                                <textarea placeholder="'가족' 멤버와 함께 나눌 이야기를 올려주세요!" id="write_area" rows="1" style="max-height: 144px; overflow-x: hidden; overflow-wrap: break-word; height: 18px;">
+                                                                <textarea placeholder="멤버와 함께 나눌 이야기를 올려주세요!" id="write_area" rows="1" style="max-height: 144px; overflow-x: hidden; overflow-wrap: break-word; height: 18px;">
                                                                 </textarea>
                                                             </div>
                                                         <div class="">
@@ -170,7 +224,8 @@
                                             <p><img src="https://ssl.pstatic.net/static/pwe/cloud/pc/group_welcome.png" height="145" alt=""></p>
                                             <p class="date">2022.11.23</p>
                                             <h3 class="title">
-                                                <strong class="point_3675c7">다행이당</strong>님이&nbsp;<strong>가족</strong> 모임을 시작합니다.
+                                                <strong class="point_3675c7"><span class="emplyrNm"></strong>님이&nbsp;
+                                                <strong><span class="groupNm"></span></strong> 모임을 시작합니다.
                                             </h3>
                                             <p class="text">MYDRIVE에 저장되어 있는 우리 아기 사진, 가족 여행 사진,<br>멋진 야경 사진 등 일상과 추억을 가족, 친구와 함께 나눠보세요!<br>멤버는 최대 200명까지 초대할 수 있습니다.</p>
                                             <a class="my_btn_member">멤버초대</a>
@@ -185,7 +240,7 @@
                         <div class="invitation_side_wrap">
                             <div class="invitation_side fixed">
                                 <div class="invitation_box">
-                                    <h3 class="invitation_tit"><strong>'<em>가족</em>'&nbsp;</strong>멤버와 이 사진을 함께 보세요.</h3>
+                                    <h3 class="invitation_tit"><strong>'<em><span class="groupNm"></span></em>'&nbsp;</strong>멤버와 이 사진을 함께 보세요.</h3>
                                     <div>
                                         <div>
                                             <h4><a href="#/photo/all">최근 올린 사진 (5)</a></h4>
@@ -232,19 +287,22 @@
                                     <h1>
                                         <span class="ellipsis" title="test">test</span> 모임에서 정말 나가시겠습니까?
                                     </h1>
-                                    <div class="desc3">다행이당(otae****) 님이<br>우리 가족 모임에 올린<br>모든 파일과 게시글이 삭제되고,
+                                    <div class="desc3">
+                                        <span class="emplyrNm"></span>
+                                        <span class="emplyrId"></span> 님이<br>
+                                        우리 <span class="groupNm"></span> 모임에 올린<br>모든 파일과 게시글이 삭제되고,
                                         <br>더 이상 이 모임에 들어오실 수 없습니다.<br>댓글은 삭제되지 않습니다.
                                     </div>
                                     <div class="desc4">
-                                        <input type="checkbox" class="input_check" id="confirm_apply">
+                                        <input type="checkbox" class="input_check" id="confirm_apply" onchange="chkBtn()">
                                         <label for="confirm_apply">내용을 확인했습니다.</label>
                                     </div>
                                 </div>
                                 <div class="footer">
-                                    <button type="button" class="" disabled="">
+                                    <button type="button" id="okBtn" class="" disabled="" onclick="outGroup()">
                                         <span class="tx">확인</span>
                                     </button>&nbsp;
-                                    <button type="button">
+                                    <button type="button" onclick="cancelBtn('out')">
                                         <span class="tx">취소</span>
                                     </button>
                                 </div>
