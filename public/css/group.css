@@ -1013,6 +1013,7 @@ label {
 }
 
 .dh_layer {
+    top: 100px;
     position: relative;
     z-index: 50;
     display: inline-block;

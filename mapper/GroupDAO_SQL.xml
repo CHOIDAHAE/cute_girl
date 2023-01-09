@@ -70,18 +70,19 @@
 			PERSONAL.AUTHOR_GROUP_SN
     </select>
 
-	<!-- 리더 여부 -->
-	<select id="selectGropLeaderAt">
-		SELECT
-			DECODE(COUNT(EMPLYR_SN), 1, 'Y', 'N') leadAt
+	<!-- 멤버 수 -->
+	<select id="selectGropMemberCnt">
+		SELECT 
+			AUTHOR_GROUP_SN,
+			COUNT(EMPLYR_SN) CNT
 		FROM
 			TCM_EMPLYRBY_GROUP_AUTHOR
 		WHERE
-			FRST_REGISTER_SN = #{emplyrSn}
-		AND AUTHOR_GROUP_SN = #{groupSn}
+			AUTHOR_GROUP_SN = #{groupSn}
+		GROUP BY AUTHOR_GROUP_SN
 	</select>
 
-	<!-- 그룹 사용 여부 업데이트 (그룹 삭제) -->
+	<!-- 그룹 사용 여부 업데이트 (사용자가 0명인경우 그룹삭제) -->
 	<update id="updateGroupUseAt">
 		UPDATE
 			TCM_AUTHOR_GROUP
@@ -123,17 +124,10 @@
 
 	<!-- 모임나가기 -->
 	<delete id="outGroup">
-		DELETE
-		FROM TCM_EMPLYRBY_GROUP_AUTHOR
-		WHERE EMPLYR_SN = #{emplyrSn}
+		DELETE FROM 
+			TCM_EMPLYRBY_GROUP_AUTHOR
+		WHERE 
+			EMPLYR_SN = #{emplyrSn}
 		AND AUTHOR_GROUP_SN = #{groupSn}
 	</delete>
-
-	<!-- 모임나가기(그룹 리더인경우)-->
-	<update id="outGroupLeader">
-		UPDATE 
-		SET USE_AT = 'N'
-		FROM TCM_AUTHOR_GROUP
-		WHERE AUTHOR_GROUP_SN = #{groupSn}
-	</update>
 </mapper>
