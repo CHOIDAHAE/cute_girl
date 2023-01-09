@@ -38,7 +38,7 @@
                 $('.out_modal_wrap').show();
             };
             
-            // 모임나가기
+            // 모임나가기 확인 버튼 클릭
             function outGroup(){
                 var emplyrSn = window.parent.$('#emplyrSn').val();
                 var groupSn = window.parent.$('#groupSn').val();
@@ -172,7 +172,7 @@
                                                     <a class="btn_mem_out" onclick="outGroupBtn()">모임 나가기</a>
                                                 </div>
                                                 <div class="btn_area">
-                                                    <button type="button"><strong>확인</strong></button>
+                                                    <button type="button" onclick="okBtnClick()"><strong>확인</strong></button>
                                                     <button type="button" onclick="cancelBtn('setting')">취소</button>
                                                 </div>
                                             </div>
