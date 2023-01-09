@@ -219,7 +219,23 @@
 	</update>
 
 	<!-- 파일 자동삭제 -->
+	<select id="selectAutoFileTest">
+		<![CDATA[
+		/* IndexDAO.selectAutoFileTest */
+		SELECT * FROM TCM_ATCHMNFL TA		/* 첨부파일 */
+		WHERE FRST_REGISTER_SN = #{sEmplyrSn}
+		AND FRST_REGIST_DT < SYSDATE - 
+			(
+				SELECT AUTO_DELETE_INFO
+				FROM TCM_EMPLYR
+				WHERE EMPLYR_SN = #{sEmplyrSn}
+			)
+		]]>
+	</select>
+
+	<!-- 파일 자동삭제 -->
 	<delete id="deleteAutoFile">
+		<![CDATA[
 		/* IndexDAO.deleteAutoFile */
 		DELETE FROM TCM_ATCHMNFL TA		/* 첨부파일 */
 		WHERE FRST_REGISTER_SN = #{sEmplyrSn}
@@ -229,9 +245,11 @@
 				FROM TCM_EMPLYR
 				WHERE EMPLYR_SN = #{sEmplyrSn}
 			)
+		]]>
 	</delete>
 
 	<delete id="deleteAutoFileDtl">
+		<![CDATA[
 		/* IndexDAO.deleteAutoFileDtl */
 		DELETE FROM TCM_ATCHMNFL_DETAIL TAD		/* 첨부파일 상세 */
 		WHERE FRST_REGISTER_SN = #{sEmplyrSn}
@@ -241,5 +259,6 @@
 				FROM TCM_EMPLYR
 				WHERE EMPLYR_SN = #{sEmplyrSn}
 			)
+			]]>
 	</delete>
 </mapper>

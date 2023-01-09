@@ -50,9 +50,9 @@ module.exports = function(app){
         res.render('upload');
     });
     
+	//파일 등록
     app.post('/uploadFile', upload.single('attachment'), function(req, res){
 		console.log("uploadFiles");
-		console.log(req);
 		
 		if(req.fileValidationError != null){
 			console.log("exe!!");
@@ -116,26 +116,26 @@ module.exports = function(app){
 							console.log(err);
 							res.json("F");
 						}
-					});
 
-					query = mybatisMapper.getStatement('IndexDAO','insertAtchFileDtl', param, format);
-					conn.execute(query, function(err,result){
-						console.log("IndexDAO.insertAtchFileDtl");
-						console.log(query);
+						query = mybatisMapper.getStatement('IndexDAO','insertAtchFileDtl', param, format);
+						conn.execute(query, function(err,result){
+							console.log("IndexDAO.insertAtchFileDtl");
+							console.log(query);
 
-						if(err){
-							console.log("fileDtl Insert failed "+err);
-							res.json("F");
-						}
+							if(err){
+								console.log("fileDtl Insert failed "+err);
+								res.json("F");
+							}
+							conn.commit();
+						});
 					});
 				}
-
-				doRelease(conn);
+				//doRelease(conn);
 			});
 		});
 
 		console.log(req.session.user.emplyrSn);
-		res.render('index', {"emplyrSn":req.session.user.emplyrSn});
+		res.json({"emplyrSn":req.session.user.emplyrSn});
 	});
 
 	// 파일 리스트 읽어오기
@@ -259,10 +259,11 @@ module.exports = function(app){
 					console.log(err);
 					res.json("F");
 				}
+				conn.commit();
 			});
 			console.log(res);
 			res.json({"emplyrSn":req.session.user.emplyrSn});
-			doRelease(conn);
+			//doRelease(conn);
 		});
 	});
 
@@ -306,10 +307,11 @@ module.exports = function(app){
 					console.log(err);
 					res.json("F");
 				}
+				conn.commit();
 			});
 			console.log(res);
 			res.json({"emplyrSn":req.session.user.emplyrSn});
-			doRelease(conn);
+			// doRelease(conn);
 		});
 	});
 
@@ -351,10 +353,11 @@ module.exports = function(app){
 					console.log(err);
 					res.json("F");
 				}
+				conn.commit();
 			});
 			console.log(res);
 			res.json({"emplyrSn":req.session.user.emplyrSn});
-			doRelease(conn);
+			// doRelease(conn);
 		});
 	});
 
@@ -396,10 +399,11 @@ module.exports = function(app){
 					console.log(err);
 					res.json("F");
 				}
+				conn.commit();
 			});
 			console.log(res);
 			res.json({"emplyrSn":req.session.user.emplyrSn});
-			doRelease(conn);
+			// doRelease(conn);
 		});
 	});
 
@@ -474,7 +478,7 @@ module.exports = function(app){
 				, autoDeleteInfo : autoDeleteInfo
 			}
 
-			console.log(param);
+			console.log("param >>> ", param);
 
 			let query = mybatisMapper.getStatement('IndexDAO','updateAutoFileInfo', param, format);
 			conn.execute(query, function(err,result){
@@ -484,9 +488,10 @@ module.exports = function(app){
 					console.log(err);
 					res.json("F");
 				}
+				conn.commit();
 			});
 			res.json({"emplyrSn":req.session.user.emplyrSn});
-			doRelease(conn);
+			// doRelease(conn);
 		});
 	});
 
@@ -561,7 +566,6 @@ module.exports = function(app){
 			}
 
 			console.log(param);
-
 			let query = mybatisMapper.getStatement('IndexDAO','deleteAutoFile', param, format);
 			conn.execute(query, function(err,result){
 				console.log("IndexDAO.deleteAutoFile");
@@ -578,12 +582,12 @@ module.exports = function(app){
 							console.log(err);
 							res.json("F");
 						}
+						conn.commit();
 					});
 				}
 			});
-			
 			res.json({"emplyrSn":req.session.user.emplyrSn});
-			doRelease(conn);
+			// doRelease(conn);
 		});
 	});
 
