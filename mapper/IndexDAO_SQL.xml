@@ -58,6 +58,7 @@
 			, FILE_EXTSN_NM
 			, FILE_MG
 			, DOWN_CO
+			, ORGINL_FILE_EXTSN_NM
 			, FRST_REGISTER_SN
 			, FRST_REGIST_DT
 			, LAST_UPDUSR_SN
@@ -73,6 +74,7 @@
 			, #{fileExtsnNm}
 			, #{fileSize}
 			, 0
+			, #{orgFileExtsnNm}
 			, #{emplyrSn}
 			, SYSDATE
 			, #{emplyrSn}
@@ -105,6 +107,7 @@
 			AND TAD.FILE_SN  = TEB.FILE_SN(+)
 			AND TA.USE_AT = #{useAt}
 			AND TA.FRST_REGISTER_SN = #{emplyrSn}
+			AND (ORGINL_FILE_EXTSN_NM LIKE #{fileType}||'%' OR #{fileType} = 'ALL')
 	</select>
 
 	<!--첨부파일 상세정보 조회-->
@@ -233,7 +236,26 @@
 		]]>
 	</select>
 
-	<!-- 파일 자동삭제 -->
+	<!-- 파일 자동 삭제(휴지통으로 이동) -->
+	<update id="deleteAutoFile">
+		/* IndexDAO.deleteAutoFile */
+		<![CDATA[
+		UPDATE TCM_ATCHMNFL
+		SET
+			USE_AT = 'N',
+			LAST_UPDT_DT = SYSDATE,
+			LAST_UPDUSR_SN = #{sEmplyrSn}
+		WHERE FRST_REGISTER_SN = #{sEmplyrSn}
+		AND FRST_REGIST_DT < SYSDATE - 
+			(
+				SELECT AUTO_DELETE_INFO
+				FROM TCM_EMPLYR
+				WHERE EMPLYR_SN = #{sEmplyrSn}
+			)
+		]]>
+	</update>
+
+	<!-- 파일 자동삭제 
 	<delete id="deleteAutoFile">
 		<![CDATA[
 		/* IndexDAO.deleteAutoFile */
@@ -261,4 +283,5 @@
 			)
 			]]>
 	</delete>
+	-->
 </mapper>

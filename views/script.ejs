@@ -12,7 +12,7 @@
 		<script>
 			window.onload = function(){
 				file_Volume();	// 파일 용량 조회
-				fileSelect();	// 파일 조회
+				fileSelect("Y", "ALL");	// 파일 조회
 				closeModal();	//모임만들기 모달 닫기
 				document.getElementById('void_btn').disabled = true;
 			};
@@ -55,7 +55,6 @@
 				
 				console.log(gridArea);
 				console.log(menuNm);                
-
 				document.getElementById("gridArea").src = menuNm;
 			};
 			
@@ -129,7 +128,7 @@
 						// } else {
 							// other browser 일때 input[type=file] init.
 							$("#fileUpload").val("");
-							fileSelect();
+							fileSelect("Y", "ALL");
 							file_Volume();
 						// }
 					},
@@ -141,14 +140,14 @@
 			};
 
 			// 파일 조회 
-			function fileSelect(){
+			function fileSelect(useAt, fileType){
 				var emplyrSn = document.getElementById('emplyrSn').value;
 
 				$.ajax({
 					url : "/selectFileList",
 					type : "POST",
 					dataType : "JSON", //"JSON"
-					data : {"emplyrSn" : emplyrSn, "useAt" : "Y"}	// 2022.12.23 최다혜 : 오류가 나길래 임시 수정(useAt : "Y" 추가)
+					data : {"emplyrSn" : emplyrSn, "useAt" : useAt, "fileType" : fileType}
 
 				})
 				.done(function (res) {

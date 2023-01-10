@@ -100,7 +100,7 @@
 			})
 			.done(function (res) {
 				console.log(res);
-				window.parent.fileSelect();
+				window.parent.fileSelect("Y", "ALL");
 			})
 			.fail(function (xhr, textStatus, errorThrown) {
 				console.log('updateFileNm ajax 실패');

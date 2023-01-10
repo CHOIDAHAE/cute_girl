@@ -133,7 +133,7 @@
 			})
 			.done(function (res) {
 				console.log(res);
-				window.parent.fileSelect();
+				window.parent.fileSelect("Y", "ALL");
 			})
 			.fail(function (xhr, textStatus, errorThrown) {
 				console.log('updateFileUseAt ajax 실패');
@@ -157,7 +157,7 @@
 			})
 			.done(function (res) {
 				console.log(res);
-				window.parent.fileSelect();
+				window.parent.fileSelect("Y", "ALL");
 			})
 			.fail(function (xhr, textStatus, errorThrown) {
 				console.log('insertBmFavorite ajax 실패');
@@ -181,7 +181,7 @@
 			})
 			.done(function (res) {
 				console.log(res);
-				window.parent.fileSelect();
+				window.parent.fileSelect("Y", "ALL");
 			})
 			.fail(function (xhr, textStatus, errorThrown) {
 				console.log('deleteBmFavorite ajax 실패');
@@ -219,7 +219,7 @@
 			})
 			.done(function (res) {
 				console.log(res);
-				window.parent.fileSelect();
+				window.parent.fileSelect("Y", "ALL");
 			})
 			.fail(function (xhr, textStatus, errorThrown) {
 				console.log('updateFileNm ajax 실패');

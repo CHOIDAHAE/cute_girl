@@ -13,22 +13,22 @@
 				<div class="foldable_menu">
 					<ul class="list mt0">
 						<li id="photo" name="menu">
-							<div id="sMenu00" onclick="unselected('sMenu00'); selected('sMenu00'); openMenu('photo');" class="tree_item">
+							<div id="sMenu00" onclick="unselected('sMenu00'); selected('sMenu00'); fileSelect('Y', 'image');" class="tree_item">
 								사진
 							</div>
 						</li>
 						<li id="movie" name="menu">
-							<div id="sMenu01" onclick="unselected('sMenu01'); selected('sMenu01'); openMenu('movie')" class="tree_item">
+							<div id="sMenu01" onclick="unselected('sMenu01'); selected('sMenu01'); fileSelect('Y', 'video')" class="tree_item">
 								동영상
 							</div>
 						</li>
 						<li id="document" name="menu">
-							<div id="sMenu02" onclick="unselected('sMenu02'); selected('sMenu02'); openMenu('document')" class="tree_item">
+							<div id="sMenu02" onclick="unselected('sMenu02'); selected('sMenu02'); fileSelect('Y', 'application')" class="tree_item">
 								문서
 							</div>
 						</li>
 						<li id="music" name="menu">
-							<div id="sMenu03" onclick="unselected('sMenu03'); selected('sMenu03'); openMenu('music')" class="tree_item">
+							<div id="sMenu03" onclick="unselected('sMenu03'); selected('sMenu03'); fileSelect('Y', 'audio')" class="tree_item">
 								음악
 							</div>
 						</li>
@@ -174,7 +174,7 @@
 			</button>
 		</div>
 		<div class="bottom_wrap">
-			<a class="bottom" onclick='openMenu("trash")'>
+			<a class="bottom" onclick='fileSelect("N", "ALL")'>
 				<i class="fa-solid fa-trash"></i>
 				휴지통
 			</a>
