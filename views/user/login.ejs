@@ -43,6 +43,7 @@
 				success : function(data) {
 					if(data === "S"){
                         alert("환영합니다.");
+                        fn_fileAutoDelete();
                         document.location.href="/index";
                     } else if (data === "I"){
                         alert("존재하지 않는 아이디입니다.");
@@ -85,6 +86,29 @@
         function keepChk(){
             console.log("로그인 상태 유지");
         }
+
+        //파일 자동 삭제
+        function fn_fileAutoDelete(){
+			var emplyrSn = window.parent.$('#emplyrSn').val();
+
+			$.ajax({
+				url : "/deleteAutoFile",
+				type : "POST",
+				dataType : "JSON", //"JSON"
+				data : {"sEmplyrSn" : emplyrSn}
+
+			})
+			.done(function (res) {
+				console.log(res);
+				window.parent.fileSelect();
+			})
+			.fail(function (xhr, textStatus, errorThrown) {
+				console.log('updateFileNm ajax 실패');
+				console.log('xhr'+xhr);
+				console.log('textStatus'+textStatus);
+				console.log('errorThrown'+errorThrown);
+			})
+		}
 
 	</script>
 	<body>
