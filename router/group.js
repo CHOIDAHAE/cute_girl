@@ -123,7 +123,6 @@ module.exports = function(app){
 
 	// 선택된 그룹 일련번호
 	app.post("/selectedGouprSn", function(req, res, next){
-		console.log('내 모임 조회하기');
 		oracledb.getConnection({
 			user:dbConfig.user,
 			password:dbConfig.password,
@@ -172,6 +171,49 @@ module.exports = function(app){
 	// 그룹 삭제(해당 사용자가 올린 모든 파일은 삭제됨, 리더-그룹사용여부N, 모든사용자-그룹사용여부Y)
 	app.post("/updateGroupUseAt", function(req, res){	
 
+	})
+
+	// 그룹명 수정, 그룹 대표사진 수정
+	app.post("/updateGroupSet", function(req, res){	
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(updateGroupSet)",err);
+			} else {
+				//console.log("Oracle Connection success(updateGroupSet)");
+			}
+			conn = con;
+
+			//query format
+			let format = {language: 'sql', indent: ''};
+
+			var param = {
+				"emplyrSn"	: req.body.emplyrSn,
+				"groupSn"	: req.body.groupSn,
+				"data"		: req.body.data
+			}
+
+			//내 그룹 조회
+			let updateGroupNm = mybatisMapper.getStatement('GroupDAO','updateGroupNm', param, format);
+
+			//쿼리문 실행
+			conn.execute(updateGroupNm, function(err,result){
+				if(err){
+					console.log("updateGroupNm failed :", err);
+					res.json({"Status":"F"});
+					return;
+				}
+				res.json({"Status":"S"});
+
+				// 대표사진 추가 쿼리 실행 시점 
+				
+				conn.commit();
+			});
+		});
 	})
 
 	function doRelease(conn){

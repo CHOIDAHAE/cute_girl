@@ -91,6 +91,50 @@
             function edit_box(){
                 document.getElementById('input_title').style.display = "block";
                 document.getElementById('title_text').style.display = "none";
+
+                //  클릭하면 그룹명 수정에 포커스
+                var textarea = document.getElementById("textarea");
+                textarea.focus();
+            }
+
+            // 그룹명, 그룹대표사진 수정 후 변경작업
+            function okBtnClick(){
+                var emplyrSn = window.parent.$('#emplyrSn').val();
+                var groupSn = window.parent.$('#groupSn').val();
+                var data = document.getElementById("textarea").value;
+
+                if (data.length == 0){
+                    alert('모임명을 입력하지 않았거나 수정하지 않았습니다.');
+                    return;
+                }
+
+                $.ajax({
+					url : "/updateGroupSet",
+					type : "POST",
+					dataType : "JSON", //"JSON"
+					data : {"emplyrSn" : emplyrSn, "groupSn" : groupSn, "data" : data},
+					success:function(result){
+                        if(result.Status == "S"){
+							alert("수정이 완료되었습니다.");
+                            // 메뉴 재조회
+                            window.parent.mygroup();
+                            // 그룹 재조회
+
+						} else if(result.Status == "F"){
+                            alert("그룹명 변경 또는 대표사진 변경 중 오류가 발생하였습니다.");
+                        }
+					},
+					error:function(e){
+						alert("그룹명 변경 또는 대표사진 변경 중 오류가 발생하였습니다.(ajax에러)");
+					}
+				})
+            }
+
+            // textarea 내에서 엔터키 제한
+            function chkEnter(){
+                if(event.keyCode == 13){
+                    event.returnValue = false;
+                }
             }
 		</script>
 	</head>
@@ -164,7 +208,7 @@
                                                         <div class="edit_box" onclick="edit_box()">
                                                             <span class="title_text" id="title_text"><span class="groupNm"></span><em class="ic_edit"></em></span>
                                                             <span class="input_title" id="input_title">
-                                                                <textarea maxlength="25"></textarea>
+                                                                <textarea maxlength="15" id="textarea" onkeypress="chkEnter()"></textarea>
                                                                 <span class="line"></span>
                                                             </span>
                                                         </div>
@@ -188,7 +232,7 @@
                                                                     <span class="bu_q">
                                                                     </span>
                                                                     <h1>
-                                                                        <span class="ellipsis" title="test">test</span> 모임에서 정말 나가시겠습니까?
+                                                                        <span class="ellipsis" title="test"><span class="groupNm"></span></span> 모임에서 정말 나가시겠습니까?
                                                                     </h1>
                                                                     <div class="desc3">
                                                                         <span class="emplyrNm"></span>
@@ -210,7 +254,7 @@
                                                                     </button>
                                                                 </div>
                                                                 <div class="pop_close">
-                                                                    <a class="bu_close_p">
+                                                                    <a class="bu_close_p" onclick="cancelBtn('out')">
                                                                         <span class="blind">닫기</span>
                                                                     </a>
                                                                 </div>

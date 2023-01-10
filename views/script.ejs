@@ -261,6 +261,9 @@
 
 				if(input.length > 0){
 					nextBtn.disabled = false;
+					if(input.length > 15){
+						alert('모임명은 15글자를 초과할 수 없습니다.')
+					}
 				} else {
 					nextBtn.disabled = true;
 				}
@@ -280,12 +283,15 @@
 							if(data == "add"){	// 내 모임 만들기 이후 재 조회가 필요한 경우
 								var num = result.length-1;
 								var ul_list = $("#ul_list");
-								ul_list.append("<li id='add_li_"+num+"' class='add_li'> <div class='tree_item'> "+result[num][1]+"</div> </li>"); //ul_list안쪽에 li추가
+								ul_list.append("<li id='add_li_"+num+"' class='add_li'><div class='tree_item'> "+result[num][1]+"</div></li>"); //ul_list안쪽에 li추가
 							} else {	// 그냥 메뉴에서 내 그룹 연경우
+								//if(document.getElementById("removeChild")){	//removeCHild가 존재하면 삭제 
+									//0ㄱㅐ로 세팅
+								//}
 								for(var i=0; i<result.length; i++){
 									//li 동적생성
 									var ul_list = $("#ul_list");
-									ul_list.append("<li id='add_li_"+i+"' class='add_li'> <div class='tree_item'> "+result[i][1]+"</div> </li>"); //ul_list안쪽에 li추가
+									ul_list.append("<li id='add_li_"+i+"' class='add_li'><div class='tree_item'> "+result[i][1]+"</div></li>"); //ul_list안쪽에 li추가
 								}
 							}							
 						} else if(result.Status == "F"){

@@ -122,7 +122,7 @@
 		AND NUM = #{num}
 	</select>
 
-	<!-- 모임나가기 -->
+	<!-- 모임(그룹) 나가기 -->
 	<delete id="outGroup">
 		DELETE FROM 
 			TCM_EMPLYRBY_GROUP_AUTHOR
@@ -130,4 +130,16 @@
 			EMPLYR_SN = #{emplyrSn}
 		AND AUTHOR_GROUP_SN = #{groupSn}
 	</delete>
+
+	<!-- 그룹명 수정 -->
+	<update id="updateGroupNm">
+		UPDATE
+			TCM_AUTHOR_GROUP		--공유그룹
+		SET 
+			AUTHOR_GROUP_NM	= #{data},
+			LAST_UPDUSR_SN	= #{emplyrSn},
+			LAST_UPDT_DT	= SYSDATE
+		WHERE
+			AUTHOR_GROUP_SN	= #{groupSn}
+	</update>
 </mapper>

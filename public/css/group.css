@@ -861,7 +861,7 @@ a.more_invitation .more_invitation_bg{
 
 .toge_add_edit .edit_box {
     position: relative;
-    width: 200px;
+    width: 250px;
     margin: 0 auto;
     padding: 0 0 0 0;
     border-bottom: 0 none;
@@ -877,7 +877,7 @@ a.more_invitation .more_invitation_bg{
 }
 
 .toge_add_edit .edit_box .title_text {
-    width: 200px;
+    width: 250px;
     padding: 0 0 0 0;
     font-size: 14px;
     font-weight: normal;
@@ -949,11 +949,12 @@ a.more_invitation .more_invitation_bg{
     outline: none;
     line-height: 24px;
     resize: none;
-    font-size: 14px;
+    font-size: 15px;
     color: #222;
     vertical-align: top;
     font-weight: bold;
     padding: 0;
+    font-family: inherit;
 }
 
 .edit_box .input_title .line {
