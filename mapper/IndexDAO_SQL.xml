@@ -97,6 +97,7 @@
 			, tad.ATCHMNFL_SN
 			, tad.FILE_SN
 			, DECODE(TEB.FILE_SN, '', 'N', 'Y') BKMK_AT
+			, ta.USE_AT
 		FROM
 			TCM_ATCHMNFL ta
 			, TCM_ATCHMNFL_DETAIL tad
@@ -136,6 +137,20 @@
 		WHERE 
 			ATCHMNFL_SN = #{AtchfileSn}
 	</update>
+
+	<!-- 파일 완전히 삭제 -->
+	<delete id="deleteFileUseAt">
+		/* IndexDAO.deleteFileUseAt */
+		DELETE TCM_ATCHMNFL
+		WHERE ATCHMNFL_SN = #{AtchfileSn}
+	</delete>
+
+	<delete id="deleteFileUseAtDtl">
+		/* IndexDAO.deleteFileUseAtDtl */
+		DELETE TCM_ATCHMNFL_DETAIL
+		WHERE ATCHMNFL_SN = #{AtchfileSn}
+		AND FILE_SN = #{AtchfileSn}
+	</delete>
 
 	<!-- 첨부파일 즐겨찾기 추가 -->
 	<insert id="insertBmFavorite">

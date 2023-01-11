@@ -158,7 +158,8 @@
 
 					for(var i=0; i<res.length; i++){
 						fileList += '<li class="item_fnc" id="' + res[i][8] + '_' + res[i][9] + '" ondblclick="view_photoInfo(this)">';
-						fileList += '<img src="../uploadedFiles/' + res[i][1] + '" id="img_' + res[i][8] + '_' + res[i][10] + '" class="img_item"/>\n';
+						/* ID : IMG_파일일련번호_즐겨찾기추가여부_사용여부 */
+						fileList += '<img src="../uploadedFiles/' + res[i][1] + '" id="img_' + res[i][8] + '_' + res[i][10] + '_' + res[i][11] + '" class="img_item"/>\n';
 						fileList += '<div class="item-name" id="dv_' + res[i][8] + '"> ' + res[i][2] + ' </div></li>\n';
 					}
 

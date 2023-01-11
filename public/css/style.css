@@ -61,7 +61,8 @@ body{
 
 /* 그리드 영역 */
 .grid_Area {
-    width : 90%;
+    width : 83%;
+    float:left;
 }
 
 .sideInfo-box{

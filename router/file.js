@@ -62,13 +62,15 @@ module.exports = function(app){
 		
 		//그냥 파일명을 가져올 경우 한글이 깨지는 오류 수정
 		var fileNm = Buffer.from(req.file.originalname, 'latin1').toString('utf8');
+		var fileExt = req.file.originalname.split(".");
 
 		var FILE_STRE_COURS_NM = '/uploadedFiles';
 		var FILE_NM = fileNm;
 		var ORGINL_FILE_NM = req.file.filename;
-		var FILE_EXTSN_NM = req.file.originalname.split(".")[1];
+		var FILE_EXTSN_NM = fileExt[fileExt.length - 1];
 		var FILE_MG = req.file.size;
 		var emplyrSn = req.session.user.emplyrSn;
+		var ORGINL_FILE_EXTSN_NM = req.file.mimetype;
 		
 		oracledb.getConnection({
 			user:dbConfig.user,
@@ -105,6 +107,7 @@ module.exports = function(app){
 						, fileSize : FILE_MG
 						, emplyrSn : emplyrSn
 						, fileSn : result.rows[0][0]
+						, orgFileExtsnNm : ORGINL_FILE_EXTSN_NM
 					}
 
 					//파일 등록
@@ -156,6 +159,7 @@ module.exports = function(app){
 			var param = {
 				emplyrSn : req.body.emplyrSn
 				, useAt : req.body.useAt
+				, fileType : req.body.fileType
 			}
 
 			//query format
@@ -260,6 +264,61 @@ module.exports = function(app){
 					res.json("F");
 				}
 				conn.commit();
+			});
+			console.log(res);
+			res.json({"emplyrSn":req.session.user.emplyrSn});
+			//doRelease(conn);
+		});
+	});
+
+	//파일 완전 삭제
+	app.post('/deleteFileUseAt', upload.single('attachment'), function(req, res){
+		console.log("deleteFileUseAt");
+		console.log(req.session.user);
+		
+		var AtchfileSn = req.body.AtchfileSn;
+		var emplyrSn = req.session.user.emplyrSn;
+		
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(/deleteFileUseAt)",err);
+			} else {
+				console.log("Oracle Connection success(/deleteFileUseAt)");
+			}
+			conn = con;
+				
+			//query format
+			let format = {language: 'sql', indent: ''};
+			
+			var param = {
+				emplyrSn : emplyrSn
+				, AtchfileSn : AtchfileSn
+			}
+
+			let query = mybatisMapper.getStatement('IndexDAO','deleteFileUseAt', param, format);
+			conn.execute(query, function(err,result){
+				console.log("IndexDAO.deleteFileUseAt");
+				console.log(query);
+				if(err){
+					console.log(err);
+					res.json("F");
+				}else{
+					let query = mybatisMapper.getStatement('IndexDAO','deleteFileUseAtDtl', param, format);
+					conn.execute(query, function(err,result){
+						console.log("IndexDAO.deleteFileUseAtDtl");
+						console.log(query);
+						if(err){
+							console.log(err);
+							res.json("F");
+						}
+						conn.commit();
+					});
+				}
 			});
 			console.log(res);
 			res.json({"emplyrSn":req.session.user.emplyrSn});
@@ -573,7 +632,9 @@ module.exports = function(app){
 				if(err){
 					console.log(err);
 					res.json("F");
-				}else{
+				}
+				/*
+				else{
 					let query = mybatisMapper.getStatement('IndexDAO','deleteAutoFileDtl', param, format);
 					conn.execute(query, function(err,result){
 						console.log("IndexDAO.deleteAutoFileDtl");
@@ -584,7 +645,8 @@ module.exports = function(app){
 						}
 						conn.commit();
 					});
-				}
+				}*/
+				conn.commit();
 			});
 			res.json({"emplyrSn":req.session.user.emplyrSn});
 			// doRelease(conn);
