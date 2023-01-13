@@ -176,6 +176,8 @@ module.exports = function(app){
 					doRelease(conn);
 					return;
 				}
+
+				console.log(result);
 				
 				res.send(result.rows);
 				doRelease(conn);					
@@ -652,6 +654,53 @@ module.exports = function(app){
 			// doRelease(conn);
 		});
 	});
+
+	// 파일 정리하기 (중복)
+	app.post("/cleanUpFiles", function(req, res){		
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(cleanUpFiles)",err);
+			} else {
+				console.log("Oracle Connection success(cleanUpFiles)");
+			}
+			conn = con;
+
+			var cleanType = req.body.cleanType;
+
+			let query = "";
+			//query format
+			let format = {language: 'sql', indent: ''};
+
+			if(cleanType == "findDupNm"){
+				var param = {
+					sEmplyrSn : req.body.emplyrSn
+				}
+
+				//getStatement(namespace명, queryId, parameter, format);
+				query = mybatisMapper.getStatement('IndexDAO','selectDupList', param, format);
+			}
+
+			//쿼리문 실행
+			conn.execute(query, function(err,result){
+				console.log(query);
+				if(err){
+					console.log("에러가 발생했습니다(selectDupList)>", err);
+					doRelease(conn);
+					return;
+				}
+
+				console.log(result);
+				
+				res.send(result.rows);
+				doRelease(conn);					
+			});  
+		});
+	})
 
 	function doRelease(conn){
 		conn.close(function(err){

@@ -198,12 +198,16 @@
 			, TAD.FILE_EXTSN_NM 
 			, TAD.FILE_NM 
 		FROM
-			TCM_ATCHMNFL_DETAIL TAD 
-			, TCM_EMPLYRBY_BKMK TEB 
+			TCM_ATCHMNFL TA				/* 첨부파일 */
+			, TCM_ATCHMNFL_DETAIL TAD	/* 첨부파일 상세 */
+			, TCM_EMPLYRBY_BKMK TEB		/* 즐겨찾기 */
 		WHERE
-			TAD.ATCHMNFL_SN = TEB.ATCHMNFL_SN
+			TAD.ATCHMNFL_SN = TA.ATCHMNFL_SN
+			AND TAD.ATCHMNFL_SN = TEB.ATCHMNFL_SN
 			AND TAD.FILE_SN = TEB.FILE_SN
+			AND TA.USE_AT = 'Y'
 			AND TEB.EMPLYR_SN = #{sEmplyrSn}
+
 	</select>
 
 	<!-- 첨부파일명 수정 -->
@@ -299,4 +303,36 @@
 			]]>
 	</delete>
 	-->
+
+	<!-- 파일명 중복 리스트 조회 -->
+	<select id="selectDupList">
+		<![CDATA[
+		/* IndexDAO.selectDupList */
+		SELECT *
+		FROM (
+			SELECT
+					tad.FILE_STRE_COURS_NM
+					, tad.ORGINL_FILE_NM
+					, tad.FILE_NM
+					, tad.FILE_EXTSN_NM
+					, tad.FILE_MG
+					, tad.ATCHMNFL_SN
+					, tad.FILE_SN
+					, COUNT(FILE_NM) OVER(PARTITION BY FILE_NM) CNT
+					, tad.FRST_REGIST_DT
+					, tad.FRST_REGISTER_SN
+				FROM
+					TCM_ATCHMNFL ta
+					, TCM_ATCHMNFL_DETAIL tad
+					, TCM_EMPLYRBY_BKMK TEB 
+				WHERE
+					TA.ATCHMNFL_SN = TAD.ATCHMNFL_SN
+					AND TAD.ATCHMNFL_SN  = TEB.ATCHMNFL_SN(+)
+					AND TAD.FILE_SN  = TEB.FILE_SN(+)
+					AND TA.USE_AT = 'Y'
+					AND TA.FRST_REGISTER_SN = #{sEmplyrSn}
+		) A
+		WHERE A.CNT > 1
+		]]>
+	</select>
 </mapper>

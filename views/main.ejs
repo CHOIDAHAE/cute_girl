@@ -16,12 +16,14 @@
 				</div>-->
 			</li>
 		</ul>
+		<input type="hidden" id="ListType" value="selectList">
 	</div>
 	<div id="contextMenuArea">
 		<ul id="contextMenuList" class="contextmenu">
-			<li><a onclick="fn_updateFileNm();">파일명 수정</a></li>
+			<li id="updateFileNm"><a onclick="fn_updateFileNm();">파일명 수정</a></li>
 			<li id="listUseAt"><a href="javascript:void(0);" onclick="fn_fileDelete();">파일 삭제</a></li>
 			<li id="listFavorAt"><a href="javascript:void(0);" onclick="fn_addFavor();">즐겨찾기 추가</a></li>
+			<li id="fileDelete"><a href="javascript:void(0);" onclick="fn_fileDeleteOut();">파일 완전히 삭제</a></li>
 		  </ul>
 	</div>
 	<div id="sideInfo_box" class="sideInfo-box">

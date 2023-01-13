@@ -37,15 +37,23 @@
 					innerHtml = '<a href="javascript:void(0);" onclick="fn_fileDelete(\'N\');">파일 삭제</a>';
 
 					$('#listUseAt').html(innerHtml);
+					$('#fileDelete').hide();
+
 				}else{
 					var innerHtml = "";
 					innerHtml = '<a href="javascript:void(0);" onclick="fn_fileDelete(\'Y\');">파일 원복</a>';
-					var innerHtml2 = "";
-					innerHtml2 = '<li id="fileDelete"><a href="javascript:void(0);" onclick="fn_fileDeleteOut();">파일 완전히 삭제</a></li>';
-
 					$('#listUseAt').html(innerHtml);
-					$('#contextMenuList').append(innerHtml2);
+					$('#fileDelete').show();
 				}
+
+				if($('#ListType').val() == "cleanUpType"){
+					$('#listFavorAt').hide();
+					$('#updateFileNm').hide();
+				}else{
+					$('#listFavorAt').show();
+					$('#updateFileNm').show();
+				}
+
 				//get window size
 				var winWidth = $(document).width();
 				var winHeight = $(document).height();
@@ -135,47 +143,48 @@
 
 		//파일 삭제 (휴지통으로 이동)
 		function fn_fileDelete(useAt){
-			console.log(contextFileInfo);
 			var AtchfileSn = contextFileInfo.split("_")[1];
 			var emplyrSn = window.parent.$('#emplyrSn').val();
-			console.log("file Delete!");
-			$.ajax({
-				url : "/updateFileUseAt",
-				type : "POST",
-				dataType : "JSON", //"JSON"
-				data : {"AtchfileSn" : AtchfileSn, "emplyrSn" : emplyrSn, "useAt":useAt}
+			if(confirm("파일을 삭제하시겠습니까?\n(삭제된 파일은 휴지통으로 이동됩니다.)")){
+				$.ajax({
+					url : "/updateFileUseAt",
+					type : "POST",
+					dataType : "JSON", //"JSON"
+					data : {"AtchfileSn" : AtchfileSn, "emplyrSn" : emplyrSn, "useAt":useAt}
 
-			})
-			.done(function (res) {
-				console.log(res);
-				window.parent.fileSelect("Y", "ALL");
-			})
-			.fail(function (xhr, textStatus, errorThrown) {
-				console.log('updateFileUseAt ajax 실패');
-				console.log('xhr'+xhr);
-				console.log('textStatus'+textStatus);
-				console.log('errorThrown'+errorThrown);
-			})
+				})
+				.done(function (res) {
+					console.log(res);
+					window.parent.fileSelect("Y", "ALL");
+				})
+				.fail(function (xhr, textStatus, errorThrown) {
+					console.log('updateFileUseAt ajax 실패');
+					console.log('xhr'+xhr);
+					console.log('textStatus'+textStatus);
+					console.log('errorThrown'+errorThrown);
+				})
+			}
 		}
 
 		//파일 완전히 삭제
 		function fn_fileDeleteOut(){
-			console.log('deleteOut');
 			var AtchfileSn = contextFileInfo.split("_")[1];
 			var emplyrSn = window.parent.$('#emplyrSn').val();
-			$.ajax({
-				url : "/deleteFileUseAt",
-				type : "POST",
-				dataType : "JSON", //"JSON"
-				data : {"AtchfileSn" : AtchfileSn, "emplyrSn" : emplyrSn}
+			if(confirm("파일을 완전히 삭제하시겠습니까?")){
+				$.ajax({
+					url : "/deleteFileUseAt",
+					type : "POST",
+					dataType : "JSON", //"JSON"
+					data : {"AtchfileSn" : AtchfileSn, "emplyrSn" : emplyrSn}
 
-			})
-			.done(function (res) {
-				window.parent.fileSelect("Y", "ALL");
-			})
-			.fail(function (xhr, textStatus, errorThrown) {
-				console.log('deleteFileUseAt ajax 실패');
-			})
+				})
+				.done(function (res) {
+					window.parent.fileSelect("Y", "ALL");
+				})
+				.fail(function (xhr, textStatus, errorThrown) {
+					console.log('deleteFileUseAt ajax 실패');
+				})
+			}
 		}
 
 		//즐겨찾기 추가
@@ -237,7 +246,9 @@
 			var nameHtml = "";
 			nameHtml += '<input type="text" id="txt_name" onfocusout = "fn_updateFileNmCb();" value="' + dvName + '"/>';
 
-			dvHtml.innerHTML = nameHtml;
+			if(confirm("파일명을 수정하시겠습니까?")){
+				dvHtml.innerHTML = nameHtml;
+			}
 		}
 
 		function fn_updateFileNmCb(){

@@ -152,20 +152,19 @@
 				})
 				.done(function (res) {
 					var fileArea = $('#gridArea').contents().find('#fileList');
-					var emplyrSnArea = $('#gridArea').contents().find('#emplyrSn');
+					var ListType = $('#gridArea').contents().find('#ListType');
 					
 					var fileList = "";
 
 					for(var i=0; i<res.length; i++){
-						fileList += '<li class="item_fnc" id="' + res[i][8] + '_' + res[i][9] + '" ondblclick="view_photoInfo(this)">';
+						fileList += '<li class="item_fnc" id="' + res[i][8] + '_' + res[i][9] + '" onclick="view_photoInfo(this)">';
 						/* ID : IMG_파일일련번호_즐겨찾기추가여부_사용여부 */
 						fileList += '<img src="../uploadedFiles/' + res[i][1] + '" id="img_' + res[i][8] + '_' + res[i][10] + '_' + res[i][11] + '" class="img_item"/>\n';
 						fileList += '<div class="item-name" id="dv_' + res[i][8] + '"> ' + res[i][2] + ' </div></li>\n';
 					}
 
 					$(fileArea).html(fileList);      //파일 리스트
-					$(emplyrSnArea).value = emplyrSn;
-					console.log(emplyrSnArea);
+					$(ListType).attr('value', "selectList");
 				})
 				.fail(function (xhr, textStatus, errorThrown) {
 					console.log('selectFileList ajax 실패');
@@ -214,6 +213,40 @@
 					console.log('errorThrown'+errorThrown);
 				})
 			};
+
+			//파일정리하기
+			function cleanUpFiles(cleanType){
+				var emplyrSn = document.getElementById('emplyrSn').value;
+
+				$.ajax({
+					url : "/cleanUpFiles",
+					type : "POST",
+					dataType : "JSON", //"JSON"
+					data : {"emplyrSn" : emplyrSn, "cleanType":cleanType}
+
+				})
+				.done(function (res) {
+					var fileArea = $('#gridArea').contents().find('#fileList');
+					var ListType = $('#gridArea').contents().find('#ListType');
+					
+					var fileList = "";
+
+					for(var i=0; i<res.length; i++){
+						fileList += '<li class="item_fnc" id="' + res[i][5] + '_' + res[i][6] + '" ondblclick="view_photoInfo(this)">';
+						fileList += '<img src="../uploadedFiles/' + res[i][1] + '" id="img_' + res[i][5] + '_NULL_Y" class="img_item"/>\n';
+						fileList += '<div class="item-name" id="dv_' + res[i][5] + '"> ' + res[i][2] + ' </div></li>\n';
+					}
+
+					$(fileArea).html(fileList);      //파일 리스트
+					$(ListType).attr('value', "cleanUpType");
+				})
+				.fail(function (xhr, textStatus, errorThrown) {
+					console.log('selectBkmkList ajax 실패');
+					console.log('xhr'+xhr);
+					console.log('textStatus'+textStatus);
+					console.log('errorThrown'+errorThrown);
+				})
+			}
 				
 			// 모임만들기 모달 열기
 			function openModal() {
