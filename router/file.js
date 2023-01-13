@@ -694,8 +694,6 @@ module.exports = function(app){
 					return;
 				}
 
-				console.log(result);
-				
 				res.send(result.rows);
 				doRelease(conn);					
 			});  
