@@ -10,6 +10,35 @@ var mybatisMapper = require('mybatis-mapper');
 // Mapper Load(xml이 있는 디렉토리 주소&파일위치)
 mybatisMapper.createMapper( ['./mapper/GroupDAO_SQL.xml']);
 
+var groupStorage = multer.diskStorage({
+	destination(req, file, cb){
+		cb(null, './public/uploadedGroupFiles/');
+	},
+
+	//파일 이름 지정 (저장시 파일명이 깨지는 경우가 있는데 다시 불러올 때 DB에 저장해둔 오리지널 파일명 가져오기)
+	filename(req, file, cb){
+		cb(null, `${Date.now()}_${file.originalname}`);
+	},
+});
+
+var groupfileFilter = (req, file, cb) => {
+	console.log("groupfileFilter >>>> ");
+	console.log(file);
+	var fileType = file.originalname.split(".")[1];
+
+	if(file.mimetype == "application/x-msdownload"){
+		req.fileValidationError = "exe 파일은 업로드가 불가능합니다."
+		return cb(null, false);
+	}else{
+		cb(null, true);
+	}
+}
+
+var upload = multer({
+	storage: storage,
+	fileFilter : fileFilter
+});
+
 module.exports = function(app){
 	// 그룹화면
 	app.get('/group', function(req, res, next){
@@ -342,22 +371,43 @@ module.exports = function(app){
 
 			//내 그룹 조회
 			let updateGroupNm = mybatisMapper.getStatement('GroupDAO','updateGroupNm', param, format);
+			// 리더여부 조회
+			let selecteLeaderYn = mybatisMapper.getStatement('GroupDAO','selecteLeaderYn', param, format);
 
 			//쿼리문 실행
-			conn.execute(updateGroupNm, function(err,result){
+			conn.execute(selecteLeaderYn, function(err,result){
 				if(err){
-					console.log("updateGroupNm failed :", err);
+					console.log("selecteLeaderYn failed :", err);
 					res.json({"Status":"F"});
 					return;
 				}
-				res.json({"Status":"S"});
-
-				// 대표사진 추가 쿼리 실행 시점 
 				
-				conn.commit();
+				console.log("leaderYn: "+result.rows[0][0]);
+				var leaderYn = result.rows[0][0];
+				if( leaderYn == "N" ){	//리더 아님
+					res.json({"Status":"L"});
+					return;
+				} else {
+					//쿼리문 실행
+					conn.execute(updateGroupNm, function(err,result){
+						if(err){
+							console.log("updateGroupNm failed :", err);
+							res.json({"Status":"F"});
+							return;
+						}
+						res.json({"Status":"S"});
+
+						// 대표사진 추가 쿼리 실행 시점 
+						
+						conn.commit();
+					});
+				}
 			});
 		});
 	})
+
+	/******************그룹 파일 업로드******************/
+	
 
 	function doRelease(conn){
 		conn.close(function(err){

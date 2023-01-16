@@ -113,7 +113,9 @@
 					dataType : "JSON", //"JSON"
 					data : {"emplyrSn" : emplyrSn, "groupSn" : groupSn, "data" : data},
 					success:function(result){
-                        if(result.Status == "S"){
+                        if(result.Status == "L"){
+                            alert("그룹 리더만 수정이 가능합니다.");
+                        } else if(result.Status == "S"){
 							alert("수정이 완료되었습니다.");
                             // 메뉴 재조회
                             window.parent.mygroup();
