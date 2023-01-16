@@ -43,7 +43,6 @@
                 var emplyrSn = window.parent.$('#emplyrSn').val();
                 var groupSn = window.parent.$('#groupSn').val();
                 
-                /*
                 $.ajax({
 					url : "/updateGroupUseAt",
 					type : "POST",
@@ -52,6 +51,7 @@
 					success:function(result){
 						if(result.Status == "S"){
 							//메뉴리스트 업데이트
+                            alert("모임 나가기가 완료되었습니다.");
 						} else if(result.Status == "F"){
 							alert("모임 나가기 중 오류가 발생하였습니다.");
 						}
@@ -60,7 +60,6 @@
 						alert("모임 나가기 중 오류가 발생하였습니다.(ajax에러)");
 					}
 				})
-                */
             }
 
             // 확인 체크박스 변경 이벤트

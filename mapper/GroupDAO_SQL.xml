@@ -17,6 +17,7 @@
 			AUTHOR_GROUP_SN,
 			AUTHOR_GROUP_NM,
 			USE_AT,
+			GROUP_LEADER_AT,
 			FRST_REGISTER_SN,
 			FRST_REGIST_DT,
 			LAST_UPDUSR_SN,
@@ -27,6 +28,7 @@
 			#{groupSn},
 			#{groupNm},
 			#{useAt},
+			#{emplyrSn},
 			#{emplyrSn},
 			SYSDATE,
 			#{emplyrSn},
@@ -82,13 +84,13 @@
 		GROUP BY AUTHOR_GROUP_SN
 	</select>
 
-	<!-- 그룹 사용 여부 업데이트 (사용자가 0명인경우 그룹삭제) -->
+	<!-- 그룹 사용 여부 업데이트 (마지막 사용자인 경우 그룹삭제) -->
 	<update id="updateGroupUseAt">
 		UPDATE
 			TCM_AUTHOR_GROUP
 		SET
 			USE_AT = 'N',
-			LAST_UPDUSR_SN #{emplyrSn},
+			LAST_UPDUSR_SN = #{emplyrSn},
 			LAST_UPDT_DT = SYSDATE
 		WHERE
 			AUTHOR_GROUP_SN = #{groupSn}
@@ -130,6 +132,69 @@
 			EMPLYR_SN = #{emplyrSn}
 		AND AUTHOR_GROUP_SN = #{groupSn}
 	</delete>
+
+	<!-- 그룹의 내 파일 모두 삭제하기 -->
+	<delete id="deleteGroupFile">
+		DELETE FROM
+			TCM_GROUP_FILE
+		WHERE
+			EMPLYR_SN = #{emplyrSn}
+		AND AUTHOR_GROUP_SN = #{groupSn}
+	</delete>
+
+	<!-- 그룹의 인원수 조회 -->
+	<select id="selecteGoupCnt">
+		SELECT
+			COUNT(EMPLYR_SN) CNT
+		FROM
+			TCM_EMPLYRBY_GROUP_AUTHOR
+		WHERE
+			AUTHOR_GROUP_SN = #{groupSn}
+	</select>
+
+	<!-- 리더여부 조회 -->
+	<select id="selecteLeaderYn">
+		SELECT
+			NVL2(MIN(GROUP_LEADER_SN), 'Y', 'N') LEADER_AT
+		FROM
+			TCM_AUTHOR_GROUP
+		WHERE
+			GROUP_LEADER_SN = #{emplyrSn}
+		AND AUTHOR_GROUP_SN = #{groupSn}
+	</select>
+
+	<!-- 등록일자 순으로 다음 리더 조회 -->
+	<select id="selecteNextLeader">
+		SELECT
+			NVL(MIN(EMPLYR_SN), 'N') NEXT_LEADER_SN	--없으면N, 존재하면 일련번호
+		FROM (
+			SELECT
+				ROWNUM RNUM,
+				EMPLYR_SN,
+				AUTHOR_GROUP_SN,
+				FRST_REGISTER_SN,
+				FRST_REGIST_DT,
+				LAST_UPDUSR_SN,
+				LAST_UPDT_DT
+			FROM
+				TCM_EMPLYRBY_GROUP_AUTHOR
+			WHERE AUTHOR_GROUP_SN = #{groupSn}
+			ORDER BY FRST_REGIST_DT
+			)
+		WHERE RNUM = 2
+	</select>
+
+	<!-- 그룹 리더 수정 -->
+	<update id="updateGroupLeader">
+		UPDATE
+			TCM_AUTHOR_GROUP
+		SET
+			GROUP_LEADER_SN = #{nextLeaderSn},
+			LAST_UPDUSR_SN = #{emplyrSn},
+			LAST_UPDT_DT = SYSDATE
+		WHERE
+			AUTHOR_GROUP_SN = #{groupSn}
+	</update>
 
 	<!-- 그룹명 수정 -->
 	<update id="updateGroupNm">

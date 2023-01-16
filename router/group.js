@@ -168,10 +168,153 @@ module.exports = function(app){
 		});
 	})
 
-	// 그룹 삭제(해당 사용자가 올린 모든 파일은 삭제됨, 리더-그룹사용여부N, 모든사용자-그룹사용여부Y)
+	/* 그룹 삭제 로직
+	1. 해당 사용자가 올린 모든 파일은 삭제됨-그룹일련번호, 사용자일련번호필요
+	2. 그룹 인원수 카운트해서 1이면 여부 N으로 업데이트-그룹일련번호
+	3. 1이 아니면 리더여부 조회 -> 리더라면 다음 사용자(가입순)조회 -> 리더변경
+	4. 그룹 테이블에서 내 일련번호 삭제하기
+	*/
 	app.post("/updateGroupUseAt", function(req, res){	
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(updateGroupUseAt)",err);
+			} else {
+				//console.log("Oracle Connection success(updateGroupUseAt)");
+			}
+			conn = con;
 
+			//query format
+			let format = {language: 'sql', indent: ''};
+
+			var param = {
+				"emplyrSn"	: req.body.emplyrSn,
+				"groupSn"	: req.body.groupSn
+			}
+
+			// 사용자가 올린 모든 파일 삭제
+			let deleteGroupFile = mybatisMapper.getStatement('GroupDAO','deleteGroupFile', param, format);
+			// 그룹 인원수 카운트
+			let selecteGoupCnt = mybatisMapper.getStatement('GroupDAO','selecteGoupCnt', param, format);
+			// 마지막 사용자인 경우 그룹삭제
+			let updateGroupUseAt = mybatisMapper.getStatement('GroupDAO','updateGroupUseAt', param, format);
+			// 리더여부 조회
+			let selecteLeaderYn = mybatisMapper.getStatement('GroupDAO','selecteLeaderYn', param, format);
+			// 등록일자 순으로 다음 리더 조회
+			let selecteNextLeader = mybatisMapper.getStatement('GroupDAO','selecteNextLeader', param, format);
+			
+			//쿼리문 실행
+			conn.execute(deleteGroupFile, function(err,result){
+				if(err){
+					console.log("deleteGroupFile failed :", err);
+					res.json({"Status":"F"});
+					return;
+				}
+
+				conn.execute(selecteGoupCnt, function(err,result){
+					if(err){
+						console.log("selecteGoupCnt failed :", err);
+						res.json({"Status":"F"});
+						return;
+					}
+					
+					var cnt = result.rows[0][0];
+					
+					// 마지막 탈퇴자
+					if(cnt == 1){
+						// 마지막 사용자인 경우 그룹삭제
+						conn.execute(updateGroupUseAt, function(err,result){
+							if(err){
+								console.log("updateGroupUseAt failed :", err);
+								res.json({"Status":"F"});
+								return;
+							}
+
+							// 개별 그룹 테이블에서 내 일련번호 삭제하기
+							outGroup(res, req.body.emplyrSn, req.body.groupSn);						
+						});
+					} else {	// 다른 사용자가 더 남은 경우
+						// 리더여부 조회
+						conn.execute(selecteLeaderYn, function(err,result){
+							if(err){
+								console.log("selecteLeaderYn failed :", err);
+								res.json({"Status":"F"});
+								return;
+							}
+
+							var groupLeader = result.rows[0][0];
+							
+							if(groupLeader == 'N'){	//리더가 아닌경우
+								// 개별 그룹 테이블에서 내 일련번호 삭제하기
+								outGroup(res, req.body.emplyrSn, req.body.groupSn);
+
+							} else {	// 리더인경우
+								// 등록일자 순으로 다음 리더 조회
+								conn.execute(selecteNextLeader, function(err,result){
+									if(err){
+										console.log("selecteNextLeader failed :", err);
+										res.json({"Status":"F"});
+										return;
+									}
+									// 그룹 리더 수정
+									var nextParam = {
+										"emplyrSn"	: req.body.emplyrSn,
+										"groupSn"	: req.body.groupSn,
+										"nextLeaderSn"	: result.rows[0][0]
+									};
+
+									// 그룹 리더 수정
+									let updateGroupLeader = mybatisMapper.getStatement('GroupDAO','updateGroupLeader', nextParam, format);
+
+									conn.execute(updateGroupLeader, function(err,result){
+										if(err){
+											console.log("updateGroupLeader failed :", err);
+											res.json({"Status":"F"});
+											return;
+										}
+
+										// 개별 그룹 테이블에서 내 일련번호 삭제하기
+										outGroup(res, req.body.emplyrSn, req.body.groupSn);
+									});
+								});
+							}
+						});
+					}
+				
+				});
+				//conn.commit();
+			});
+		});
 	})
+
+	// 개별 그룹 테이블에서 내 일련번호 삭제하기
+	function outGroup(res, emplyrSn, groupSn){
+		//query format
+		let format = {language: 'sql', indent: ''};
+
+		var param = {
+					"emplyrSn"	: emplyrSn,
+					"groupSn"	: groupSn
+				};
+
+		// 모임 나가기 최종
+		let outGroup = mybatisMapper.getStatement('GroupDAO','outGroup', param, format);
+
+		conn.execute(outGroup, function(err,result){
+			if(err){
+				console.log("outGroup failed :", err);
+				res.json({"Status":"F"});
+				return;
+			}
+			
+			res.json({"Status":"S"});
+			conn.commit();
+		});
+	}
 
 	// 그룹명 수정, 그룹 대표사진 수정
 	app.post("/updateGroupSet", function(req, res){	
