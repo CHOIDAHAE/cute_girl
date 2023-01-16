@@ -208,7 +208,7 @@
 			AUTHOR_GROUP_SN	= #{groupSn}
 	</update>
 
-	<!-- 첨부파일 일련번호 찾아오기 -->
+	<!-- 그룹파일 일련번호 찾아오기 -->
 	<select id="selectFileSn">
 		/* GroupDAO.selectFileSn */
 		SELECT
@@ -216,8 +216,7 @@
 		FROM
 			TCM_GROUP_FILE
 		WHERE
-			EMPLYR_SN = #{emplyrSn}
-		AND AUTHOR_GROUP_SN = #{groupSn}
+			AUTHOR_GROUP_SN = #{groupSn}
 	</select>
 
 	<!-- 그룹 파일 등록 -->
