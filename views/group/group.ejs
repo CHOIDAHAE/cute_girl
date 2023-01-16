@@ -28,8 +28,7 @@
 					data : {"groupSn" : window.parent.$('#groupSn').val()},
                     success:function(res){
 						if(res.Status == "S"){
-                            console.log(res.result[0][0]);
-                            //fileList += '<img src="../uploadedFiles/' + res[i][1] + '" id="img_' + res[i][8] + '_' + res[i][10] + '_' + res[i][11] + '" class="img_item"/>\n';
+                            // 대표사진 보기
                             document.getElementById('preview').src = '../uploadedGroupFiles/'+res.result[0][0];
                             $(".groupNm").text(window.parent.$('#groupNm').val());
                             $(".emplyrNm").text(window.parent.$('#emplyrNm').val());
@@ -42,8 +41,6 @@
 						alert("대표 사진 불러오던 중 오류가 발생하였습니다.(ajax에러)");
 					}
 				})
-
-                
             }
 
             //설정 아이콘
