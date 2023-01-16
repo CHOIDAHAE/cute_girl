@@ -224,25 +224,40 @@
 		/* IndexDAO.insertGroupFile */
 		INSERT INTO TCM_GROUP_FILE
 		(
-			EMPLYR_SN
-			, AUTHOR_GROUP_SN
-			, FILE_SN
-			, MAIN_FILE_AT
-			, FRST_REGIST_DT
-			, FRST_REGISTER_SN
-			, LAST_UPDT_DT
-			, LAST_UPDUSR_SN
+			EMPLYR_SN,
+			AUTHOR_GROUP_SN,
+			FILE_SN,
+			MAIN_FILE_AT,
+			FILE_STRE_COURS_NM,	--파일저장경로명
+			ORGINL_FILE_NM,		--원본파일명
+			FRST_REGIST_DT,
+			FRST_REGISTER_SN,
+			LAST_UPDT_DT,
+			LAST_UPDUSR_SN
 		)
 		VALUES
 		(
-			#{emplyrSn}	
-			, #{gruopSn}
-			, #{fileSn}	
-			, #{mainFileAt}
-			, SYSDATE
-			, #{emplyrSn}
-			, SYSDATE
-			, #{emplyrSn}
+			#{emplyrSn},
+			#{groupSn},
+			#{fileSn},
+			#{mainFileAt},
+			#{filePath},
+			#{orgFileNm},
+			SYSDATE,
+			#{emplyrSn},
+			SYSDATE,
+			#{emplyrSn}
 		)
 	</insert>
+
+	<!-- 그룹 대표사진 조회 -->
+	<select id="selectTopPicture">
+		SELECT
+			ORGINL_FILE_NM
+		FROM
+			TCM_GROUP_FILE
+		WHERE
+			AUTHOR_GROUP_SN = #{groupSn}
+		AND MAIN_FILE_AT = 'Y'
+	</select>
 </mapper>

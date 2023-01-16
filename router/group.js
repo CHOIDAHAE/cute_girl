@@ -1,3 +1,5 @@
+var multer = require('multer');
+
 var crypto = require('crypto');
 
 var oracledb = require("oracledb");
@@ -10,7 +12,9 @@ var mybatisMapper = require('mybatis-mapper');
 // Mapper Load(xml이 있는 디렉토리 주소&파일위치)
 mybatisMapper.createMapper( ['./mapper/GroupDAO_SQL.xml']);
 
-var groupStorage = multer.diskStorage({
+const fs = require('fs');
+
+var storage = multer.diskStorage({
 	destination(req, file, cb){
 		cb(null, './public/uploadedGroupFiles/');
 	},
@@ -21,8 +25,7 @@ var groupStorage = multer.diskStorage({
 	},
 });
 
-var groupfileFilter = (req, file, cb) => {
-	console.log("groupfileFilter >>>> ");
+var fileFilter = (req, file, cb) => {
 	console.log(file);
 	var fileType = file.originalname.split(".")[1];
 
@@ -244,6 +247,7 @@ module.exports = function(app){
 					return;
 				}
 
+				//그룹 인원수 카운트
 				conn.execute(selecteGoupCnt, function(err,result){
 					if(err){
 						console.log("selecteGoupCnt failed :", err);
@@ -306,7 +310,7 @@ module.exports = function(app){
 											return;
 										}
 
-										// 개별 그룹 테이블에서 내 일련번호 삭제하기
+										// 개별 그룹 테이블(TCM_EMPLYRBY_GROUP_AUTHOR)에서 내 일련번호 삭제하기
 										outGroup(res, req.body.emplyrSn, req.body.groupSn);
 									});
 								});
@@ -320,7 +324,7 @@ module.exports = function(app){
 		});
 	})
 
-	// 개별 그룹 테이블에서 내 일련번호 삭제하기
+	// 개별 그룹 테이블(TCM_EMPLYRBY_GROUP_AUTHOR)에서 내 일련번호 삭제하기
 	function outGroup(res, emplyrSn, groupSn){
 		//query format
 		let format = {language: 'sql', indent: ''};
@@ -348,23 +352,35 @@ module.exports = function(app){
 	/******************그룹 파일 업로드******************/
 	// 그룹명 수정, 그룹 대표사진 수정
 	app.post("/updateGroupSet", upload.single('groupImg'), function(req, res){	
+		console.log(req.file);
+		console.log(req.body);
+		
+		/*
+		fs.readdir('../uploadedGroupFiles', (error) => {
+			// uploads 폴더 없으면 생성
+			if (error) {
+				fs.mkdirSync('/uploadedGroupFiles');
+			}
+		});
+		*/
+
 		if(req.fileValidationError != null){
 			res.json("exe");
 			return;
 		}
-		/*
+		
 		//그냥 파일명을 가져올 경우 한글이 깨지는 오류 수정
 		var fileNm = Buffer.from(req.file.originalname, 'latin1').toString('utf8');
 		var fileExt = req.file.originalname.split(".");
 
-		var FILE_STRE_COURS_NM = '/uploadedFiles';
-		var FILE_NM = fileNm;
+		var FILE_STRE_COURS_NM = '/uploadedGroupFiles';
+		//var FILE_NM = fileNm;
 		var ORGINL_FILE_NM = req.file.filename;
-		var FILE_EXTSN_NM = fileExt[fileExt.length - 1];
-		var FILE_MG = req.file.size;
+		//var FILE_EXTSN_NM = fileExt[fileExt.length - 1];
+		//var FILE_MG = req.file.size;
 		var emplyrSn = req.session.user.emplyrSn;
-		var ORGINL_FILE_EXTSN_NM = req.file.mimetype;
-		*/
+		//var ORGINL_FILE_EXTSN_NM = req.file.mimetype;
+		
 		oracledb.getConnection({
 			user:dbConfig.user,
 			password:dbConfig.password,
@@ -381,18 +397,8 @@ module.exports = function(app){
 			//query format
 			let format = {language: 'sql', indent: ''};
 
-			var param = {
-				"emplyrSn"	: req.body.emplyrSn,
-				"groupSn"	: req.body.groupSn,
-				"data"		: req.body.data
-			}
-
 			//fileSn 찾아오기
-			let selectFileSn = mybatisMapper.getStatement('GroupDAO','selectFileSn', {}, format);
-			//내 그룹 조회
-			let updateGroupNm = mybatisMapper.getStatement('GroupDAO','updateGroupNm', param, format);
-			// 리더여부 조회
-			let selecteLeaderYn = mybatisMapper.getStatement('GroupDAO','selecteLeaderYn', param, format);
+			let selectFileSn = mybatisMapper.getStatement('GroupDAO','selectFileSn', {"groupSn"	: req.body.groupSn}, format);
 
 			conn.execute(selectFileSn, function(err,result){
 				if(err){
@@ -401,36 +407,101 @@ module.exports = function(app){
 					return;
 				}
 
-				//쿼리문 실행
-				conn.execute(selecteLeaderYn, function(err,result){
+				var param = {
+					"emplyrSn"		: emplyrSn,
+					"fileSn"		: result.rows[0][0],
+					"mainFileAt"	: 'Y',
+					"groupSn"		: req.body.groupSn,
+					"data"			: req.body.data,
+					"orgFileNm"		: ORGINL_FILE_NM,
+					"filePath"		: FILE_STRE_COURS_NM
+				}
+
+				//파일 등록
+				query = mybatisMapper.getStatement('GroupDAO','insertGroupFile', param, format);
+				conn.execute(query, function(err,result){
 					if(err){
-						console.log("selecteLeaderYn failed :", err);
-						res.json({"Status":"F"});
-						return;
+						console.log(err);
+						res.json("F");
 					}
 					
-					console.log("leaderYn: "+result.rows[0][0]);
-					var leaderYn = result.rows[0][0];
-					if( leaderYn == "N" ){	//리더 아님
-						res.json({"Status":"L"});
-						return;
-					} else {
-						//쿼리문 실행
-						conn.execute(updateGroupNm, function(err,result){
+					// 제목 변경이 있는경우 업데이트
+					if(req.body.data != "" && req.body.data != null){
+						// 리더여부 조회
+						let selecteLeaderYn = mybatisMapper.getStatement('GroupDAO','selecteLeaderYn', param, format);
+						//내 그룹 업데이트
+						let updateGroupNm = mybatisMapper.getStatement('GroupDAO','updateGroupNm', param, format);
+						
+						// 제목수정
+						conn.execute(selecteLeaderYn, function(err,result){
 							if(err){
-								console.log("updateGroupNm failed :", err);
+								console.log("selecteLeaderYn failed :", err);
 								res.json({"Status":"F"});
 								return;
 							}
-							res.json({"Status":"S"});
-
-							// 대표사진 추가 쿼리 실행 시점 
 							
-							conn.commit();
+							var leaderYn = result.rows[0][0];
+							if( leaderYn == "N" ){	//리더 아님
+								res.json({"Status":"L"});
+								return;
+							} else {
+								//쿼리문 실행
+								conn.execute(updateGroupNm, function(err,result){
+									if(err){
+										console.log("updateGroupNm failed :", err);
+										res.json({"Status":"F"});
+										return;
+									}
+									res.json({"Status":"S"});
+									
+									conn.commit();
+								});
+							}
 						});
+					} else {
+						res.json({"Status":"S"});
+						
+						conn.commit();
 					}
+					
 				});
 			});
+		});
+	})
+
+	// 대표사진 조회
+	app.post("/selectedGroupInfo", function(req, res){
+		console.log(req.body);	
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(selectedGroupInfo)",err);
+			} else {
+				//console.log("Oracle Connection success(selectedGroupInfo)");
+			}
+			conn = con;
+
+			//query format
+			let format = {language: 'sql', indent: ''};
+
+			//getStatement(namespace명, queryId, parameter, format);
+			let selectTopPicture = mybatisMapper.getStatement('GroupDAO','selectTopPicture', { "groupSn" : req.body.groupSn}, format);
+
+			//쿼리문 실행
+			conn.execute(selectTopPicture, function(err,result){
+				if(err){
+					console.log("selectedGroupInfo failed :", err);
+					res.json({"Status":"F"});
+					return;
+				}
+				
+				res.json({"Status":"S", "result" : result.rows});
+				doRelease(conn);					
+			});  
 		});
 	})
 

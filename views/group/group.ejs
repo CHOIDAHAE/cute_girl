@@ -20,9 +20,30 @@
 
             // 해당 그룹의 정보 세팅
             function selectedGroupInfo(){
-                $(".groupNm").text(window.parent.$('#groupNm').val());
-                $(".emplyrNm").text(window.parent.$('#emplyrNm').val());
-                $(".emplyrId").text(window.parent.$('#emplyrId').val());
+                // 대표사진 불러오기
+				$.ajax({
+					url : "/selectedGroupInfo",
+					type : "POST",
+					dataType : "JSON", //"JSON"
+					data : {"groupSn" : window.parent.$('#groupSn').val()},
+                    success:function(res){
+						if(res.Status == "S"){
+                            console.log(res.result[0][0]);
+                            //fileList += '<img src="../uploadedFiles/' + res[i][1] + '" id="img_' + res[i][8] + '_' + res[i][10] + '_' + res[i][11] + '" class="img_item"/>\n';
+                            document.getElementById('preview').src = '../uploadedGroupFiles/'+res.result[0][0];
+                            $(".groupNm").text(window.parent.$('#groupNm').val());
+                            $(".emplyrNm").text(window.parent.$('#emplyrNm').val());
+                            $(".emplyrId").text(window.parent.$('#emplyrId').val());
+						} else if(res.Status == "F"){
+							alert("대표 사진 불러오던 중 오류가 발생하였습니다.");
+						}
+					},
+					error:function(e){
+						alert("대표 사진 불러오던 중 오류가 발생하였습니다.(ajax에러)");
+					}
+				})
+
+                
             }
 
             //설정 아이콘
@@ -101,18 +122,29 @@
                 var emplyrSn = window.parent.$('#emplyrSn').val();
                 var groupSn = window.parent.$('#groupSn').val();
                 var data = document.getElementById("textarea").value;
-
+                
+                /*
                 if (data.length == 0){
                     alert('모임명을 입력하지 않았거나 수정하지 않았습니다.');
                     return;
-                }
+                }*/
+
+                var formData = new FormData();
+				formData.append('groupImg', $('#fileUpload')[0].files[0]);
+				formData.append('groupSn', groupSn);
+                formData.append('data', data);
 
                 $.ajax({
 					url : "/updateGroupSet",
 					type : "POST",
+                    processData : false,
+					contentType : false,
+					async : false,
+					enctype: 'multipart/form-data',
 					dataType : "JSON", //"JSON"
-					data : {"emplyrSn" : emplyrSn, "groupSn" : groupSn, "data" : data},
+                    data : formData,
 					success:function(result){
+                        console.log(result);
                         if(result.Status == "L"){
                             alert("그룹 리더만 수정이 가능합니다.");
                         } else if(result.Status == "S"){
@@ -135,6 +167,20 @@
             function chkEnter(){
                 if(event.keyCode == 13){
                     event.returnValue = false;
+                }
+            }
+            
+            // 그룹 대표 사진 업로드 전 미리보기
+            function readURL(input) {
+                
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById('preview').src = e.target.result;
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                } else {
+                    document.getElementById('preview').src = "";
                 }
             }
 		</script>
@@ -197,12 +243,12 @@
                                                 <div class="toge_add_group">
                                                     <div class="toge_add_thum">
                                                         <span class="add_pho add_pho_v2">
-                                                            <img src="https://nphotogroup-phinf.pstatic.net/20221123_287/4555084_1669186348727S1Vmq_PNG/group_cover_a.png?type=ff120_120" height="120">
+                                                            <img id="preview" src="https://nphotogroup-phinf.pstatic.net/20221123_287/4555084_1669186348727S1Vmq_PNG/group_cover_a.png?type=ff120_120" height="120" width="120">
                                                             <span class="add_photo_ic">사진</span>
-                                                            <label for="file-input-view357">
+                                                            <label for="fileUpload">
                                                                 <span class="blind">사진 선택</span>
                                                             </label>
-                                                            <input type="file" id="file-input-view357">
+                                                            <input type="file" id="fileUpload" name="groupImg" onchange="readURL(this);">
                                                         </span>
                                                     </div>
                                                     <div class="toge_add_edit">
