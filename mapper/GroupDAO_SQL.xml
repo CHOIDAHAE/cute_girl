@@ -207,4 +207,43 @@
 		WHERE
 			AUTHOR_GROUP_SN	= #{groupSn}
 	</update>
+
+	<!-- 첨부파일 일련번호 찾아오기 -->
+	<select id="selectFileSn">
+		/* GroupDAO.selectFileSn */
+		SELECT
+			TO_NUMBER(NVL(MAX(FILE_SN), TO_CHAR(SYSDATE, 'YYYYMMDD') || '00000')) + 1 FILE_SN
+		FROM
+			TCM_GROUP_FILE
+		WHERE
+			EMPLYR_SN = #{emplyrSn}
+		AND AUTHOR_GROUP_SN = #{groupSn}
+	</select>
+
+	<!-- 그룹 파일 등록 -->
+	<insert id="insertGroupFile">
+		/* IndexDAO.insertGroupFile */
+		INSERT INTO TCM_GROUP_FILE
+		(
+			EMPLYR_SN
+			, AUTHOR_GROUP_SN
+			, FILE_SN
+			, MAIN_FILE_AT
+			, FRST_REGIST_DT
+			, FRST_REGISTER_SN
+			, LAST_UPDT_DT
+			, LAST_UPDUSR_SN
+		)
+		VALUES
+		(
+			#{emplyrSn}	
+			, #{gruopSn}
+			, #{fileSn}	
+			, #{mainFileAt}
+			, SYSDATE
+			, #{emplyrSn}
+			, SYSDATE
+			, #{emplyrSn}
+		)
+	</insert>
 </mapper>

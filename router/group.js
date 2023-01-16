@@ -345,8 +345,26 @@ module.exports = function(app){
 		});
 	}
 
+	/******************그룹 파일 업로드******************/
 	// 그룹명 수정, 그룹 대표사진 수정
-	app.post("/updateGroupSet", function(req, res){	
+	app.post("/updateGroupSet", upload.single('groupImg'), function(req, res){	
+		if(req.fileValidationError != null){
+			res.json("exe");
+			return;
+		}
+		/*
+		//그냥 파일명을 가져올 경우 한글이 깨지는 오류 수정
+		var fileNm = Buffer.from(req.file.originalname, 'latin1').toString('utf8');
+		var fileExt = req.file.originalname.split(".");
+
+		var FILE_STRE_COURS_NM = '/uploadedFiles';
+		var FILE_NM = fileNm;
+		var ORGINL_FILE_NM = req.file.filename;
+		var FILE_EXTSN_NM = fileExt[fileExt.length - 1];
+		var FILE_MG = req.file.size;
+		var emplyrSn = req.session.user.emplyrSn;
+		var ORGINL_FILE_EXTSN_NM = req.file.mimetype;
+		*/
 		oracledb.getConnection({
 			user:dbConfig.user,
 			password:dbConfig.password,
@@ -369,45 +387,52 @@ module.exports = function(app){
 				"data"		: req.body.data
 			}
 
+			//fileSn 찾아오기
+			let selectFileSn = mybatisMapper.getStatement('GroupDAO','selectFileSn', {}, format);
 			//내 그룹 조회
 			let updateGroupNm = mybatisMapper.getStatement('GroupDAO','updateGroupNm', param, format);
 			// 리더여부 조회
 			let selecteLeaderYn = mybatisMapper.getStatement('GroupDAO','selecteLeaderYn', param, format);
 
-			//쿼리문 실행
-			conn.execute(selecteLeaderYn, function(err,result){
+			conn.execute(selectFileSn, function(err,result){
 				if(err){
-					console.log("selecteLeaderYn failed :", err);
+					console.log("selectFileSn failed :", err);
 					res.json({"Status":"F"});
 					return;
 				}
-				
-				console.log("leaderYn: "+result.rows[0][0]);
-				var leaderYn = result.rows[0][0];
-				if( leaderYn == "N" ){	//리더 아님
-					res.json({"Status":"L"});
-					return;
-				} else {
-					//쿼리문 실행
-					conn.execute(updateGroupNm, function(err,result){
-						if(err){
-							console.log("updateGroupNm failed :", err);
-							res.json({"Status":"F"});
-							return;
-						}
-						res.json({"Status":"S"});
 
-						// 대표사진 추가 쿼리 실행 시점 
-						
-						conn.commit();
-					});
-				}
+				//쿼리문 실행
+				conn.execute(selecteLeaderYn, function(err,result){
+					if(err){
+						console.log("selecteLeaderYn failed :", err);
+						res.json({"Status":"F"});
+						return;
+					}
+					
+					console.log("leaderYn: "+result.rows[0][0]);
+					var leaderYn = result.rows[0][0];
+					if( leaderYn == "N" ){	//리더 아님
+						res.json({"Status":"L"});
+						return;
+					} else {
+						//쿼리문 실행
+						conn.execute(updateGroupNm, function(err,result){
+							if(err){
+								console.log("updateGroupNm failed :", err);
+								res.json({"Status":"F"});
+								return;
+							}
+							res.json({"Status":"S"});
+
+							// 대표사진 추가 쿼리 실행 시점 
+							
+							conn.commit();
+						});
+					}
+				});
 			});
 		});
 	})
-
-	/******************그룹 파일 업로드******************/
-	
 
 	function doRelease(conn){
 		conn.close(function(err){
