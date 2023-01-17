@@ -260,4 +260,19 @@
 			AUTHOR_GROUP_SN = #{groupSn}
 		AND MAIN_FILE_AT = 'Y'
 	</select>
+
+	<!-- 기존 그룹사진 대표여부 수정 -->
+	<update id="updateTopPicture">
+		UPDATE
+			TCM_GROUP_FILE
+		SET
+			MAIN_FILE_AT		= 'N'
+			FRST_REGISTER_SN	= #{emplyrSn},
+			FRST_REGIST_DT		= SYSDATE
+			LAST_UPDUSR_SN		= #{emplyrSn},
+			LAST_UPDT_DT		= SYSDATE
+		WHERE
+			MAIN_FILE_AT = 'Y'
+		AND AUTHOR_GROUP_SN = #{groupSn}
+	</update>
 </mapper>
