@@ -16,7 +16,21 @@
 
                 // 해당 그룹의 정보 세팅
                 selectedGroupInfo();
+
+				// 스토리/사진 탭
+				changePart('story');
             });
+
+            // 스토리/사진 탭
+			function changePart(part){
+				if(part == "story"){
+					$('.story_part').show();
+					$('.picture_part').hide();
+				} else if (part == "picture"){
+					$('.story_part').hide();
+					$('.picture_part').show();
+				}
+			}
 
             // 해당 그룹의 정보 세팅
             function selectedGroupInfo(){
@@ -223,8 +237,9 @@
                             <div class="task_together">
                                 <div class="together_menu">
                                     <ul>
-                                        <li class="menu_story selected"><a>이야기</a></li>
-                                        <li class="menu_photo"><a>사진/동영상</a></li>
+                                        <!--<li class="menu_story selected"><a>이야기</a></li>-->
+                                        <li class="menu_story"><a href="#" onclick="changePart('story')">이야기</a></li>
+                                        <li class="menu_photo"><a href="#" onclick="changePart('picture')">사진/동영상</a></li>
                                     </ul>
                                 </div>
                                 <div class="together_my">
@@ -323,7 +338,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="content_box _together_scroll">
+                    <!-- 이야기 -->
+                    <div id="story_part" class="content_box _together_scroll">
                         <div class="lst_pt">
                             <div class="together_wrap">
                                 <div class="together_area" style="opacity: 1;">
@@ -377,6 +393,24 @@
                             <div class="reload_area"></div>
                         </div>
                     </div>
+                    <!-- 사진 -->
+					<div id="picture_part" class="content_box _together_scroll">
+						<div class="lst_pt">
+							<div class="together_photo">
+								<ul class="toge_photo_list">
+									<li style="width: auto; height: auto;">
+										<div class="together_none">
+											<span class="ic_p"></span>
+											<p class="text">
+											<span class="point">test</span>에서<br> 함께 볼 사진을 추가해 주세요!</p>
+											<a class="btn_add_more">사진 추가하기</a>
+										</div>
+									</li>
+								</ul>
+								<div class="reload_area"></div>
+							</div>
+						</div>
+					</div>
                     <div class="together_right">
                         <div class="invitation_side_wrap">
                             <div class="invitation_side fixed">
