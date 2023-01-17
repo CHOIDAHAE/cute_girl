@@ -16,7 +16,8 @@
 						WHEN ROUND((sysdate - TO_DATE(LAST_CONECT_TRY_DT, 'YYYYMMDDHH24MISS')) * 24 * 60, 0) <![CDATA[<]]> 10 THEN 'Y'
 					ELSE 'N'
 					END
-				) AS LOCK_GBN
+				) AS LOCK_GBN,
+				EMPLYR_MBTLNUM
 		FROM	TCM_EMPLYR
 		WHERE	EMPLYR_ID = #{id}
 	</select>
@@ -106,9 +107,9 @@
 			TCM_EMPLYR
 		SET
 			EMPLYR_PASSWORD		= #{pw},
-			SALT				= #{salt},
-			LAST_UPDUSR_SN		= #{id},
-			LAST_UPDT_DT		= SYSDATE
+			SALT				= #{salt}
+			<!--,LAST_UPDUSR_SN		= #{id},
+			LAST_UPDT_DT		= SYSDATE-->
 		WHERE
 			EMPLYR_ID = #{id}
 	</update>
