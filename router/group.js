@@ -47,6 +47,11 @@ module.exports = function(app){
 	app.get('/group', function(req, res, next){
         res.render('./group/group');
     })
+	
+	// 그룹 업로드 팝업(iframe)
+	app.get('/groupUpload', function(req, res, next){
+		res.render('./group/groupUpload');
+	})
 
   	// 새 모임 추가하기
 	app.post("/insertNewGroup", function(req, res){		
