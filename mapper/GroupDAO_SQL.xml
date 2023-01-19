@@ -291,4 +291,20 @@
 		AND TA.FRST_REGISTER_SN = #{emplyrSn}
 		AND TA.USE_AT = 'Y'
 	</select>
+
+	<!-- 그룹 업로드 시 해당 파일의 상세조회 -->
+	<select id="selectPictureList">
+		SELECT
+			EMPLYR_SN,
+			AUTHOR_GROUP_SN,
+			ATCHMNFL_SN,
+			FILE_STRE_COURS_NM,
+			ORGINL_FILE_NM
+		FROM
+			TCM_ATCHMNFL_DETAIL
+		WHERE
+			ATCHMNFL_SN  = #{fileSn}
+		AND FRST_REGISTER_SN = #{emplyrSn}
+		AND MAIN_FILE_AT = 'N'
+	</select>
 </mapper>

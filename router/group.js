@@ -11,6 +11,7 @@ var mybatisMapper = require('mybatis-mapper');
 
 // Mapper Load(xml이 있는 디렉토리 주소&파일위치)
 mybatisMapper.createMapper( ['./mapper/GroupDAO_SQL.xml']);
+mybatisMapper.createMapper( ['./mapper/IndexDAO_SQL.xml']);
 
 const fs = require('fs');
 
@@ -581,21 +582,22 @@ module.exports = function(app){
 			let format = {language: 'sql', indent: ''};
 			
 			var param = {
-				"emplyrSn" : req.body.emplyrSn
+				"emplyrSn"	: req.body.emplyrSn,
+				"fileSn"	: req.body.fileSn
 			};
 
-			//쿼리
-			let groupUpload = mybatisMapper.getStatement('GroupDAO','groupUpload', param, format);
+			// 파일 상세정보 조회 (한건당 상세조회 해서 그걸 group_file 테이블에 insert)
+			let selectFileDtlData = mybatisMapper.getStatement('IndexDAO','selectFileDtlData', param, format);
 
 			//쿼리문 실행
-			conn.execute(groupUpload, function(err,result){
+			conn.execute(selectFileDtlData, function(err,result){
 				if(err){
-					console.log("groupUpload failed :", err);
+					console.log("selectFileDtlData failed :", err);
 					res.json({"Status":"F"});
 					return;
 				}
 				
-				res.json({"Status":"S", "result" : result.rows});
+				res.json({"Status":"S"});
 				doRelease(conn);					
 			});  
 		});
