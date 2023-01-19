@@ -203,6 +203,15 @@ img, fieldset {
     font-weight: bold;
 }
 
+.menu_story, .menu_photo {
+	cursor: pointer;
+    width: 105px;
+    height: 64px;
+    line-height: 64px;
+    color: #737373;
+    font-weight: bold;
+}
+
 a, .rightmenu_layer {
     cursor: pointer;
 }
@@ -709,6 +718,62 @@ a.more_invitation .more_invitation_bg{
     background-repeat: no-repeat;
 }
 
+.together_photo {
+    padding: 30px;
+}
+
+.toge_photo_list {
+    position: relative;
+}
+
+.together_photo .toge_photo_list li {
+    width: 240px;
+    height: 200px;
+    overflow: hidden;
+}
+
+.together_none {
+    width: 300px;
+    margin: 0 auto;
+    padding: 192px 0 0 0;
+    text-align: center;
+}
+
+.together_none .ic_p {
+    display: block;
+    width: 102px;
+    height: 78px;
+    margin-left: 111px;
+    background-position: 0 -500px;
+}
+
+.together_none .text {
+    padding: 24px 0 18px 0;
+    color: #444;
+    font-size: 17px;
+    line-height: 26px;
+    letter-spacing: -1px;
+}
+
+.together_none .text .point {
+    color: #2188e5;
+}
+
+.together_none .btn_add_more {
+    display: inline-block;
+    position: relative;
+    height: 32px;
+    padding: 0 26px 0 17px;
+    border: 1px solid #d3d3d3;
+    border-radius: 1px;
+    background-color: #fff;
+    color: #555;
+    text-decoration: none;
+    line-height: 31px;
+    font-size: 13px;
+    letter-spacing: -1px;
+}
+
 /*************모달창(설정)***************/
 .my_layer_set {
     width: 350px;
@@ -1186,3 +1251,15 @@ button .tx {
     z-index: 50;
 }
 
+/*************파일업로드(iframe)*************/
+.frameBox {
+    position: fixed;
+    left: 10px;
+    top: 100px;
+    height: 600px;
+    width: 800px;
+    z-index: 10000;
+    box-shadow: rgb(0 0 0 / 20%) 0px 2px 6px;
+    border: 1px solid rgb(102, 102, 102);
+    background-color: beige;
+}

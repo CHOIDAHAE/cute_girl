@@ -34,7 +34,8 @@ body{
     max-width: 100%;
     color:white;
     height:55px;
-    position:relative;
+    /*position:relative;*/
+    position: sticky;
 }
 
 .top_title {

@@ -7,6 +7,12 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" />
 		<script>
             $(document).ready(function(){
+                var emplyrSn = window.parent.$('#emplyrSn').val();
+                var groupSn = window.parent.$('#groupSn').val();
+                
+                document.getElementById("emplyrSn").value = emplyrSn;
+                document.getElementById("groupSn").value = groupSn;
+
                 // 모달 제어 (깜빡이는거 나중에 해결 예정)
                 $('.my_layer').hide(); // 설정
                 $('.out_modal_wrap').hide(); // 모임나가기
@@ -16,8 +22,22 @@
 
                 // 해당 그룹의 정보 세팅
                 selectedGroupInfo();
-            });
 
+				// 스토리/사진 탭
+				changePart('story');
+            });
+            
+            // 스토리/사진 탭
+			function changePart(part){
+				if(part == "story"){
+					$('#story_part').show();
+					$('#picture_part').hide();
+				} else if (part == "picture"){
+					$('#story_part').hide();
+					$('#picture_part').show();
+				}
+			}
+            
             // 해당 그룹의 정보 세팅
             function selectedGroupInfo(){
                 // 대표사진 불러오기
@@ -129,12 +149,6 @@
                 var emplyrSn = window.parent.$('#emplyrSn').val();
                 var groupSn = window.parent.$('#groupSn').val();
                 var data = document.getElementById("textarea").value;
-                
-                /*
-                if (data.length == 0){
-                    alert('모임명을 입력하지 않았거나 수정하지 않았습니다.');
-                    return;
-                }*/
 
                 var formData = new FormData();
 				formData.append('groupImg', $('#fileUpload')[0].files[0]);
@@ -190,9 +204,23 @@
                     document.getElementById('preview').src = "";
                 }
             }
+
+            // 파일 업로드 시 뜨는 팝업
+            function uploadPopup(){
+                // iframe(그룹 파일 업로드 팝업)
+                document.getElementById('iframe').setAttribute('style', 'visibility:visible;');
+            };
+            
+            // 업로드 팝업 닫기
+            function closeBtn(){
+                // iframe(그룹 파일 업로드 팝업)
+                document.getElementById('iframe').setAttribute('style', 'visibility:hidden;');
+            };
 		</script>
 	</head>
 	<body>
+        <input type="hidden" id="emplyrSn" name="emplyrSn" value=""/>
+        <input type="hidden" id="groupSn" name="groupSn" value=""/>
         <div>
             <input multiple="" type="file" autocomplete="off" tabindex="-1" style="display: none;">
             <div id="content" style="left: 200px;">
@@ -223,8 +251,9 @@
                             <div class="task_together">
                                 <div class="together_menu">
                                     <ul>
-                                        <li class="menu_story selected"><a>이야기</a></li>
-                                        <li class="menu_photo"><a>사진/동영상</a></li>
+                                        <!--<li class="menu_story selected"><a>이야기</a></li>-->
+                                        <li class="menu_story" onclick="changePart('story')">이야기</li>
+                                        <li class="menu_photo" onclick="changePart('picture')">사진/동영상</li>
                                     </ul>
                                 </div>
                                 <div class="together_my">
@@ -240,7 +269,7 @@
                                         <a class="my_task set" title="설정" onclick="setting()">
                                             <i class="fa-solid fa-gear"></i>
                                         </a>
-                                        <div class="my_layer my_layer_set" style="display: block;">
+                                        <div class="my_layer my_layer_set" style="display: none;">
                                             <h4 class="my_tit">
                                                 <span class="tit_txt">
                                                     <span class="txt">모임설정</span>
@@ -250,7 +279,7 @@
                                                 <div class="toge_add_group">
                                                     <div class="toge_add_thum">
                                                         <span class="add_pho add_pho_v2">
-                                                            <img id="preview" src="https://nphotogroup-phinf.pstatic.net/20221123_287/4555084_1669186348727S1Vmq_PNG/group_cover_a.png?type=ff120_120" height="120" width="120">
+                                                            <img id="preview" src="../uploadedGroupFiles/1673919149954_ë³ìì 3276 íë°±.jpg" height="120" width="120">
                                                             <span class="add_photo_ic">사진</span>
                                                             <label for="fileUpload">
                                                                 <span class="blind">사진 선택</span>
@@ -261,7 +290,7 @@
                                                     <div class="toge_add_edit">
                                                         <div class="edit_box" onclick="edit_box()">
                                                             <span class="title_text" id="title_text"><span class="groupNm"></span><em class="ic_edit"></em></span>
-                                                            <span class="input_title" id="input_title">
+                                                            <span class="input_title" id="input_title" style="display: none;">
                                                                 <textarea maxlength="15" id="textarea" onkeypress="chkEnter()"></textarea>
                                                                 <span class="line"></span>
                                                             </span>
@@ -275,7 +304,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="out_modal_wrap" style="display: block; user-select: none; line-height: 716px; transition: line-height 100ms ease-out 0s;">
+                                        <div class="out_modal_wrap" style="display: none; user-select: none; line-height: 716px; transition: line-height 100ms ease-out 0s;">
                                             <div class="dh_layer" style="min-width: 300px;">
                                                 <div class="type_c">
                                                     <div class="wrap_pop">
@@ -286,7 +315,7 @@
                                                                     <span class="bu_q">
                                                                     </span>
                                                                     <h1>
-                                                                        <span class="ellipsis" title="test"><span class="groupNm"></span></span> 모임에서 정말 나가시겠습니까?
+                                                                        <span class="ellipsis"><span class="groupNm"></span></span> 모임에서 정말 나가시겠습니까?
                                                                     </h1>
                                                                     <div class="desc3">
                                                                         <span class="emplyrNm"></span>
@@ -323,7 +352,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="content_box _together_scroll">
+                    <!-- 이야기 -->
+                    <div id="story_part" class="content_box _together_scroll">
                         <div class="lst_pt">
                             <div class="together_wrap">
                                 <div class="together_area" style="opacity: 1;">
@@ -332,15 +362,14 @@
                                             <div class="together_section writing">
                                                 <div class="toge_story_list">
                                                     <div class="user_thum">
-                                                        <img id="smallPicture" width="55" height="55">
+                                                        <img id="smallPicture" width="55" height="55" src="../uploadedGroupFiles/1673919149954_ë³ìì 3276 íë°±.jpg">
                                                     </div>
                                                     <div class="together_writing">
                                                         <div class="write_box">
                                                             <div class="textarea_input">
                                                                 <label for="write_area">글입력</label>
                                                                 <div class="textarea">
-                                                                <textarea placeholder="멤버와 함께 나눌 이야기를 올려주세요!" id="write_area" rows="1" style="max-height: 144px; overflow-x: hidden; overflow-wrap: break-word; height: 18px;">
-                                                                </textarea>
+                                                                <textarea placeholder="멤버와 함께 나눌 이야기를 올려주세요!" id="write_area" rows="1" style="max-height: 144px; overflow-x: hidden; overflow-wrap: break-word; height: 18px;">                                                                </textarea>
                                                             </div>
                                                         <div class="">
                                                     </div>
@@ -365,7 +394,7 @@
                                             <p><img src="https://ssl.pstatic.net/static/pwe/cloud/pc/group_welcome.png" height="145" alt=""></p>
                                             <p class="date">2022.11.23</p>
                                             <h3 class="title">
-                                                <strong class="point_3675c7"><span class="emplyrNm"></strong>님이&nbsp;
+                                                <strong class="point_3675c7"><span class="emplyrNm"></span></strong>님이&nbsp;
                                                 <strong><span class="groupNm"></span></strong> 모임을 시작합니다.
                                             </h3>
                                             <p class="text">MYDRIVE에 저장되어 있는 우리 아기 사진, 가족 여행 사진,<br>멋진 야경 사진 등 일상과 추억을 가족, 친구와 함께 나눠보세요!<br>멤버는 최대 200명까지 초대할 수 있습니다.</p>
@@ -381,29 +410,29 @@
                         <div class="invitation_side_wrap">
                             <div class="invitation_side fixed">
                                 <div class="invitation_box">
-                                    <h3 class="invitation_tit"><strong>'<em><span class="groupNm"></span></em>'&nbsp;</strong>멤버와 이 사진을 함께 보세요.</h3>
+                                    <h3 class="invitation_tit"><strong>'<em><span class="groupNm">TEST</span></em>'&nbsp;</strong>멤버와 이 사진을 함께 보세요.</h3>
                                     <div>
                                         <div>
                                             <h4><a href="#/photo/all">최근 올린 사진 (5)</a></h4>
                                             <a class="more_invitation" href="#/photo/all">
-                                            <ul class="invitation_photo layout5">
-                                                <li class="item grid0">
-                                                    <img src="https://thumb1.photo.mybox.naver.com/3472495530733629005?type=ff52_43&amp;nocache=5236120301">
-                                                </li>
-                                                <li class="item grid1">
-                                                    <img src="https://thumb1.photo.mybox.naver.com/3472495530733427532?type=ff52_43&amp;nocache=4636120301">
-                                                </li>
-                                                <li class="item grid2">
-                                                    <img src="https://thumb1.photo.mybox.naver.com/3472495530724238924?type=ff52_43&amp;nocache=4636120301">
-                                                </li>
-                                                <li class="item grid3">
-                                                    <img src="https://thumb1.photo.mybox.naver.com/3472495530717829453?type=ff52_43&amp;nocache=4036120301">
-                                                </li>
-                                                <li class="item grid4">
-                                                    <img src="https://thumb1.photo.mybox.naver.com/3472495530717653836?type=ff104_87&amp;nocache=3836120301">
-                                                </li>
-                                            </ul>
-                                            <span class="more_invitation_bg">더보기</span>
+												<ul class="invitation_photo layout5">
+													<li class="item grid0">
+														<img src="https://thumb1.photo.mybox.naver.com/3472495530733629005?type=ff52_43&amp;nocache=5236120301">
+													</li>
+													<li class="item grid1">
+														<img src="https://thumb1.photo.mybox.naver.com/3472495530733427532?type=ff52_43&amp;nocache=4636120301">
+													</li>
+													<li class="item grid2">
+														<img src="https://thumb1.photo.mybox.naver.com/3472495530724238924?type=ff52_43&amp;nocache=4636120301">
+													</li>
+													<li class="item grid3">
+														<img src="https://thumb1.photo.mybox.naver.com/3472495530717829453?type=ff52_43&amp;nocache=4036120301">
+													</li>
+													<li class="item grid4">
+														<img src="https://thumb1.photo.mybox.naver.com/3472495530717653836?type=ff104_87&amp;nocache=3836120301">
+													</li>
+												</ul>
+												<span class="more_invitation_bg">더보기</span>
                                             </a>
                                             <a class="invi_btn"><span class="i_m"></span>함께보기</a>
                                         </div>
@@ -415,5 +444,31 @@
                 </div>
             </div>
         </div>
-	</body>
+	</div>
+    <!-- 사진 -->
+    <div id="picture_part" class="content_box _together_scroll">
+        <div class="lst_pt">
+            <div class="together_photo">
+                <ul class="toge_photo_list">
+                    <li style="width: auto; height: auto;">
+                        <div class="together_none">
+                            <span class="ic_p"></span>
+                            <p class="text">
+                            <span class="point"><span class="groupNm"></span></span>에서<br> 함께 볼 사진을 추가해 주세요!</p>
+                            <a class="btn_add_more" onclick="uploadPopup();">사진 추가하기</a>
+                            
+                            <p style="text-align:center;">
+                                <iframe id="iframe" class="frameBox" src="/groupUpload" id="groupUpload" scrolling="yes" width="100%" height="100%" frameborder="0" style='visibility : hidden;'></iframe>
+                            </p>
+                        </div>
+                    </li>
+                </ul>
+                <div class="reload_area"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</body>
 </html> 

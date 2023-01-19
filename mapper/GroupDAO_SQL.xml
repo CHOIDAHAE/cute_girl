@@ -275,4 +275,19 @@
 			MAIN_FILE_AT = 'Y'
 		AND AUTHOR_GROUP_SN = #{groupSn}
 	</update>
+
+	<!-- 그룹 업로드용 모든 사진 조회 -->
+	<select id="selectPictureList">
+		SELECT 
+			TAD.FILE_STRE_COURS_NM,
+			TAD.ORGINL_FILE_NM,
+			TAD.FILE_NM
+		FROM
+			TCM_ATCHMNFL TA,
+			TCM_ATCHMNFL_DETAIL TAD
+		WHERE
+			TA.ATCHMNFL_SN = TAD.ATCHMNFL_SN
+		AND TA.FRST_REGISTER_SN = #{emplyrSn}
+		AND TA.USE_AT = 'Y'
+	</select>
 </mapper>
