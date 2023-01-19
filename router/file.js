@@ -10,6 +10,8 @@ var mybatisMapper = require('mybatis-mapper');
 const { compact } = require('underscore');
 const { Callbacks } = require('jquery');
 
+const fs = require('fs');
+
 // Mapper Load(xml이 있는 디렉토리 주소&파일위치)
 mybatisMapper.createMapper( ['./mapper/UserDAO_SQL.xml']);
 
@@ -20,7 +22,8 @@ var storage = multer.diskStorage({
 
     //파일 이름 지정 (저장시 파일명이 깨지는 경우가 있는데 다시 불러올 때 DB에 저장해둔 오리지널 파일명 가져오기)
     filename(req, file, cb){
-        cb(null, `${Date.now()}_${file.originalname}`);
+		var orgfileNm = Buffer.from(file.originalname, 'latin1').toString('utf8')
+        cb(null, `${Date.now()}_${orgfileNm}`);
     },
 });
 
@@ -55,7 +58,6 @@ module.exports = function(app){
 		console.log("uploadFiles");
 		
 		if(req.fileValidationError != null){
-			console.log("exe!!");
 			res.json("exe");
 			return;
 		}
@@ -111,33 +113,22 @@ module.exports = function(app){
 					}
 
 					//파일 등록
-					query = mybatisMapper.getStatement('IndexDAO','insertAtchFile', param, format);
+					query = mybatisMapper.getStatement('IndexDAO','insertAtchFileDtl', param, format);
 					conn.execute(query, function(err,result){
-						console.log("IndexDAO.insertAtchFile");
+						console.log("IndexDAO.insertAtchFileDtl");
 						console.log(query);
+
 						if(err){
-							console.log(err);
+							console.log("fileDtl Insert failed "+err);
 							res.json("F");
 						}
-
-						query = mybatisMapper.getStatement('IndexDAO','insertAtchFileDtl', param, format);
-						conn.execute(query, function(err,result){
-							console.log("IndexDAO.insertAtchFileDtl");
-							console.log(query);
-
-							if(err){
-								console.log("fileDtl Insert failed "+err);
-								res.json("F");
-							}
-							conn.commit();
-						});
+						conn.commit();
 					});
 				}
 				//doRelease(conn);
 			});
 		});
 
-		console.log(req.session.user.emplyrSn);
 		res.json({"emplyrSn":req.session.user.emplyrSn});
 	});
 
@@ -160,6 +151,7 @@ module.exports = function(app){
 				emplyrSn : req.body.emplyrSn
 				, useAt : req.body.useAt
 				, fileType : req.body.fileType
+				, orderBy : req.body.orderBy
 			}
 
 			//query format
@@ -177,8 +169,6 @@ module.exports = function(app){
 					return;
 				}
 
-				console.log(result);
-				
 				res.send(result.rows);
 				doRelease(conn);					
 			});  
@@ -202,7 +192,6 @@ module.exports = function(app){
 
 			var param = {
 				AtchfileSn : req.body.AtchfileSn
-				, fileSn : req.body.fileSn
 			}
 
 			//query format
@@ -229,7 +218,6 @@ module.exports = function(app){
 	//파일 휴지통으로 보내기 / 복원
 	app.post('/updateFileUseAt', upload.single('attachment'), function(req, res){
 		console.log("updateFileUseAt");
-		console.log(req.session.user);
 		
 		var useAt = req.body.useAt;
 		var AtchfileSn = req.body.AtchfileSn;
@@ -267,7 +255,6 @@ module.exports = function(app){
 				}
 				conn.commit();
 			});
-			console.log(res);
 			res.json({"emplyrSn":req.session.user.emplyrSn});
 			//doRelease(conn);
 		});
@@ -276,11 +263,10 @@ module.exports = function(app){
 	//파일 완전 삭제
 	app.post('/deleteFileUseAt', upload.single('attachment'), function(req, res){
 		console.log("deleteFileUseAt");
-		console.log(req.session.user);
 		
 		var AtchfileSn = req.body.AtchfileSn;
 		var emplyrSn = req.session.user.emplyrSn;
-		
+
 		oracledb.getConnection({
 			user:dbConfig.user,
 			password:dbConfig.password,
@@ -302,27 +288,34 @@ module.exports = function(app){
 				, AtchfileSn : AtchfileSn
 			}
 
-			let query = mybatisMapper.getStatement('IndexDAO','deleteFileUseAt', param, format);
+			let query = mybatisMapper.getStatement('IndexDAO','selectFileDtlData', param, format);
 			conn.execute(query, function(err,result){
-				console.log("IndexDAO.deleteFileUseAt");
+				console.log("IndexDAO.selectFileDtlData");
 				console.log(query);
 				if(err){
 					console.log(err);
 					res.json("F");
-				}else{
-					let query = mybatisMapper.getStatement('IndexDAO','deleteFileUseAtDtl', param, format);
-					conn.execute(query, function(err,result){
-						console.log("IndexDAO.deleteFileUseAtDtl");
-						console.log(query);
-						if(err){
-							console.log(err);
-							res.json("F");
-						}
-						conn.commit();
-					});
 				}
+
+				var orgnFileNm = result.rows[0][5];
+				
+				fs.unlink('./public/uploadedFiles/' + orgnFileNm, err => {
+					console.log("er : ", err);
+					res.json("F");
+				})
 			});
-			console.log(res);
+			
+			query = mybatisMapper.getStatement('IndexDAO','deleteFileUseAtDtl', param, format);
+			conn.execute(query, function(err,result){
+				console.log("IndexDAO.deleteFileUseAtDtl");
+				console.log(query);
+				if(err){
+					console.log(err);
+					res.json("F");
+				}
+				conn.commit();
+			});
+
 			res.json({"emplyrSn":req.session.user.emplyrSn});
 			//doRelease(conn);
 		});
@@ -331,7 +324,6 @@ module.exports = function(app){
 	//파일명 수정
 	app.post('/updateFileNm', function(req, res){
 		console.log("updateFileNm");
-		console.log(req.session.user);
 
 		var atchmnflSn = req.body.atchmnflSn;
 		var fileNm = req.body.fileNm;
@@ -356,7 +348,6 @@ module.exports = function(app){
 			var param = {
 				sEmplyrSn : sEmplyrSn
 				, atchmnflSn : atchmnflSn
-				, fileSn : atchmnflSn
 				, fileNm : fileNm
 			}
 
@@ -370,7 +361,6 @@ module.exports = function(app){
 				}
 				conn.commit();
 			});
-			console.log(res);
 			res.json({"emplyrSn":req.session.user.emplyrSn});
 			// doRelease(conn);
 		});
@@ -379,7 +369,6 @@ module.exports = function(app){
 	//즐겨찾기 추가
 	app.post('/insertBmFavorite', function(req, res){
 		console.log("insertBmFavorite");
-		console.log(req.session.user);
 		
 		var AtchfileSn = req.body.AtchfileSn;
 		var emplyrSn = req.session.user.emplyrSn;
@@ -403,7 +392,6 @@ module.exports = function(app){
 			var param = {
 				sEmplyrSn : emplyrSn
 				, atchmnflSn : AtchfileSn
-				, fileSn : AtchfileSn
 			}
 
 			let query = mybatisMapper.getStatement('IndexDAO','insertBmFavorite', param, format);
@@ -416,7 +404,6 @@ module.exports = function(app){
 				}
 				conn.commit();
 			});
-			console.log(res);
 			res.json({"emplyrSn":req.session.user.emplyrSn});
 			// doRelease(conn);
 		});
@@ -449,7 +436,6 @@ module.exports = function(app){
 			var param = {
 				sEmplyrSn : emplyrSn
 				, atchmnflSn : AtchfileSn
-				, fileSn : AtchfileSn
 			}
 
 			let query = mybatisMapper.getStatement('IndexDAO','deleteBmFavorite', param, format);
@@ -462,7 +448,6 @@ module.exports = function(app){
 				}
 				conn.commit();
 			});
-			console.log(res);
 			res.json({"emplyrSn":req.session.user.emplyrSn});
 			// doRelease(conn);
 		});
@@ -512,7 +497,6 @@ module.exports = function(app){
 	//자동삭제 추가
 	app.post('/updateAutoFileInfo', function(req, res){
 		console.log("updateAutoFileInfo");
-		console.log(req.session.user);
 		
 		var sEmplyrSn = req.session.user.emplyrSn;
 		var autoDeleteInfo = req.body.autoDeleteInfo;
@@ -538,8 +522,6 @@ module.exports = function(app){
 				sEmplyrSn : sEmplyrSn
 				, autoDeleteInfo : autoDeleteInfo
 			}
-
-			console.log("param >>> ", param);
 
 			let query = mybatisMapper.getStatement('IndexDAO','updateAutoFileInfo', param, format);
 			conn.execute(query, function(err,result){
@@ -591,7 +573,6 @@ module.exports = function(app){
 				}
 				
 				res.send(result.rows);
-				console.log(result.rows);
 				doRelease(conn);					
 			});  
 		});
@@ -626,7 +607,6 @@ module.exports = function(app){
 				sEmplyrSn : sEmplyrSn
 			}
 
-			console.log(param);
 			let query = mybatisMapper.getStatement('IndexDAO','deleteAutoFile', param, format);
 			conn.execute(query, function(err,result){
 				console.log("IndexDAO.deleteAutoFile");

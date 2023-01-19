@@ -10,6 +10,7 @@
 
 	<script>
 		var contextFileInfo = "";
+		var orginFileNm = "";
 		$(document).ready(function(){
 			$(document).contextmenu(function(e){
 				console.log(e.target);
@@ -20,6 +21,7 @@
 					return;
 				}
 				var targetId = e.target.id;
+				console.log(targetId);
 				if(targetId.split("_")[2] == "Y"){
 					var innerHtml = "";
 					innerHtml = '<a href="javascript:void(0);" onclick="fn_delFavor();">즐겨찾기 삭제</a>';
@@ -94,6 +96,8 @@
 				}).show();
 				//Prevent browser default contextmenu.
 				contextFileInfo = e.target.id;
+				console.log(e.target.src);
+				orginFileNm = e.target.src.split("/");
 				return false;
 			});
 			//Hide contextmenu:
@@ -106,13 +110,12 @@
 		function view_photoInfo(e){
 			var fileInfo = e.id.split("_");
 			var AtchfileSn = fileInfo[0];
-			var fileSn = fileInfo[1];
 
 			$.ajax({
 				url : "/selectFileDtlData",
 				type : "POST",
 				dataType : "JSON", //"JSON"
-				data : {"AtchfileSn" : AtchfileSn, "fileSn" : fileSn}
+				data : {"AtchfileSn" : AtchfileSn}
 
 			})
 			.done(function (res) {
@@ -143,6 +146,7 @@
 
 		//파일 삭제 (휴지통으로 이동)
 		function fn_fileDelete(useAt){
+			console.log(contextFileInfo);
 			var AtchfileSn = contextFileInfo.split("_")[1];
 			var emplyrSn = window.parent.$('#emplyrSn').val();
 			if(confirm("파일을 삭제하시겠습니까?\n(삭제된 파일은 휴지통으로 이동됩니다.)")){
@@ -170,12 +174,14 @@
 		function fn_fileDeleteOut(){
 			var AtchfileSn = contextFileInfo.split("_")[1];
 			var emplyrSn = window.parent.$('#emplyrSn').val();
+			var orgnFileNm = orginFileNm[orginFileNm.length - 1];
+
 			if(confirm("파일을 완전히 삭제하시겠습니까?")){
 				$.ajax({
 					url : "/deleteFileUseAt",
 					type : "POST",
 					dataType : "JSON", //"JSON"
-					data : {"AtchfileSn" : AtchfileSn, "emplyrSn" : emplyrSn}
+					data : {"AtchfileSn" : AtchfileSn, "emplyrSn" : emplyrSn, "orgnFileNm" : orgnFileNm}
 
 				})
 				.done(function (res) {
