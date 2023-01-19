@@ -42,8 +42,19 @@ a {
 
 .mini_header .mi_logo {
     margin: 0;
+    padding-left: 10px;
     height: 44px;
-    background-color: #428cff;
+    background-color: #4078ff;
+    line-height: 44px;
+    font-size: 15px;
+}
+
+.mi_logo >a {
+    color: white;
+}
+
+.mi_logo >a >i {
+    margin-right: 5px;
 }
 
 .mini_header .btn_group {
@@ -275,6 +286,10 @@ a {
     font-size: 13px;
 }
 
+.task_text > span {
+    margin-right: 2px;
+}
+
 .task_area .btn_task {
     position: relative;
     -webkit-box-flex: 0;
@@ -290,10 +305,11 @@ a {
     vertical-align: top;
     line-height: normal;
     color: #000;
+    cursor: pointer;
 }
 
 .task_area .btn_task.highlight {
-    background-color: #4078ff;
+    /*background-color: #4078ff;*/
     color: #fff;
 }
 
