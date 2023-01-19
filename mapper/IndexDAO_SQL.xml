@@ -20,32 +20,10 @@
 		SELECT
 			TO_NUMBER(NVL(MAX(ATCHMNFL_SN), TO_CHAR(SYSDATE, 'YYYYMMDD') || '00000')) + 1 FILE_SN
 		FROM
-			TCM_ATCHMNFL
+			TCM_ATCHMNFL_DETAIL
 	</select>
 
 	<!-- 첨부파일 등록 -->
-	<insert id="insertAtchFile">
-		/* IndexDAO.insertAtchFile */
-		INSERT INTO TCM_ATCHMNFL
-		(
-			ATCHMNFL_SN
-			, USE_AT
-			, FRST_REGIST_DT
-			, FRST_REGISTER_SN
-			, LAST_UPDT_DT
-			, LAST_UPDUSR_SN
-		)
-		VALUES
-		(
-			#{fileSn}
-			, 'Y'
-			, SYSDATE
-			, #{emplyrSn}
-			, SYSDATE
-			, #{emplyrSn}
-		)
-	</insert>
-
 	<insert id="insertAtchFileDtl">
 		/* IndexDAO.insertAtchFileDtl */
 		INSERT INTO TCM_ATCHMNFL_DETAIL
@@ -59,6 +37,7 @@
 			, FILE_MG
 			, DOWN_CO
 			, ORGINL_FILE_EXTSN_NM
+			, USE_AT
 			, FRST_REGISTER_SN
 			, FRST_REGIST_DT
 			, LAST_UPDUSR_SN
@@ -75,6 +54,7 @@
 			, #{fileSize}
 			, 0
 			, #{orgFileExtsnNm}
+			, 'Y'
 			, #{emplyrSn}
 			, SYSDATE
 			, #{emplyrSn}
@@ -95,20 +75,19 @@
 			, tad.FRST_REGIST_DT
 			, tad.FRST_REGISTER_SN 
 			, tad.ATCHMNFL_SN
-			, tad.FILE_SN
-			, DECODE(TEB.FILE_SN, '', 'N', 'Y') BKMK_AT
-			, ta.USE_AT
+			, DECODE(TEB.ATCHMNFL_SN, '', 'N', 'Y') BKMK_AT
+			, tad.USE_AT
 		FROM
-			TCM_ATCHMNFL ta
-			, TCM_ATCHMNFL_DETAIL tad
+			TCM_ATCHMNFL_DETAIL tad
 			, TCM_EMPLYRBY_BKMK TEB 
 		WHERE
-			TA.ATCHMNFL_SN = TAD.ATCHMNFL_SN
-			AND TAD.ATCHMNFL_SN  = TEB.ATCHMNFL_SN(+)
-			AND TAD.FILE_SN  = TEB.FILE_SN(+)
-			AND TA.USE_AT = #{useAt}
-			AND TA.FRST_REGISTER_SN = #{emplyrSn}
+			TAD.ATCHMNFL_SN  = TEB.ATCHMNFL_SN(+)
+			AND TAD.USE_AT = #{useAt}
+			AND TAD.FRST_REGISTER_SN = #{emplyrSn}
 			AND (ORGINL_FILE_EXTSN_NM LIKE #{fileType}||'%' OR #{fileType} = 'ALL')
+		<if test='orderBy != "" and orderBy != null'>
+			ORDER BY TAD.FILE_MG DESC
+		</if>
 	</select>
 
 	<!--첨부파일 상세정보 조회-->
@@ -120,16 +99,16 @@
 			, FILE_EXTSN_NM 
 			, FILE_MG 
 			, DOWN_CO 
+			, ORGINL_FILE_NM
 		FROM TCM_ATCHMNFL_DETAIL TAD
 		WHERE
 			ATCHMNFL_SN  = #{AtchfileSn}
-			AND FILE_SN  = #{fileSn}
 	</select>
 
 	<!-- 파일 휴지통으로 이동 / 복원 -->
 	<update id="updateFileUseAt">
 		/* IndexDAO.updateFileUseAt */
-		UPDATE TCM_ATCHMNFL
+		UPDATE TCM_ATCHMNFL_DETAIL
 		SET
 			USE_AT = #{useAt},
 			LAST_UPDT_DT = SYSDATE,
@@ -139,12 +118,6 @@
 	</update>
 
 	<!-- 파일 완전히 삭제 -->
-	<delete id="deleteFileUseAt">
-		/* IndexDAO.deleteFileUseAt */
-		DELETE TCM_ATCHMNFL
-		WHERE ATCHMNFL_SN = #{AtchfileSn}
-	</delete>
-
 	<delete id="deleteFileUseAtDtl">
 		/* IndexDAO.deleteFileUseAtDtl */
 		DELETE TCM_ATCHMNFL_DETAIL
@@ -159,7 +132,6 @@
 		(
 			EMPLYR_SN,
 			ATCHMNFL_SN,
-			FILE_SN,
 			FRST_REGISTER_SN,
 			FRST_REGIST_DT,
 			LAST_UPDUSR_SN,
@@ -169,7 +141,6 @@
 		(
 			#{sEmplyrSn},
 			#{atchmnflSn},
-			#{fileSn},
 			#{sEmplyrSn},
 			SYSDATE,
 			#{sEmplyrSn},
@@ -182,7 +153,6 @@
 		/* IndexDAO.deleteBmFavorite */
 		DELETE FROM TCM_EMPLYRBY_BKMK
 		WHERE EMPLYR_SN = #{sEmplyrSn}
-		AND FILE_SN = #{fileSn}
 		AND ATCHMNFL_SN = #{atchmnflSn}
 	</delete>
 
@@ -191,21 +161,17 @@
 		/* IndexDAO.selectBkmkList */
 		SELECT
 			TAD.ATCHMNFL_SN
-			, TAD.FILE_SN 
 			, TAD.FILE_STRE_COURS_NM 
 			, TAD.ORGINL_FILE_NM 
 			, TAD.FILE_MG 
 			, TAD.FILE_EXTSN_NM 
 			, TAD.FILE_NM 
 		FROM
-			TCM_ATCHMNFL TA				/* 첨부파일 */
-			, TCM_ATCHMNFL_DETAIL TAD	/* 첨부파일 상세 */
+			TCM_ATCHMNFL_DETAIL TAD	/* 첨부파일 상세 */
 			, TCM_EMPLYRBY_BKMK TEB		/* 즐겨찾기 */
 		WHERE
-			TAD.ATCHMNFL_SN = TA.ATCHMNFL_SN
-			AND TAD.ATCHMNFL_SN = TEB.ATCHMNFL_SN
-			AND TAD.FILE_SN = TEB.FILE_SN
-			AND TA.USE_AT = 'Y'
+			TAD.ATCHMNFL_SN = TEB.ATCHMNFL_SN
+			AND TAD.USE_AT = 'Y'
 			AND TEB.EMPLYR_SN = #{sEmplyrSn}
 
 	</select>
@@ -219,7 +185,6 @@
 			, LAST_UPDUSR_SN = #{sEmplyrSn}
 		WHERE
 			ATCHMNFL_SN = #{atchmnflSn}
-			AND FILE_SN = #{fileSn}
 	</update>
 
 	<!-- 파일 자동삭제 정보 조회 -->
@@ -240,7 +205,7 @@
 		WHERE EMPLYR_SN = #{sEmplyrSn}
 	</update>
 
-	<!-- 파일 자동삭제 -->
+	<!-- 파일 자동삭제 (현재 안 쓰는 쿼리)-->
 	<select id="selectAutoFileTest">
 		<![CDATA[
 		/* IndexDAO.selectAutoFileTest */
@@ -259,7 +224,7 @@
 	<update id="deleteAutoFile">
 		/* IndexDAO.deleteAutoFile */
 		<![CDATA[
-		UPDATE TCM_ATCHMNFL
+		UPDATE TCM_ATCHMNFL_DETAIL
 		SET
 			USE_AT = 'N',
 			LAST_UPDT_DT = SYSDATE,
@@ -275,20 +240,6 @@
 	</update>
 
 	<!-- 파일 자동삭제 
-	<delete id="deleteAutoFile">
-		<![CDATA[
-		/* IndexDAO.deleteAutoFile */
-		DELETE FROM TCM_ATCHMNFL TA		/* 첨부파일 */
-		WHERE FRST_REGISTER_SN = #{sEmplyrSn}
-		AND FRST_REGIST_DT < SYSDATE - 
-			(
-				SELECT AUTO_DELETE_INFO
-				FROM TCM_EMPLYR
-				WHERE EMPLYR_SN = #{sEmplyrSn}
-			)
-		]]>
-	</delete>
-
 	<delete id="deleteAutoFileDtl">
 		<![CDATA[
 		/* IndexDAO.deleteAutoFileDtl */
@@ -317,20 +268,16 @@
 					, tad.FILE_EXTSN_NM
 					, tad.FILE_MG
 					, tad.ATCHMNFL_SN
-					, tad.FILE_SN
 					, COUNT(FILE_NM) OVER(PARTITION BY FILE_NM) CNT
 					, tad.FRST_REGIST_DT
 					, tad.FRST_REGISTER_SN
 				FROM
-					TCM_ATCHMNFL ta
-					, TCM_ATCHMNFL_DETAIL tad
+					TCM_ATCHMNFL_DETAIL tad
 					, TCM_EMPLYRBY_BKMK TEB 
 				WHERE
-					TA.ATCHMNFL_SN = TAD.ATCHMNFL_SN
-					AND TAD.ATCHMNFL_SN  = TEB.ATCHMNFL_SN(+)
-					AND TAD.FILE_SN  = TEB.FILE_SN(+)
-					AND TA.USE_AT = 'Y'
-					AND TA.FRST_REGISTER_SN = #{sEmplyrSn}
+					TAD.ATCHMNFL_SN  = TEB.ATCHMNFL_SN(+)
+					AND TAD.USE_AT = 'Y'
+					AND TAD.FRST_REGISTER_SN = #{sEmplyrSn}
 		) A
 		WHERE A.CNT > 1
 		]]>

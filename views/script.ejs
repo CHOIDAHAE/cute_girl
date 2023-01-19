@@ -142,12 +142,16 @@
 			// 파일 조회 
 			function fileSelect(useAt, fileType){
 				var emplyrSn = document.getElementById('emplyrSn').value;
+				var orderBy = "NULL";
+				if(fileType == "cleanType"){
+					orderBy = "fileMg";
+				}
 
 				$.ajax({
 					url : "/selectFileList",
 					type : "POST",
 					dataType : "JSON", //"JSON"
-					data : {"emplyrSn" : emplyrSn, "useAt" : useAt, "fileType" : fileType}
+					data : {"emplyrSn" : emplyrSn, "useAt" : useAt, "fileType" : fileType, "orderBy" : orderBy}
 
 				})
 				.done(function (res) {
@@ -157,9 +161,9 @@
 					var fileList = "";
 
 					for(var i=0; i<res.length; i++){
-						fileList += '<li class="item_fnc" id="' + res[i][8] + '_' + res[i][9] + '" onclick="view_photoInfo(this)">';
+						fileList += '<li class="item_fnc" id="' + res[i][8]+ '" onclick="view_photoInfo(this)">';
 						/* ID : IMG_파일일련번호_즐겨찾기추가여부_사용여부 */
-						fileList += '<img src="../uploadedFiles/' + res[i][1] + '" id="img_' + res[i][8] + '_' + res[i][10] + '_' + res[i][11] + '" class="img_item"/>\n';
+						fileList += '<img src="../uploadedFiles/' + res[i][1] + '" id="img_' + res[i][8] + '_' + res[i][9] + '_' + res[i][10] + '" class="img_item"/>\n';
 						fileList += '<div class="item-name" id="dv_' + res[i][8] + '"> ' + res[i][2] + ' </div></li>\n';
 					}
 
@@ -198,9 +202,9 @@
 					var fileList = "";
 
 					for(var i=0; i<res.length; i++){
-						fileList += '<li class="item_fnc" id="' + res[i][0] + '_' + res[i][1] + '" ondblclick="view_photoInfo(this)">';
-						fileList += '<img src="../uploadedFiles/' + res[i][3] + '" id="img_' + res[i][0] + '_' + res[i][1] + '" class="img_item"/>\n';
-						fileList += '<div class="item-name" id="dv_' + res[i][0] + '"> ' + res[i][6] + ' </div></li>\n';
+						fileList += '<li class="item_fnc" id="' + res[i][0] + '" ondblclick="view_photoInfo(this)">';
+						fileList += '<img src="../uploadedFiles/' + res[i][2] + '" id="img_' + res[i][0] + '" class="img_item"/>\n';
+						fileList += '<div class="item-name" id="dv_' + res[i][0] + '"> ' + res[i][5] + ' </div></li>\n';
 					}
 
 					$(fileArea).html(fileList);      //파일 리스트
@@ -232,7 +236,7 @@
 					var fileList = "";
 
 					for(var i=0; i<res.length; i++){
-						fileList += '<li class="item_fnc" id="' + res[i][5] + '_' + res[i][6] + '" ondblclick="view_photoInfo(this)">';
+						fileList += '<li class="item_fnc" id="' + res[i][5] + '" ondblclick="view_photoInfo(this)">';
 						fileList += '<img src="../uploadedFiles/' + res[i][1] + '" id="img_' + res[i][5] + '_NULL_Y" class="img_item"/>\n';
 						fileList += '<div class="item-name" id="dv_' + res[i][5] + '"> ' + res[i][2] + ' </div></li>\n';
 					}
