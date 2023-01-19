@@ -581,6 +581,7 @@ module.exports = function(app){
 			//query format
 			let format = {language: 'sql', indent: ''};
 			
+			/* fileSnList 가공필요
 			var param = {
 				"emplyrSn"	: req.body.emplyrSn,
 				"fileSn"	: req.body.fileSn
@@ -588,6 +589,7 @@ module.exports = function(app){
 
 			// 파일 상세정보 조회 (한건당 상세조회 해서 그걸 group_file 테이블에 insert)
 			let selectFileDtlData = mybatisMapper.getStatement('IndexDAO','selectFileDtlData', param, format);
+			*/
 
 			//쿼리문 실행
 			conn.execute(selectFileDtlData, function(err,result){
