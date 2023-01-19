@@ -64,6 +64,16 @@ a {
     margin-top: 7px;
 }
 
+.mini_header .btn_close:before {
+    background-image: linear-gradient(transparent, transparent), url(https://ssl.pstatic.net/static/pwe/cloud/img/sprite/sp_cloudsvg_ef3264f5.svg);
+    background-size: 1057px 1023px;
+    background-position: -1042px -59px;
+    width: 10px;
+    height: 10px;
+    display: block;
+    content: '';
+}
+
 .blind, legend {
     position: absolute;
     overflow: hidden;
@@ -199,10 +209,6 @@ a {
     background-color: #fff;
 }
 
-.mini_container .task_area .task_bottom_area:first-child {
-    margin-top: 8px;
-}
-
 .task_bottom_area {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -243,6 +249,8 @@ a {
     padding: 6px;
     background-color: #f1f3f9;
     vertical-align: top;
+    width: 12px;
+    height: 12px;
 }
 
 .task_btn_area .check_all .input_check {
@@ -254,12 +262,58 @@ a {
     height: 1px;
 }
 
+.mini_container .task_area .task_text {
+    margin-right: 7px;
+}
+
+.task_area .task_text.select {
+    -webkit-box-flex: 0;
+    -ms-flex: none;
+    flex: none;
+    font-weight: 700;
+    color: #9398a0;
+    font-size: 13px;
+}
+
+.task_area .btn_task {
+    position: relative;
+    -webkit-box-flex: 0;
+    -ms-flex: none;
+    flex: none;
+    height: 32px;
+    padding: 0 10px;
+    margin-left: 8px;
+    border: 0;
+    border-radius: 4px;
+    background-color: #f1f3f9;
+    font-weight: 700;
+    vertical-align: top;
+    line-height: normal;
+    color: #000;
+}
+
+.task_area .btn_task.highlight {
+    background-color: #4078ff;
+    color: #fff;
+}
+
+.input_check, .input_radio {
+    width: 13px;
+    height: 13px;
+    vertical-align: middle;
+}
+
 .mini_container .task_area .task_tab_list {
-    margin-left: 25px;
+    margin-left: 15px;
+    padding: 0;
 }
 
 .task_tab_list {
     font-size: 0;
+}
+
+.task_tab_list li + li {
+    margin-left: 15px;
 }
 
 .mini_container .task_area .task_tab_list li {
@@ -270,7 +324,6 @@ a {
     position: relative;
     display: inline-block;
     margin-top: 6px;
-    padding-bottom: 6px;
 }
 
 .task_tab_list li.selected a {
@@ -363,6 +416,7 @@ a {
     font-size: 13px;
     line-height: 16px;
     color: #000;
+    margin-right: 5px;
 }
 
 .phot_h_tit .sort_cover {
@@ -375,6 +429,7 @@ a {
     font-weight: 700;
     line-height: 16px;
     color: #000;
+    cursor: pointer;
 }
 
 .phot_h_tit .sort_cover.open .ly_task {
@@ -424,8 +479,6 @@ a {
     margin-left: auto;
 }
 
-
-
 .array_cover {
     position: relative;
 }
@@ -441,7 +494,6 @@ a {
     cursor: pointer;
 }
 
-
 .array_cover .ly_task {
     right: 0;
     left: auto;
@@ -451,7 +503,7 @@ a {
     position: absolute;
     top: 100%;
     left: 0;
-    margin-top: 6px;
+    margin-top: -5px;
     font-size: 14px;
     white-space: nowrap;
     z-index: 20;
@@ -465,38 +517,22 @@ a {
     pointer-events: none;
 }
 
+.hidden {
+    visibility : hidden;
+}
+
 .array_cover .ly_task > ul {
     min-width: 138px;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
 
-.ly_task > ul {
-    padding: 6px;
-    border-radius: 6px;
-    -webkit-box-shadow: 1px 2px 8px 0 rgb(0 0 0 / 15%);
-    box-shadow: 1px 2px 8px 0 rgb(0 0 0 / 15%);
-    background-color: #fff;
-}
-
 .array_cover .ly_task > ul a {
     padding-right: 28px;
 }
 
-.ly_task > ul .selected a {
-    position: relative;
-    padding-right: 35px;
-    font-weight: 700;
-    color: #4078ff;
-}
-
-.ly_task > ul a {
-    display: block;
-    height: 32px;
-    padding: 0 14px;
-    border-radius: 4px;
-    line-height: 32px;
-    color: #000;
+.sort_list > li {
+	cursor: pointer;
 }
 
 .listSbBox {
@@ -581,6 +617,8 @@ a {
     position: relative;
     height: 100%;
     overflow: hidden;
+    opacity: 1;
+    transition: opacity 0.1s ease 0s;
 }
 
 .photo_list .item a {
@@ -604,15 +642,21 @@ a {
 }
 
 .checkbox {
-    display: none;
+    /*display: none;*/
     position: absolute;
     top: 10px;
     left: 10px;
 }
 
 .checkbox input[type="checkbox"] {
-    position: absolute;
+    /*position: absolute;*/
     clip: rect(0, 0, 0, 0);
+    cursor: pointer;
+    zoom: 1.5;
+}
+
+.photo_list li.selected .checkbox {
+    display: block;
 }
 
 .checkbox label {
@@ -701,4 +745,14 @@ em, address {
     border: 0;
     border-radius: 4px;
     background-color: transparent;
+}
+
+.icon {
+	color: gray;
+}
+
+.mypicture{
+    height: 150px;
+    width: 130px;
+    background-color: rgb(255, 255, 255);
 }

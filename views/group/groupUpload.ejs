@@ -38,7 +38,10 @@
                             photo_list.append(
                                 '<li class="mypicture">'
                                 +'<div class="item"><a><img src="..'+res.result[i][0]+'/'+res.result[i][1]
-                                +'" alt="'+res.result[i][2]+'" style="width:100%; height:100%;"></a></div></li>');
+                                +'" alt="'+res.result[i][2]+'" style="width:100%; height:100%;"></a>'
+								+'<span class="checkbox">'
+                                +'<input type="checkbox" id="uploadChkbox_'+i+'"onclick="check(this)">'
+                                +'<label for="uploadChkbox">선택</label></span></div></li>');
 						}                        
 					},
 					error:function(e){
@@ -46,6 +49,8 @@
 					}
 				})
 			};
+
+            
 		</script>
 	</head>
     <body style="user-select: none; -ms-user-select: none">
@@ -118,8 +123,12 @@
                                             <a>즐겨찾기</a>
                                         </li>
                                     </ul>
+                                </div>                                
+                                <div class="task_view_area">
+                                    <span class="task_text select"><em>1</em>개 선택</span>
+                                    <button type="button" class="btn_task">선택 취소</button>
+                                    <button type="button" class="btn_task highlight">첨부하기</button>
                                 </div>
-                                <div class="task_view_area"></div>
                             </div>
                         </div>
                     </div>
@@ -170,8 +179,8 @@
                                                         <span class="blind">즐겨찾기</span>
                                                     </button>
                                                     <span class="checkbox">
-                                                        <input type="checkbox" id="3472495530733427532:10588976">
-                                                        <label for="3472495530733427532:10588976">선택</label>
+                                                        <input type="checkbox" id="uploadChkbox">
+                                                        <label for="uploadChkbox">선택</label>
                                                     </span>
                                                 </div>
                                             </li>
