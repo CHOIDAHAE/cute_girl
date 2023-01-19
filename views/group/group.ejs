@@ -7,6 +7,12 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" />
 		<script>
             $(document).ready(function(){
+                var emplyrSn = window.parent.$('#emplyrSn').val();
+                var groupSn = window.parent.$('#groupSn').val();
+                
+                document.getElementById("emplyrSn").value = emplyrSn;
+                document.getElementById("groupSn").value = groupSn;
+
                 // 모달 제어 (깜빡이는거 나중에 해결 예정)
                 $('.my_layer').hide(); // 설정
                 $('.out_modal_wrap').hide(); // 모임나가기
@@ -19,14 +25,10 @@
 
 				// 스토리/사진 탭
 				changePart('story');
-
-                // iframe(그룹 파일 업로드 팝업) 숨기기
-                iframe.setAttribute('style', 'height:0;width:0;border:0;border:none;visibility:hidden;');
             });
             
             // 스토리/사진 탭
 			function changePart(part){
-                console.log("part: "+part);
 				if(part == "story"){
 					$('#story_part').show();
 					$('#picture_part').hide();
@@ -147,12 +149,6 @@
                 var emplyrSn = window.parent.$('#emplyrSn').val();
                 var groupSn = window.parent.$('#groupSn').val();
                 var data = document.getElementById("textarea").value;
-                
-                /*
-                if (data.length == 0){
-                    alert('모임명을 입력하지 않았거나 수정하지 않았습니다.');
-                    return;
-                }*/
 
                 var formData = new FormData();
 				formData.append('groupImg', $('#fileUpload')[0].files[0]);
@@ -208,9 +204,23 @@
                     document.getElementById('preview').src = "";
                 }
             }
+
+            // 파일 업로드 시 뜨는 팝업
+            function uploadPopup(){
+                // iframe(그룹 파일 업로드 팝업)
+                document.getElementById('iframe').setAttribute('style', 'visibility:visible;');
+            };
+            
+            // 업로드 팝업 닫기
+            function closeBtn(){
+                // iframe(그룹 파일 업로드 팝업)
+                document.getElementById('iframe').setAttribute('style', 'visibility:hidden;');
+            };
 		</script>
 	</head>
 	<body>
+        <input type="hidden" id="emplyrSn" name="emplyrSn" value=""/>
+        <input type="hidden" id="groupSn" name="groupSn" value=""/>
         <div>
             <input multiple="" type="file" autocomplete="off" tabindex="-1" style="display: none;">
             <div id="content" style="left: 200px;">
@@ -445,10 +455,10 @@
                             <span class="ic_p"></span>
                             <p class="text">
                             <span class="point"><span class="groupNm"></span></span>에서<br> 함께 볼 사진을 추가해 주세요!</p>
-                            <a class="btn_add_more">사진 추가하기</a>
+                            <a class="btn_add_more" onclick="uploadPopup();">사진 추가하기</a>
                             
                             <p style="text-align:center;">
-                                <iframe class="frameBox" src="/groupUpload" id="groupUpload" scrolling="yes" width="100%" height="100%" frameborder="0"></iframe>
+                                <iframe id="iframe" class="frameBox" src="/groupUpload" id="groupUpload" scrolling="yes" width="100%" height="100%" frameborder="0" style='visibility : hidden;'></iframe>
                             </p>
                         </div>
                     </li>

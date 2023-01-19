@@ -6,7 +6,46 @@
 		<link href="../css/groupUpload.css?after" rel="stylesheet" type="text/css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" />
 		<script>
-            
+            $(document).ready(function(){
+                var emplyrSn = window.parent.$('#emplyrSn').val();
+                var groupSn = window.parent.$('#groupSn').val();
+
+                myPictureList();    // 업로드용 내 모든사진 조회
+			});
+			
+			// 닫기 버튼
+			function closeBtn(){
+				window.parent.closeBtn();
+			};
+
+			// 년도별 정렬(토글)
+			function sortBtn(){
+				$('#ly_task').toggle();
+			};
+
+			// 내사진 보기
+			function myPictureList(){
+				var emplyrSn = window.parent.$('#emplyrSn').val();
+				
+				$.ajax({
+					url : "/myPictureList",
+					type : "POST",
+					dataType : "JSON", //"JSON"
+					data : {"emplyrSn" : emplyrSn},
+					success:function(res){
+                        var photo_list = $("#photo_list");
+						for(var i=0; i<res.result.length; i++){
+                            photo_list.append(
+                                '<li class="mypicture">'
+                                +'<div class="item"><a><img src="..'+res.result[i][0]+'/'+res.result[i][1]
+                                +'" alt="'+res.result[i][2]+'" style="width:100%; height:100%;"></a></div></li>');
+						}                        
+					},
+					error:function(e){
+						alert("사진을 불러오던 도중 오류가 발생하였습니다.(ajax에러)");
+					}
+				})
+			};
 		</script>
 	</head>
     <body style="user-select: none; -ms-user-select: none">
@@ -18,7 +57,7 @@
                     </a>
                 </h1>
                 <div class="btn_group">
-                    <button type="button" class="btn_close">
+                    <button type="button" class="btn_close" onclick="closeBtn();" >
                         <span class="blind">닫기</span>
                     </button>
                 </div>
@@ -86,10 +125,10 @@
                     </div>
                     <div class="phot_h_tit">
                         <div class="photo_sort">
-                            <a class="sort_title">촬영일별 보기</a>
+                            <a class="sort_title">촬영일별 보기<i class="fa-solid fa-angle-right icon"></i></a>
                             <div class="sort_cover open">
-                                <a class="btn_sort" title="전체 년도">전체 년도</a>
-                                <div class="ly_task">
+                                <a class="btn_sort" title="전체 년도" onclick="sortBtn();" >전체 년도</a>
+                                <div id="ly_task" class="ly_task" style="display : none;">
                                     <ul class="sort_list">
                                         <li class="selected">
                                             <a>전체</a>
@@ -120,23 +159,10 @@
                                         <label for="2022" class="chk_label">2022년</label>
                                     </h4>
                                     <div style="opacity: 1;">
-                                        <ul class="photo_list" style="height: 1764.01px;">
-                                            <li class="" style="height: 125.998px; background-color: rgb(255, 255, 255); width: 125.998px;">
-                                                <div class="item" style="opacity: 1; transition: opacity 0.1s ease 0s;">
-                                                    <a>
-                                                        <img src="https://thumb1.photo.mybox.naver.com/3472495530733629005:10588976?type=m740_390_2&amp;nocache=5236120301&amp;setidc=1" alt="이미지 제목">
-                                                    </a>
-                                                    <button type="button" class="btn_favorite">
-                                                        <span class="blind">즐겨찾기</span>
-                                                    </button>
-                                                    <span class="checkbox">
-                                                        <input type="checkbox" id="3472495530733629005:10588976">
-                                                        <label for="3472495530733629005:10588976">선택</label>
-                                                    </span>
-                                                </div>
-                                            </li>
-                                            <li class="" style="height: 125.998px; background-color: rgb(255, 255, 255); width: 119.01px;">
-                                                <div class="item" style="opacity: 1; transition: opacity 0.1s ease 0s;">
+                                        <ul id="photo_list" class="photo_list" style="height: 1764.01px;">
+                                            <!--
+                                            <li class="mypicture">
+                                                <div class="item">
                                                     <a>
                                                         <img src="https://thumb1.photo.mybox.naver.com/3472495530733427532:10588976?type=m740_390_2&amp;nocache=4636120301&amp;setidc=1" alt="이미지 제목">
                                                     </a>
@@ -149,77 +175,16 @@
                                                     </span>
                                                 </div>
                                             </li>
+                                            -->
                                         </ul>
                                     </div>
                                 </div>
                                 <div style="width: 100%; height: 1px;"></div>
                             </div>
                         </div>
-                    </div>                    
-					<!--
-                    <div class="content_box">
-                        <div style="transform: translateZ(0px); will-change: auto;">
-                            <div class="lst_pt">
-                                <div class="album_list_area">
-                                    <ul class="album_list">
-                                        <li class="img_none">
-                                            <a class="item">
-                                                <div class="thumb">
-                                                    <em class="num">
-                                                        <span class="blind">앨범 사진 개수</span>
-                                                        0
-                                                    </em>
-                                                </div>
-                                                <div class="info">
-                                                    <strong class="title">학교 앨범</strong>
-                                                    <span class="update">2015.05.11에 생성됨</span>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li class="img_none">
-                                            <a class="item">
-                                                <div class="thumb">
-                                                    <em class="num">
-                                                        <span class="blind">앨범 사진 개수</span>
-                                                        0
-                                                    </em>
-                                                </div>
-                                                <div class="info">
-                                                    <strong class="title">커플 앨범</strong>
-                                                    <span class="update">2015.05.11에 생성됨</span>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li class="img_none">
-                                            <a class="item">
-                                                <div class="thumb">
-                                                    <em class="num">
-                                                        <span class="blind">앨범 사진 개수</span>
-                                                        0
-                                                    </em>
-                                                </div>
-                                                <div class="info">
-                                                    <strong class="title">가족 앨범</strong>
-                                                    <span class="update">2015.05.11에 생성됨</span>
-                                                </div>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                    <div style="width: 100%; height: 1px;">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
-					-->
                 </div>
             </div>
-            <!--
-            <div class="mi_layer_tip no_view" style="">
-                <p class="tit">P20220929_180310235_822C6C87-21C9-47AC-BC87-DE6E2F223222.HEIC</p>
-                <p class="info">2022-09-29<em class="bar">|</em>3024x4032<em class="bar">|</em>1.0MB</p>
-            </div>
-            -->
             <div class="toast_container short-animated fadeOut" style="z-index: 10020; visibility: hidden;">
                 <div class="alert_inner">
                     <span class="txt_box ellipsis"></span>
