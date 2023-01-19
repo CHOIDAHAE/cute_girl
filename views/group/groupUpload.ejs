@@ -7,14 +7,13 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" />
 		<script>
             $(document).ready(function(){
-                var emplyrSn = window.parent.$('#emplyrSn').val();
-                var groupSn = window.parent.$('#groupSn').val();
-
                 myPictureList();    // 업로드용 내 모든사진 조회
 			});
 			
 			// 닫기 버튼
 			function closeBtn(){
+                $("input:checkbox[name=uploadChkbox]").prop("checked", false);
+				$("#chk_length").text("0");
 				window.parent.closeBtn();
 			};
 
@@ -26,6 +25,7 @@
 			// 내사진 보기
 			function myPictureList(){
 				var emplyrSn = window.parent.$('#emplyrSn').val();
+                //var groupSn = window.parent.$('#groupSn').val();
 				
 				$.ajax({
 					url : "/myPictureList",
@@ -33,16 +33,21 @@
 					dataType : "JSON", //"JSON"
 					data : {"emplyrSn" : emplyrSn},
 					success:function(res){
-                        var photo_list = $("#photo_list");
-						for(var i=0; i<res.result.length; i++){
-                            photo_list.append(
-                                '<li class="mypicture">'
-                                +'<div class="item"><a><img src="..'+res.result[i][0]+'/'+res.result[i][1]
-                                +'" alt="'+res.result[i][2]+'" style="width:100%; height:100%;"></a>'
-								+'<span class="checkbox">'
-                                +'<input type="checkbox" id="uploadChkbox_'+i+'"onclick="check(this)">'
-                                +'<label for="uploadChkbox">선택</label></span></div></li>');
-						}                        
+						if(res.Status == "S"){
+							document.getElementById("total_length").value = res.result.length;
+							var photo_list = $("#photo_list");
+							for(var i=0; i<res.result.length; i++){
+								photo_list.append(
+									'<li class="mypicture">'
+									+'<div class="item"><a><img src="..'+res.result[i][1]+'/'+res.result[i][2]
+									+'" alt="'+res.result[i][3]+'" style="width:100%; height:100%;"></a>'
+									+'<span class="checkbox">'
+									+'<input type="checkbox" name="uploadChkbox" value="'+res.result[i][0]+'" id="uploadChkbox_'+i+'"onclick="check()">'
+									+'<label for="uploadChkbox">선택</label></span></div></li>');
+							}
+						} else if(res.Status == "F"){
+							alert('사진을 불러오던 도중 오류가 발생하였습니다.');
+						}						                        
 					},
 					error:function(e){
 						alert("사진을 불러오던 도중 오류가 발생하였습니다.(ajax에러)");
@@ -50,15 +55,72 @@
 				})
 			};
 
-            
+            // 사진 체크박스 클릭 이벤트
+            function check(type){
+                // 선택취소버튼
+				if (type == "cancel"){ 
+					// '0'개 선택으로 변경
+					$("#chk_length").text("0");
+					
+					// 모든 체크 해제
+					$("input:checkbox[name=uploadChkbox]").prop("checked", false);
+					
+					// 첨부하기 버튼 disabled
+					$("#upload").attr("disabled", true);
+					$("#upload").css("background-color","#A9BCF5");
+				} else { //사진 체크박스 클릭
+                    var chk_length = $('input:checkbox[name=uploadChkbox]:checked').length;
+					$("#chk_length").text(chk_length);
+
+					if(chk_length > 0){
+						$("#upload").attr("disabled", false); //해제
+						$("#upload").css("background-color","#4078ff");
+					} else {
+						$("#upload").attr("disabled", true);
+						$("#upload").css("background-color","#A9BCF5");
+					}
+                }           
+            }
+			
+			// 첨부하기 버튼 클릭 이벤트
+			function groupUpload(){
+				var total_length = document.getElementById("total_length").value;
+				var fileSnList = {};
+				
+				for(var i=0; i<total_length; i++){
+					var chkSn = $("input[type=checkbox][id=uploadChkbox_"+i+"]:checked").val();
+					if(typeof chkSn != 'undefined'){
+						fileSnList += ','+chkSn;
+					}
+				}
+
+				$.ajax({
+					url : "/groupUpload",
+					type : "POST",
+					dataType : "JSON", //"JSON"
+					data : {"emplyrSn" : emplyrSn, "groupSn" : groupSn},
+					success:function(res){
+						if(res.Status == "S"){
+							
+						} else if(res.Status == "F"){
+							alert('첨부 도중 오류가 발생하였습니다.');
+						}						                        
+					},
+					error:function(e){
+						alert("첨부 도중 오류가 발생하였습니다.(ajax에러)");
+					}
+				})
+			}
+
 		</script>
 	</head>
     <body style="user-select: none; -ms-user-select: none">
+		<input type="hidden" id="total_length" name="chk_length" value="" />
         <div id="mini_wrap" class="mini_wrap">
             <div class="mini_header">
                 <h1 class="mi_logo">
-                    <a href="https://mybox.naver.com" target="_blank" rel="noopener noreferrer">
-                        <span class="blind">네이버 MYBOX</span>
+                    <a href="/index">
+                        <i class="fa-solid fa-cloud"></i>MYDRIVE
                     </a>
                 </h1>
                 <div class="btn_group">
@@ -125,9 +187,9 @@
                                     </ul>
                                 </div>                                
                                 <div class="task_view_area">
-                                    <span class="task_text select"><em>1</em>개 선택</span>
-                                    <button type="button" class="btn_task">선택 취소</button>
-                                    <button type="button" class="btn_task highlight">첨부하기</button>
+                                    <span class="task_text select"><span id="chk_length">0</span>개 선택</span>
+                                    <button type="button" class="btn_task" onclick="check('cancel');">선택 취소</button>
+                                    <button type="button" id="upload" class="btn_task highlight" style="background-color: #A9BCF5;" disabled onclick="groupUpload();">첨부하기</button>
                                 </div>
                             </div>
                         </div>

@@ -279,6 +279,7 @@
 	<!-- 그룹 업로드용 모든 사진 조회 -->
 	<select id="selectPictureList">
 		SELECT 
+			TAD.ATCHMNFL_SN,
 			TAD.FILE_STRE_COURS_NM,
 			TAD.ORGINL_FILE_NM,
 			TAD.FILE_NM
