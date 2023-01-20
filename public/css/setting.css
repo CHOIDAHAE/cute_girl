@@ -1,445 +1,501 @@
 body, p, ul {
-    margin : 0;
+	margin : 0;
 }
 
 fieldset, img {
-    border: 0;
-    vertical-align: top;
-    padding: 0;
-    margin: 0;
+	border: 0;
+	vertical-align: top;
+	padding: 0;
+	margin: 0;
 }
 
 menu, ol, ul {
-    list-style: none;
+	list-style: none;
 }
 
 address, caption, hr {
-    display: none;
+	display: none;
 }
 
 select {
-    color: #333;
+	color: #333;
 }
 
 .wrap_pop {
-    border-width: 1px;
-    border-style: solid;
-    border-color: #d9d9d9 #bfbfbf #b6b6b6 #d5d5d5;
-    box-shadow: 1px 1px 1px rgb(0 0 0 / 10%);
-    text-align: center;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #d9d9d9 #bfbfbf #b6b6b6 #d5d5d5;
+	box-shadow: 1px 1px 1px rgb(0 0 0 / 10%);
+	text-align: center;
 }
 
 .wrap_pop_manage .header {
-    position: relative;
-    height: 36px;
-    background-color: #3182d8;
+	position: relative;
+	height: 36px;
+	background-color: #3182d8;
 }
 
 .wrap_pop .header {
-    height: 37px;
-    text-align: left;
-    border-bottom: 1px solid #ededed;
+	height: 37px;
+	text-align: left;
+	border-bottom: 1px solid #ededed;
 }
 
 .wrap_pop_manage .header .mana_header_title {
-    width: auto;
-    color: #fff;
-    font-size: 12px;
-    letter-spacing: -1px;
-    padding: 13px 0 0 5px;
+	width: auto;
+	color: #fff;
+	font-size: 12px;
+	letter-spacing: -1px;
+	padding: 13px 0 0 5px;
 }
 
 .wrap_pop_manage .header h1 {
-    float: left;
-    width: 56px;
-    margin: 1px 5px 0 4px;
-    padding-top: 11px;
+	float: left;
+	width: 56px;
+	margin: 1px 5px 0 4px;
+	padding-top: 11px;
 }
 
 .wrap_pop .header h1 {
-    display: inline-block;
-    overflow: hidden;
-    width: 370px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    padding: 14px 0 0 20px;
-    font-size: 14px;
-    color: #333;
-    line-height: 16px;
-    vertical-align: top;
+	display: inline-block;
+	overflow: hidden;
+	width: 370px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	padding: 14px 0 0 20px;
+	font-size: 14px;
+	color: #333;
+	line-height: 16px;
+	vertical-align: top;
 }
 
 .wrap_pop_manage .manage {
-    padding: 0;
-    text-align: left;
-    overflow-y: auto;
-    overflow-x: hidden;
+	padding: 0;
+	text-align: left;
+	overflow-y: auto;
+	overflow-x: hidden;
 }
 
 .wrap_pop_manage .content {
-    padding: 0!important;
+	padding: 0!important;
 }
 
 .wrap_pop_manage ul.tabmenu {
-    left: 0;
-    top: 39px;
-    bottom: 0;
-    margin: 0;
-    width: 130px;
-    min-height: 594px;
-    border-right: 1px solid #e6e6e6;
-    background: #fbfbfb;
-    overflow: hidden;
-    padding: 0;
-    display: inline-block;
+	left: 0;
+	top: 39px;
+	bottom: 0;
+	margin: 0;
+	width: 130px;
+	min-height: 594px;
+	border-right: 1px solid #e6e6e6;
+	background: #fbfbfb;
+	overflow: hidden;
+	padding: 0;
+	display: inline-block;
 }
 
 .wrap_pop_manage ul.tabmenu li {
-    background: 0 0;
+	background: 0 0;
 }
 
 .wrap_pop_manage ul.tabmenu li {
-    display: block;
-    float: none;
-    margin-right: 0;
-    border-bottom: 1px solid #ebebeb;
-    background: #fbfbfb;
-    letter-spacing: -1px;
-    text-align: left;
-    zoom: 1;
+	display: block;
+	float: none;
+	margin-right: 0;
+	border-bottom: 1px solid #ebebeb;
+	background: #fbfbfb;
+	letter-spacing: -1px;
+	text-align: left;
+	zoom: 1;
 }
 
 .wrap_pop_manage ul.tabmenu a li, .wrap_pop_manage ul.tabmenu a.m1 li, .wrap_pop_manage ul.tabmenu a.m2 li {
-    width: auto;
-    padding-left: 24px;
-    width: 110px;
+	width: auto;
+	padding-left: 24px;
+	width: 110px;
 }
 
 .m1, .m2 {
-    cursor: pointer;
+	cursor: pointer;
 }
 
 .wrap_pop_manage ul.tabmenu a li {
-    display: block;
-    position: relative;
-    height: 31px;
-    padding: 0 0 0 24px;
-    background: 0 0;
-    color: #7a7a7a;
-    line-height: 32px!important;
-    text-decoration: none;
+	display: block;
+	position: relative;
+	height: 31px;
+	padding: 0 0 0 24px;
+	background: 0 0;
+	color: #7a7a7a;
+	line-height: 32px!important;
+	text-decoration: none;
 }
 
 .wrap_pop_manage ul.tabmenu a li.on {
-    padding: 0 0 0 24px;
-    background: 0 0;
-    color: #157efb;
-    font-weight: 700;
+	padding: 0 0 0 24px;
+	background: 0 0;
+	color: #157efb;
+	font-weight: 700;
 }
 
 .wrap_pop ul.tabmenu a li {
-    display: inline;
-    float: left;
-    margin-right: -1px;
-    background: url(https://ssl.pstatic.net/static/pwe/ndrive/deskhome/bg.gif) no-repeat 0 -44px;
-    letter-spacing: -1px;
-    text-align: left;
-    font-size: 13px;
-    font-weight: bold;
-    width: 130px;
+	display: inline;
+	float: left;
+	margin-right: -1px;
+	background: url(https://ssl.pstatic.net/static/pwe/ndrive/deskhome/bg.gif) no-repeat 0 -44px;
+	letter-spacing: -1px;
+	text-align: left;
+	font-size: 13px;
+	font-weight: bold;
+	width: 130px;
 }
 
 .tabmenu .ban {
-    border-bottom: 0 none!important;
-    padding-top: 14px!important;
-    height: auto;
-    padding: 0;
-    text-align: center!important;
+	border-bottom: 0 none!important;
+	padding-top: 14px!important;
+	height: auto;
+	padding: 0;
+	text-align: center!important;
 }
 
 /**********************settingMain**********************/
 .manage_size .sub {
-    position: relative;
-    height: 31px;
-    padding-left: 1px;
-    border-bottom: 1px solid #c9c9c9;
+	position: relative;
+	height: 31px;
+	padding-left: 1px;
+	border-bottom: 1px solid #c9c9c9;
 }
 
 .manage_size .sub .on {
-    border-color: #c9c9c9;
-    border-bottom-color: #fff;
-    background-color: #fff;
-    z-index: 20;
+	border-color: #c9c9c9;
+	border-bottom-color: #fff;
+	background-color: #fff;
+	z-index: 20;
 }
 
 .manage_size .sub a {
-    display: inline-block;
-    position: relative;
-    z-index: 10;
-    float: left;
-    margin: 0 0 -1px -1px;
-    padding: 9px 16px 9px 17px;
-    border: 1px solid #e7e7e7;
-    border-bottom-color: #c9c9c9;
-    background: #fbfbfb;
-    font-weight: 700;
-    color: #222;
-    letter-spacing: -1px;
-    line-height: 12px;
-    vertical-align: top;
-    text-decoration: none;
-    font-size: 13px;
+	display: inline-block;
+	position: relative;
+	z-index: 10;
+	float: left;
+	margin: 0 0 -1px -1px;
+	padding: 9px 16px 9px 17px;
+	border: 1px solid #e7e7e7;
+	border-bottom-color: #c9c9c9;
+	background: #fbfbfb;
+	font-weight: 700;
+	color: #222;
+	letter-spacing: -1px;
+	line-height: 12px;
+	vertical-align: top;
+	text-decoration: none;
+	font-size: 13px;
 }
 
 .mycapacity_cont {
-    overflow: hidden;
-    padding: 18px 0 7px;
-    border-bottom: 1px solid #e9e9ec;
-    zoom: 1;
+	overflow: hidden;
+	padding: 18px 0 7px;
+	border-bottom: 1px solid #e9e9ec;
+	zoom: 1;
 }
 
 .graph_tooltip.above {
-    -ms-transform: translate(-50%, -100%);
-    transform: translate(-50%, -100%);
+	-ms-transform: translate(-50%, -100%);
+	transform: translate(-50%, -100%);
 }
 
 .graph_tooltip {
-    opacity: 0;
-    filter: alpha(opacity=0);
-    position: absolute;
-    transition: all .1s ease;
-    pointer-events: none;
-    -ms-transform: translate(-50%, 0);
-    transform: translate(-50%, 0);
-    white-space: nowrap;
-    font-family: "나눔고딕", NanumGothic, "돋움", Dotum, AppleGothic, Sans-serif;
-    font-size: 13px;
-    color: #fff;
+	opacity: 0;
+	filter: alpha(opacity=0);
+	position: absolute;
+	transition: all .1s ease;
+	pointer-events: none;
+	-ms-transform: translate(-50%, 0);
+	transform: translate(-50%, 0);
+	white-space: nowrap;
+	font-family: "나눔고딕", NanumGothic, "돋움", Dotum, AppleGothic, Sans-serif;
+	font-size: 13px;
+	color: #fff;
 }
 
 .graph_tooltip .tooltip {
-    display: block;
-    position: relative;
-    z-index: 10;
-    height: 30px;
-    padding: 0 10px;
-    line-height: 30px;
+	display: block;
+	position: relative;
+	z-index: 10;
+	height: 30px;
+	padding: 0 10px;
+	line-height: 30px;
 }
 
 .graph_tooltip:after {
-    opacity: 0.7;
-    filter: alpha(opacity=70);
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #000;
-    content: '';
+	opacity: 0.7;
+	filter: alpha(opacity=70);
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #000;
+	content: '';
 }
 
 .mycapacity_cont .mycapacity_tbl_wrap {
-    overflow: hidden;
+	overflow: hidden;
 }
 
 .mycapacity_tbl {
-    border: 0;
-    border-spacing: 0;
+	border: 0;
+	border-spacing: 0;
 }
 
 .mycapacity_tbl caption {
-    visibility: hidden;
-    overflow: hidden;
-    padding: 0;
-    width: 0;
-    height: 0;
-    font-size: 0;
-    line-height: 0;
+	visibility: hidden;
+	overflow: hidden;
+	padding: 0;
+	width: 0;
+	height: 0;
+	font-size: 0;
+	line-height: 0;
 }
 
 .mycapacity_tbl .group {
-    width: 136px;
-    color: #666;
-    font-size: 13px;
+	width: 136px;
+	color: #666;
+	font-size: 13px;
 }
 
 .mycapacity_tbl .gigabyte {
-    width: 78px;
-    font-weight: 700;
-    text-align: right;
+	width: 78px;
+	font-weight: 700;
+	text-align: right;
 }
 
 .mycapacity_tbl td.fst, .mycapacity_tbl th.fst {
-    border-top: 0;
+	border-top: 0;
 }
 
 .mycapacity_tbl th {
-    overflow: hidden;
+	overflow: hidden;
 }
 
 .mycapacity_tbl td, .mycapacity_tbl th {
-    height: 22px;
-    border: 0;
-    border-top: 1px solid #eeeef0;
-    color: #333;
+	height: 22px;
+	border: 0;
+	border-top: 1px solid #eeeef0;
+	color: #333;
 }
 
 .mycapacity_tbl .group .thcell {
-    padding-left: 9px;
+	padding-left: 9px;
 }
 
 .mycapacity_tbl .thcell {
-    line-height: 12px;
-    vertical-align: top;
-    text-align: left;
+	line-height: 12px;
+	vertical-align: top;
+	text-align: left;
 }
 
 .mycapacity_tbl .group .txt_tit {
-    display: inline-block;
-    float: left;
-    margin-left: 5px;
-    padding: 4px 0 3px;
-    line-height: 12px;
-    vertical-align: top;
+	display: inline-block;
+	float: left;
+	margin-left: 5px;
+	padding: 4px 0 3px;
+	line-height: 12px;
+	vertical-align: top;
 }
 
 .mycapacity_tbl .group .rect {
-    display: inline-block;
-    overflow: hidden;
-    float: left;
-    width: 8px;
-    height: 8px;
-    margin: 5px 0 0;
-    vertical-align: top;
+	display: inline-block;
+	overflow: hidden;
+	float: left;
+	width: 8px;
+	height: 8px;
+	margin: 5px 0 0;
+	vertical-align: top;
 }
 
 .mycapacity_tbl .gigabyte .tdcell {
-    padding-right: 9px;
+	padding-right: 9px;
 }
 
 .mycapacity_tbl .tdcell {
-    line-height: 17px;
-    vertical-align: top;
-    font-size: 13px;
+	line-height: 17px;
+	vertical-align: top;
+	font-size: 13px;
 }
 
 /* 용량 그래프 하단 */
 .myvolumn {
-    position: relative;
-    zoom: 1;
-    padding: 20px 9px 17px;
-    border-bottom: 1px solid #e9e9ec;
-    font-size: 13px;
+	position: relative;
+	zoom: 1;
+	padding: 20px 9px 17px;
+	border-bottom: 1px solid #e9e9ec;
+	font-size: 13px;
 }
 
 .myvolumn .volumn {
-    color: #333;
+	color: #333;
 }
 
 .myvolumn {
-    position: relative;
-    zoom: 1;
-    padding: 20px 9px 17px;
-    border-bottom: 1px solid #e9e9ec;
+	position: relative;
+	zoom: 1;
+	padding: 20px 9px 17px;
+	border-bottom: 1px solid #e9e9ec;
 }
 
 .myvolumn .dsc {
-    display: inline-block;
-    position: relative;
-    width: auto;
-    margin-top: 7px;
-    color: #888;
+	display: inline-block;
+	position: relative;
+	width: auto;
+	margin-top: 7px;
+	color: #888;
 }
 
 .myvolumn .dsc a {
-    color: #888;
-    text-decoration: none;
+	color: #888;
+	text-decoration: none;
 }
 
 .myvolumn .dsc a {
-    color: #888;
-    text-decoration: none;
+	color: #888;
+	text-decoration: none;
 }
 
 .manage_size .basket {
-    overflow: hidden;
-    clear: both;
-    padding: 15px 0 0 9px;
-    color: #666;
-    letter-spacing: -1px;
-    zoom: 1;
-    font-size: 13px;
+	overflow: hidden;
+	clear: both;
+	padding: 15px 0 0 9px;
+	color: #666;
+	letter-spacing: -1px;
+	zoom: 1;
+	font-size: 13px;
 }
 
 .manage_size .basket label {
-    vertical-align: middle;
+	vertical-align: middle;
 }
 
 .manage_size .basket select {
-    margin: 0 3px 0 10px;
-    vertical-align: middle;
+	margin: 0 3px 0 10px;
+	vertical-align: middle;
 }
 
 html:first-child select {
-    height: 20px;
-    padding-right: 6px;
+	height: 20px;
+	padding-right: 6px;
 }
 
 .manage_size .basket button {
-    height: 20px;
-    font-size: 11px;
+	height: 20px;
+	font-size: 11px;
 }
 
 button {
-    display: inline-block;
-    overflow: visible;
-    border-radius: 0;
-    height: 23px;
-    padding: 1px 4px 0;
-    border: 1px solid #c3c3c3;
-    background-color: #fff;
-    color: #333;
-    line-height: 100%;
-    letter-spacing: 0;
-    vertical-align: bottom;
-    white-space: nowrap;
-    cursor: pointer;
-    -webkit-appearance: none;
-    -webkit-text-size-adjust: none;
+	display: inline-block;
+	overflow: visible;
+	border-radius: 0;
+	height: 23px;
+	padding: 1px 4px 0;
+	border: 1px solid #c3c3c3;
+	background-color: #fff;
+	color: #333;
+	line-height: 100%;
+	letter-spacing: 0;
+	vertical-align: bottom;
+	white-space: nowrap;
+	cursor: pointer;
+	-webkit-appearance: none;
+	-webkit-text-size-adjust: none;
 }
 
 button .tx {
-    display: inline-block;
-    vertical-align: top;
+	display: inline-block;
+	vertical-align: top;
 }
 
 .manage_size .basket_info {
-    padding: 14px 0 0;
+	padding: 14px 0 0;
 }
 
 .manage_size .basket_info .lst {
-    padding: 12px 0 0 10px;
-    border-top: 1px solid #f2f2f4;
+	padding: 12px 0 0 10px;
+	border-top: 1px solid #f2f2f4;
 }
 
 .manage_size .basket_info .lst li {
-    height: auto;
-    padding: 1px 0 1px 7px;
-    background: url(https://ssl.pstatic.net/static/pwe/ndrive/2011/bu_basket_dot.gif) no-repeat 0 6px;
-    font-size: 11px;
-    color: #8e949d;
-    line-height: 16px;
-    vertical-align: top;
+	height: auto;
+	padding: 1px 0 1px 7px;
+	background: url(https://ssl.pstatic.net/static/pwe/ndrive/2011/bu_basket_dot.gif) no-repeat 0 6px;
+	font-size: 11px;
+	color: #8e949d;
+	line-height: 16px;
+	vertical-align: top;
 }
 
 /* 프레임박스 */
 .frameBox {
-    width: 655px;
-    min-height: 594px;
-    border-width: 0;
-    position: absolute;
+	width: 655px;
+	min-height: 594px;
+	border-width: 0;
+	position: absolute;
 }
 
 iframe {
-    margin: 0;
+	margin: 0;
+}
+
+/* 개인정보 */
+.tbl_model{
+	position: relative;
+	width: 80%;
+	table-layout: fixed;
+	border-spacing: 0;
+	border-collapse: collapse;
+	word-wrap: break-word;
+	word-break: keep-all;
+	border: 0;
+	border-bottom: 1px solid #e5e5e5;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.tbl_model .thcell{
+	padding: 32px 31px 32px;
+}
+
+.tbl_model .tdcell{
+	padding: 32px 0 32px 30px;
+}
+
+.tbl_model tr{
+	border-bottom: 1px solid #e5e5e5;
+}
+
+.tbl_model th{
+	color: #333;
+	border-right: 1px solid #e5e5e5;
+	background: #f9f9f9;
+}
+
+.tbl_model td{
+	color:#565656;
+}
+
+.tbl_model td,
+.tbl_model th{
+	line-height: 14px;
+	text-align: left;
+	vertical-align: top;
+	letter-spacing: -1px;
+	border: 0;
+	border-top: #e5e5e5;
+}
+
+.updInfoArea{
+	width: fit-content;
+	margin: auto;
+}
+
+.updBtn{
+	margin-top : 1em;
 }

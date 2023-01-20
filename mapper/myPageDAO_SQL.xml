@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="MyPageDAO">
+	<select id="selectMyProfile">
+		/* myPageDAO.selectMyProfile */
+		SELECT
+			EMPLYR_NM			/* 사용자명 */
+			, EMPLYR_ID			/* 사용자ID */
+			, EMPLYR_PASSWORD	/* 사용자 비밀번호 */
+			, EMAIL_ADRES		/* 이메일주소 */
+			, SEXDSTN_CODE		/* 성별 */
+			, EMPLYR_MBTLNUM	/* 전화번호 */
+		FROM TCM_EMPLYR TE		/* 사용자 */
+		WHERE FRST_REGISTER_SN = #{sEmplyrSn}
+	</select>
+</mapper>

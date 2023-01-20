@@ -299,7 +299,6 @@ module.exports = function(app){
 
 				var orgnFileNm = result.rows[0][5];
 				
-				console.log('파일 삭제 시작!!');
 				fs.unlink(`./public/uploadedFiles/${orgnFileNm}`, function(err){
 					if(err != null){
 						console.log('파일 삭제 에러!!');

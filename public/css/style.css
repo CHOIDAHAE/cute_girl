@@ -89,7 +89,7 @@ body{
 .formBox {
     width: 100px;
     height: 32px;
-    display: inline-block;
+    /*display: inline-block;*/
     float: right;
     margin-top : 5px;
     margin-right:10px;

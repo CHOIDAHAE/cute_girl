@@ -11,6 +11,7 @@ var dbRouter = require('./router/login')(app);
 var fileRouter = require('./router/file')(app);
 var settingRouter = require('./router/setting')(app);
 var groupRouter = require('./router/group')(app);
+var myPageRouter = require('./router/myPage')(app);
 
 var fs = require('fs');
 

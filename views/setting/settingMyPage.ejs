@@ -1,99 +1,101 @@
 <html lang="ko">
-    <head>
-        <meta charset="utf-8">
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <script src="https://kit.fontawesome.com/ad41bee873.js" crossorigin="anonymous"></script>
-        <link href="../css/setting.css?after" rel="stylesheet" type="text/css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" />
-        <script>
-            
-        </script>
-    </head>
-    <body>
-        <div class="manage_size" id="pop_content">
-            <div class="_managePop_holder">
-                <div class="sub tab">
-                    <a href="#myCapacity" class="toggle _tab on">
-                        <strong>마이페이지</strong>
-                    </a>
-                </div>
-                <div class="_myFolderCapacity_holder"></div>
-                <div class="mycapacity_cont tab_cont _tab_cont" style="padding:15px 0">
-                    <div class="tab_container" style="clear: both;float: left;margin: 0px 30px 0px 60px;width: 175px;">
-                        <div class="tab_content" id="canvas-holder">
-                            <div class="_chart_holder"><canvas id="_graph" width="193" height="193" style="position: relative; width: 155px; height: 155px;"></canvas></div>
-                            <div id="chart_percent" style="left: 261px; top: 170.316px; position: absolute; z-index: 100;"><div style="text-align:center;width:60px"><span id="percent" style="width:10px;font-size: 25px;font-weight:normal;">76</span><span style="font-size:13px;font-weight:normal;">%</span></div></div>
-                        </div>
-                    </div>
-                    <div class="mycapacity_tbl_wrap _legend_holder" id="_legend_holder" style="padding:15px 0">
-                        <table cellspacing="0" class="mycapacity_tbl" style="float: right;width: 90%;"> 
-                            <caption>내 용량 정보</caption> 
-                            <colgroup>
-                                <col class="group"> 
-                                <col class="gigabyte">  
-                            </colgroup>
-                            <tbody>
-                                <tr class="_legend_item" data-legendid="myUsedQuota" data-idx="0"> 
-                                    <th scope="row" class="group fst"> 
-                                        <div class="thcell">  
-                                            <span class="txt_tit">사용 중</span>
-                                        </div> 
-                                    </th> 
-                                    <td class=" gigabyte fst"> 
-                                        <div class="tdcell">22.9GB</div> 
-                                    </td> 
-                                </tr>  
-                                <tr class="_legend_item" data-legendid="myUsedQuota" data-idx="0"> 
-                                    <th scope="row" class="group "> 
-                                        <div class="thcell">  
-                                            <span class="rect" style="background-color:rgb(152,166,190)">&nbsp;</span>  
-                                            <span class="txt_tit">내 MYBOX</span>
-                                        </div> 
-                                    </th> 
-                                    <td class=" gigabyte "> 
-                                        <div class="tdcell">22.9GB</div> 
-                                    </td> 
-                                </tr>  
-                                <tr class="_legend_item" data-legendid="myUsedQuota" data-idx="0"> 
-                                    <th scope="row" class="group "> 
-                                        <div class="thcell">  
-                                            <span class="rect">&nbsp;</span>
-                                            <span class="txt_tit">폴더 및 파일</span>
-                                        </div> 
-                                    </th> 
-                                    <td class=" gigabyte "> 
-                                        <div class="tdcell">22.9GB</div> 
-                                    </td> 
-                                </tr>  
-                                <tr class="_legend_item" data-legendid="myUsedQuota" data-idx="0"> 
-                                    <th scope="row" class="group "> 
-                                        <div class="thcell">  
-                                            <span class="rect">&nbsp;</span>  
-                                            <span class="txt_tit">휴지통</span>
-                                        </div> 
-                                    </th> 
-                                    <td class=" gigabyte "> 
-                                        <div class="tdcell">
-                                            0KB
-                                        </div> 
-                                    </td> 
-                                </tr>  
-                                <tr class="_legend_item" data-legendid="unusedQuota" data-idx="1"> 
-                                    <th scope="row" class="group "> 
-                                        <div class="thcell">  
-                                            <span class="rect" style="background-color:rgb(0,110,246)">&nbsp;</span>  
-                                            <span class="txt_tit">사용 가능</span>
-                                        </div> 
-                                    </th> 
-                                    <td class=" gigabyte "> 
-                                        <div class="tdcell">7.1GB</div> 
-                                    </td> 
-                                </tr>  
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </body>
+<head>
+	<meta charset="utf-8">
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script src="https://kit.fontawesome.com/ad41bee873.js" crossorigin="anonymous"></script>
+	<link href="../css/setting.css?after" rel="stylesheet" type="text/css">
+	<link href="../css/grid.css?after" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" />
+	<script>
+		$(document).ready(function(){
+			$('#myProfile').addClass('cleanMenuSelected');
+			$('.cleanLi').click(function(){
+				$('.cleanLi').removeClass('cleanMenuSelected');
+				$(this).toggleClass('cleanMenuSelected');
+			})
+
+			viewMyProfile();
+		})
+
+		//프로필 조회
+		function viewMyProfile(){
+			$.ajax({
+				url : "/selectMyProfile",
+				type : "POST",
+				dataType : "JSON", //"JSON"
+				data : {"sEmplyrSn" : window.parent.$('#emplyrSn').val()}
+
+			})
+			.done(function (res) {
+				console.log(res);
+				$('#emplyrNm').html(res[0][0]);
+				$('#emplyrId').html(res[0][1]);
+				$('#emailAdres').html(res[0][3]);
+			})
+			.fail(function (xhr, textStatus, errorThrown) {
+				console.log('selectFileDtlData ajax 실패');
+			})
+		}
+
+		//프로필 수정하기
+		function updProfile(){
+
+		}
+	</script>
+</head>
+<body>
+	<div class="manage_size" id="pop_content">
+		<div class="_managePop_holder">
+			<div class="sub tab">
+				<a href="#myCapacity" class="toggle _tab on">
+					<strong>마이페이지</strong>
+				</a>
+			</div>
+			<div class="_myFolderCapacity_holder"></div>
+			<div id="clean_file_menu" class="clean_file_menu">
+				<ul class="task_tab_list">
+					<li class="cleanLi" id="myProfile"><a id="fileNmDup" href="javascript:void(0);" onclick="">내 프로필</a></li>
+					<li class="cleanLi"><a href="javascript:void(0);" onclick="">비밀번호 변경</a></li>
+				</ul>
+			</div>
+			<div id="userInfoArea">
+				<table border="0" class="tbl_model">
+					<colgroup>
+						<col style="width:35%">
+						<col>
+					</colgroup>
+					<tbody>
+						<tr>
+							<th scope="row">
+								<div class="thcell"> 사용자명 </div>
+							</th>
+							<td>
+								<div id="emplyrNm" class="tdcell"></div>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">
+								<div class="thcell">아이디</div>
+							</th>
+							<td>
+								<div id="emplyrId" class="tdcell"></div>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">
+								<div class="thcell">이메일</div>
+							</th>
+							<td>
+								<div id="emailAdres" class="tdcell"></div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<div id="updArea" class="updInfoArea">
+					<button type="button" class="updBtn" onclick="updProfile()"> 수정하기 </button>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
 </html>
