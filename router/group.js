@@ -405,15 +405,15 @@ module.exports = function(app){
 							"emplyrSn"	: emplyrSn
 							}
 
-			//기존 그룹사진 대표여부 수정
-			let updateTopPicture = mybatisMapper.getStatement('GroupDAO','updateTopPicture', fileParam, format);
+			//기존 그룹사진 삭제
+			let deleteTopPicture = mybatisMapper.getStatement('GroupDAO','deleteTopPicture', fileParam, format);
 			//fileSn 찾아오기
 			let selectFileSn = mybatisMapper.getStatement('GroupDAO','selectFileSn', {"groupSn"	: req.body.groupSn}, format);
 			
-			//기존 그룹사진 대표여부 수정
-			conn.execute(updateTopPicture, function(err,result){
+			//기존 그룹사진 삭제
+			conn.execute(deleteTopPicture, function(err,result){
 				if(err){
-					console.log("updateTopPicture failed :", err);
+					console.log("deleteTopPicture failed :", err);
 					res.json({"Status":"F"});
 					return;
 				}
@@ -580,28 +580,50 @@ module.exports = function(app){
 
 			//query format
 			let format = {language: 'sql', indent: ''};
-			
-			/* fileSnList 가공필요
-			var param = {
-				"emplyrSn"	: req.body.emplyrSn,
-				"fileSn"	: req.body.fileSn
-			};
 
-			// 파일 상세정보 조회 (한건당 상세조회 해서 그걸 group_file 테이블에 insert)
-			let selectFileDtlData = mybatisMapper.getStatement('IndexDAO','selectFileDtlData', param, format);
-			*/
-
-			//쿼리문 실행
-			conn.execute(selectFileDtlData, function(err,result){
-				if(err){
-					console.log("selectFileDtlData failed :", err);
-					res.json({"Status":"F"});
-					return;
-				}
+			var fileSn = req.body.fileSnList.split(",");
+			for(var i=1; i<fileSn.length; i++){
+				var param = {
+					"emplyrSn"	: req.body.emplyrSn,
+					"fileSn"	: fileSn[i]
+				};
 				
-				res.json({"Status":"S"});
-				doRelease(conn);					
-			});  
+				// 파일 상세정보 조회 (한건당 상세조회 해서 그걸 group_file 테이블에 insert)
+				let picturesForUpload = mybatisMapper.getStatement('GroupDAO','picturesForUpload', param, format);
+				
+				// 쿼리문 실행
+				conn.execute(picturesForUpload, function(err,result){
+					if(err){
+						console.log("picturesForUpload failed :", err);
+						res.json({"Status":"F"});
+						return;
+					}
+
+					var insertParam = {
+						"emplyrSn"	: req.body.emplyrSn,
+						"groupSn"	: req.body.groupSn,
+						"fileSn"	: result.rows[0][0],
+						"mainFileAt": "N",
+						"filePath"	: result.rows[0][1],
+						"orgFileNm"	: result.rows[0][2],
+					};
+
+					// 그룹파일에 insert
+					let insertGroupFile = mybatisMapper.getStatement('GroupDAO','insertGroupFile', insertParam, format);
+					
+					conn.execute(insertGroupFile, function(err,result){
+						if(err){
+							console.log("insertGroupFile failed :", err);
+							res.json({"Status":"F"});
+							return;
+						}
+
+						conn.commit();
+					});
+				});
+			}
+			res.json({"Status":"S"});
+			//conn.commit();
 		});
 	})
 

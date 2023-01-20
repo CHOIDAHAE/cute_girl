@@ -261,17 +261,11 @@
 		AND MAIN_FILE_AT = 'Y'
 	</select>
 
-	<!-- 기존 그룹사진 대표여부 수정 -->
-	<update id="updateTopPicture">
-		UPDATE
+	<!-- 기존 그룹 대표사진 삭제 -->
+	<update id="deleteTopPicture">
+		DELETE FROM
 			TCM_GROUP_FILE
-		SET
-			MAIN_FILE_AT		= 'N',
-			FRST_REGISTER_SN	= #{emplyrSn},
-			FRST_REGIST_DT		= SYSDATE,
-			LAST_UPDUSR_SN		= #{emplyrSn},
-			LAST_UPDT_DT		= SYSDATE
-		WHERE
+		WHERE	
 			MAIN_FILE_AT = 'Y'
 		AND AUTHOR_GROUP_SN = #{groupSn}
 	</update>
@@ -293,8 +287,6 @@
 	<!-- 그룹 업로드 시 해당 파일의 상세조회 -->
 	<select id="picturesForUpload">
 		SELECT
-			EMPLYR_SN,
-			AUTHOR_GROUP_SN,
 			ATCHMNFL_SN,
 			FILE_STRE_COURS_NM,
 			ORGINL_FILE_NM
@@ -303,6 +295,18 @@
 		WHERE
 			ATCHMNFL_SN  = #{fileSn}
 		AND FRST_REGISTER_SN = #{emplyrSn}
+	</select>
+
+	<!-- 그룹사진 조회 -->
+	<select id="selectForGroup">
+		SELECT
+			FILE_SN,
+			FILE_STRE_COURS_NM,
+			ORGINL_FILE_NM
+		FROM
+			TCM_GROUP_FILE
+		WHERE
+			AUTHOR_GROUP_SN = #{groupSn}
 		AND MAIN_FILE_AT = 'N'
 	</select>
 </mapper>

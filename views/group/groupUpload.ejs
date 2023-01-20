@@ -8,6 +8,7 @@
 		<script>
             $(document).ready(function(){
                 myPictureList();    // 업로드용 내 모든사진 조회
+                groupPictureList(); // 그룹 사진 조회
 			});
 			
 			// 닫기 버튼
@@ -21,11 +22,32 @@
 			function sortBtn(){
 				$('#ly_task').toggle();
 			};
+            
+            // 그룹 사진 조회
+            function groupPictureList(){
+                var groupSn = window.parent.$('#groupSn').val();
 
-			// 내사진 보기
+                $.ajax({
+					url : "/selectForGroup",
+					type : "POST",
+					dataType : "JSON", //"JSON"
+					data : {"groupSn" : groupSn},
+					success:function(res){
+						if(res.Status == "S"){
+							alert('사진 업로드가 완료되었습니다.');
+						} else if(res.Status == "F"){
+							alert('첨부 도중 오류가 발생하였습니다.');
+						}						                        
+					},
+					error:function(e){
+						alert("첨부 도중 오류가 발생하였습니다.(ajax에러)");
+					}
+				})
+            };
+
+			// 내사진 보기(업로드용)
 			function myPictureList(){
 				var emplyrSn = window.parent.$('#emplyrSn').val();
-                //var groupSn = window.parent.$('#groupSn').val();
 				
 				$.ajax({
 					url : "/myPictureList",
@@ -84,9 +106,13 @@
 			
 			// 첨부하기 버튼 클릭 이벤트
 			function groupUpload(){
-				var total_length = document.getElementById("total_length").value;
+				var emplyrSn = window.parent.$('#emplyrSn').val();
+                var groupSn = window.parent.$('#groupSn').val();
+
+                var total_length = document.getElementById("total_length").value;
 				var fileSnList = {};
 				
+                // 선택된 파일 담기
 				for(var i=0; i<total_length; i++){
 					var chkSn = $("input[type=checkbox][id=uploadChkbox_"+i+"]:checked").val();
 					if(typeof chkSn != 'undefined'){
@@ -98,10 +124,10 @@
 					url : "/groupUpload",
 					type : "POST",
 					dataType : "JSON", //"JSON"
-					data : {"emplyrSn" : emplyrSn, "fileSnList" : fileSnList},
+					data : {"emplyrSn" : emplyrSn, "fileSnList" : fileSnList, "groupSn" : groupSn},
 					success:function(res){
 						if(res.Status == "S"){
-							
+							alert('사진 업로드가 완료되었습니다.');
 						} else if(res.Status == "F"){
 							alert('첨부 도중 오류가 발생하였습니다.');
 						}						                        
@@ -111,7 +137,6 @@
 					}
 				})
 			}
-
 		</script>
 	</head>
     <body style="user-select: none; -ms-user-select: none">
