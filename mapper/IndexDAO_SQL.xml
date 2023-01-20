@@ -75,6 +75,7 @@
 			, tad.ATCHMNFL_SN
 			, DECODE(TEB.ATCHMNFL_SN, '', 'N', 'Y') BKMK_AT
 			, tad.USE_AT
+			, tad.ORGINL_FILE_EXTSN_NM
 		FROM
 			TCM_ATCHMNFL_DETAIL tad
 			, TCM_EMPLYRBY_BKMK TEB 
@@ -83,8 +84,14 @@
 			AND TAD.USE_AT = #{useAt}
 			AND TAD.FRST_REGISTER_SN = #{emplyrSn}
 			AND (ORGINL_FILE_EXTSN_NM LIKE #{fileType}||'%' OR #{fileType} = 'ALL')
-		<if test='orderBy != "" and orderBy != null'>
+		<if test='orderBy == "fileMg"'>
 			ORDER BY TAD.FILE_MG DESC
+		</if>
+		<if test='orderBy == "fileNm"'>
+			ORDER BY TAD.FILE_NM
+		</if>
+		<if test='orderBy == "date"'>
+			ORDER BY TAD.FRST_REGIST_DT
 		</if>
 	</select>
 
