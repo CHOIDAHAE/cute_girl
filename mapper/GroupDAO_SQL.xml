@@ -284,16 +284,14 @@
 			TAD.ORGINL_FILE_NM,
 			TAD.FILE_NM
 		FROM
-			TCM_ATCHMNFL TA,
 			TCM_ATCHMNFL_DETAIL TAD
 		WHERE
-			TA.ATCHMNFL_SN = TAD.ATCHMNFL_SN
-		AND TA.FRST_REGISTER_SN = #{emplyrSn}
-		AND TA.USE_AT = 'Y'
+			TAD.FRST_REGISTER_SN = #{emplyrSn}
+		AND TAD.USE_AT = 'Y'
 	</select>
 
 	<!-- 그룹 업로드 시 해당 파일의 상세조회 -->
-	<select id="selectPictureList">
+	<select id="picturesForUpload">
 		SELECT
 			EMPLYR_SN,
 			AUTHOR_GROUP_SN,
