@@ -12,6 +12,7 @@
 		var contextFileInfo = "";
 		var orginFileNm = "";
 		$(document).ready(function(){
+			$('#clean_file_menu').hide();
 			$(document).contextmenu(function(e){
 				console.log(e.target);
 				console.log(e);
@@ -104,6 +105,11 @@
 			$(document).click(function(){
 				$(".contextmenu").hide();
 			});
+
+			$('.cleanLi').click(function(){
+				$('.cleanLi').removeClass('cleanMenuSelected');
+				$(this).toggleClass('cleanMenuSelected');
+			})
 		});
 
 		//파일 선택시 사이드바 정보 띄우는 이벤트
@@ -275,6 +281,69 @@
 			})
 			.fail(function (xhr, textStatus, errorThrown) {
 				console.log('updateFileNm ajax 실패');
+				console.log('xhr'+xhr);
+				console.log('textStatus'+textStatus);
+				console.log('errorThrown'+errorThrown);
+			})
+		}
+
+		//파일명 중복
+		function fileNmDup() {
+			$.ajax({
+				url : "/cleanUpFiles",
+				type : "POST",
+				dataType : "JSON", //"JSON"
+				data : {"cleanType":"findDupNm"}
+
+			})
+			.done(function (res) {
+				var fileArea = $('#fileList');
+				var ListType = $('#ListType');
+				
+				var fileList = "";
+
+				for(var i=0; i<res.length; i++){
+					fileList += '<li class="item_fnc" id="' + res[i][5] + '" ondblclick="view_photoInfo(this)">';
+					fileList += '<img src="../uploadedFiles/' + res[i][1] + '" id="img_' + res[i][5] + '_NULL_Y" class="img_item"/>\n';
+					fileList += '<div class="item-name" id="dv_' + res[i][5] + '"> ' + res[i][2] + ' </div></li>\n';
+				}
+
+				$(fileArea).html(fileList);      //파일 리스트
+				$(ListType).attr('value', "cleanUpType");
+			})
+			.fail(function (xhr, textStatus, errorThrown) {
+				console.log('selectBkmkList ajax 실패');
+				console.log('xhr'+xhr);
+				console.log('textStatus'+textStatus);
+				console.log('errorThrown'+errorThrown);
+			})
+		}
+
+		function selectFileMg(){
+			var emplyrSn = window.parent.$('#emplyrSn').val();
+
+			$.ajax({
+				url : "/selectFileList",
+				type : "POST",
+				dataType : "JSON", //"JSON"
+				data : {"emplyrSn" : emplyrSn, "useAt" : "Y", "fileType" : "ALL", "orderBy" : "fileMg"}
+
+			})
+			.done(function (res) {
+				var fileList = "";
+
+				for(var i=0; i<res.length; i++){
+					fileList += '<li class="item_fnc" id="' + res[i][8]+ '" onclick="view_photoInfo(this)">';
+					/* ID : IMG_파일일련번호_즐겨찾기추가여부_사용여부 */
+					fileList += '<img src="../uploadedFiles/' + res[i][1] + '" id="img_' + res[i][8] + '_' + res[i][9] + '_' + res[i][10] + '" class="img_item"/>\n';
+					fileList += '<div class="item-name" id="dv_' + res[i][8] + '"> ' + res[i][2] + ' </div></li>\n';
+				}
+
+				$('#fileList').html(fileList);      //파일 리스트
+				$('#ListType').attr('value', "selectList");
+			})
+			.fail(function (xhr, textStatus, errorThrown) {
+				console.log('selectFileMg ajax 실패');
 				console.log('xhr'+xhr);
 				console.log('textStatus'+textStatus);
 				console.log('errorThrown'+errorThrown);

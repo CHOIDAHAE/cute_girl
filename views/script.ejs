@@ -15,6 +15,10 @@
 				fileSelect("Y", "ALL");	// 파일 조회
 				closeModal();	//모임만들기 모달 닫기
 				document.getElementById('void_btn').disabled = true;
+
+				$(document).click(function(){
+					$('#gridArea').contents().find(".contextmenu").hide();
+				})
 			};
 
 			//파일용량 읽어오기
@@ -44,10 +48,8 @@
 				var sortSelect = document.getElementById("sortSbBox");
 				var selectValue = sortSelect.options[sortSelect.selectedIndex].value;
 				var selectText = sortSelect.options[sortSelect.selectedIndex].text;
-				var ibx_boonmoon = document.getElementById("main");
 
-				ibx_boonmoon.textContent = selectText;
-				
+				fileSelect("Y", "ALL", selectValue);
 			};
 
 			function openMenu(menuNm){
@@ -140,11 +142,14 @@
 			};
 
 			// 파일 조회 
-			function fileSelect(useAt, fileType){
+			function fileSelect(useAt, fileType, sortType){
 				var emplyrSn = document.getElementById('emplyrSn').value;
 				var orderBy = "NULL";
-				if(fileType == "cleanType"){
-					orderBy = "fileMg";
+
+				if(sortType == "name"){
+					orderBy = "fileNm";
+				}else if(sortType == "date"){
+					orderBy == "date";
 				}
 
 				$.ajax({
@@ -161,9 +166,14 @@
 					var fileList = "";
 
 					for(var i=0; i<res.length; i++){
+						var fileType = res[i][11].split("/")[0];
+						var fileSrc = "../uploadedFiles/" + res[i][1];
+						if(fileType != "image"){
+							fileSrc = "../images/Icon_" + res[i][3] + ".png";
+						}
 						fileList += '<li class="item_fnc" id="' + res[i][8]+ '" onclick="view_photoInfo(this)">';
 						/* ID : IMG_파일일련번호_즐겨찾기추가여부_사용여부 */
-						fileList += '<img src="../uploadedFiles/' + res[i][1] + '" id="img_' + res[i][8] + '_' + res[i][9] + '_' + res[i][10] + '" class="img_item"/>\n';
+						fileList += '<img src="' + fileSrc + '" id="img_' + res[i][8] + '_' + res[i][9] + '_' + res[i][10] + '" class="img_item"/>\n';
 						fileList += '<div class="item-name" id="dv_' + res[i][8] + '"> ' + res[i][2] + ' </div></li>\n';
 					}
 
@@ -219,37 +229,10 @@
 			};
 
 			//파일정리하기
-			function cleanUpFiles(cleanType){
-				var emplyrSn = document.getElementById('emplyrSn').value;
-
-				$.ajax({
-					url : "/cleanUpFiles",
-					type : "POST",
-					dataType : "JSON", //"JSON"
-					data : {"emplyrSn" : emplyrSn, "cleanType":cleanType}
-
-				})
-				.done(function (res) {
-					var fileArea = $('#gridArea').contents().find('#fileList');
-					var ListType = $('#gridArea').contents().find('#ListType');
-					
-					var fileList = "";
-
-					for(var i=0; i<res.length; i++){
-						fileList += '<li class="item_fnc" id="' + res[i][5] + '" ondblclick="view_photoInfo(this)">';
-						fileList += '<img src="../uploadedFiles/' + res[i][1] + '" id="img_' + res[i][5] + '_NULL_Y" class="img_item"/>\n';
-						fileList += '<div class="item-name" id="dv_' + res[i][5] + '"> ' + res[i][2] + ' </div></li>\n';
-					}
-
-					$(fileArea).html(fileList);      //파일 리스트
-					$(ListType).attr('value', "cleanUpType");
-				})
-				.fail(function (xhr, textStatus, errorThrown) {
-					console.log('selectBkmkList ajax 실패');
-					console.log('xhr'+xhr);
-					console.log('textStatus'+textStatus);
-					console.log('errorThrown'+errorThrown);
-				})
+			function cleanUpFiles(){
+				$('#gridArea').contents().find('#clean_file_menu').show();
+				$('#gridArea').contents().find('#fileNmDup').click();
+				$('#gridArea').contents().find('#fileNmDupLi').toggleClass('cleanMenuSelected');
 			}
 				
 			// 모임만들기 모달 열기

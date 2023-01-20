@@ -29,7 +29,6 @@
 		INSERT INTO TCM_ATCHMNFL_DETAIL
 		(
 			ATCHMNFL_SN
-			, FILE_SN
 			, FILE_STRE_COURS_NM
 			, ORGINL_FILE_NM
 			, FILE_NM
@@ -46,7 +45,6 @@
 		VALUES
 		(
 			#{fileSn}
-			, #{fileSn}
 			, #{filePath}
 			, #{orgFileNm}
 			, #{fileNm}
@@ -77,6 +75,7 @@
 			, tad.ATCHMNFL_SN
 			, DECODE(TEB.ATCHMNFL_SN, '', 'N', 'Y') BKMK_AT
 			, tad.USE_AT
+			, tad.ORGINL_FILE_EXTSN_NM
 		FROM
 			TCM_ATCHMNFL_DETAIL tad
 			, TCM_EMPLYRBY_BKMK TEB 
@@ -85,8 +84,14 @@
 			AND TAD.USE_AT = #{useAt}
 			AND TAD.FRST_REGISTER_SN = #{emplyrSn}
 			AND (ORGINL_FILE_EXTSN_NM LIKE #{fileType}||'%' OR #{fileType} = 'ALL')
-		<if test='orderBy != "" and orderBy != null'>
+		<if test='orderBy == "fileMg"'>
 			ORDER BY TAD.FILE_MG DESC
+		</if>
+		<if test='orderBy == "fileNm"'>
+			ORDER BY TAD.FILE_NM
+		</if>
+		<if test='orderBy == "date"'>
+			ORDER BY TAD.FRST_REGIST_DT
 		</if>
 	</select>
 
@@ -122,7 +127,6 @@
 		/* IndexDAO.deleteFileUseAtDtl */
 		DELETE TCM_ATCHMNFL_DETAIL
 		WHERE ATCHMNFL_SN = #{AtchfileSn}
-		AND FILE_SN = #{AtchfileSn}
 	</delete>
 
 	<!-- 첨부파일 즐겨찾기 추가 -->
