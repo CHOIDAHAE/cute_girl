@@ -2,6 +2,12 @@
 <% include ./main_script %>
 <body>
 <div class="main-box">
+	<div id="clean_file_menu" class="clean_file_menu">
+		<ul class="task_tab_list">
+			<li class="cleanLi" id="fileNmDupLi"><a id="fileNmDup" href="javascript:void(0);" onclick="fileNmDup();">파일명 중복</a></li>
+			<li class="cleanLi"><a href="javascript:void(0);">용량 큰 파일</a></li>
+		</ul>
+	</div>
 	<div class="grid_Area">
 		<ul class="item_data" id="fileList">
 			<li title="test" class="item_fnc">

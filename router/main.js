@@ -5,26 +5,6 @@ module.exports = function(app){
         res.render('index.html');
     })*/
 
-    app.get('/photo', function(req, res){
-        res.render('photo', {data:'photo'});
-    })
-
-    app.get('/movie', function(req, res){
-        res.render('movie', {data:'movie'});
-    })
-
-    app.get('/document', function(req, res){
-        res.render('document', {data:'document'});
-    })
-
-    app.get('/music', function(req, res){
-        res.render('music', {data:'music'});
-    })
-
-    app.get('/trash', function(req, res){
-        res.render('trash', {data:'trash'});
-    })
-    
     app.get('/about', function(req, res){
         res.render('about', {data:'about'});
     })
@@ -32,7 +12,6 @@ module.exports = function(app){
     app.get('/main', function(req, res){
         res.render('main', {data:'main'});
     })
-
 // var output = _.filter(array, function(item){
 //     return item.value < 50;
 // });

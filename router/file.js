@@ -299,9 +299,13 @@ module.exports = function(app){
 
 				var orgnFileNm = result.rows[0][5];
 				
-				fs.unlink('./public/uploadedFiles/' + orgnFileNm, err => {
-					console.log("er : ", err);
-					res.json("F");
+				console.log('파일 삭제 시작!!');
+				fs.unlink(`./public/uploadedFiles/${orgnFileNm}`, function(err){
+					if(err != null){
+						console.log('파일 삭제 에러!!');
+						console.log("er : ", err);
+						res.json("F");
+					}
 				})
 			});
 			
@@ -658,7 +662,7 @@ module.exports = function(app){
 
 			if(cleanType == "findDupNm"){
 				var param = {
-					sEmplyrSn : req.body.emplyrSn
+					sEmplyrSn : req.session.user.emplyrSn
 				}
 
 				//getStatement(namespace명, queryId, parameter, format);

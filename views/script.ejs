@@ -142,16 +142,12 @@
 			// 파일 조회 
 			function fileSelect(useAt, fileType){
 				var emplyrSn = document.getElementById('emplyrSn').value;
-				var orderBy = "NULL";
-				if(fileType == "cleanType"){
-					orderBy = "fileMg";
-				}
 
 				$.ajax({
 					url : "/selectFileList",
 					type : "POST",
 					dataType : "JSON", //"JSON"
-					data : {"emplyrSn" : emplyrSn, "useAt" : useAt, "fileType" : fileType, "orderBy" : orderBy}
+					data : {"emplyrSn" : emplyrSn, "useAt" : useAt, "fileType" : fileType, "orderBy" : "NULL"}
 
 				})
 				.done(function (res) {
@@ -219,37 +215,10 @@
 			};
 
 			//파일정리하기
-			function cleanUpFiles(cleanType){
-				var emplyrSn = document.getElementById('emplyrSn').value;
-
-				$.ajax({
-					url : "/cleanUpFiles",
-					type : "POST",
-					dataType : "JSON", //"JSON"
-					data : {"emplyrSn" : emplyrSn, "cleanType":cleanType}
-
-				})
-				.done(function (res) {
-					var fileArea = $('#gridArea').contents().find('#fileList');
-					var ListType = $('#gridArea').contents().find('#ListType');
-					
-					var fileList = "";
-
-					for(var i=0; i<res.length; i++){
-						fileList += '<li class="item_fnc" id="' + res[i][5] + '" ondblclick="view_photoInfo(this)">';
-						fileList += '<img src="../uploadedFiles/' + res[i][1] + '" id="img_' + res[i][5] + '_NULL_Y" class="img_item"/>\n';
-						fileList += '<div class="item-name" id="dv_' + res[i][5] + '"> ' + res[i][2] + ' </div></li>\n';
-					}
-
-					$(fileArea).html(fileList);      //파일 리스트
-					$(ListType).attr('value', "cleanUpType");
-				})
-				.fail(function (xhr, textStatus, errorThrown) {
-					console.log('selectBkmkList ajax 실패');
-					console.log('xhr'+xhr);
-					console.log('textStatus'+textStatus);
-					console.log('errorThrown'+errorThrown);
-				})
+			function cleanUpFiles(){
+				$('#gridArea').contents().find('#clean_file_menu').show();
+				$('#gridArea').contents().find('#fileNmDup').click();
+				$('#gridArea').contents().find('#fileNmDupLi').toggleClass('cleanMenuSelected');
 			}
 				
 			// 모임만들기 모달 열기

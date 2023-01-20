@@ -103,6 +103,7 @@ ul {
 	opacity: 1;
 }
 
+/* 우클릭 메뉴 */
 .contextmenu {
 	display: none;
 	position: absolute;
@@ -139,4 +140,43 @@ ul {
   
   .contextmenu li:hover a {
 	color: #FFFFFF;
+  }
+
+  /* 파일정리 메뉴 */
+  .clean_file_menu {
+	height: 7%;
+	width: 98%;
+	border-bottom: 1px solid #B0BEC5;
+	margin: 1em;
+  }
+
+  .task_tab_list a{
+	text-decoration-line: none;
+	color: #545454;
+  }
+
+  .task_tab_list li{
+	position: relative;
+	display: inline-block;
+	margin-top: 6px;
+	padding-bottom: 6px;
+	margin-right: 10px;
+  }
+
+  /* 파일정리 메뉴 선택 */
+  .cleanMenuSelected{
+	font-weight: bolder;
+	/* 기존 밑줄
+	text-decoration-line: underline;
+	text-underline-position: under;
+	text-decoration-thickness: 3px;*/
+  }
+  .cleanMenuSelected::after{
+	position: absolute;
+	bottom: -2px;
+	left: 0;
+	right: 0;
+	height: 3px;
+	background-color: #000;
+	content: '';
   }
