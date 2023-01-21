@@ -216,6 +216,12 @@
                 // iframe(그룹 파일 업로드 팝업)
                 document.getElementById('iframe').setAttribute('style', 'visibility:hidden;');
             };
+
+            // 사진 아이콘 클릭
+            function uploadPicture(){
+                changePart('picture');
+                uploadPopup();
+            }
 		</script>
 	</head>
 	<body>
@@ -375,7 +381,7 @@
                                                     </div>
                                                     <div class="write_submit">
                                                         <div class="write_btn_group">
-                                                            <a class="b_photo"><span class="ic_ph"></span>사진</a>
+                                                            <a class="b_photo" onclick="uploadPicture();"><span class="ic_ph"></span>사진</a>
                                                             <a class="b_video"><span class="ic_ph"></span>동영상</a>
                                                             <a class="b_audio"><span class="ic_ph"></span>오디오</a>
                                                     </div>
@@ -449,7 +455,7 @@
     <div id="picture_part" class="content_box _together_scroll">
         <div class="lst_pt">
             <div class="together_photo">
-                <ul class="toge_photo_list">
+                <ul id="photo_none" class="toge_photo_list">
                     <li style="width: auto; height: auto;">
                         <div class="together_none">
                             <span class="ic_p"></span>
@@ -462,6 +468,19 @@
                             </p>
                         </div>
                     </li>
+                </ul>
+                <ul id="photo_list" class="toge_photo_list" style="height: 267px;">
+                    <!--
+                    <li class="">
+                        <a>
+                            <img src="https://thumb1.photo.mybox.naver.com/3472495530733629005?type=m740_390_2&amp;nocache=5236120301" style="opacity: 1; transition: opacity 0.2s ease 0s; height: inherit;">
+                            <span class="info">
+                                <span class="tit">2022.10.21, 대구시 진천동에서</span>
+                                <span class="num">0</span>
+                            </span>
+                        </a>
+                    </li>
+                    -->
                 </ul>
                 <div class="reload_area"></div>
             </div>

@@ -574,7 +574,7 @@ module.exports = function(app){
 			if(err){
 				console.log("Oracle Connection failed(groupUpload)",err);
 			} else {
-				console.log("Oracle Connection success(groupUpload)");
+				//console.log("Oracle Connection success(groupUpload)");
 			}
 			conn = con;
 
@@ -625,6 +625,40 @@ module.exports = function(app){
 			res.json({"Status":"S"});
 			//conn.commit();
 		});
+	})
+
+	// 그룹 첨부하기
+	app.post("/selectForGroup", function(req, res){
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(selectForGroup)",err);
+			} else {
+				//console.log("Oracle Connection success(selectForGroup)");
+			}
+			conn = con;
+
+			//query format
+			let format = {language: 'sql', indent: ''};
+
+			// 그룹파일에 insert
+			let selectForGroup = mybatisMapper.getStatement('GroupDAO','selectForGroup', {"groupSn" : req.body.groupSn}, format);
+
+			conn.execute(selectForGroup, function(err,result){
+				if(err){
+					console.log("selectForGroup failed :", err);
+					res.json({"Status":"F"});
+					return;
+				}
+				
+				res.json({"Status":"S", "result" : result.rows});
+				conn.commit();
+			});
+		});	
 	})
 
 	function doRelease(conn){

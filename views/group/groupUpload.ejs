@@ -33,14 +33,35 @@
 					dataType : "JSON", //"JSON"
 					data : {"groupSn" : groupSn},
 					success:function(res){
+                        console.log(res);
 						if(res.Status == "S"){
-							alert('사진 업로드가 완료되었습니다.');
+                            var photo_length = res.result.length;
+							if (photo_length == 0){
+                                // 기본 소스
+                                window.parent.$('#photo_none').show();
+                                window.parent.$('#photo_list').hide();
+                            } else {
+                                // 조회된 사진 배열
+                                window.parent.$('#photo_list').show();
+                                window.parent.$('#photo_none').hide();
+
+                                var photo_list = window.parent.$("#photo_list");
+                                for (var i=0; i<photo_length; i++){
+                                    photo_list.append(
+									'<li class="mypicture" style="position: absolute; top: 17px; left: 0px; width: 250px; height: 250px;">'
+									+'<div class="item"><a><img src="..'+res.result[i][1]+'/'+res.result[i][2]
+									+'" style="width:100%; height:100%;"></a>'
+									+'<span class="checkbox">'
+									+'<input type="checkbox" name="uploadChkbox" value="'+res.result[i][0]+'" id="uploadChkbox_'+i+'"onclick="check()">'
+									+'<label for="uploadChkbox">선택</label></span></div></li>');
+                                }
+                            }
 						} else if(res.Status == "F"){
-							alert('첨부 도중 오류가 발생하였습니다.');
+							alert('사진 조회 중 오류가 발생하였습니다.');
 						}						                        
 					},
 					error:function(e){
-						alert("첨부 도중 오류가 발생하였습니다.(ajax에러)");
+						alert("사진 조회 중 오류가 발생하였습니다.(ajax에러)");
 					}
 				})
             };
@@ -255,24 +276,7 @@
                                         <label for="2022" class="chk_label">2022년</label>
                                     </h4>
                                     <div style="opacity: 1;">
-                                        <ul id="photo_list" class="photo_list" style="height: 1764.01px;">
-                                            <!--
-                                            <li class="mypicture">
-                                                <div class="item">
-                                                    <a>
-                                                        <img src="https://thumb1.photo.mybox.naver.com/3472495530733427532:10588976?type=m740_390_2&amp;nocache=4636120301&amp;setidc=1" alt="이미지 제목">
-                                                    </a>
-                                                    <button type="button" class="btn_favorite">
-                                                        <span class="blind">즐겨찾기</span>
-                                                    </button>
-                                                    <span class="checkbox">
-                                                        <input type="checkbox" id="uploadChkbox">
-                                                        <label for="uploadChkbox">선택</label>
-                                                    </span>
-                                                </div>
-                                            </li>
-                                            -->
-                                        </ul>
+                                        <ul id="photo_list" class="photo_list" style="height: 1764.01px;"></ul>
                                     </div>
                                 </div>
                                 <div style="width: 100%; height: 1px;"></div>
