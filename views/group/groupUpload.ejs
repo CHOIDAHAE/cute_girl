@@ -133,6 +133,33 @@
 					}
 				})
 			}
+
+            // 전체 선택
+            function check_all(){
+                var checked = document.getElementById('whole_selector').checked;
+
+                if(checked == true){
+                    var total_length = document.getElementById("total_length").value;
+                    for(var i=0; i<total_length; i++){
+                        var id = 'uploadChkbox_'+i;
+                        var disabled = document.getElementById(id).disabled;
+                        
+                        if(disabled == false){
+                            document.getElementById(id).checked = true;
+                        } else {
+                            document.getElementById(id).checked = false;
+                        }
+                    }
+
+                    // 전체 체크박스 클릭 이벤트
+                    check();
+                } else {
+                    $("input:checkbox[name=uploadChkbox]").prop("checked", false);
+
+                    // 전체 체크박스 클릭 이벤트
+                    check('cancel');
+                }
+            };
 		</script>
 	</head>
     <body style="user-select: none; -ms-user-select: none">
@@ -192,7 +219,7 @@
                         <div class="task_area">
                             <div class="task_bottom_area">
                                 <div class="task_btn_area">
-                                    <span class="check_all">
+                                    <span id="check_all" class="check_all" onclick="check_all();">
                                         <input type="checkbox" id="whole_selector" class="input_check">
                                         <label for="whole_selector">
                                             <span class="blind">모두선택</span>
@@ -243,7 +270,7 @@
                         </div>
                     </div>
                     <div class="content_box">
-                        <div style="transform: translateZ(0px); will-change: auto;">
+                        <div style="transform: translateZ(0px); will-change: auto; height: 100%;">
                             <div class="lst_pt"><div class="all_photo_list_area year">
                                 <div class="all_photo_box">
                                     <h4 class="photo_title">
@@ -257,7 +284,7 @@
                                         <ul id="photo_list" class="photo_list" style="height: 100%;"></ul>
                                     </div>
                                 </div>
-                                <div style="width: 100%; height: 1px;"></div>
+                                <!--<div style="width: 100%; height: 1px;"></div>-->
                             </div>
                         </div>
                     </div>

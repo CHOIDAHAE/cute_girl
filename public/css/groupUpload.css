@@ -31,7 +31,7 @@ a {
 
 .mini_wrap {
     position: relative;
-    min-width: 600px;
+    min-width: 500px;
     height: 100%;
 }
 
@@ -252,6 +252,7 @@ a {
     align-items: center;
 }
 
+/*
 .task_btn_area .check_all {
     -webkit-box-flex: 0;
     -ms-flex: none;
@@ -264,14 +265,16 @@ a {
     width: 12px;
     height: 12px;
 }
+*/
 
 .task_btn_area .check_all .input_check {
-    position: absolute;
+    /*position: absolute;*/
     overflow: hidden;
     clip: rect(0 0 0 0);
     margin: -1px;
-    width: 1px;
-    height: 1px;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
 }
 
 .mini_container .task_area .task_text {
@@ -588,6 +591,11 @@ a {
 .mini_container .all_photo_list_area .all_photo_box {
     padding-bottom: 25px;
 }
+
+.all_photo_list_area {
+    height: 100%;
+}
+
 
 .all_photo_list_area .all_photo_box:first-child {
     padding-top: 20px;
