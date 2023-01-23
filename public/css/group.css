@@ -1272,3 +1272,215 @@ button .tx {
 .groupPicture {
     display: inline-block;
 }
+
+/**************타임라인****************/
+.toge_box {
+    position: relative;
+    min-height: 110px;
+    border: 1px solid #d9d9d9;
+    background-color: #fff;
+    border-radius: 2px;
+    -webkit-box-shadow: 0 2px 1px -1px #d6d6d6;
+    box-shadow: 0 2px 1px -1px #d6d6d6;
+}
+
+.toge_box .toge_title {
+    padding: 16px 0 12px 19px;
+    line-height: 16px;
+}
+
+.toge_box .toge_title strong {
+    font-size: 14px;
+}
+
+.toge_box .toge_title .load_time {
+    margin-left: 12px;
+    font-size: 11px;
+    font-weight: normal;
+    color: #a5a5a5;
+}
+
+.toge_content_box {
+    padding: 0 19px 19px 19px;
+    line-height: 20px;
+    font-size: 13px;
+}
+
+.toge_content .toge_text {
+    word-break: break-all;
+    word-wrap: break-word;
+}
+
+.toge_photo {
+    padding: 18px 0 0 0;
+}
+
+.toge_photo ul {
+    position: relative;
+}
+
+.toge_photo ul.single .p_lst {
+    position: static;
+    min-height: 100px;
+    width: 100%;
+    text-align: center;
+}
+
+.toge_photo ul li {
+    position: absolute;
+    overflow: hidden;
+}
+
+.toge_photo li {
+    position: relative;
+}
+
+.toge_photo ul.single .p_lst a {
+    vertical-align: middle;
+    position: relative;
+}
+
+.toge_photo ul li a {
+    display: block;
+    height: 100%;
+}
+
+.toge_photo ul li a .shadow_in {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: block;
+    width: auto;
+    height: auto;
+    border: 1px solid #000;
+    opacity: .1;
+    filter: alpha(opacity=10);
+}
+
+.toge_comment {
+    padding: 14px 20px 8px 19px;
+    border-top: 1px solid #e7e7e7;
+    background-color: #fcfcfc;
+}
+
+.comm_list {
+    margin: -7px -19px 8px -20px;
+}
+
+.comm_input {
+    margin-bottom: 7px;
+}
+
+.comm_input .textarea_input {
+    position: relative;
+    min-height: 32px;
+}
+
+.comm_input .textarea_input label {
+    display: none;
+}
+
+.comm_input .textarea_input .textarea {
+    position: relative;
+    padding: 0 10px;
+    border: 1px solid #e6e6e8;
+    background-color: #fff;
+    min-height: 31px;
+}
+
+.comm_input .textarea_input textarea {
+    padding: 6px 0 5px 0;
+    border: 0 none;
+    width: 100%;
+    outline: 0;
+    line-height: 18px;
+    vertical-align: top;
+    resize: none;
+    overflow-x: hidden;
+}
+
+.comm_input .textarea_input .btn_submit {
+    display: none;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+.comm_input .textarea_input .btn_submit button {
+    width: 63px;
+    height: 33px;
+    border: 1px solid #c3c3c3;
+    background-color: #cccccc;
+    color: #fff;
+}
+
+button {
+    display: inline-block;
+    overflow: visible;
+    height: 23px;
+    padding: 1px 4px 0;
+    border: 1px solid #c3c3c3;
+    background-color: #fff;
+    color: #333;
+    line-height: 100%;
+    letter-spacing: 0;
+    vertical-align: top;
+    white-space: nowrap;
+    cursor: pointer;
+    -webkit-appearance: none;
+    -webkit-text-size-adjust: none;
+    border-radius: 0;
+}
+
+.toge_modify {
+    position: absolute;
+    right: 11px;
+    top: 14px;
+    z-index: 200;
+}
+
+.toge_modify .btn_modify {
+    display: block;
+    width: 21px;
+    height: 25px;
+    border: 0 none;
+    background-position: -74px -130px;
+}
+
+.toge_modify .btn_modify{
+    background-image: url(https://ssl.pstatic.net/static/pwe/cloud/img/sprite/sprite_1704.png);
+    background-repeat: no-repeat;
+}
+
+.toge_modify .ly_small {
+    display: none;
+    position: absolute;
+    right: 17px;
+    top: 2px;
+    background-color: #fff;
+    border: 1px solid #c6c6c6;
+}
+
+menu, ul, ol {
+    list-style: none;
+}
+
+.toge_modify .ly_small a {
+    display: block;
+    width: auto;
+    height: 27px;
+    padding: 0 12px 0 12px;
+    white-space: nowrap;
+    line-height: 28px;
+    color: #333;
+    text-decoration: none;
+    font-size: 11px;
+}
+
+.toge_modify .ly_small li.bar {
+    height: 1px;
+    overflow: hidden;
+    background-color: #dedede;
+}
