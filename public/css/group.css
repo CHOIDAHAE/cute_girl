@@ -727,8 +727,9 @@ a.more_invitation .more_invitation_bg{
 }
 
 .together_photo .toge_photo_list li {
-    width: 240px;
+    width: 200px;
     height: 200px;
+    margin: 10px;
     overflow: hidden;
 }
 
@@ -1262,4 +1263,12 @@ button .tx {
     box-shadow: rgb(0 0 0 / 20%) 0px 2px 6px;
     border: 1px solid rgb(102, 102, 102);
     background-color: beige;
+}
+
+.ic_ph {
+    padding-top: 5px;
+}
+
+.groupPicture {
+    display: inline-block;
 }

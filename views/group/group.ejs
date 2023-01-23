@@ -25,6 +25,9 @@
 
 				// 스토리/사진 탭
 				changePart('story');
+
+                // 그룹 사진 조회
+                groupPictureList();
             });
             
             // 스토리/사진 탭
@@ -165,7 +168,6 @@
 					dataType : "JSON", //"JSON"
                     data : formData,
 					success:function(result){
-                        console.log(result);
                         if(result.Status == "L"){
                             alert("그룹 리더만 수정이 가능합니다.");
                         } else if(result.Status == "S"){
@@ -207,21 +209,65 @@
 
             // 파일 업로드 시 뜨는 팝업
             function uploadPopup(){
+                document.getElementById('iframe_photo').src = "/groupUpload";
                 // iframe(그룹 파일 업로드 팝업)
-                document.getElementById('iframe').setAttribute('style', 'visibility:visible;');
+                document.getElementById('iframe_photo').setAttribute('style', 'visibility:visible;');
             };
             
             // 업로드 팝업 닫기
             function closeBtn(){
                 // iframe(그룹 파일 업로드 팝업)
-                document.getElementById('iframe').setAttribute('style', 'visibility:hidden;');
+                document.getElementById('iframe_photo').setAttribute('style', 'visibility:hidden;');
+                document.getElementById('iframe_story').setAttribute('style', 'visibility:hidden;');
             };
 
             // 사진 아이콘 클릭
             function uploadPicture(){
-                changePart('picture');
-                uploadPopup();
+                // iframe(그룹 파일 업로드 팝업)
+                document.getElementById('iframe_story').src = "/groupUpload";
+                document.getElementById('iframe_story').setAttribute('style', 'visibility:visible;');
             }
+
+            // 그룹 사진 조회
+            function groupPictureList(){
+                var groupSn = $('#groupSn').val();
+
+                $.ajax({
+					url : "/selectForGroup",
+					type : "POST",
+					dataType : "JSON", //"JSON"
+					data : {"groupSn" : groupSn},
+					success:function(res){
+						if(res.Status == "S"){
+                            var photo_length = res.result.length;
+							if (photo_length == 0){
+                                // 기본 소스
+                                $('#photo_none').show();
+                                $('#toge_photo_list').hide();
+                            } else {
+                                // 조회된 사진 배열
+                                $('#toge_photo_list').show();
+                                $('#photo_none').hide();
+
+                                var content = "";
+
+                                for (var i=0; i<photo_length; i++){
+                                    content += '<li class="groupPicture">'
+                                        +'<div class="item"><a><img src="..'+res.result[i][1]+'/'+res.result[i][2]
+                                        +'" style="width:100%; height:100%;"></a></div></li>\n';
+                                }
+
+                                $('#toge_photo_list').html(content);      // 조회된 사진 리스트
+                            }
+						} else if(res.Status == "F"){
+							alert('사진 조회 중 오류가 발생하였습니다.');
+						}						                        
+					},
+					error:function(e){
+						alert("사진 조회 중 오류가 발생하였습니다.(ajax에러)");
+					}
+				})
+            };
 		</script>
 	</head>
 	<body>
@@ -361,6 +407,9 @@
                     <!-- 이야기 -->
                     <div id="story_part" class="content_box _together_scroll">
                         <div class="lst_pt">
+                            <p style="text-align:center;">
+                                <iframe id="iframe_story" class="frameBox" src="/" scrolling="yes" width="100%" height="100%" frameborder="0" style='visibility : hidden;'></iframe>
+                            </p>
                             <div class="together_wrap">
                                 <div class="together_area" style="opacity: 1;">
                                     <div class="together_group">
@@ -381,9 +430,15 @@
                                                     </div>
                                                     <div class="write_submit">
                                                         <div class="write_btn_group">
-                                                            <a class="b_photo" onclick="uploadPicture();"><span class="ic_ph"></span>사진</a>
-                                                            <a class="b_video"><span class="ic_ph"></span>동영상</a>
-                                                            <a class="b_audio"><span class="ic_ph"></span>오디오</a>
+                                                            <a class="b_photo" onclick="uploadPicture();">
+                                                                <span class="ic_ph"><i class="fa-solid fa-camera"></i></span>사진
+                                                            </a>
+                                                            <a class="b_video">
+                                                                <span class="ic_ph"><i class="fa-solid fa-video"></i></span>동영상
+                                                            </a>    
+                                                            <a class="b_audio">
+                                                                <span class="ic_ph"><i class="fa-solid fa-microphone"></i></span>오디오                                                                
+                                                            </a>
                                                     </div>
                                                     <button class="write_type cancel">취소</button>
                                                     <button class="write_type up">올리기</button>
@@ -464,24 +519,12 @@
                             <a class="btn_add_more" onclick="uploadPopup();">사진 추가하기</a>
                             
                             <p style="text-align:center;">
-                                <iframe id="iframe" class="frameBox" src="/groupUpload" id="groupUpload" scrolling="yes" width="100%" height="100%" frameborder="0" style='visibility : hidden;'></iframe>
+                                <iframe id="iframe_photo" class="frameBox" src="/" scrolling="yes" width="100%" height="100%" frameborder="0" style='visibility : hidden;'></iframe>
                             </p>
                         </div>
                     </li>
                 </ul>
-                <ul id="photo_list" class="toge_photo_list" style="height: 267px;">
-                    <!--
-                    <li class="">
-                        <a>
-                            <img src="https://thumb1.photo.mybox.naver.com/3472495530733629005?type=m740_390_2&amp;nocache=5236120301" style="opacity: 1; transition: opacity 0.2s ease 0s; height: inherit;">
-                            <span class="info">
-                                <span class="tit">2022.10.21, 대구시 진천동에서</span>
-                                <span class="num">0</span>
-                            </span>
-                        </a>
-                    </li>
-                    -->
-                </ul>
+                <ul id="toge_photo_list" class="toge_photo_list"></ul>
                 <div class="reload_area"></div>
             </div>
         </div>

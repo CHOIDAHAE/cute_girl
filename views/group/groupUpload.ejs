@@ -8,7 +8,6 @@
 		<script>
             $(document).ready(function(){
                 myPictureList();    // 업로드용 내 모든사진 조회
-                groupPictureList(); // 그룹 사진 조회
 			});
 			
 			// 닫기 버튼
@@ -22,71 +21,37 @@
 			function sortBtn(){
 				$('#ly_task').toggle();
 			};
-            
-            // 그룹 사진 조회
-            function groupPictureList(){
-                var groupSn = window.parent.$('#groupSn').val();
-
-                $.ajax({
-					url : "/selectForGroup",
-					type : "POST",
-					dataType : "JSON", //"JSON"
-					data : {"groupSn" : groupSn},
-					success:function(res){
-                        console.log(res);
-						if(res.Status == "S"){
-                            var photo_length = res.result.length;
-							if (photo_length == 0){
-                                // 기본 소스
-                                window.parent.$('#photo_none').show();
-                                window.parent.$('#photo_list').hide();
-                            } else {
-                                // 조회된 사진 배열
-                                window.parent.$('#photo_list').show();
-                                window.parent.$('#photo_none').hide();
-
-                                var photo_list = window.parent.$("#photo_list");
-                                for (var i=0; i<photo_length; i++){
-                                    photo_list.append(
-									'<li class="mypicture" style="position: absolute; top: 17px; left: 0px; width: 250px; height: 250px;">'
-									+'<div class="item"><a><img src="..'+res.result[i][1]+'/'+res.result[i][2]
-									+'" style="width:100%; height:100%;"></a>'
-									+'<span class="checkbox">'
-									+'<input type="checkbox" name="uploadChkbox" value="'+res.result[i][0]+'" id="uploadChkbox_'+i+'"onclick="check()">'
-									+'<label for="uploadChkbox">선택</label></span></div></li>');
-                                }
-                            }
-						} else if(res.Status == "F"){
-							alert('사진 조회 중 오류가 발생하였습니다.');
-						}						                        
-					},
-					error:function(e){
-						alert("사진 조회 중 오류가 발생하였습니다.(ajax에러)");
-					}
-				})
-            };
 
 			// 내사진 보기(업로드용)
 			function myPictureList(){
 				var emplyrSn = window.parent.$('#emplyrSn').val();
+                var groupSn = window.parent.$('#groupSn').val();
 				
 				$.ajax({
 					url : "/myPictureList",
 					type : "POST",
 					dataType : "JSON", //"JSON"
-					data : {"emplyrSn" : emplyrSn},
+					data : {"emplyrSn" : emplyrSn, "groupSn": groupSn},
 					success:function(res){
 						if(res.Status == "S"){
 							document.getElementById("total_length").value = res.result.length;
 							var photo_list = $("#photo_list");
 							for(var i=0; i<res.result.length; i++){
+                                var type = "";
+
 								photo_list.append(
 									'<li class="mypicture">'
-									+'<div class="item"><a><img src="..'+res.result[i][1]+'/'+res.result[i][2]
-									+'" alt="'+res.result[i][3]+'" style="width:100%; height:100%;"></a>'
-									+'<span class="checkbox">'
-									+'<input type="checkbox" name="uploadChkbox" value="'+res.result[i][0]+'" id="uploadChkbox_'+i+'"onclick="check()">'
-									+'<label for="uploadChkbox">선택</label></span></div></li>');
+									+ '<div class="item"><a><img src="..'+res.result[i][1]+'/'+res.result[i][2]
+									+ '" alt="'+res.result[i][3]+'" style="width:100%; height:100%;"></a>'
+									+ '<span class="checkbox">'
+									+ '<input type="checkbox" name="uploadChkbox" value="'+res.result[i][0]+'" id="uploadChkbox_'+i+'" onclick="check()">'
+									+ '<label for="uploadChkbox">선택</label></span></div></li>'
+                                    );
+
+                                if(res.result[i][4] == window.parent.$('#groupSn').val()){    // 해당 그룹에 등록이 되어있음
+                                    var id = '#uploadChkbox_'+i;
+                                    $(id).attr("disabled", true);
+                                }
 							}
 						} else if(res.Status == "F"){
 							alert('사진을 불러오던 도중 오류가 발생하였습니다.');
@@ -121,8 +86,8 @@
 					} else {
 						$("#upload").attr("disabled", true);
 						$("#upload").css("background-color","#A9BCF5");
-					}
-                }           
+                    }
+                }
             }
 			
 			// 첨부하기 버튼 클릭 이벤트
@@ -149,6 +114,16 @@
 					success:function(res){
 						if(res.Status == "S"){
 							alert('사진 업로드가 완료되었습니다.');
+
+                            // 업로드 팝업 닫기
+                            window.parent.closeBtn();
+
+                            // 업로드 후 사진 파트로 이동
+                            window.parent.changePart('picture');
+
+                            // 업로드 한 사진 재조회
+                            window.parent.groupPictureList();
+
 						} else if(res.Status == "F"){
 							alert('첨부 도중 오류가 발생하였습니다.');
 						}						                        
@@ -275,8 +250,11 @@
                                         <input type="checkbox" class="chk" id="2022">
                                         <label for="2022" class="chk_label">2022년</label>
                                     </h4>
+                                    <div style="margin-bottom: 10px;">
+                                        <span style="padding-left: 40px; font-size: 13px;">※ 이미 등록된 사진은 중복 등록 할 수 없습니다.</span>
+                                    </div>
                                     <div style="opacity: 1;">
-                                        <ul id="photo_list" class="photo_list" style="height: 1764.01px;"></ul>
+                                        <ul id="photo_list" class="photo_list" style="height: 100%;"></ul>
                                     </div>
                                 </div>
                                 <div style="width: 100%; height: 1px;"></div>

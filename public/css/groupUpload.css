@@ -599,8 +599,8 @@ a {
 .all_photo_list_area .photo_title {
     font-size: 15px;
     line-height: 20px;
-    padding-bottom: 16px;
     white-space: nowrap;
+    margin-bottom: 10px;
 }
 
 .all_photo_list_area .photo_title input {
@@ -767,7 +767,7 @@ em, address {
 	color: gray;
 }
 
-.mypicture{
+.mypicture {
     height: 150px;
     width: 130px;
     background-color: rgb(255, 255, 255);

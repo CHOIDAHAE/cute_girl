@@ -543,7 +543,8 @@ module.exports = function(app){
 			let format = {language: 'sql', indent: ''};
 			
 			var param = {
-				"emplyrSn" : req.body.emplyrSn
+				"emplyrSn"	: req.body.emplyrSn,
+				"groupSn"	: req.body.groupSn
 			};
 
 			//쿼리
@@ -610,7 +611,7 @@ module.exports = function(app){
 
 					// 그룹파일에 insert
 					let insertGroupFile = mybatisMapper.getStatement('GroupDAO','insertGroupFile', insertParam, format);
-					
+					console.log(insertGroupFile);
 					conn.execute(insertGroupFile, function(err,result){
 						if(err){
 							console.log("insertGroupFile failed :", err);
