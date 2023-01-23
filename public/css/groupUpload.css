@@ -73,6 +73,7 @@ a {
 
 .mini_header .btn_close {
     margin-top: 7px;
+    cursor: pointer;
 }
 
 .mini_header .btn_close:before {

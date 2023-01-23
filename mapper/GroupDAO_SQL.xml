@@ -250,15 +250,18 @@
 		)
 	</insert>
 
-	<!-- 그룹 대표사진 조회 -->
+	<!-- 그룹 정보 조회 -->
 	<select id="selectTopPicture">
 		SELECT
-			ORGINL_FILE_NM
+			TGF.ORGINL_FILE_NM,
+			TO_CHAR(GRP.FRST_REGIST_DT, 'YYYY.MM.DD') FRST_REGIST_DT
 		FROM
-			TCM_GROUP_FILE
+			TCM_GROUP_FILE TGF,
+			TCM_AUTHOR_GROUP GRP
 		WHERE
-			AUTHOR_GROUP_SN = #{groupSn}
-		AND MAIN_FILE_AT = 'Y'
+			TGF.AUTHOR_GROUP_SN = GRP.AUTHOR_GROUP_SN 
+		AND	TGF.AUTHOR_GROUP_SN = #{groupSn}
+		AND TGF.MAIN_FILE_AT = 'Y'
 	</select>
 
 	<!-- 기존 그룹 대표사진 삭제 -->

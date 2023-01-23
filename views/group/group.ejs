@@ -66,6 +66,7 @@
                             $(".groupNm").text(window.parent.$('#groupNm').val());
                             $(".emplyrNm").text(window.parent.$('#emplyrNm').val());
                             $(".emplyrId").text(window.parent.$('#emplyrId').val());
+                            $(".frstDt").text(res.result[0][1]);
 						} else if(res.Status == "F"){
 							alert("대표 사진 불러오던 중 오류가 발생하였습니다.");
 						}
@@ -453,7 +454,7 @@
                                     <div class="noti_box_v2">
                                         <div class="start_togeth">
                                             <p><img src="https://ssl.pstatic.net/static/pwe/cloud/pc/group_welcome.png" height="145" alt=""></p>
-                                            <p class="date">2022.11.23</p>
+                                            <p class="date"><span class="frstDt"></span></p>
                                             <h3 class="title">
                                                 <strong class="point_3675c7"><span class="emplyrNm"></span></strong>님이&nbsp;
                                                 <strong><span class="groupNm"></span></strong> 모임을 시작합니다.
