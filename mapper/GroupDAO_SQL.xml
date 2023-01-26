@@ -250,53 +250,51 @@
 		)
 	</insert>
 
-	<!-- 그룹 대표사진 조회 -->
+	<!-- 그룹 정보 조회 -->
 	<select id="selectTopPicture">
 		SELECT
-			ORGINL_FILE_NM
+			TGF.ORGINL_FILE_NM,
+			TO_CHAR(GRP.FRST_REGIST_DT, 'YYYY.MM.DD') FRST_REGIST_DT
 		FROM
-			TCM_GROUP_FILE
+			TCM_GROUP_FILE TGF,
+			TCM_AUTHOR_GROUP GRP
 		WHERE
-			AUTHOR_GROUP_SN = #{groupSn}
-		AND MAIN_FILE_AT = 'Y'
+			TGF.AUTHOR_GROUP_SN = GRP.AUTHOR_GROUP_SN 
+		AND	TGF.AUTHOR_GROUP_SN = #{groupSn}
+		AND TGF.MAIN_FILE_AT = 'Y'
 	</select>
 
-	<!-- 기존 그룹사진 대표여부 수정 -->
-	<update id="updateTopPicture">
-		UPDATE
+	<!-- 기존 그룹 대표사진 삭제 -->
+	<update id="deleteTopPicture">
+		DELETE FROM
 			TCM_GROUP_FILE
-		SET
-			MAIN_FILE_AT		= 'N',
-			FRST_REGISTER_SN	= #{emplyrSn},
-			FRST_REGIST_DT		= SYSDATE,
-			LAST_UPDUSR_SN		= #{emplyrSn},
-			LAST_UPDT_DT		= SYSDATE
-		WHERE
+		WHERE	
 			MAIN_FILE_AT = 'Y'
 		AND AUTHOR_GROUP_SN = #{groupSn}
 	</update>
 
 	<!-- 그룹 업로드용 모든 사진 조회 -->
 	<select id="selectPictureList">
-		SELECT 
+		  SELECT 
 			TAD.ATCHMNFL_SN,
 			TAD.FILE_STRE_COURS_NM,
 			TAD.ORGINL_FILE_NM,
-			TAD.FILE_NM
+			TAD.FILE_NM,
+			(SELECT TGF.AUTHOR_GROUP_SN
+				FROM TCM_GROUP_FILE TGF
+				WHERE TAD.FRST_REGISTER_SN = TGF.EMPLYR_SN
+				AND TAD.ATCHMNFL_SN = TGF.FILE_SN
+				AND TGF.AUTHOR_GROUP_SN = #{groupSn}) AUTHOR_GROUP_SN
 		FROM
-			TCM_ATCHMNFL TA,
 			TCM_ATCHMNFL_DETAIL TAD
 		WHERE
-			TA.ATCHMNFL_SN = TAD.ATCHMNFL_SN
-		AND TA.FRST_REGISTER_SN = #{emplyrSn}
-		AND TA.USE_AT = 'Y'
+			TAD.FRST_REGISTER_SN = #{emplyrSn}
+		AND TAD.USE_AT = 'Y'
 	</select>
 
 	<!-- 그룹 업로드 시 해당 파일의 상세조회 -->
-	<select id="selectPictureList">
+	<select id="picturesForUpload">
 		SELECT
-			EMPLYR_SN,
-			AUTHOR_GROUP_SN,
 			ATCHMNFL_SN,
 			FILE_STRE_COURS_NM,
 			ORGINL_FILE_NM
@@ -305,6 +303,18 @@
 		WHERE
 			ATCHMNFL_SN  = #{fileSn}
 		AND FRST_REGISTER_SN = #{emplyrSn}
+	</select>
+
+	<!-- 그룹사진 조회 -->
+	<select id="selectForGroup">
+		SELECT
+			FILE_SN,
+			FILE_STRE_COURS_NM,
+			ORGINL_FILE_NM
+		FROM
+			TCM_GROUP_FILE
+		WHERE
+			AUTHOR_GROUP_SN = #{groupSn}
 		AND MAIN_FILE_AT = 'N'
 	</select>
 </mapper>

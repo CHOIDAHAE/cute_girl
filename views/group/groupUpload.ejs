@@ -22,28 +22,36 @@
 				$('#ly_task').toggle();
 			};
 
-			// 내사진 보기
+			// 내사진 보기(업로드용)
 			function myPictureList(){
 				var emplyrSn = window.parent.$('#emplyrSn').val();
-                //var groupSn = window.parent.$('#groupSn').val();
+                var groupSn = window.parent.$('#groupSn').val();
 				
 				$.ajax({
 					url : "/myPictureList",
 					type : "POST",
 					dataType : "JSON", //"JSON"
-					data : {"emplyrSn" : emplyrSn},
+					data : {"emplyrSn" : emplyrSn, "groupSn": groupSn},
 					success:function(res){
 						if(res.Status == "S"){
 							document.getElementById("total_length").value = res.result.length;
 							var photo_list = $("#photo_list");
 							for(var i=0; i<res.result.length; i++){
+                                var type = "";
+
 								photo_list.append(
 									'<li class="mypicture">'
-									+'<div class="item"><a><img src="..'+res.result[i][1]+'/'+res.result[i][2]
-									+'" alt="'+res.result[i][3]+'" style="width:100%; height:100%;"></a>'
-									+'<span class="checkbox">'
-									+'<input type="checkbox" name="uploadChkbox" value="'+res.result[i][0]+'" id="uploadChkbox_'+i+'"onclick="check()">'
-									+'<label for="uploadChkbox">선택</label></span></div></li>');
+									+ '<div class="item"><a><img src="..'+res.result[i][1]+'/'+res.result[i][2]
+									+ '" alt="'+res.result[i][3]+'" style="width:100%; height:100%;"></a>'
+									+ '<span class="checkbox">'
+									+ '<input type="checkbox" name="uploadChkbox" value="'+res.result[i][0]+'" id="uploadChkbox_'+i+'" onclick="check()">'
+									+ '<label for="uploadChkbox">선택</label></span></div></li>'
+                                    );
+
+                                if(res.result[i][4] == window.parent.$('#groupSn').val()){    // 해당 그룹에 등록이 되어있음
+                                    var id = '#uploadChkbox_'+i;
+                                    $(id).attr("disabled", true);
+                                }
 							}
 						} else if(res.Status == "F"){
 							alert('사진을 불러오던 도중 오류가 발생하였습니다.');
@@ -78,15 +86,19 @@
 					} else {
 						$("#upload").attr("disabled", true);
 						$("#upload").css("background-color","#A9BCF5");
-					}
-                }           
+                    }
+                }
             }
 			
 			// 첨부하기 버튼 클릭 이벤트
 			function groupUpload(){
-				var total_length = document.getElementById("total_length").value;
+				var emplyrSn = window.parent.$('#emplyrSn').val();
+                var groupSn = window.parent.$('#groupSn').val();
+
+                var total_length = document.getElementById("total_length").value;
 				var fileSnList = {};
 				
+                // 선택된 파일 담기
 				for(var i=0; i<total_length; i++){
 					var chkSn = $("input[type=checkbox][id=uploadChkbox_"+i+"]:checked").val();
 					if(typeof chkSn != 'undefined'){
@@ -98,10 +110,20 @@
 					url : "/groupUpload",
 					type : "POST",
 					dataType : "JSON", //"JSON"
-					data : {"emplyrSn" : emplyrSn, "fileSnList" : fileSnList},
+					data : {"emplyrSn" : emplyrSn, "fileSnList" : fileSnList, "groupSn" : groupSn},
 					success:function(res){
 						if(res.Status == "S"){
-							
+							alert('사진 업로드가 완료되었습니다.');
+
+                            // 업로드 팝업 닫기
+                            window.parent.closeBtn();
+
+                            // 업로드 후 사진 파트로 이동
+                            window.parent.changePart('picture');
+
+                            // 업로드 한 사진 재조회
+                            window.parent.groupPictureList();
+
 						} else if(res.Status == "F"){
 							alert('첨부 도중 오류가 발생하였습니다.');
 						}						                        
@@ -112,6 +134,32 @@
 				})
 			}
 
+            // 전체 선택
+            function check_all(){
+                var checked = document.getElementById('whole_selector').checked;
+
+                if(checked == true){
+                    var total_length = document.getElementById("total_length").value;
+                    for(var i=0; i<total_length; i++){
+                        var id = 'uploadChkbox_'+i;
+                        var disabled = document.getElementById(id).disabled;
+                        
+                        if(disabled == false){
+                            document.getElementById(id).checked = true;
+                        } else {
+                            document.getElementById(id).checked = false;
+                        }
+                    }
+
+                    // 전체 체크박스 클릭 이벤트
+                    check();
+                } else {
+                    $("input:checkbox[name=uploadChkbox]").prop("checked", false);
+
+                    // 전체 체크박스 클릭 이벤트
+                    check('cancel');
+                }
+            };
 		</script>
 	</head>
     <body style="user-select: none; -ms-user-select: none">
@@ -171,7 +219,7 @@
                         <div class="task_area">
                             <div class="task_bottom_area">
                                 <div class="task_btn_area">
-                                    <span class="check_all">
+                                    <span id="check_all" class="check_all" onclick="check_all();">
                                         <input type="checkbox" id="whole_selector" class="input_check">
                                         <label for="whole_selector">
                                             <span class="blind">모두선택</span>
@@ -222,35 +270,21 @@
                         </div>
                     </div>
                     <div class="content_box">
-                        <div style="transform: translateZ(0px); will-change: auto;">
+                        <div style="transform: translateZ(0px); will-change: auto; height: 100%;">
                             <div class="lst_pt"><div class="all_photo_list_area year">
                                 <div class="all_photo_box">
                                     <h4 class="photo_title">
                                         <input type="checkbox" class="chk" id="2022">
                                         <label for="2022" class="chk_label">2022년</label>
                                     </h4>
+                                    <div style="margin-bottom: 10px;">
+                                        <span style="padding-left: 40px; font-size: 13px;">※ 이미 등록된 사진은 중복 등록 할 수 없습니다.</span>
+                                    </div>
                                     <div style="opacity: 1;">
-                                        <ul id="photo_list" class="photo_list" style="height: 1764.01px;">
-                                            <!--
-                                            <li class="mypicture">
-                                                <div class="item">
-                                                    <a>
-                                                        <img src="https://thumb1.photo.mybox.naver.com/3472495530733427532:10588976?type=m740_390_2&amp;nocache=4636120301&amp;setidc=1" alt="이미지 제목">
-                                                    </a>
-                                                    <button type="button" class="btn_favorite">
-                                                        <span class="blind">즐겨찾기</span>
-                                                    </button>
-                                                    <span class="checkbox">
-                                                        <input type="checkbox" id="uploadChkbox">
-                                                        <label for="uploadChkbox">선택</label>
-                                                    </span>
-                                                </div>
-                                            </li>
-                                            -->
-                                        </ul>
+                                        <ul id="photo_list" class="photo_list" style="height: 100%;"></ul>
                                     </div>
                                 </div>
-                                <div style="width: 100%; height: 1px;"></div>
+                                <!--<div style="width: 100%; height: 1px;"></div>-->
                             </div>
                         </div>
                     </div>

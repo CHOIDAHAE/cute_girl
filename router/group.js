@@ -405,15 +405,15 @@ module.exports = function(app){
 							"emplyrSn"	: emplyrSn
 							}
 
-			//기존 그룹사진 대표여부 수정
-			let updateTopPicture = mybatisMapper.getStatement('GroupDAO','updateTopPicture', fileParam, format);
+			//기존 그룹사진 삭제
+			let deleteTopPicture = mybatisMapper.getStatement('GroupDAO','deleteTopPicture', fileParam, format);
 			//fileSn 찾아오기
 			let selectFileSn = mybatisMapper.getStatement('GroupDAO','selectFileSn', {"groupSn"	: req.body.groupSn}, format);
 			
-			//기존 그룹사진 대표여부 수정
-			conn.execute(updateTopPicture, function(err,result){
+			//기존 그룹사진 삭제
+			conn.execute(deleteTopPicture, function(err,result){
 				if(err){
-					console.log("updateTopPicture failed :", err);
+					console.log("deleteTopPicture failed :", err);
 					res.json({"Status":"F"});
 					return;
 				}
@@ -543,7 +543,8 @@ module.exports = function(app){
 			let format = {language: 'sql', indent: ''};
 			
 			var param = {
-				"emplyrSn" : req.body.emplyrSn
+				"emplyrSn"	: req.body.emplyrSn,
+				"groupSn"	: req.body.groupSn
 			};
 
 			//쿼리
@@ -574,35 +575,91 @@ module.exports = function(app){
 			if(err){
 				console.log("Oracle Connection failed(groupUpload)",err);
 			} else {
-				console.log("Oracle Connection success(groupUpload)");
+				//console.log("Oracle Connection success(groupUpload)");
 			}
 			conn = con;
 
 			//query format
 			let format = {language: 'sql', indent: ''};
-			
-			/* fileSnList 가공필요
-			var param = {
-				"emplyrSn"	: req.body.emplyrSn,
-				"fileSn"	: req.body.fileSn
-			};
 
-			// 파일 상세정보 조회 (한건당 상세조회 해서 그걸 group_file 테이블에 insert)
-			let selectFileDtlData = mybatisMapper.getStatement('IndexDAO','selectFileDtlData', param, format);
-			*/
+			var fileSn = req.body.fileSnList.split(",");
+			for(var i=1; i<fileSn.length; i++){
+				var param = {
+					"emplyrSn"	: req.body.emplyrSn,
+					"fileSn"	: fileSn[i]
+				};
+				
+				// 파일 상세정보 조회 (한건당 상세조회 해서 그걸 group_file 테이블에 insert)
+				let picturesForUpload = mybatisMapper.getStatement('GroupDAO','picturesForUpload', param, format);
+				
+				// 쿼리문 실행
+				conn.execute(picturesForUpload, function(err,result){
+					if(err){
+						console.log("picturesForUpload failed :", err);
+						res.json({"Status":"F"});
+						return;
+					}
 
-			//쿼리문 실행
-			conn.execute(selectFileDtlData, function(err,result){
+					var insertParam = {
+						"emplyrSn"	: req.body.emplyrSn,
+						"groupSn"	: req.body.groupSn,
+						"fileSn"	: result.rows[0][0],
+						"mainFileAt": "N",
+						"filePath"	: result.rows[0][1],
+						"orgFileNm"	: result.rows[0][2],
+					};
+
+					// 그룹파일에 insert
+					let insertGroupFile = mybatisMapper.getStatement('GroupDAO','insertGroupFile', insertParam, format);
+					console.log(insertGroupFile);
+					conn.execute(insertGroupFile, function(err,result){
+						if(err){
+							console.log("insertGroupFile failed :", err);
+							res.json({"Status":"F"});
+							return;
+						}
+
+						conn.commit();
+					});
+				});
+			}
+			res.json({"Status":"S"});
+			//conn.commit();
+		});
+	})
+
+	// 그룹 첨부하기
+	app.post("/selectForGroup", function(req, res){
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(selectForGroup)",err);
+			} else {
+				//console.log("Oracle Connection success(selectForGroup)");
+			}
+			conn = con;
+
+			//query format
+			let format = {language: 'sql', indent: ''};
+
+			// 그룹파일에 insert
+			let selectForGroup = mybatisMapper.getStatement('GroupDAO','selectForGroup', {"groupSn" : req.body.groupSn}, format);
+
+			conn.execute(selectForGroup, function(err,result){
 				if(err){
-					console.log("selectFileDtlData failed :", err);
+					console.log("selectForGroup failed :", err);
 					res.json({"Status":"F"});
 					return;
 				}
 				
-				res.json({"Status":"S"});
-				doRelease(conn);					
-			});  
-		});
+				res.json({"Status":"S", "result" : result.rows});
+				conn.commit();
+			});
+		});	
 	})
 
 	function doRelease(conn){
