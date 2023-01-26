@@ -1,48 +1,4 @@
-<html lang="ko">
-<head>
-	<meta charset="utf-8">
-	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-	<script src="https://kit.fontawesome.com/ad41bee873.js" crossorigin="anonymous"></script>
-	<link href="../css/setting.css?after" rel="stylesheet" type="text/css">
-	<link href="../css/grid.css?after" rel="stylesheet" type="text/css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" />
-	<script>
-		$(document).ready(function(){
-			$('#myProfile').addClass('cleanMenuSelected');
-			$('.cleanLi').click(function(){
-				$('.cleanLi').removeClass('cleanMenuSelected');
-				$(this).toggleClass('cleanMenuSelected');
-			})
-
-			viewMyProfile();
-		})
-
-		//프로필 조회
-		function viewMyProfile(){
-			$.ajax({
-				url : "/selectMyProfile",
-				type : "POST",
-				dataType : "JSON", //"JSON"
-				data : {"sEmplyrSn" : window.parent.$('#emplyrSn').val()}
-
-			})
-			.done(function (res) {
-				console.log(res);
-				$('#emplyrNm').html(res[0][0]);
-				$('#emplyrId').html(res[0][1]);
-				$('#emailAdres').html(res[0][3]);
-			})
-			.fail(function (xhr, textStatus, errorThrown) {
-				console.log('selectFileDtlData ajax 실패');
-			})
-		}
-
-		//프로필 수정하기
-		function updProfile(){
-
-		}
-	</script>
-</head>
+<% include ./settingMyPage_script %>
 <body>
 	<div class="manage_size" id="pop_content">
 		<div class="_managePop_holder">
@@ -54,11 +10,11 @@
 			<div class="_myFolderCapacity_holder"></div>
 			<div id="clean_file_menu" class="clean_file_menu">
 				<ul class="task_tab_list">
-					<li class="cleanLi" id="myProfile"><a id="fileNmDup" href="javascript:void(0);" onclick="">내 프로필</a></li>
-					<li class="cleanLi"><a href="javascript:void(0);" onclick="">비밀번호 변경</a></li>
+					<li class="cleanLi" id="myProfile"><a id="fileNmDup" href="javascript:void(0);" onclick="myProfile_onclick()">내 프로필</a></li>
+					<li class="cleanLi"><a href="javascript:void(0);" onclick="myPassword_onclick()">비밀번호 변경</a></li>
 				</ul>
 			</div>
-			<div id="userInfoArea">
+			<div id="MyProfileArea">
 				<table border="0" class="tbl_model">
 					<colgroup>
 						<col style="width:35%">
@@ -94,6 +50,172 @@
 				<div id="updArea" class="updInfoArea">
 					<button type="button" class="updBtn" onclick="updProfile()"> 수정하기 </button>
 				</div>
+				<div id="updSaveArea" class="updInfoArea">
+					<button type="button" class="updBtn" onclick="saveProfile()"> 저장 </button>
+					<button type="button" class="updBtn" onclick="viewMyProfile()"> 취소 </button>
+				</div>
+			</div>
+			<div id="MyPasswordArea" class="spc_content">
+				<form>
+					<fieldset>
+						<legend>비밀번호 변경</legend>
+						<p class="spc_row">
+							<label for="now_pw" id="lb_now_pw">현재 비밀번호</label>
+							<!-- <input type="password" name="now_pw" id="now_pw" title="현재 비밀번호 입력" onfocus="setCompFocus(this.id)" onblur="setCompBlur(this.id)"> -->
+							<input type="password" name="now_pw" id="now_pw" title="현재 비밀번호 입력" onfocus="convertDiv('now_pw', 'none')" onblur="convertDiv('now_pw', 'block'); showCapslockForNowPw(-1);"
+							 onkeyup="showCapslockForNowPw(1);" onkeypress="capslock(event);">
+						</p>
+						<div id="help0_1" class="help left" style="top: 35px; right: 17px; display: none;">
+							<div class="txt">
+								<p>키보드에 Caps Lock이 켜져 있습니다.</p>
+							</div>
+							<span class="shadow1"></span>
+							<span class="shadow2"></span>
+							<span class="arrow"></span>
+						</div>
+						<p class="spc_row2">
+							<label for="new_pw" id="lb_new_pw">새 비밀번호</label>
+							<input type="password" name="new_pw" id="new_pw" onfocus="setCompFocus(this.id)" onblur="setCompBlur(this.id)">
+						</p>
+						<p class="spc_row3">
+							<label for="conf_pw" id="lb_conf_pw">새 비밀번호 확인</label>
+							<input type="password" name="conf_pw" id="conf_pw" onfocus="setCompFocus(this.id)" onblur="setCompBlur(this.id)">
+						</p>
+						<!-- 비밀번호 안전도 말풍선 -->
+						<div id="help1_1" class="help left" style="top:70px; right:17px;">
+							<!-- 비밀번호 안전도 -->
+							<div class="txt">
+								<p>
+									<strong>사용불가</strong>
+									" : 비밀번호 재작성 필요 "
+									<br>
+									<span class="ex">8~16 자의 영문 대소문자, 숫자 및 특수문자 사용</span>
+								</p>
+							</div>
+							<!-- //비밀번호 안전도 -->
+							<span class="arrow"></span>
+						</div>
+						<div id="help1_2" class="help left" style="top:70px; right:17px">
+							<!-- 비밀번호 안전도 -->
+							<div class="txt">
+								<p>
+									" 비밀번호 안전도 "
+									<em>|</em>
+									<strong>낮음</strong>
+									<img src="https://static.nid.naver.com/images/web/user/safetybar1_140811.gif" width="47" height="3" alt>
+									<br>
+									<span class="ex">안전도가 높은 비밀번호를 권장합니다.</span>
+								</p>
+							</div>
+							<!-- //비밀번호 안전도 -->
+							<span class="arrow"></span>
+						</div>
+						<div id="help1_3" class="help left" style="top:70px; right:17px">
+							<!-- 비밀번호 안전도 -->
+							<div class="txt">
+								<p>
+									" 비밀번호 안전도 "
+									<em>|</em>
+									<strong>적정</strong>
+									<img src="https://static.nid.naver.com/images/web/user/safetybar2_140811.gif" width="47" height="3" alt>
+									<br>
+									<span>안전하게 사용하실 수 있는 비밀번호 입니다.</span>
+								</p>
+							</div>
+							<!-- //비밀번호 안전도 -->
+							<span class="arrow"></span>
+						</div>
+						<div id="help1_4" class="help left" style="top:70px; right:17px">
+							<div class="txt">
+								<p>
+									" 비밀번호 안전도 "
+									<em>|</em>
+									<strong>높음</strong>
+									<img src="https://static.nid.naver.com/images/web/user/safetybar3_140811.gif" width="47" height="3" alt>
+									<br>
+									<span>예측하기 힘든 비밀번호로 더욱 안전합니다.</span>
+								</p>
+							</div>
+							<span class="arrow"></span>
+						</div>
+						<div id="help1_5" class="help left" style="top:70px; right:17px; display:none;">
+							<div class="txt">
+								<p>
+									" 비밀번호 안전도 "
+									<em>|</em>
+									<strong>낮음</strong>
+									<img src="https://static.nid.naver.com/images/web/user/safetybar1_140811.gif" width="47" height="3" alt>
+									<br>
+									<span>도용 예방을 위해 이전에 사용한 적 없는 새로운 비밀번호를 사용하세요.</span>
+								</p>
+								<p class="topline">비밀번호는 암호화하여 보관하며, 기존 비밀번호와의 일치 여부만 확인합니다.</p>
+							</div>
+							<span class="arrow"></span>
+						</div>
+						<div id="help1_6" class="help left" style="top:70px; right:17px; display:none;">
+							<div class="txt">
+								<p>비밀번호는 8자 이상 입력하셔야 합니다.</p>
+							</div>
+							<span class="arrow"></span>
+						</div>
+						<div id="help1_7" class="help left" style="top:70px; right:17px; display:none;">
+							<div class="txt">
+								<p>
+									<strong>사용불가</strong>
+									" : 비밀번호 재작성 필요 "
+									<br>
+									<span>이미 도용된 비밀번호는 추가 도용 가능성이 높아 사용하실 수 없습니다.</span>
+								</p>
+								<p class="topline">비밀번호는 암호화하여 보관하며, 기존 비밀번호와의 일치 여부만 확인합니다.</p>
+							</div>
+							<span class="arrow"></span>
+						</div>
+						<div id="help2_1" class="help left" style="top:70px; right:17px; display:none;">
+							<div class="txt">
+								<p>
+									<strong>사용불가</strong>
+									" : 비밀번호 재작성 필요 "
+									<br>
+									<span class="ex" id="p02">8~16 자의 영문 대소문자, 숫자 및 특수문자 사용</span>
+									<span class="ex2">키보드에 Caps Lock이 켜져 있습니다.</span>
+								</p>
+							</div>
+							<span class="arrow"></span>
+						</div>
+						<div id="help2_2" class="help left" style="top:70px; right:17px; display:none;">
+							<div class="txt">
+								<p>
+									" 비밀번호 안전도 "
+									<em>|</em>
+									<strong>낮음</strong>
+									<img src="https://static.nid.naver.com/images/web/user/safetybar1_140811.gif" width="47" height="3" alt>
+									<br>
+									<span class="ex">안전도가 높은 비밀번호를 권장합니다.</span>
+									<span class="ex2">키보드에 Caps Lock이 켜져있습니다.</span>
+								</p>
+							</div>
+							<span class="arrow"></span>
+						</div>
+						<div id="help2_3" class="help left" style="top:70px; right:17px; display:none">
+							<div class="txt">
+								<p>
+									" 비밀번호 안전도 "
+									<em>|</em>
+									<strong>적정</strong>
+									<img src="https://static.nid.naver.com/images/web/user/safetybar2_140811.gif" width="47" height="3" alt>
+									<br>
+									<span class="ex">안전하게 사용하실 수 있는 비밀번호 입니다.</span>
+									<span class="ex2">키보드에 Caps Lock이 켜져 있습니다.</span>
+								</p>
+							</div>
+							<span class="arrow"></span>
+						</div>
+						<div id="updPwArea">
+							<button type="button" class="updBtn" onclick="savePassword()"> 저장 </button>
+							<button type="button" class="updBtn" onclick="savePassword()"> 취소 </button>
+						</div>
+					</fieldset>
+				</form>
 			</div>
 		</div>
 	</div>

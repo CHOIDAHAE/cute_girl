@@ -14,4 +14,15 @@
 		FROM TCM_EMPLYR TE		/* 사용자 */
 		WHERE FRST_REGISTER_SN = #{sEmplyrSn}
 	</select>
+
+	<update id="updateMyProfile">
+		/* MyPageDAO.updateMyProfile */
+		UPDATE TCM_EMPLYR
+		SET
+			EMPLYR_NM = #{emplyrNm}
+			, EMPLYR_ID = #{emplyrId}
+			, EMAIL_ADRES = #{emailAdres}
+		WHERE
+			FRST_REGISTER_SN = #{sEmplyrSn}
+	</update>
 </mapper>

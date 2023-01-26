@@ -1,0 +1,173 @@
+<html lang="ko">
+	<head>
+		<meta charset="utf-8">
+		<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+		<script src="https://kit.fontawesome.com/ad41bee873.js" crossorigin="anonymous"></script>
+		<link href="../css/setting.css?after" rel="stylesheet" type="text/css">
+		<link href="../css/grid.css?after" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" />
+
+		<script>
+			var isshift = false;
+			var isCapslock = false;
+			var pswdlevel = 0;
+			var focuswhere = 0;
+			var pwdstat = true;
+
+			$(document).ready(function(){
+				$('#myProfile').addClass('cleanMenuSelected');
+				$('.cleanLi').click(function(){
+					$('.cleanLi').removeClass('cleanMenuSelected');
+					$(this).toggleClass('cleanMenuSelected');
+				})
+
+				myProfile_onclick();
+				$('#updSaveArea').hide();
+			})
+
+			//내 프로필
+			function myProfile_onclick(){
+				$('#MyProfileArea').show();
+				$('#MyPasswordArea').hide();
+				viewMyProfile();
+			}
+
+			//비밀번호 변경
+			function myPassword_onclick(){
+				$('#MyProfileArea').hide();
+				$('#MyPasswordArea').show();
+			}
+
+			//프로필 조회
+			function viewMyProfile(){
+				$.ajax({
+					url : "/selectMyProfile",
+					type : "POST",
+					dataType : "JSON", //"JSON"
+					data : {"sEmplyrSn" : window.parent.$('#emplyrSn').val()}
+
+				})
+				.done(function (res) {
+					console.log(res);
+					$('#emplyrNm').html(res[0][0]);
+					$('#emplyrId').html(res[0][1]);
+					$('#emailAdres').html(res[0][3]);
+				})
+				.fail(function (xhr, textStatus, errorThrown) {
+					console.log('selectFileDtlData ajax 실패');
+				})
+			}
+
+			//프로필 수정하기
+			function updProfile(){
+				var innerHTML = "";
+				var divId = ['#emplyrNm', '#emplyrId', '#emailAdres'];
+				var divType = ['text', 'text', 'email'];
+				var inputId = ['InEmplyrNm', 'InEmplyrId', 'InEmailAdres'];
+				for(var i=0; i < divId.length; i++){
+					innerHTML = '<input id="' + inputId[i] + '" type="' + divType[i] +'" value="' + $(divId[i]).html() + '">';
+					$(divId[i]).html(innerHTML);
+				}
+				$('#updArea').hide();
+				$('#updSaveArea').show();
+			}
+
+			function saveProfile(){
+				$.ajax({
+					url : "/saveProfile",
+					type : "POST",
+					dataType : "JSON", //"JSON"
+					data : {
+						"sEmplyrSn" : window.parent.$('#emplyrSn').val(),
+						"emplyrNm" : $('#InEmplyrNm').val(),
+						"emplyrId" : $('#InEmplyrId').val(),
+						"emailAdres" : $('#InEmailAdres').val()
+					}
+
+				})
+				.done(function (res) {
+					viewMyProfile();
+					$('#updArea').show();
+					$('#updSaveArea').hide();
+				})
+				.fail(function (xhr, textStatus, errorThrown) {
+					console.log('updateMyProfile ajax 실패');
+				})
+			}
+
+			//비밀번호 변경
+			function savePassword(){
+				console.log('password');
+			}
+
+			//포커스 이벤트
+			function setCompFocus(compId){
+				var Id = '#lb_'+compId;
+				console.log(Id);
+				$(Id).hide();
+			}
+
+			function setCompBlur(compId){
+				var Id = '#lb_'+compId;
+				var thisId = '#'+compId;
+				console.log($(thisId).val());
+				if($(thisId).val() == ""){
+					$(Id).show();
+				}
+			}
+
+			//캡스락 여부
+			function showCapslockForNowPw(options){
+				if (options == -1){
+					document.getElementById('help0_1').style.display = "none";
+				}else{
+					if(isCapslock){
+						document.getElementById('help0_1').style.display = "block";
+					}else{
+						document.getElementById('help0_1').style.display = "none";
+					}
+				}
+			}
+			
+			function capslock(e){
+				var myKeyCode =0;
+				var myShiftKey=false;
+				if(window.event){
+					myKeyCode=e.keyCode; myShiftKey=e.shiftKey;
+				}else if(e.which){
+					myKeyCode=e.which; myShiftKey=isshift;
+				}
+
+				if((myKeyCode >= 65 && myKeyCode <= 90)&&!myShiftKey){
+					isCapslock = true;
+				}else if((myKeyCode >= 97 && myKeyCode <= 122) && myShiftKey){
+					isCapslock = true;
+				}else{
+					isCapslock = false;
+				}
+			}
+
+			function showCapslock(){
+				if(isCapslock){
+					document.getElementById('help2_1').style.display="block";
+				}else{
+					document.getElementById('help2_1').style.display="none";
+				}
+			}
+
+			function convertDiv(obj, stat){
+				if(stat == "none"){
+					//$('#lb_'+obj).style.display = stat;
+					document.getElementById('lb_'+obj).style.display = stat;
+				}else{
+					if($('#'+obj).value == ""){
+						//$('#lb_'+obj).style.display = stat;
+						document.getElementById('lb_'+obj).style.display = stat;
+					}else{
+						//$('#lb_'+obj).style.display = "none";
+						document.getElementById('lb_'+obj).style.display = "none";
+					}
+				}
+			}
+		</script>
+	</head>

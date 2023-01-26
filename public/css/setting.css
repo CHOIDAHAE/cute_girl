@@ -499,3 +499,99 @@ iframe {
 .updBtn{
 	margin-top : 1em;
 }
+
+.spc_content{
+	margin-left: 176px;
+	position: relative;
+	height: 43px;
+}
+
+.spc_row{
+	margin-top: 20px;
+	margin-bottom: 8px;
+}
+
+.spc_row label {
+	font-weight: 700;
+	position: absolute;
+	top: 45px;
+	left: 9px;
+	color: #8e8e8e;
+}
+
+.spc_row2 label {
+	font-weight: 700;
+	position: absolute;
+	top: 74px;
+	left: 9px;
+	color: #8e8e8e;
+}
+
+.spc_row3{
+	margin-top: -1px;
+}
+
+.spc_row3 label {
+	font-weight: 700;
+	position: absolute;
+	top: 94px;
+	left: 9px;
+	color: #8e8e8e;
+}
+
+legend{
+	display: block;
+	padding-inline-start: 2px;
+	padding-inline-end: 2px;
+	border-width: initial;
+	border-style: none;
+	border-color: initial;
+	border-image: initial;
+	font-weight: 1000;
+}
+
+fieldset {
+	border: 0;
+	display: block;
+	margin-inline-start: 2px;
+	margin-inline-end: 2px;
+	padding-block-start: 0.35em;
+	padding-block-end: 0.75em;
+	padding-inline-end: 0.75em;
+	padding-block-end: 0.625em;
+	min-inline-size: min-content;
+	/*
+	border-width: 2px;
+	border-style: groove;
+	border-color: rgb(192, 192, 192);
+	border-image: initial;
+	*/
+}
+
+.help {
+	position: absolute;
+	display: none;
+	width: 270px;
+}
+
+.help .txt{
+	line-height: 19px;
+	position: relative;
+	z-index: 3;
+	text-align: left;
+	color: #666;
+	border: 1px solid #ccc;
+	background: #fff;
+}
+
+.left .arrow {
+	position: absolute;
+	z-index: 4;
+	top: 8px;
+	left: -6px;
+	display: block;
+	overflow: hidden;
+	width: 7px;
+	height: 12px;
+	background: url(https://static.nid.naver.com/images/web/user/bu_help_left_140811.gif) no-repeat;
+}
