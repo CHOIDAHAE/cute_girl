@@ -60,12 +60,12 @@
 					<fieldset>
 						<legend>비밀번호 변경</legend>
 						<p class="spc_row">
-							<label for="now_pw" id="lb_now_pw">현재 비밀번호</label>
+							<label for="now_pw" id="lb_now_pw" style="display:block;">현재 비밀번호</label>
 							<!-- <input type="password" name="now_pw" id="now_pw" title="현재 비밀번호 입력" onfocus="setCompFocus(this.id)" onblur="setCompBlur(this.id)"> -->
 							<input type="password" name="now_pw" id="now_pw" title="현재 비밀번호 입력" onfocus="convertDiv('now_pw', 'none')" onblur="convertDiv('now_pw', 'block'); showCapslockForNowPw(-1);"
 							 onkeyup="showCapslockForNowPw(1);" onkeypress="capslock(event);">
 						</p>
-						<div id="help0_1" class="help left" style="top: 35px; right: 17px; display: none;">
+						<div id="help0_1" class="help left" style="top: 33px; right: 17px; display: none;">
 							<div class="txt">
 								<p>키보드에 Caps Lock이 켜져 있습니다.</p>
 							</div>
@@ -74,12 +74,13 @@
 							<span class="arrow"></span>
 						</div>
 						<p class="spc_row2">
-							<label for="new_pw" id="lb_new_pw">새 비밀번호</label>
-							<input type="password" name="new_pw" id="new_pw" onfocus="setCompFocus(this.id)" onblur="setCompBlur(this.id)">
+							<label for="new_pw" id="lb_new_pw" style="display:block;">새 비밀번호</label>
+							<input type="password" name="new_pw" id="new_pw" title="새 비밀번호 입력" onfocus="convertDiv('new_pw', 'none'); checkpwd_login('new_pw', 'now_pw');" onblur="convertDiv('new_pw', 'block'); showhelpmsg(-1);"
+							onkeyup="checkShiftUp(event);checkpwd_login('new_pw', 'now_pw');" onkeypress="capslock(event);" onkeydown="checkShiftDownNoMsg(event);">
 						</p>
 						<p class="spc_row3">
 							<label for="conf_pw" id="lb_conf_pw">새 비밀번호 확인</label>
-							<input type="password" name="conf_pw" id="conf_pw" onfocus="setCompFocus(this.id)" onblur="setCompBlur(this.id)">
+							<input type="password" name="conf_pw" id="conf_pw" title="새 비밀번호 확인 입력" onfocus="convertDiv('conf_pw', 'none');" onblur="convertDiv('conf_pw', 'block')">
 						</p>
 						<!-- 비밀번호 안전도 말풍선 -->
 						<div id="help1_1" class="help left" style="top:70px; right:17px;">
@@ -210,9 +211,120 @@
 							</div>
 							<span class="arrow"></span>
 						</div>
+						<div id="help2_4" class="help left" style="top:70px; right:17px;">
+							<div class="txt">
+								<p>
+									" 비밀번호 안전도 "
+									<em>|</em>
+									<strong>높음</strong>
+									<img src="https://static.nid.naver.com/images/web/user/safetybar3_140811.gif" width="47" height="3" alt>
+									<br>
+									<span class="ex">예측하기 힘든 비밀번호로 더욱 안전합니다.</span>
+									<span class="ex2">키보드에 Caps Lock이 켜져 있습니다.</span>
+								</p>
+							</div>
+							<span class="arrow"></span>
+						</div>
+						<div id="help2_5" class="help left" style="top:70px; right:17px;">
+							<div class="txt">
+								<p>
+									" 비밀번호 안전도 "
+									<em>|</em>
+									<strong>낮음</strong>
+									<img src="https://static.nid.naver.com/images/web/user/safetybar1_140811.gif" width="47" height="3" alt>
+									<br>
+									<span>도용 예방을 위해 이전에 사용한 적 없는 비밀번호를 사용하세요.</span>
+								</p>
+								<p class="topline">
+									"비밀번호는 암호화하여 보관하며, 기존 비밀번호와의 일치 여부만 확인합니다. "
+									<span class="ex2">키보드에 Caps Lock이 켜져 있습니다.</span>
+								</p>
+							</div>
+							<span class="arrow"></span>
+						</div>
+						<div id="help2_6" class="help left" style="top:70px; right:17px;">
+							<div class="txt">
+								<p>
+									<span class="ex">비밀번호는 8자 이상 입력하셔야 합니다.</span>
+									<span class="ex2">키보드에 Caps Lock이 켜져 있습니다.</span>
+								</p>
+							</div>
+							<span class="arrow"></span>
+						</div>
+						<div id="help2_7" class="help left" style="top:70px; right:17px">
+							<div class="txt">
+								<p>
+									<strong>사용 불가</strong>
+									" : 비밀번호 재작성 필요 "
+									<br>
+									<span>이미 도용된 비밀번호는 추가 도용 가능성이 높아 사용하실 수 없습니다.</span>
+								</p>
+								<p class="topline">
+									"비밀번호는 암호화하여 보관하며, 기존 비밀번호와의 일치 여부만 확인합니다. "
+									<span class="ex2">키보드에 Caps Lock이 켜져 있습니다.</span>
+								</p>
+							</div>
+							<span class="arrow"></span>
+						</div>
+						<!-- 캡차 -->
+						<div class="captcha_member">
+							<!-- [D]이미지캡차시 display:block -->
+							<div id="captcha_image_legend" style="display:block">
+								<p class="captcha_txt">아래 이미지를 보이는 대로 입력해주세요.</p>
+								<div id="image_captcha_div" class="captcha_box">
+									<span class="captcha_img">
+										<img name="captchaImage" id="chptchaimg" src="https://nid.naver.com/login/image/captcha/nhncaptchav4.gif?key=GeY3xzYjtpKz91HG&1" width="100%" height="87" alt="자동입력 방지문자">
+									</span>
+									<a href="javascript:reCaptcha('');" id="aReCaptcha" onclick="clickcr(this, 'npw.recpch', '', '', event); return false;" class="btn_refresh">
+										<span class="sp">새로고침</span>
+									</a>
+									<a href="javascript:changeCaptchaMode('ko_KR', 'autoValue');" onclick="clickcr(this, 'npw.vochpch', '', '', event);" class="btn_sound">
+										<span class="sp">음성으로 듣기</span>
+									</a>
+								</div>
+							</div>
+							<!-- 음성캡차시 display:block -->
+							<div id="captcha_sound_legend" style="display:none">
+								<p class="captcha_txt">스피커로 들리는 내용을 숫자로 입력해 주세요.</p>
+								<div id="sound_captcha_div" class="captcha_box capcha_sound" style="display:none;">
+									<span class="captcha_img">
+										<span class="sp speaker"></span>
+										<p>
+											<span class="audio_txt">음성으로 안내되고 있습니다. (시작음 3회 반복 후 재생)</span>
+										</p>
+									</span>
+									<a href="javascript:playSoundCaptcha('ko_KR');" onclick="clickcr(this, '', '', event);" id="play_audio" class="btn_refresh">
+										<span class="sp">새로고침</span>
+									</a>
+									<a href="javascript:changeCaptchaMode('ko_KR');" onclick="clickcr(this, 'npw.imgcpch', '', '', event);" class="btn_img">
+										<span class="sp">이미지로 보기</span>
+									</a>
+								</div>
+							</div>
+							<!-- 자동 입력 방지 문자 -->
+							<div id="bdr_autoValue" class="spc_row">
+								<label id="lbCapcha" for="autoValue" class="lbl_in" style="display:block">자동입력 방지문자</label>
+								<span class="int_box">
+									<input type="text" name="autoValue" id="autoValue" class="int" title="자동입력 방지문자" style="width:336px;" onkeydown="checkNumber();" onfocus="hiddenText('lbCapcha')" onblur="showText('lbCapcha', 'autoValue')">
+								</span>
+							</div>
+						</div>
+						<!-- 캡챠 -->
+						<div id="bivShowBlock" class="login_check" style="display:none">
+							<input type="checkbox" name="chkBlockIp" id="chkBlockIp" checked class>
+							<label for="chkBlockIp" class="lbl">보안강화를 위해 해와 IP에서의 로그인 차단</label>
+							<a href="javascript:toggle('blockIp')" class="link_help">
+								<i id="i_blockIp" class="spico ico_arr4_dn">도움말</i>
+							</a>
+							<p id="p_blockIp" class="check_txt" style="display:none">
+								" 해외에서 접속할 경우 "
+								<strong>회원정보에 등록된 이름/생일을 입력하여 본인 여부를 확인</strong>
+								"합니다. 기억나지 않을 경우 등록된 사용자 연락처 정보로 로그인 하실 수 있습니다. 해외 사용자이거나, 여행, 출장 등으로 해외에서 체류할 경우 해제해주세요. "
+							</p>
+						</div>
 						<div id="updPwArea">
-							<button type="button" class="updBtn" onclick="savePassword()"> 저장 </button>
-							<button type="button" class="updBtn" onclick="savePassword()"> 취소 </button>
+							<button type="button" class="updBtn" onclick="savePassword();"> 저장 </button>
+							<button type="button" class="updBtn" onclick="savePassword();"> 취소 </button>
 						</div>
 					</fieldset>
 				</form>

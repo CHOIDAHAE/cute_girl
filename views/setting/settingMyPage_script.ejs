@@ -6,6 +6,10 @@
 		<link href="../css/setting.css?after" rel="stylesheet" type="text/css">
 		<link href="../css/grid.css?after" rel="stylesheet" type="text/css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" />
+		<script type="text/javascript" src="https://nid.naver.com/js/clickcr.js"></script>
+		<script type="text/javascript" src="https://nid.naver.com/inc/common/js/ko/passwdAjax.js?20180530"></script>
+		<script type="text/javascript" src="https://nid.naver.com/inc/common/js/ko/commonUtil.js?20170214"></script>
+		<script src="https://ssl.pstatic.net/static.gn/js/clickcrD.js" id="gnb_clickcrD" charset="utf-8"></script>
 
 		<script>
 			var isshift = false;
@@ -13,6 +17,9 @@
 			var pswdlevel = 0;
 			var focuswhere = 0;
 			var pwdstat = true;
+
+			var nsc = "my.private"+ "";
+			var ccsrv = "cc.naver.com";
 
 			$(document).ready(function(){
 				$('#myProfile').addClass('cleanMenuSelected');
@@ -24,6 +31,59 @@
 				myProfile_onclick();
 				$('#updSaveArea').hide();
 			})
+
+			function mainSubmit() {
+				if ( document.fm.now_pw.value == "" ) {
+					alert("비밀번호를 입력하세요.");
+					document.fm.now_pw.focus();
+				} else if ( document.fm.new_pw.value == "" ) {
+					alert("새 비밀번호를 입력하세요.");
+					document.fm.new_pw.focus();
+				} else if ( !isValid_passwd(document.fm.new_pw.value) ) {
+					document.fm.new_pw.value = "";
+					document.fm.conf_pw.value = "";
+					document.getElementById("lb_new_pw").style.display = "block";
+					document.getElementById("lb_conf_pw").style.display = "block";
+					document.fm.new_pw.focus();
+					document.fm.new_pw.select();
+				} else if( !pwdstat ) {
+					alert("안전도가 너무 낮습니다. 다른 비밀번호를 입력해 주세요.");
+					document.fm.new_pw.value = "";
+					document.fm.conf_pw.value = "";
+					document.getElementById("lb_new_pw").style.display = "block";
+					document.getElementById("lb_conf_pw").style.display = "block";
+					document.fm.new_pw.focus();
+				} else if ( document.fm.now_pw.value == document.fm.new_pw.value ) {
+					alert("현재 비밀번호와 동일합니다.");
+					document.fm.new_pw.value = "";
+					document.fm.conf_pw.value = "";
+					document.getElementById("lb_new_pw").style.display = "block";
+					document.getElementById("lb_conf_pw").style.display = "block";
+					document.fm.new_pw.focus();
+					document.fm.new_pw.select();
+				} else if ( document.fm.conf_pw.value == "" ) {
+					alert("새 비밀번호 확인을 입력하세요.");
+					document.getElementById("lb_conf_pw").style.display = "block";
+					document.fm.conf_pw.focus();
+				} else if ( document.fm.new_pw.value != document.fm.conf_pw.value ) {
+					alert("새 비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+					document.fm.conf_pw.value = "";
+					document.getElementById("lb_conf_pw").style.display = "block";
+					document.fm.conf_pw.focus();
+				} else if(document.fm.autoValue.value == "") {
+					alert("자동입력방지문자를 정확하게 입력해 주세요.");
+					document.fm.autoValue.value = document.fm.autoValue.value;
+					document.fm.autoValue.focus();
+				}else {
+					document.fm.tempAutoValue.value = document.fm.autoValue.value;
+					document.fm.tempChkBlockIp.value = document.fm.chkBlockIp.checked;
+					
+					createRsaKey();
+					lua_do('changePW_PC' , arguments.callee.name,INFO_CHECK_POINT_SUBMIT, document.fm.token_help.value, true,'');
+					return true;
+				}
+				return false;
+			}
 
 			//내 프로필
 			function myProfile_onclick(){
@@ -100,22 +160,6 @@
 				console.log('password');
 			}
 
-			//포커스 이벤트
-			function setCompFocus(compId){
-				var Id = '#lb_'+compId;
-				console.log(Id);
-				$(Id).hide();
-			}
-
-			function setCompBlur(compId){
-				var Id = '#lb_'+compId;
-				var thisId = '#'+compId;
-				console.log($(thisId).val());
-				if($(thisId).val() == ""){
-					$(Id).show();
-				}
-			}
-
 			//캡스락 여부
 			function showCapslockForNowPw(options){
 				if (options == -1){
@@ -147,6 +191,7 @@
 				}
 			}
 
+			//캡스락 메세지
 			function showCapslock(){
 				if(isCapslock){
 					document.getElementById('help2_1').style.display="block";
@@ -155,17 +200,187 @@
 				}
 			}
 
+			//shift 누르고 있는지 여부
+			function checkShiftUp(e){
+				if(e.which && e.which == 16){
+					isshift = false;
+				}
+			}
+
+			function checkShiftDown(e){
+				var myKeyCode = e.which || e.keyCode;
+				if(myKeyCode && myKeyCode == 16){
+					isshift = true;
+				}
+
+				var element = document.getElementById('help2_1');
+
+				if(myKeyCode && myKeyCode == 20){
+					if(!isCapslock){
+						isCapslock = true;
+						element.style.display = "block";
+						setTimeout("hide('help2_1')", 1500);
+					}else{
+						isCapslock = false;
+						element.style.display = "none";
+					}
+				}
+				focuswhere = 0;
+			}
+
+			function checkShiftDownNoMsg(e) {
+				if (e.which && e.which==16){
+					isshift = true;
+				}
+				focuswhere=0;
+			}
+
+			function show(id) {
+				var e = document.getElementById(id);
+				if (e != null) {
+					e.style.display = "block";
+				}
+			}
+			function hide(id) {
+				var e = document.getElementById(id);
+				if (e != null) {
+					e.style.display = "none";
+				}
+			}
+
+			function hiddenText(objName){
+				document.getElementById(objName).className = "blind";
+			}
+
+			function showText(objName, compName){
+				if(document.getElementById(compName).value == ""){
+					document.getElementById(objName).className = "lbl_in";
+				}
+			}
+
+			//포커스 및 blur 이벤트
 			function convertDiv(obj, stat){
 				if(stat == "none"){
 					//$('#lb_'+obj).style.display = stat;
 					document.getElementById('lb_'+obj).style.display = stat;
 				}else{
-					if($('#'+obj).value == ""){
+					if($('#'+obj).val() == ""){
 						//$('#lb_'+obj).style.display = stat;
 						document.getElementById('lb_'+obj).style.display = stat;
 					}else{
 						//$('#lb_'+obj).style.display = "none";
 						document.getElementById('lb_'+obj).style.display = "none";
+					}
+				}
+			}
+
+			function checkNumber(){
+				var captcha = document.getElementById('captcha_image_legend').style.display;
+				
+				if(captcha == "none"){
+					check_num('autoValue', '1');
+				}
+			}
+			
+			//캡차모드
+			var playTimer = null;
+			function clearAudio(parentNode){
+				if(playTimer != null){
+					clearTimeout(playTimer);
+					playTimer = null;
+				}
+
+				var targetAudio = parentNode.getElementsByTagName('EMBED');
+				if(targetAudio != null && targetAudio.length > 0){
+					targetAudio[0].stop();
+					parentNode.removeChild(targetAudio[0]);
+					return;
+				}
+
+				targetAudio = parentNode.getElementsByTagName('AUDIO');
+				if(targetAudio != null && targetAudio.length > 0){
+					parentNode.removeChild(targetAudio[0]);
+				}
+			}
+
+			function changeCaptchaMode(locale, inputFormId){
+				var toggle = function(div, legend){
+					if(div.style.display == 'none'){
+						div.style.display = 'block';
+						legend.style.display = 'block';
+					}else{
+						div.style.display = 'none';
+						legend.style.display = 'none';
+					}
+				};
+
+				var imageDiv = document.getElementById('image_captcha_div');
+				var soundDiv = document.getElementById('sound_captcha_div');
+				toggle(imageDiv, document.getElementById('captcha_image_legend'));
+				toggle(soundDiv, document.getElementById('captcha_sound_legend'));
+
+				var isImageMode = (imageDiv.style.display == "block");
+				if(isImageMode){
+					document.getElementById('captcha_type').value = "image";
+					clearAudio(document.getElementById('play_audio'));
+					try{document.getElementById('aReCaptcha').focus();}catch(e){}
+				}else{
+					document.getElementById('captcha_type').value = "sound";
+					playSoundCaptcha(locale);
+					if(inputFormId){
+						try{document.getElementById(inputFormId).focus();} catch(e){}
+					}else{
+						try{document.getElementById('play_audio').focus();} catch(e){}
+					}
+				}
+			}
+
+			var soundDelay = 4000;
+			function playSoundCaptcha(locale){
+				var key = document.getElementById('chptchakey').value;
+				var waveURL = "https://soundcaptcha.nid.naver.com/soundCaptcha.wav?key=" + key + "&replay=" + new Date().valueOf();
+
+				var playerArea = document.getElementById('play_audio');
+				clearAudio(playerArea);
+
+				try{
+					var audio = new Audio("");
+					if(!audio.canPlayType('audio/wav')){
+						throw new Error('');
+					}
+
+					audio.style.width="0px";
+					audio.style.height="0px";
+
+					audio = new Audio(waveURL);
+					if(soundDelay === 0){
+						playerArea.appendChild(audio);
+						audio.play();
+					}else{
+						playTimer = setTimeout(function(){
+							playerArea.appendChild(audio);
+							audio.play();
+						}, soundDelay);
+					}
+				}catch(e){
+					if(soundDelay === 0){
+						var audio = document.createElement('EMBED');
+						audio.setAttribute('src', waveURL);
+						audio.setAttribute('hidden', true);
+						audio.setAttribute('autostart', true);
+						playerArea.appendChild(audio);
+					}else{
+						playTimer = setTimeout(function(){
+							var audio = document.createElement('EMBED');
+							audio.setAttribute('src', waveURL);
+							audio.setAttribute('hidden', true);
+							audio.setAttribute('autostart', true);
+							audio.setAttribute('showstatusbar', false);
+							audio.setAttribute('showcontrols', false);
+							audio.setAttribute('showaudiocontrols', false);
+							audio.setAttribute('showtracker', false);
+							playerArea.appendChild(audio);
+						}, soundDelay);
 					}
 				}
 			}
