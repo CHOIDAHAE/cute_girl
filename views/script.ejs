@@ -246,6 +246,9 @@
 				$('.modal_wrap').hide();
 				$('.next_modal').hide();
 				document.getElementById('input_group').value = "";
+				
+				// 메뉴 selected 없애기
+				document.getElementById('sMenu30').classList.remove('selected');
 			};
 
 			// 모임만들기 완료 모달 열기
@@ -264,7 +267,7 @@
 					success:function(result){
 						if(result == "S"){
 							$('.next_modal').show();
-							mygroup("add");
+							mygroup();
 						} else {
 							alert("새 모임 만들기 중 오류가 발생하였습니다.(ajax성공)");
 						}
@@ -301,20 +304,15 @@
 					data : {"emplyrSn" : emplyrSn},
 					success:function(result){
 						if(result.length > 0){
-							if(data == "add"){	// 내 모임 만들기 이후 재 조회가 필요한 경우
-								var num = result.length-1;
-								var ul_list = $("#ul_list");
-								ul_list.append("<li id='add_li_"+num+"' class='add_li'><div class='tree_item'> "+result[num][1]+"</div></li>"); //ul_list안쪽에 li추가
-							} else {	// 그냥 메뉴에서 내 그룹 연경우
-								//if(document.getElementById("removeChild")){	//removeCHild가 존재하면 삭제 
-									//0ㄱㅐ로 세팅
-								//}
-								for(var i=0; i<result.length; i++){
-									//li 동적생성
-									var ul_list = $("#ul_list");
-									ul_list.append("<li id='add_li_"+i+"' class='add_li'><div class='tree_item'> "+result[i][1]+"</div></li>"); //ul_list안쪽에 li추가
-								}
-							}							
+							// 조회된 메뉴 나열
+							var content = "";
+
+							for(var i=0; i<result.length; i++){
+								content += "<li id='add_li_"+i+"' class='add_li'><div class='tree_item'> "+result[i][1]+"</div></li>";
+							}
+
+							$('#sub_list').html(content);      // 조회된 사진 리스트
+							
 						} else if(result.Status == "F"){
 							alert("내 그룹 불러오는 도중 오류가 발생하였습니다.");
 						}

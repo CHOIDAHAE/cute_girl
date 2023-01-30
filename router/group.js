@@ -357,33 +357,7 @@ module.exports = function(app){
 
 	/******************그룹 파일 업로드******************/
 	// 그룹명 수정, 그룹 대표사진 수정
-	app.post("/updateGroupSet", upload.single('groupImg'), function(req, res){	
-		/*
-		fs.readdir('../uploadedGroupFiles', (error) => {
-			// uploads 폴더 없으면 생성
-			if (error) {
-				fs.mkdirSync('/uploadedGroupFiles');
-			}
-		});
-		*/
-
-		if(req.fileValidationError != null){
-			res.json("exe");
-			return;
-		}
-		
-		//그냥 파일명을 가져올 경우 한글이 깨지는 오류 수정
-		var fileNm = Buffer.from(req.file.originalname, 'latin1').toString('utf8');
-		var fileExt = req.file.originalname.split(".");
-
-		var FILE_STRE_COURS_NM = '/uploadedGroupFiles';
-		//var FILE_NM = fileNm;
-		var ORGINL_FILE_NM = req.file.filename;
-		//var FILE_EXTSN_NM = fileExt[fileExt.length - 1];
-		//var FILE_MG = req.file.size;
-		var emplyrSn = req.session.user.emplyrSn;
-		//var ORGINL_FILE_EXTSN_NM = req.file.mimetype;
-		
+	app.post("/updateGroupSet", upload.single('groupImg'), function(req, res){			
 		oracledb.getConnection({
 			user:dbConfig.user,
 			password:dbConfig.password,
@@ -399,93 +373,162 @@ module.exports = function(app){
 
 			//query format
 			let format = {language: 'sql', indent: ''};
-			
-			var fileParam = {
-							"groupSn"	: req.body.groupSn,
-							"emplyrSn"	: emplyrSn
-							}
 
-			//기존 그룹사진 삭제
-			let deleteTopPicture = mybatisMapper.getStatement('GroupDAO','deleteTopPicture', fileParam, format);
-			//fileSn 찾아오기
-			let selectFileSn = mybatisMapper.getStatement('GroupDAO','selectFileSn', {"groupSn"	: req.body.groupSn}, format);
-			
-			//기존 그룹사진 삭제
-			conn.execute(deleteTopPicture, function(err,result){
-				if(err){
-					console.log("deleteTopPicture failed :", err);
-					res.json({"Status":"F"});
+			// 파일이 있으면 파일 업로드 및 제목 수정
+			if(typeof req.file != 'undefined'){
+				/*
+				fs.readdir('../uploadedGroupFiles', (error) => {
+					// uploads 폴더 없으면 생성
+					if (error) {
+						fs.mkdirSync('/uploadedGroupFiles');
+					}
+				});
+				*/
+
+				if(req.fileValidationError != null){
+					res.json("exe");
 					return;
 				}
+				
+				//그냥 파일명을 가져올 경우 한글이 깨지는 오류 수정
+				//var fileNm = Buffer.from(req.file.originalname, 'latin1').toString('utf8');
+				// var fileExt = req.file.originalname.split(".");
 
-				//fileSn Max찾아오기
-				conn.execute(selectFileSn, function(err,result){
+				var FILE_STRE_COURS_NM = '/uploadedGroupFiles';
+				//var FILE_NM = fileNm;
+				var ORGINL_FILE_NM = req.file.filename;
+				//var FILE_EXTSN_NM = fileExt[fileExt.length - 1];
+				//var FILE_MG = req.file.size;
+				//var ORGINL_FILE_EXTSN_NM = req.file.mimetype;
+
+				var fileParam = {
+								"groupSn"	: req.body.groupSn,
+								"emplyrSn"	: req.session.user.emplyrSn
+								}
+
+				//기존 그룹사진 삭제
+				let deleteTopPicture = mybatisMapper.getStatement('GroupDAO','deleteTopPicture', fileParam, format);
+				//fileSn 찾아오기
+				let selectFileSn = mybatisMapper.getStatement('GroupDAO','selectFileSn', {"groupSn"	: req.body.groupSn}, format);
+				
+				//기존 그룹사진 삭제
+				conn.execute(deleteTopPicture, function(err,result){
 					if(err){
-						console.log("selectFileSn failed :", err);
+						console.log("deleteTopPicture failed :", err);
 						res.json({"Status":"F"});
 						return;
 					}
-				
-					var param = {
-						"emplyrSn"		: emplyrSn,
-						"fileSn"		: result.rows[0][0],
-						"mainFileAt"	: 'Y',
-						"groupSn"		: req.body.groupSn,
-						"data"			: req.body.data,
-						"orgFileNm"		: ORGINL_FILE_NM,
-						"filePath"		: FILE_STRE_COURS_NM
-					}
 
-					//파일 등록
-					let insertGroupFile = mybatisMapper.getStatement('GroupDAO','insertGroupFile', param, format);
-
-					conn.execute(insertGroupFile, function(err,result){
+					//fileSn Max찾아오기
+					conn.execute(selectFileSn, function(err,result){
 						if(err){
-							console.log(err);
-							res.json("F");
+							console.log("selectFileSn failed :", err);
+							res.json({"Status":"F"});
+							return;
 						}
-						
-						// 제목 변경이 있는경우 업데이트
-						if(req.body.data != "" && req.body.data != null){
-							// 리더여부 조회
-							let selecteLeaderYn = mybatisMapper.getStatement('GroupDAO','selecteLeaderYn', param, format);
-							//내 그룹 업데이트
-							let updateGroupNm = mybatisMapper.getStatement('GroupDAO','updateGroupNm', param, format);
+					
+						var param = {
+							"emplyrSn"		: req.session.user.emplyrSn,
+							"fileSn"		: result.rows[0][0],
+							"mainFileAt"	: 'Y',
+							"groupSn"		: req.body.groupSn,
+							"data"			: req.body.data,
+							"orgFileNm"		: ORGINL_FILE_NM,
+							"filePath"		: FILE_STRE_COURS_NM
+						}
+
+						//파일 등록
+						let insertGroupFile = mybatisMapper.getStatement('GroupDAO','insertGroupFile', param, format);
+						console.log(param);
+						conn.execute(insertGroupFile, function(err,result){
+							if(err){
+								console.log(err);
+								res.json("F");
+							}
 							
-							// 제목수정
-							conn.execute(selecteLeaderYn, function(err,result){
-								if(err){
-									console.log("selecteLeaderYn failed :", err);
-									res.json({"Status":"F"});
-									return;
-								}
+							// 제목 변경이 있는경우 업데이트
+							if(req.body.data != "" && req.body.data != null){
+								console.log(param);
+								// 리더여부 조회
+								let selecteLeaderYn = mybatisMapper.getStatement('GroupDAO','selecteLeaderYn', param, format);
+								//내 그룹 업데이트
+								let updateGroupNm = mybatisMapper.getStatement('GroupDAO','updateGroupNm', param, format);
 								
-								var leaderYn = result.rows[0][0];
-								if( leaderYn == "N" ){	//리더 아님
-									res.json({"Status":"L"});
-									return;
-								} else {
-									//쿼리문 실행
-									conn.execute(updateGroupNm, function(err,result){
-										if(err){
-											console.log("updateGroupNm failed :", err);
-											res.json({"Status":"F"});
-											return;
-										}
-										res.json({"Status":"S"});
-										
-										conn.commit();
-									});
-								}
-							});
-						} else {// 제목 없는 경우 바로 커밋
+								// 제목수정
+								conn.execute(selecteLeaderYn, function(err,result){
+									if(err){
+										console.log("selecteLeaderYn failed :", err);
+										res.json({"Status":"F"});
+										return;
+									}
+									
+									var leaderYn = result.rows[0][0];
+									if( leaderYn == "N" ){	//리더 아님
+										res.json({"Status":"L"});
+										return;
+									} else {
+										//쿼리문 실행
+										conn.execute(updateGroupNm, function(err,result){
+											if(err){
+												console.log("updateGroupNm failed :", err);
+												res.json({"Status":"F"});
+												return;
+											}
+											res.json({"Status":"S"});
+											
+											conn.commit();
+										});
+									}
+								});
+							} else {// 제목 없는 경우 바로 커밋
+								res.json({"Status":"S"});
+								
+								conn.commit();
+							}
+						});
+					});
+				});
+			} else if(req.body.data != "" && req.body.data != null){
+				var param = {
+					"emplyrSn"		: req.session.user.emplyrSn,
+					"data"			: req.body.data,
+					"groupSn"		: req.body.groupSn
+				}
+				
+				// 리더여부 조회
+				let selecteLeaderYn = mybatisMapper.getStatement('GroupDAO','selecteLeaderYn', param, format);
+				//내 그룹 업데이트
+				let updateGroupNm = mybatisMapper.getStatement('GroupDAO','updateGroupNm', param, format);
+
+				// 제목수정
+				conn.execute(selecteLeaderYn, function(err,result){
+					if(err){
+						console.log("selecteLeaderYn failed :", err);
+						res.json({"Status":"F"});
+						return;
+					}
+					
+					var leaderYn = result.rows[0][0];
+					if( leaderYn == "N" ){	//리더 아님
+						res.json({"Status":"L"});
+						return;
+					} else {
+						//쿼리문 실행
+						conn.execute(updateGroupNm, function(err,result){
+							if(err){
+								console.log("updateGroupNm failed :", err);
+								res.json({"Status":"F"});
+								return;
+							}
 							res.json({"Status":"S"});
 							
 							conn.commit();
-						}
-					});
+						});
+					}
 				});
-			});
+			} else {	// 사진도 제목도 없는 경우
+				res.json({"Status":"Q"});
+			}
 		});
 	})
 

@@ -43,7 +43,7 @@
             
             // 해당 그룹의 정보 세팅
             function selectedGroupInfo(){
-                // 대표사진 불러오기
+                // 대표사진 및 그룹명 불러오기
 				$.ajax({
 					url : "/selectedGroupInfo",
 					type : "POST",
@@ -63,7 +63,7 @@
                             document.getElementById('preview').src = imgUrl;
                             document.getElementById('smallPicture').src = imgUrl;
 
-                            $(".groupNm").text(window.parent.$('#groupNm').val());
+                            $(".groupNm").text(res.result[0][2]);
                             $(".emplyrNm").text(window.parent.$('#emplyrNm').val());
                             $(".emplyrId").text(window.parent.$('#emplyrId').val());
                             $(".frstDt").text(res.result[0][1]);
@@ -103,7 +103,9 @@
 					success:function(result){
 						if(result.Status == "S"){
 							//메뉴리스트 업데이트
+                            window.parent.mygroup();
                             alert("모임 나가기가 완료되었습니다.");
+                            window.parent.document.location.href="/";
 						} else if(result.Status == "F"){
 							alert("모임 나가기 중 오류가 발생하였습니다.");
 						}
@@ -175,9 +177,11 @@
 							alert("수정이 완료되었습니다.");
                             // 메뉴 재조회
                             window.parent.mygroup();
-                            // 그룹 재조회
-
-						} else if(result.Status == "F"){
+                            // 그룹 재조회(이름이랑 대표사진 재세팅)
+                            window.parent.openMenu('group');
+						} else if (result.Status == "Q"){
+                            alert("입력된 대표사진이 없거나 수정된 그룹명이 없습니다.");
+                        } else if(result.Status == "F"){
                             alert("그룹명 변경 또는 대표사진 변경 중 오류가 발생하였습니다.");
                         }
 					},
@@ -575,6 +579,9 @@
                     <!-- 사진 -->
                     <div id="picture_part" class="content_box _together_scroll">
                         <div class="lst_pt">
+                            <p style="text-align:center;">
+                                <iframe id="iframe_photo" class="frameBox" src="/" scrolling="yes" width="100%" height="100%" frameborder="0" style='visibility : hidden;'></iframe>
+                            </p>
                             <div class="together_photo">
                                 <ul id="photo_none" class="toge_photo_list">
                                     <li style="width: auto; height: auto;">
@@ -583,10 +590,6 @@
                                             <p class="text">
                                             <span class="point"><span class="groupNm"></span></span>에서<br> 함께 볼 사진을 추가해 주세요!</p>
                                             <a class="btn_add_more" onclick="uploadPopup();">사진 추가하기</a>
-                                            
-                                            <p style="text-align:center;">
-                                                <iframe id="iframe_photo" class="frameBox" src="/" scrolling="yes" width="100%" height="100%" frameborder="0" style='visibility : hidden;'></iframe>
-                                            </p>
                                         </div>
                                     </li>
                                 </ul>
