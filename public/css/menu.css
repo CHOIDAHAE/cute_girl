@@ -449,6 +449,7 @@ button {
     background-repeat: no-repeat;
     background-position: 0 0;
     z-index: 50;
+    cursor: pointer;
 }
 
 .blind {
@@ -562,5 +563,6 @@ button {
     background: url(https://ssl.pstatic.net/static/pwe/ndrive/new_ndrive/layer_sp_cls2.png) no-repeat 0 0;
     overflow: hidden;
     line-height: 999px;
+    cursor: pointer;
 }
 
