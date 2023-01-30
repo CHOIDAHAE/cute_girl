@@ -55,8 +55,6 @@
 			function openMenu(menuNm){
 				var gridArea = document.getElementById("gridArea");
 				
-				console.log(gridArea);
-				console.log(menuNm);                
 				document.getElementById("gridArea").src = menuNm;
 			};
 			
@@ -143,6 +141,7 @@
 
 			// 파일 조회 
 			function fileSelect(useAt, fileType, sortType){
+				openMenu('main');
 				var emplyrSn = document.getElementById('emplyrSn').value;
 				var orderBy = "NULL";
 

@@ -22,7 +22,32 @@
 			EMPLYR_NM = #{emplyrNm}
 			, EMPLYR_ID = #{emplyrId}
 			, EMAIL_ADRES = #{emailAdres}
+			, LAST_UPDUSR_SN = #{sEmplyrSn}
+			, LAST_UPDT_DT = SYSDATE
 		WHERE
 			FRST_REGISTER_SN = #{sEmplyrSn}
+	</update>
+
+	<select id="selectSalt">
+		/* MyPageDAO.selectSalt */
+		SELECT
+			SALT
+			, EMPLYR_PASSWORD
+		FROM
+			TCM_EMPLYR
+		WHERE
+			EMPLYR_SN = #{sEmplyrSn}
+	</select>
+
+	<update id="updatePasswd">
+		/* MyPageDAO.updatePasswd */
+		UPDATE TCM_EMPLYR
+		SET
+			EMPLYR_PASSWORD = #{emplyrPasswd}
+			, SALT = #{salt}
+			, LAST_UPDUSR_SN = #{sEmplyrSn}
+			, LAST_UPDT_DT = SYSDATE
+		WHERE
+			EMPLYR_SN = #{sEmplyrSn}
 	</update>
 </mapper>

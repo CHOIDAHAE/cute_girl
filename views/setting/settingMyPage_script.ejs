@@ -1,388 +1,612 @@
 <html lang="ko">
-	<head>
-		<meta charset="utf-8">
-		<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-		<script src="https://kit.fontawesome.com/ad41bee873.js" crossorigin="anonymous"></script>
-		<link href="../css/setting.css?after" rel="stylesheet" type="text/css">
-		<link href="../css/grid.css?after" rel="stylesheet" type="text/css">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" />
-		<script type="text/javascript" src="https://nid.naver.com/js/clickcr.js"></script>
-		<script type="text/javascript" src="https://nid.naver.com/inc/common/js/ko/passwdAjax.js?20180530"></script>
-		<script type="text/javascript" src="https://nid.naver.com/inc/common/js/ko/commonUtil.js?20170214"></script>
-		<script src="https://ssl.pstatic.net/static.gn/js/clickcrD.js" id="gnb_clickcrD" charset="utf-8"></script>
+<head>
+	<meta charset="utf-8">
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script src="https://kit.fontawesome.com/ad41bee873.js" crossorigin="anonymous"></script>
+	<link href="../css/setting.css?after" rel="stylesheet" type="text/css">
+	<link href="../css/grid.css?after" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" />
+	<script type="text/javascript" src="https://nid.naver.com/js/clickcr.js"></script>
+	<!-- <script type="text/javascript" src="https://nid.naver.com/inc/common/js/ko/passwdAjax.js?20180530"></script> -->
+	<!-- <script type="text/javascript" src="https://nid.naver.com/inc/common/js/ko/commonUtil.js?20170214"></script> -->
+	<script src="https://ssl.pstatic.net/static.gn/js/clickcrD.js" id="gnb_clickcrD" charset="utf-8"></script>
 
-		<script>
-			var isshift = false;
-			var isCapslock = false;
-			var pswdlevel = 0;
-			var focuswhere = 0;
-			var pwdstat = true;
+	<script>
+		var isshift = false;
+		var isCapslock = false;
+		var pswdlevel = 0;
+		var focuswhere = 0;
+		var pwdstat = true;
 
-			var nsc = "my.private"+ "";
-			var ccsrv = "cc.naver.com";
+		var nsc = "my.private"+ "";
+		var ccsrv = "cc.naver.com";
 
-			$(document).ready(function(){
-				$('#myProfile').addClass('cleanMenuSelected');
-				$('.cleanLi').click(function(){
-					$('.cleanLi').removeClass('cleanMenuSelected');
-					$(this).toggleClass('cleanMenuSelected');
-				})
-
-				myProfile_onclick();
-				$('#updSaveArea').hide();
+		$(document).ready(function(){
+			$('#myProfile').addClass('cleanMenuSelected');
+			$('.cleanLi').click(function(){
+				$('.cleanLi').removeClass('cleanMenuSelected');
+				$(this).toggleClass('cleanMenuSelected');
 			})
 
-			function mainSubmit() {
-				if ( document.fm.now_pw.value == "" ) {
-					alert("비밀번호를 입력하세요.");
-					document.fm.now_pw.focus();
-				} else if ( document.fm.new_pw.value == "" ) {
-					alert("새 비밀번호를 입력하세요.");
-					document.fm.new_pw.focus();
-				} else if ( !isValid_passwd(document.fm.new_pw.value) ) {
-					document.fm.new_pw.value = "";
-					document.fm.conf_pw.value = "";
-					document.getElementById("lb_new_pw").style.display = "block";
-					document.getElementById("lb_conf_pw").style.display = "block";
-					document.fm.new_pw.focus();
-					document.fm.new_pw.select();
-				} else if( !pwdstat ) {
-					alert("안전도가 너무 낮습니다. 다른 비밀번호를 입력해 주세요.");
-					document.fm.new_pw.value = "";
-					document.fm.conf_pw.value = "";
-					document.getElementById("lb_new_pw").style.display = "block";
-					document.getElementById("lb_conf_pw").style.display = "block";
-					document.fm.new_pw.focus();
-				} else if ( document.fm.now_pw.value == document.fm.new_pw.value ) {
-					alert("현재 비밀번호와 동일합니다.");
-					document.fm.new_pw.value = "";
-					document.fm.conf_pw.value = "";
-					document.getElementById("lb_new_pw").style.display = "block";
-					document.getElementById("lb_conf_pw").style.display = "block";
-					document.fm.new_pw.focus();
-					document.fm.new_pw.select();
-				} else if ( document.fm.conf_pw.value == "" ) {
-					alert("새 비밀번호 확인을 입력하세요.");
-					document.getElementById("lb_conf_pw").style.display = "block";
-					document.fm.conf_pw.focus();
-				} else if ( document.fm.new_pw.value != document.fm.conf_pw.value ) {
-					alert("새 비밀번호와 비밀번호 확인이 일치하지 않습니다.");
-					document.fm.conf_pw.value = "";
-					document.getElementById("lb_conf_pw").style.display = "block";
-					document.fm.conf_pw.focus();
-				} else if(document.fm.autoValue.value == "") {
-					alert("자동입력방지문자를 정확하게 입력해 주세요.");
-					document.fm.autoValue.value = document.fm.autoValue.value;
-					document.fm.autoValue.focus();
-				}else {
-					document.fm.tempAutoValue.value = document.fm.autoValue.value;
-					document.fm.tempChkBlockIp.value = document.fm.chkBlockIp.checked;
-					
-					createRsaKey();
-					lua_do('changePW_PC' , arguments.callee.name,INFO_CHECK_POINT_SUBMIT, document.fm.token_help.value, true,'');
-					return true;
-				}
-				return false;
-			}
+			myProfile_onclick();
+			$('#updSaveArea').hide();
+		})
 
-			//내 프로필
-			function myProfile_onclick(){
-				$('#MyProfileArea').show();
-				$('#MyPasswordArea').hide();
+		function mainSubmit() {
+			if ( document.fm.now_pw.value == "" ) {
+				alert("비밀번호를 입력하세요.");
+				document.fm.now_pw.focus();
+			} else if ( document.fm.new_pw.value == "" ) {
+				alert("새 비밀번호를 입력하세요.");
+				document.fm.new_pw.focus();
+			} else if ( !isValid_passwd(document.fm.new_pw.value) ) {
+				document.fm.new_pw.value = "";
+				document.fm.conf_pw.value = "";
+				document.getElementById("lb_new_pw").style.display = "block";
+				document.getElementById("lb_conf_pw").style.display = "block";
+				document.fm.new_pw.focus();
+				document.fm.new_pw.select();
+			} else if( !pwdstat ) {
+				alert("안전도가 너무 낮습니다. 다른 비밀번호를 입력해 주세요.");
+				document.fm.new_pw.value = "";
+				document.fm.conf_pw.value = "";
+				document.getElementById("lb_new_pw").style.display = "block";
+				document.getElementById("lb_conf_pw").style.display = "block";
+				document.fm.new_pw.focus();
+			} else if ( document.fm.now_pw.value == document.fm.new_pw.value ) {
+				alert("현재 비밀번호와 동일합니다.");
+				document.fm.new_pw.value = "";
+				document.fm.conf_pw.value = "";
+				document.getElementById("lb_new_pw").style.display = "block";
+				document.getElementById("lb_conf_pw").style.display = "block";
+				document.fm.new_pw.focus();
+				document.fm.new_pw.select();
+			} else if ( document.fm.conf_pw.value == "" ) {
+				alert("새 비밀번호 확인을 입력하세요.");
+				document.getElementById("lb_conf_pw").style.display = "block";
+				document.fm.conf_pw.focus();
+			} else if ( document.fm.new_pw.value != document.fm.conf_pw.value ) {
+				alert("새 비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+				document.fm.conf_pw.value = "";
+				document.getElementById("lb_conf_pw").style.display = "block";
+				document.fm.conf_pw.focus();
+			} else if(document.fm.autoValue.value == "") {
+				alert("자동입력방지문자를 정확하게 입력해 주세요.");
+				document.fm.autoValue.value = document.fm.autoValue.value;
+				document.fm.autoValue.focus();
+			}else {
+				document.fm.tempAutoValue.value = document.fm.autoValue.value;
+				document.fm.tempChkBlockIp.value = document.fm.chkBlockIp.checked;
+				
+				createRsaKey();
+				lua_do('changePW_PC' , arguments.callee.name,INFO_CHECK_POINT_SUBMIT, document.fm.token_help.value, true,'');
+				return true;
+			}
+			return false;
+		}
+
+		//내 프로필
+		function myProfile_onclick(){
+			$('#MyProfileArea').show();
+			$('#MyPasswordArea').hide();
+			viewMyProfile();
+		}
+
+		//비밀번호 변경
+		function myPassword_onclick(){
+			$('#MyProfileArea').hide();
+			$('#MyPasswordArea').show();
+			requestkey();
+
+			$('#now_pw').val('');
+			$('#new_pw').val('');
+			$('#conf_pw').val('');
+			convertDiv('now_pw', 'block');
+			convertDiv('new_pw', 'block');
+			convertDiv('conf_pw', 'block');
+		}
+
+		//프로필 조회
+		function viewMyProfile(){
+			$.ajax({
+				url : "/selectMyProfile",
+				type : "POST",
+				dataType : "JSON", //"JSON"
+				data : {"sEmplyrSn" : window.parent.$('#emplyrSn').val()}
+
+			})
+			.done(function (res) {
+				console.log(res);
+				$('#emplyrNm').html(res[0][0]);
+				$('#emplyrId').html(res[0][1]);
+				$('#emailAdres').html(res[0][3]);
+			})
+			.fail(function (xhr, textStatus, errorThrown) {
+				console.log('selectFileDtlData ajax 실패');
+			})
+		}
+
+		//프로필 수정하기
+		function updProfile(){
+			var innerHTML = "";
+			var divId = ['#emplyrNm', '#emplyrId', '#emailAdres'];
+			var divType = ['text', 'text', 'email'];
+			var inputId = ['InEmplyrNm', 'InEmplyrId', 'InEmailAdres'];
+			for(var i=0; i < divId.length; i++){
+				innerHTML = '<input id="' + inputId[i] + '" type="' + divType[i] +'" value="' + $(divId[i]).html() + '">';
+				$(divId[i]).html(innerHTML);
+			}
+			$('#updArea').hide();
+			$('#updSaveArea').show();
+		}
+
+		function saveProfile(){
+			$.ajax({
+				url : "/saveProfile",
+				type : "POST",
+				dataType : "JSON", //"JSON"
+				data : {
+					"sEmplyrSn" : window.parent.$('#emplyrSn').val(),
+					"emplyrNm" : $('#InEmplyrNm').val(),
+					"emplyrId" : $('#InEmplyrId').val(),
+					"emailAdres" : $('#InEmailAdres').val()
+				}
+
+			})
+			.done(function (res) {
 				viewMyProfile();
-			}
+				$('#updArea').show();
+				$('#updSaveArea').hide();
+			})
+			.fail(function (xhr, textStatus, errorThrown) {
+				console.log('updateMyProfile ajax 실패');
+			})
+		}
 
-			//비밀번호 변경
-			function myPassword_onclick(){
-				$('#MyProfileArea').hide();
-				$('#MyPasswordArea').show();
-			}
+		//비밀번호 변경
+		function focusComp(compId){
+			console.log('focus');
+			$('#' + compId).focus();
+		}
 
-			//프로필 조회
-			function viewMyProfile(){
-				$.ajax({
-					url : "/selectMyProfile",
-					type : "POST",
-					dataType : "JSON", //"JSON"
-					data : {"sEmplyrSn" : window.parent.$('#emplyrSn').val()}
-
-				})
-				.done(function (res) {
-					console.log(res);
-					$('#emplyrNm').html(res[0][0]);
-					$('#emplyrId').html(res[0][1]);
-					$('#emailAdres').html(res[0][3]);
-				})
-				.fail(function (xhr, textStatus, errorThrown) {
-					console.log('selectFileDtlData ajax 실패');
-				})
-			}
-
-			//프로필 수정하기
-			function updProfile(){
-				var innerHTML = "";
-				var divId = ['#emplyrNm', '#emplyrId', '#emailAdres'];
-				var divType = ['text', 'text', 'email'];
-				var inputId = ['InEmplyrNm', 'InEmplyrId', 'InEmailAdres'];
-				for(var i=0; i < divId.length; i++){
-					innerHTML = '<input id="' + inputId[i] + '" type="' + divType[i] +'" value="' + $(divId[i]).html() + '">';
-					$(divId[i]).html(innerHTML);
-				}
-				$('#updArea').hide();
-				$('#updSaveArea').show();
-			}
-
-			function saveProfile(){
-				$.ajax({
-					url : "/saveProfile",
-					type : "POST",
-					dataType : "JSON", //"JSON"
-					data : {
-						"sEmplyrSn" : window.parent.$('#emplyrSn').val(),
-						"emplyrNm" : $('#InEmplyrNm').val(),
-						"emplyrId" : $('#InEmplyrId').val(),
-						"emailAdres" : $('#InEmailAdres').val()
-					}
-
-				})
-				.done(function (res) {
-					viewMyProfile();
-					$('#updArea').show();
-					$('#updSaveArea').hide();
-				})
-				.fail(function (xhr, textStatus, errorThrown) {
-					console.log('updateMyProfile ajax 실패');
-				})
-			}
-
-			//비밀번호 변경
-			function savePassword(){
-				console.log('password');
-			}
-
-			//캡스락 여부
-			function showCapslockForNowPw(options){
-				if (options == -1){
-					document.getElementById('help0_1').style.display = "none";
+		//캡스락 여부
+		function showCapslockForNowPw(options){
+			if (options == -1){
+				document.getElementById('help0_1').style.display = "none";
+			}else{
+				if(isCapslock){
+					document.getElementById('help0_1').style.display = "block";
 				}else{
-					if(isCapslock){
-						document.getElementById('help0_1').style.display = "block";
-					}else{
-						document.getElementById('help0_1').style.display = "none";
-					}
+					document.getElementById('help0_1').style.display = "none";
 				}
 			}
-			
-			function capslock(e){
-				var myKeyCode =0;
-				var myShiftKey=false;
-				if(window.event){
-					myKeyCode=e.keyCode; myShiftKey=e.shiftKey;
-				}else if(e.which){
-					myKeyCode=e.which; myShiftKey=isshift;
-				}
+		}
+		
+		function capslock(e){
+			var myKeyCode =0;
+			var myShiftKey=false;
+			if(window.event){
+				myKeyCode=e.keyCode; myShiftKey=e.shiftKey;
+			}else if(e.which){
+				myKeyCode=e.which; myShiftKey=isshift;
+			}
 
-				if((myKeyCode >= 65 && myKeyCode <= 90)&&!myShiftKey){
+			if((myKeyCode >= 65 && myKeyCode <= 90)&&!myShiftKey){
+				isCapslock = true;
+			}else if((myKeyCode >= 97 && myKeyCode <= 122) && myShiftKey){
+				isCapslock = true;
+			}else{
+				isCapslock = false;
+			}
+		}
+
+		//캡스락 메세지
+		function showCapslock(){
+			if(isCapslock){
+				document.getElementById('help2_1').style.display="block";
+			}else{
+				document.getElementById('help2_1').style.display="none";
+			}
+		}
+
+		//shift 누르고 있는지 여부
+		function checkShiftUp(e){
+			if(e.which && e.which == 16){
+				isshift = false;
+			}
+		}
+
+		function checkShiftDown(e){
+			var myKeyCode = e.which || e.keyCode;
+			if(myKeyCode && myKeyCode == 16){
+				isshift = true;
+			}
+
+			var element = document.getElementById('help2_1');
+
+			if(myKeyCode && myKeyCode == 20){
+				if(!isCapslock){
 					isCapslock = true;
-				}else if((myKeyCode >= 97 && myKeyCode <= 122) && myShiftKey){
-					isCapslock = true;
+					element.style.display = "block";
+					setTimeout("hide('help2_1')", 1500);
 				}else{
 					isCapslock = false;
+					element.style.display = "none";
 				}
 			}
+			focuswhere = 0;
+		}
 
-			//캡스락 메세지
-			function showCapslock(){
-				if(isCapslock){
-					document.getElementById('help2_1').style.display="block";
-				}else{
-					document.getElementById('help2_1').style.display="none";
-				}
+		function checkShiftDownNoMsg(e) {
+			if (e.which && e.which==16){
+				isshift = true;
 			}
+			focuswhere=0;
+		}
 
-			//shift 누르고 있는지 여부
-			function checkShiftUp(e){
-				if(e.which && e.which == 16){
-					isshift = false;
-				}
+		function show(id) {
+			var e = document.getElementById(id);
+			if (e != null) {
+				e.style.display = "block";
 			}
-
-			function checkShiftDown(e){
-				var myKeyCode = e.which || e.keyCode;
-				if(myKeyCode && myKeyCode == 16){
-					isshift = true;
-				}
-
-				var element = document.getElementById('help2_1');
-
-				if(myKeyCode && myKeyCode == 20){
-					if(!isCapslock){
-						isCapslock = true;
-						element.style.display = "block";
-						setTimeout("hide('help2_1')", 1500);
-					}else{
-						isCapslock = false;
-						element.style.display = "none";
-					}
-				}
-				focuswhere = 0;
+		}
+		function hide(id) {
+			var e = document.getElementById(id);
+			if (e != null) {
+				e.style.display = "none";
 			}
+		}
 
-			function checkShiftDownNoMsg(e) {
-				if (e.which && e.which==16){
-					isshift = true;
-				}
-				focuswhere=0;
-			}
+		function hiddenText(objName){
+			document.getElementById(objName).className = "blind";
+		}
 
-			function show(id) {
-				var e = document.getElementById(id);
-				if (e != null) {
-					e.style.display = "block";
-				}
+		function showText(objName, compName){
+			if(document.getElementById(compName).value == ""){
+				document.getElementById(objName).className = "lbl_in";
 			}
-			function hide(id) {
-				var e = document.getElementById(id);
-				if (e != null) {
-					e.style.display = "none";
-				}
-			}
+		}
 
-			function hiddenText(objName){
-				document.getElementById(objName).className = "blind";
-			}
-
-			function showText(objName, compName){
-				if(document.getElementById(compName).value == ""){
-					document.getElementById(objName).className = "lbl_in";
-				}
-			}
-
-			//포커스 및 blur 이벤트
-			function convertDiv(obj, stat){
-				if(stat == "none"){
+		//포커스 및 blur 이벤트
+		function convertDiv(obj, stat){
+			if(stat == "none"){
+				//$('#lb_'+obj).style.display = stat;
+				document.getElementById('lb_'+obj).style.display = stat;
+			}else{
+				if($('#'+obj).val() == ""){
 					//$('#lb_'+obj).style.display = stat;
 					document.getElementById('lb_'+obj).style.display = stat;
 				}else{
-					if($('#'+obj).val() == ""){
-						//$('#lb_'+obj).style.display = stat;
-						document.getElementById('lb_'+obj).style.display = stat;
-					}else{
-						//$('#lb_'+obj).style.display = "none";
-						document.getElementById('lb_'+obj).style.display = "none";
-					}
+					//$('#lb_'+obj).style.display = "none";
+					document.getElementById('lb_'+obj).style.display = "none";
 				}
 			}
+		}
 
-			function checkNumber(){
-				var captcha = document.getElementById('captcha_image_legend').style.display;
-				
-				if(captcha == "none"){
-					check_num('autoValue', '1');
-				}
-			}
+		function checkNumber(){
+			var captcha = document.getElementById('captcha_image_legend').style.display;
 			
-			//캡차모드
-			var playTimer = null;
-			function clearAudio(parentNode){
-				if(playTimer != null){
-					clearTimeout(playTimer);
-					playTimer = null;
-				}
-
-				var targetAudio = parentNode.getElementsByTagName('EMBED');
-				if(targetAudio != null && targetAudio.length > 0){
-					targetAudio[0].stop();
-					parentNode.removeChild(targetAudio[0]);
-					return;
-				}
-
-				targetAudio = parentNode.getElementsByTagName('AUDIO');
-				if(targetAudio != null && targetAudio.length > 0){
-					parentNode.removeChild(targetAudio[0]);
-				}
+			if(captcha == "none"){
+				check_num('autoValue', '1');
+			}
+		}
+		
+		//캡차모드
+		var playTimer = null;
+		function clearAudio(parentNode){
+			if(playTimer != null){
+				clearTimeout(playTimer);
+				playTimer = null;
 			}
 
-			function changeCaptchaMode(locale, inputFormId){
-				var toggle = function(div, legend){
-					if(div.style.display == 'none'){
-						div.style.display = 'block';
-						legend.style.display = 'block';
-					}else{
-						div.style.display = 'none';
-						legend.style.display = 'none';
-					}
-				};
+			var targetAudio = parentNode.getElementsByTagName('EMBED');
+			if(targetAudio != null && targetAudio.length > 0){
+				targetAudio[0].stop();
+				parentNode.removeChild(targetAudio[0]);
+				return;
+			}
 
-				var imageDiv = document.getElementById('image_captcha_div');
-				var soundDiv = document.getElementById('sound_captcha_div');
-				toggle(imageDiv, document.getElementById('captcha_image_legend'));
-				toggle(soundDiv, document.getElementById('captcha_sound_legend'));
+			targetAudio = parentNode.getElementsByTagName('AUDIO');
+			if(targetAudio != null && targetAudio.length > 0){
+				parentNode.removeChild(targetAudio[0]);
+			}
+		}
 
-				var isImageMode = (imageDiv.style.display == "block");
-				if(isImageMode){
-					document.getElementById('captcha_type').value = "image";
-					clearAudio(document.getElementById('play_audio'));
-					try{document.getElementById('aReCaptcha').focus();}catch(e){}
+		function changeCaptchaMode(locale, inputFormId){
+			var toggle = function(div, legend){
+				if(div.style.display == 'none'){
+					div.style.display = 'block';
+					legend.style.display = 'block';
 				}else{
-					document.getElementById('captcha_type').value = "sound";
-					playSoundCaptcha(locale);
-					if(inputFormId){
-						try{document.getElementById(inputFormId).focus();} catch(e){}
-					}else{
-						try{document.getElementById('play_audio').focus();} catch(e){}
-					}
+					div.style.display = 'none';
+					legend.style.display = 'none';
+				}
+			};
+
+			var imageDiv = document.getElementById('image_captcha_div');
+			var soundDiv = document.getElementById('sound_captcha_div');
+			toggle(imageDiv, document.getElementById('captcha_image_legend'));
+			toggle(soundDiv, document.getElementById('captcha_sound_legend'));
+
+			var isImageMode = (imageDiv.style.display == "block");
+			if(isImageMode){
+				document.getElementById('captcha_type').value = "image";
+				clearAudio(document.getElementById('play_audio'));
+				try{document.getElementById('aReCaptcha').focus();}catch(e){}
+			}else{
+				document.getElementById('captcha_type').value = "sound";
+				playSoundCaptcha(locale);
+				if(inputFormId){
+					try{document.getElementById(inputFormId).focus();} catch(e){}
+				}else{
+					try{document.getElementById('play_audio').focus();} catch(e){}
 				}
 			}
+		}
 
-			var soundDelay = 4000;
-			function playSoundCaptcha(locale){
-				var key = document.getElementById('chptchakey').value;
-				var waveURL = "https://soundcaptcha.nid.naver.com/soundCaptcha.wav?key=" + key + "&replay=" + new Date().valueOf();
+		var soundDelay = 4000;
+		function playSoundCaptcha(locale){
+			var key = document.getElementById('chptchakey').value;
+			var waveURL = "https://soundcaptcha.nid.naver.com/soundCaptcha.wav?key=" + key + "&replay=" + new Date().valueOf();
 
-				var playerArea = document.getElementById('play_audio');
-				clearAudio(playerArea);
+			var playerArea = document.getElementById('play_audio');
+			clearAudio(playerArea);
 
-				try{
-					var audio = new Audio("");
-					if(!audio.canPlayType('audio/wav')){
-						throw new Error('');
-					}
+			try{
+				var audio = new Audio("");
+				if(!audio.canPlayType('audio/wav')){
+					throw new Error('');
+				}
 
-					audio.style.width="0px";
-					audio.style.height="0px";
+				audio.style.width="0px";
+				audio.style.height="0px";
 
-					audio = new Audio(waveURL);
-					if(soundDelay === 0){
+				audio = new Audio(waveURL);
+				if(soundDelay === 0){
+					playerArea.appendChild(audio);
+					audio.play();
+				}else{
+					playTimer = setTimeout(function(){
 						playerArea.appendChild(audio);
 						audio.play();
-					}else{
-						playTimer = setTimeout(function(){
-							playerArea.appendChild(audio);
-							audio.play();
-						}, soundDelay);
-					}
-				}catch(e){
-					if(soundDelay === 0){
+					}, soundDelay);
+				}
+			}catch(e){
+				if(soundDelay === 0){
+					var audio = document.createElement('EMBED');
+					audio.setAttribute('src', waveURL);
+					audio.setAttribute('hidden', true);
+					audio.setAttribute('autostart', true);
+					playerArea.appendChild(audio);
+				}else{
+					playTimer = setTimeout(function(){
 						var audio = document.createElement('EMBED');
 						audio.setAttribute('src', waveURL);
 						audio.setAttribute('hidden', true);
 						audio.setAttribute('autostart', true);
+						audio.setAttribute('showstatusbar', false);
+						audio.setAttribute('showcontrols', false);
+						audio.setAttribute('showaudiocontrols', false);
+						audio.setAttribute('showtracker', false);
 						playerArea.appendChild(audio);
-					}else{
-						playTimer = setTimeout(function(){
-							var audio = document.createElement('EMBED');
-							audio.setAttribute('src', waveURL);
-							audio.setAttribute('hidden', true);
-							audio.setAttribute('autostart', true);
-							audio.setAttribute('showstatusbar', false);
-							audio.setAttribute('showcontrols', false);
-							audio.setAttribute('showaudiocontrols', false);
-							audio.setAttribute('showtracker', false);
-							playerArea.appendChild(audio);
-						}, soundDelay);
+					}, soundDelay);
+				}
+			}
+		}
+
+		function checkpwd_login(pwd_id, old_id){
+			focuswhere=0;
+			var newPassword = document.getElementById(pwd_id).value;
+			if (newPassword.length <= 0) {
+				showhelpmsg(-1);
+			} else if (newPassword.length > 16) {
+				sendLevel(10004);
+			} else if (newPassword.length < 8) {
+				sendLevel(5000);
+			} else if (newPassword == document.getElementById(old_id).value ) {
+				sendLevel(10000);
+			}
+		}
+
+		function showhelpmsg(pwdlevel) {
+			for (g = 1; g <= 7; g++) {
+				if (pwdlevel==g) {
+					if( !isCapslock ) {
+						if(document.getElementById('help1_'+g)) {
+							document.getElementById('help1_'+g).style.display="block";
+						}
+						if(document.getElementById('help2_'+g)) {
+							document.getElementById('help2_'+g).style.display="none";
+						}
+					} else {
+						if(document.getElementById('help1_'+g)) {
+							document.getElementById('help1_'+g).style.display="none";
+						}
+						if(document.getElementById('help2_'+g)) {
+							document.getElementById('help2_'+g).style.display="block";
+						}
+					}
+				} else {
+					if(document.getElementById('help1_'+g)) {
+						document.getElementById('help1_'+g).style.display="none";
+					}
+					if(document.getElementById('help2_'+g)) {
+						document.getElementById('help2_'+g).style.display="none";
 					}
 				}
 			}
-		</script>
-	</head>
+			if (pwdlevel==-1){
+				focuswhere=1;
+			}
+		}
+
+		function sendLevel(pwdstr) {
+			if (focuswhere == 0) {
+			if (pwdstr == 5000) {
+				pswdlevel = 0;
+				showhelpmsg(6);
+			}else if (pwdstr <20000) {
+				pswdlevel = 0;
+				showhelpmsg(1);
+			} else if (pwdstr>=20000 && pwdstr < 29998 ) {
+				pswdlevel = 1;
+				showhelpmsg(2);
+			} else if (pwdstr == 29998) {
+				pswdlevel = 1;
+				showhelpmsg(7)
+			} else if (pwdstr == 29999) {
+				pswdlevel = 1;
+				showhelpmsg(5)
+			} else if (pwdstr>=30000 && pwdstr <40000) {
+				pswdlevel = 1;
+				showhelpmsg(3);
+			} else if (pwdstr>=40000 && pwdstr <50000) {
+				pswdlevel = 1;
+				showhelpmsg(4);
+			}
+			} else {
+				showhelpmsg(-1);
+			}
+		}
+
+		// 캡차 키 발급 요청
+		function requestkey(){
+			$.ajax({
+				/* 요청 시작 부분 */
+				url: "/captcha/nkey", //주소
+				data: {},
+				type: "GET", //전송 타입
+				async: true, //비동기 여부
+				dataType: "JSON", //응답받을 데이터 타입 (XML,JSON,TEXT,HTML)
+				success: function(data) {
+					var key = data.key;
+					captchaImage(key);
+					document.getElementById("chptchakey").value = key;
+				},
+				error: function(xhr) {
+					console.log("[error] : " + xhr);
+				}
+			});
+		};
+
+		// 캡차 이미지 요청
+		function captchaImage(key){
+			$.ajax({
+				url: "/captcha/image",
+				data: {"key":key},
+				type: "GET",
+				async: true, //비동기 여부
+				dataType: "TEXT", //응답받을 데이터 타입 (XML,JSON,TEXT,HTML)
+				success: function(data) {
+					// 요청받아온 캡차 세팅
+					document.getElementById("chptchaimg").src = "../images/captcha.jpg";
+				},
+				error: function(request,status,error) {
+					console.log("error");
+				}
+			});
+		};
+
+		// 확인 버튼 클릭
+		function main_submit(){
+			var newPw = document.getElementById("new_pw");
+			if(newPw.value == ""){
+				alert("새 비밀번호를 작성해주세요.");
+				newPw.focus();
+				return;
+			}
+
+			var newConfPw = document.getElementById("conf_pw");
+			if(newPw.value != newConfPw.value){
+				alert("새 비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+				newConfPw.focus();
+				return;
+			}
+
+			//기존 비밀번호 확인
+			checkPasswd();
+		}
+
+		//기존 비밀번호 확인
+		function checkPasswd(){
+			$.ajax({
+				url: "/checkPasswd",
+				data: {
+					"passwd" : $('#now_pw').val()
+					, "sEmplyrSn" : window.parent.$('#emplyrSn').val()
+				},
+				type: "POST",
+				dataType: "JSON"
+			})
+			.done(function (res) {
+				console.log(res);
+				if (res == true){
+					// 비밀번호 업데이트
+					captchaResult();
+				} else {	//false
+					// window.location.reload();
+					myPassword_onclick();
+					alert("비밀번호가 틀렸습니다.");
+					document.getElementById("autoValue").focus();
+				}
+			})
+
+			.fail(function (xhr, textStatus, errorThrown) {
+				myPassword_onclick();
+				console.log('passwd error');
+			})
+		}
+
+		// 캡차 사용자 입력값 검증 요청
+		function captchaResult(){
+			var key = document.getElementById("chptchakey").value;
+			var value = document.getElementById("autoValue").value;
+
+			$.ajax({
+				url: "/captcha/result",
+				data: {"key":key, "value" : value},
+				type: "GET", //전송 타입
+				async: true, //비동기 여부
+				dataType: "JSON",
+				success: function(data) {
+					if (data.result == true){
+						// 비밀번호 업데이트
+						updatePw();
+					} else {	//false
+						window.location.reload();
+						myPassword_onclick();
+						alert("다시 확인해주세요");
+						document.getElementById("autoValue").focus();
+					}
+				},
+				error: function(request,status,error) {					
+					window.location.reload();
+					myPassword_onclick();
+					alert("자동 방지 가입 인증 중 오류가 발생했습니다.");
+				}
+			});
+		}
+
+		// 자동방지 가입 확인이 true인 경우 비밀번호 업데이트
+		function updatePw(){
+			
+			var dataInfo = {};
+			dataInfo.sEmplyrSn = window.parent.$('#emplyrSn').val();
+			dataInfo.emplyrPasswd = document.getElementById("new_pw").value;
+
+			$.ajax({
+					contentType : 'application/json; charset=utf-8', type : 'post', dataType : 'json', async : false,
+					url  : '/updatePasswd',
+					data : JSON.stringify(dataInfo),
+					success : function(data) {
+						if(data ==="S"){
+							alert("비밀번호가 변경되었습니다. \n변경된 비밀번호로 로그인 해주세요.");
+						} else if (data==="F"){
+							alert("비밀번호 설정중 오류가 발생하였습니다.");
+							return;
+						}
+					}
+				});
+		};
+	</script>
+</head>

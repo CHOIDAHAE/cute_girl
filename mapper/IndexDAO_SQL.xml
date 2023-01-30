@@ -122,6 +122,14 @@
 			ATCHMNFL_SN = #{AtchfileSn}
 	</update>
 
+	<!-- 그룹파일 삭제 -->
+	<delete id="deleteGroupFile">
+		/* IndexDAO.deleteGroupFile */
+		DELETE TCM_GROUP_FILE
+		WHERE FILE_SN = #{AtchfileSn}
+		AND EMPLYR_SN = #{emplyrSn}
+	</delete>
+
 	<!-- 파일 완전히 삭제 -->
 	<delete id="deleteFileUseAtDtl">
 		/* IndexDAO.deleteFileUseAtDtl */

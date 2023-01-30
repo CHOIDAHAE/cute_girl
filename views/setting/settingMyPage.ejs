@@ -59,7 +59,7 @@
 				<form>
 					<fieldset>
 						<legend>비밀번호 변경</legend>
-						<p class="spc_row">
+						<p class="spc_row" onclick="focusComp('now_pw');">
 							<label for="now_pw" id="lb_now_pw" style="display:block;">현재 비밀번호</label>
 							<!-- <input type="password" name="now_pw" id="now_pw" title="현재 비밀번호 입력" onfocus="setCompFocus(this.id)" onblur="setCompBlur(this.id)"> -->
 							<input type="password" name="now_pw" id="now_pw" title="현재 비밀번호 입력" onfocus="convertDiv('now_pw', 'none')" onblur="convertDiv('now_pw', 'block'); showCapslockForNowPw(-1);"
@@ -73,15 +73,16 @@
 							<span class="shadow2"></span>
 							<span class="arrow"></span>
 						</div>
-						<p class="spc_row2">
+						<p class="spc_row2" onclick="focusComp('new_pw');">
 							<label for="new_pw" id="lb_new_pw" style="display:block;">새 비밀번호</label>
 							<input type="password" name="new_pw" id="new_pw" title="새 비밀번호 입력" onfocus="convertDiv('new_pw', 'none'); checkpwd_login('new_pw', 'now_pw');" onblur="convertDiv('new_pw', 'block'); showhelpmsg(-1);"
 							onkeyup="checkShiftUp(event);checkpwd_login('new_pw', 'now_pw');" onkeypress="capslock(event);" onkeydown="checkShiftDownNoMsg(event);">
 						</p>
-						<p class="spc_row3">
+						<p class="spc_row3" onclick="focusComp('conf_pw');">
 							<label for="conf_pw" id="lb_conf_pw">새 비밀번호 확인</label>
 							<input type="password" name="conf_pw" id="conf_pw" title="새 비밀번호 확인 입력" onfocus="convertDiv('conf_pw', 'none');" onblur="convertDiv('conf_pw', 'block')">
 						</p>
+						<input type="hidden" id="chptchakey" name="chptchakey" value="">
 						<!-- 비밀번호 안전도 말풍선 -->
 						<div id="help1_1" class="help left" style="top:70px; right:17px;">
 							<!-- 비밀번호 안전도 -->
@@ -273,9 +274,11 @@
 								<p class="captcha_txt">아래 이미지를 보이는 대로 입력해주세요.</p>
 								<div id="image_captcha_div" class="captcha_box">
 									<span class="captcha_img">
-										<img name="captchaImage" id="chptchaimg" src="https://nid.naver.com/login/image/captcha/nhncaptchav4.gif?key=GeY3xzYjtpKz91HG&1" width="100%" height="87" alt="자동입력 방지문자">
+										<!-- <img name="captchaImage" id="chptchaimg" src="https://nid.naver.com/login/image/captcha/nhncaptchav4.gif?key=GeY3xzYjtpKz91HG&1" width="100%" height="87" alt="자동입력 방지문자"> -->
+										<img name="captchaImage" id="chptchaimg" src="#" width="100%" height="87" alt="자동입력 방지문자">
 									</span>
-									<a href="javascript:reCaptcha('');" id="aReCaptcha" onclick="clickcr(this, 'npw.recpch', '', '', event); return false;" class="btn_refresh">
+									<!-- <a href="javascript:reCaptcha('');" id="aReCaptcha" onclick="clickcr(this, 'npw.recpch', '', '', event); return false;" class="btn_refresh"> -->
+										<a href="#" id="aReCaptcha" onclick="requestkey()" class="btn_refresh">
 										<span class="sp">새로고침</span>
 									</a>
 									<a href="javascript:changeCaptchaMode('ko_KR', 'autoValue');" onclick="clickcr(this, 'npw.vochpch', '', '', event);" class="btn_sound">
@@ -323,8 +326,8 @@
 							</p>
 						</div>
 						<div id="updPwArea">
-							<button type="button" class="updBtn" onclick="savePassword();"> 저장 </button>
-							<button type="button" class="updBtn" onclick="savePassword();"> 취소 </button>
+							<button type="button" class="updBtn" onclick="main_submit();"> 저장 </button>
+							<button type="button" class="updBtn" onclick="myProfile_onclick();"> 취소 </button>
 						</div>
 					</fieldset>
 				</form>

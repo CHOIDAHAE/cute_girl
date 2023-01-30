@@ -253,6 +253,17 @@ module.exports = function(app){
 					console.log(err);
 					res.json("F");
 				}
+			});
+
+			//그룹에 저장된 파일 삭제
+			query = mybatisMapper.getStatement('IndexDAO','deleteGroupFile', param, format);
+			conn.execute(query, function(err,result){
+				console.log("IndexDAO.deleteGroupFile");
+				console.log(query);
+				if(err){
+					console.log(err);
+					res.json("F");
+				}
 				conn.commit();
 			});
 			res.json({"emplyrSn":req.session.user.emplyrSn});

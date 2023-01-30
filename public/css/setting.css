@@ -516,8 +516,9 @@ input[type=password]::-ms-reveal{
 .spc_content [class^=spc_row] input[type=password],.spc_row .txt_userid{
 	font-size:14px;
 	font-weight:700;
-	line-height:16px;
-	height:16px;
+	line-height:6px;
+	height:30px;
+	width:80%;
 	margin:5px 9px 0;
 	vertical-align:top;
 	color:#333;
@@ -525,7 +526,8 @@ input[type=password]::-ms-reveal{
 }
 
 .spc_content{
-	margin-left: 176px;
+	margin-left: 75px;
+	margin-right: 75px;
 	position: relative;
 	height: 43px;
 }
