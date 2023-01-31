@@ -14,6 +14,48 @@
 		WHERE LAST_UPDUSR_SN = #{emplyrSn}
 	</select>
 
+	<select id="selectFileVolume2">
+		/* IndexDAO.selectFileVolume2 */
+		SELECT
+			DECODE(USE_AT, 'Y', EXTSN_NM, 'trash') EXTSN_NM
+			, NVL(CEIL(SUM(TAD.FILE_MG)/100000),0) FILE_MG
+			, SORT_ORDR
+		FROM
+		(
+			SELECT
+				TC.CODE AS EXTSN_NM
+				, TAD.FILE_MG
+				, NVL(TAD.USE_AT, 'Y') USE_AT
+				, DECODE(TAD.USE_AT, 'N', '99', TC.SORT_ORDR) SORT_ORDR
+			FROM TCM_CODE TC LEFT OUTER JOIN TCM_ATCHMNFL_DETAIL TAD
+			ON (TC.CODE = SUBSTR(ORGINL_FILE_EXTSN_NM, 1, INSTR(ORGINL_FILE_EXTSN_NM, '/', '1', '1')-1)
+				AND TAD.LAST_UPDUSR_SN = #{emplyrSn}
+			)
+			WHERE
+				TC.BEST_CODE_TY_NO = 'EXT001'
+		) TAD
+		GROUP BY DECODE(USE_AT, 'Y', EXTSN_NM, 'trash'), SORT_ORDR
+		UNION ALL
+		SELECT	/* 남은 용량 */
+			'REMAIN' EXTSN_NM
+			, 1000-NVL(CEIL(SUM(FILE_MG)/100000),0) REMAIN
+			, '999' SORT_ORDR
+		FROM
+			TCM_ATCHMNFL_DETAIL TAD2
+		WHERE
+			LAST_UPDUSR_SN = #{emplyrSn}
+		UNION ALL
+		SELECT
+			'MYDRIVE' EXTSN_NM
+			, NVL(CEIL(SUM(FILE_MG)/100000),0) REMAIN
+			, '999' SORT_ORDR
+		FROM
+			TCM_ATCHMNFL_DETAIL TAD2
+		WHERE
+			LAST_UPDUSR_SN = #{emplyrSn}
+		ORDER BY SORT_ORDR, EXTSN_NM
+	</select>
+
 	<!-- 첨부파일 일련번호 찾아오기 -->
 	<select id="selectFileSn">
 		/* IndexDAO.selectFileSn */

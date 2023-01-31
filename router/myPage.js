@@ -201,6 +201,45 @@ module.exports = function(app){
 		});
 	})
 
+	// 전체 파일 용량 읽어오기
+	app.post("/selectFileMg", function(req, res){		
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(selectFileMg)",err);
+			} else {
+				console.log("Oracle Connection success(selectFileMg)");
+			}
+			conn = con;
+
+			var param = {
+				emplyrSn : req.body.emplyrSn
+			}
+
+			//query format
+			let format = {language: 'sql', indent: ''};
+
+			//getStatement(namespace명, queryId, parameter, format);
+			let query = mybatisMapper.getStatement('IndexDAO','selectFileVolume2', param, format);
+
+			//쿼리문 실행
+			conn.execute(query, function(err,result){
+				if(err){
+					console.log("selectFileMg failed>", err);
+					doRelease(conn);
+					return;
+				}
+				
+				res.send(result.rows);
+				doRelease(conn);					
+			});  
+		});
+	})
+
 	function doRelease(conn){
 		conn.close(function(err){
 			if(err){

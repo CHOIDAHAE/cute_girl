@@ -1,83 +1,84 @@
 <html lang="ko">
-    <head>
-        <meta charset="utf-8">
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-	    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.9.2/jquery.contextMenu.js" integrity="sha512-2ABKLSEpFs5+UK1Ol+CgAVuqwBCHBA0Im0w4oRCflK/n8PUVbSv5IY7WrKIxMynss9EKLVOn1HZ8U/H2ckimWg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-	    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.9.2/jquery.ui.position.js" integrity="sha512-vBR2rismjmjzdH54bB2Gx+xSe/17U0iHpJ1gkyucuqlTeq+Q8zwL8aJDIfhQtnWMVbEKMzF00pmFjc9IPjzR7w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="https://kit.fontawesome.com/ad41bee873.js" crossorigin="anonymous"></script>
-        <link href="../css/setting.css?after" rel="stylesheet" type="text/css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" />
-        <!-- 차트 링크 -->
-        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-        
-        <script type="text/javascript">
-           $(document).ready(function(){
-                file_Volume();  // 파일용량 읽어오기
-                fn_selected_basket_term();
-                const emplyrSn = window.parent.$('#emplyrSn').val();
-            });
-            //파일용량 읽어오기
-           function file_Volume(){
-                $.ajax({
-                    url : "/selectFileVolume",
-                    type : "POST",
-                    dataType : "JSON", //"JSON"
-                    data : {"emplyrSn" : window.parent.$('#emplyrSn').val()}
-                })
-                .done(function (res) {
-                    document.getElementById('capacity').value = res[0];
-                    
-                    $("#capacity_use").text(res[0][0]);
-                    $("#capacity").text(res[0][1]);        // 사용중 용량
-                    $("#capacity_y").text(res[0][1]);        // 사용중 용량
-                    $("#capacity_n").text(res[0][2]);        // 사용중 용량
-                    $("#rest_capacity").text(res[0][3]);   // 남은 용량
-                    $("#remain").text(res[0][3]);   // 남은 용량
-                    graph(res[0][1], res[0][2], res[0][3]);    //사용량, 휴지통용량, 남은용량
-                })
-                .fail(function (xhr, textStatus, errorThrown) {
-                    console.log('selectFileVolume ajax 실패');
-                })
-            }
-            // 용량 그래프
-            function graph(capacity_y, capacity_n, remain){
-                // chart colors
-                var colors = ['#E6E6E6', '#F5D0A9', '#F5A9A9'];
-                //             회색계열,  주황계열,   붉은계열
-                /* 3 donut charts */
-                var donutOptions = {
-                    cutoutPercentage: 50, //도넛두께 : 값이 클수록 얇아짐
-                    legend: {display:false, position:'bottom', padding:5, labels: {pointStyle:'circle', usePointStyle:true}}
-                };
-                // donut 1
-                var chDonutData1 = {
-                    labels: ['내 MyDrive', '휴지통', '남은 용량'],
-                    datasets: [
-                    {
-                        backgroundColor: colors.slice(0,3),
-                        borderWidth: 0,
-                        data: [capacity_y, capacity_n, remain]
-                    }
-                    ]
-                };
-                var chDonut1 = document.getElementById("_graph");
-                if (chDonut1) {
-                    new Chart(chDonut1, {
-                        type: 'pie',
-                        data: chDonutData1,
-                        options: donutOptions
-                    });
-                }
-            }
-            // 이용권 구매하기
-            function preparing(){
-                alert("준비중입니다.");
-            }
+	<head>
+		<meta charset="utf-8">
+		<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+		<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.9.2/jquery.contextMenu.js" integrity="sha512-2ABKLSEpFs5+UK1Ol+CgAVuqwBCHBA0Im0w4oRCflK/n8PUVbSv5IY7WrKIxMynss9EKLVOn1HZ8U/H2ckimWg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.9.2/jquery.ui.position.js" integrity="sha512-vBR2rismjmjzdH54bB2Gx+xSe/17U0iHpJ1gkyucuqlTeq+Q8zwL8aJDIfhQtnWMVbEKMzF00pmFjc9IPjzR7w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="https://kit.fontawesome.com/ad41bee873.js" crossorigin="anonymous"></script>
+		<link href="../css/setting.css?after" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" />
+		<!-- 차트 링크 -->
+		<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+		
+		<script type="text/javascript">
+		   $(document).ready(function(){
+				file_Volume();  // 파일용량 읽어오기
+				fn_selected_basket_term();
+				const emplyrSn = window.parent.$('#emplyrSn').val();
+			});
+			//파일용량 읽어오기
+		   function file_Volume(){
+				$.ajax({
+					url : "/selectFileMg",
+					type : "POST",
+					dataType : "JSON", //"JSON"
+					data : {"emplyrSn" : window.parent.$('#emplyrSn').val()}
+				})
+				.done(function (res) {
+					document.getElementById('capacity').value = res[0];
+					
+					$("#capacity_image").text(res[0][1]);			// 사진
+					$("#capacity_video").text(res[1][1]);			// 동영상
+					$("#capacity_application").text(res[2][1]);		// 문서
+					$("#capacity_audio").text(res[3][1]);			// 음악
+					$("#capacity_n").text(res[4][1]);				// 휴지통
+					$("#remain").text(res[6][1]);					// 남은 용량
+					$("#capacity").text(res[5][1]);					// 사용중 용량
+					graph(res[0][1], res[1][1], res[2][1], res[3][1], res[4][1], res[6][1]);	//사진, 동영상, 문서, 음악, 휴지통, 남은용량
+				})
+				.fail(function (xhr, textStatus, errorThrown) {
+					console.log('selectFileVolume ajax 실패');
+				})
+			}
+			// 용량 그래프
+			function graph(capacity_image, capacity_video, capacity_application, capacity_audio, capacity_n, remain){
+				// chart colors
+				var colors = ['#679164', '#8665a3', '#1f369c', '#F5D0A9', '#E6E6E6', '#F5A9A9'];
+				//             초록계열,   보라계열,   파랑계열   주황계열,   회색계열,   붉은계열
+				/* 3 donut charts */
+				var donutOptions = {
+					cutoutPercentage: 50, //도넛두께 : 값이 클수록 얇아짐
+					legend: {display:false, position:'bottom', padding:5, labels: {pointStyle:'circle', usePointStyle:true}}
+				};
+				// donut 1
+				var chDonutData1 = {
+					labels: ['사진', '동영상', '문서', '음악', '휴지통', '남은 용량'],
+					datasets: [
+					{
+						backgroundColor: colors.slice(0,6),
+						borderWidth: 0,
+						data: [capacity_image, capacity_video, capacity_application, capacity_audio, capacity_n, remain]
+					}
+					]
+				};
+				var chDonut1 = document.getElementById("_graph");
+				if (chDonut1) {
+					new Chart(chDonut1, {
+						type: 'pie',
+						data: chDonutData1,
+						options: donutOptions
+					});
+				}
+			}
+			// 이용권 구매하기
+			function preparing(){
+				alert("준비중입니다.");
+			}
 
-            function set_autoDeleteInfo(){
-                var basketTerm = $('#basket_term option:selected').val();
-                $.ajax({
+			function set_autoDeleteInfo(){
+				var basketTerm = $('#basket_term option:selected').val();
+				$.ajax({
 					url : "/updateAutoFileInfo",
 					type : "POST",
 					dataType : "JSON", //"JSON"
@@ -90,145 +91,179 @@
 				.fail(function (xhr, textStatus, errorThrown) {
 					console.log('updateAutoFileInfo ajax 실패');
 				})
-            }
+			}
 
-            function fn_selected_basket_term(){
-                $.ajax({
+			function fn_selected_basket_term(){
+				$.ajax({
 					url : "/selectAutoFileInfo",
 					type : "POST",
 					dataType : "JSON", //"JSON"
 				})
 				.done(function (res) {
-                    console.log(res);
+					console.log(res);
 					$('#basket_term').val(res[0]);
 				})
 				.fail(function (xhr, textStatus, errorThrown) {
 					console.log('updateAutoFileInfo ajax 실패');
 				})
-            }
-            
-        </script>
-    </head>
-    <body>
-        <div class="manage_size" id="pop_content">
-            <div class="_managePop_holder">
-                <div class="sub tab">
-                    <a href="#myCapacity" class="toggle _tab on">
-                        <strong>내 용량 보기</strong>
-                    </a>
-                </div>
-                <div class="_myFolderCapacity_holder"></div>
-                <div class="mycapacity_cont tab_cont _tab_cont" style="padding:15px 0">
-                    <div class="tab_container" style="clear: both;float: left;margin: 0px 30px 0px 60px;width: 175px;">
-                        <div class="tab_content" id="canvas-holder">
-                            <div class="_chart_holder">
-                                <canvas id="_graph" width="193" height="193" style="position: relative; width: 155px; height: 155px;"></canvas>
-                            </div>
-                            <!--
-                            <div id="chart_percent" style="left: 261px; top: 170.316px; position: absolute; z-index: 100;">
-                                <div style="text-align:center;width:60px">
-                                    <span id="percent" style="width:10px;font-size: 25px;font-weight:normal;">
-                                        76
-                                    </span>
-                                    <span style="font-size:13px;font-weight:normal;">
-                                        %
-                                    </span>
-                                </div>
-                            </div>-->
-                        </div>
-                    </div>
-                    <div class="mycapacity_tbl_wrap _legend_holder" id="_legend_holder" style="padding:15px 0">
-                        <table cellspacing="0" class="mycapacity_tbl" style="float: right;width: 90%;"> 
-                            <caption>내 용량 정보</caption> 
-                            <colgroup>
-                                <col class="group"> 
-                                <col class="gigabyte">  
-                            </colgroup>
-                            <tbody>
-                                <tr class="_legend_item" data-legendid="myUsedQuota" data-idx="0"> 
-                                    <th scope="row" class="group fst"> 
-                                        <div class="thcell">  
-                                            <span class="txt_tit">사용 중</span>
-                                        </div> 
-                                    </th> 
-                                    <td class=" gigabyte fst"> 
-                                        <div class="tdcell"><span id="capacity_use"></span> GB</div> 
-                                    </td> 
-                                </tr>  
-                                <tr class="_legend_item" data-legendid="myUsedQuota" data-idx="0"> 
-                                    <th scope="row" class="group "> 
-                                        <div class="thcell">  
-                                            <span class="rect" style="background-color:#E6E6E6">&nbsp;</span>
-                                            <span class="txt_tit">내 MYDRIVE</span>
-                                        </div> 
-                                    </th> 
-                                    <td class=" gigabyte "> 
-                                        <div class="tdcell"><span id="capacity_y"></span> GB</div> 
-                                    </td> 
-                                </tr>
-                                <tr class="_legend_item" data-legendid="myUsedQuota" data-idx="0"> 
-                                    <th scope="row" class="group "> 
-                                        <div class="thcell">  
-                                            <span class="rect"style="background-color:#F5D0A9">&nbsp;</span>
-                                            <span class="txt_tit">휴지통</span>
-                                        </div> 
-                                    </th> 
-                                    <td class=" gigabyte "> 
-                                        <div class="tdcell"><span id="capacity_n"></span> GB</div>
-                                    </td> 
-                                </tr>  
-                                <tr class="_legend_item" data-legendid="unusedQuota" data-idx="1"> 
-                                    <th scope="row" class="group "> 
-                                        <div class="thcell">  
-                                            <span class="rect" style="background-color:#F5A9A9">&nbsp;</span>  
-                                            <span class="txt_tit">사용 가능</span>
-                                        </div> 
-                                    </th> 
-                                    <td class=" gigabyte "> 
-                                        <div class="tdcell"><span id="remain"></span> GB</div>
-                                    </td> 
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div class="myvolumn">
-                <p class="volumn">
-                    사용 중 MYDRIVE 용량 
-                    <strong><span id="capacity"></span> GB</strong>
-                    <span>&nbsp;/&nbsp;</span>
-                    <span>1000GB</span>
-                </p>
-                <p class="dsc">
-                    <a href="#" onclick="preparing();">이용권을 구매하고 용량 걱정없이 MYDRIVE를 이용해보세요.
-                        <span style="color: #257cfe">이용권 구매하기 &gt;</span>
-                    </a>
-                </p>
-            </div>
-            <div class="_basket_holder">
-                <div class="basket">
-                    <label for="basket_term">휴지통 자동 삭제 기간 설정</label>
-                    <select size="1" id="basket_term">
-                        <option value="0">자동 삭제 안 함</option>
-                        <option value="5">삭제 5일 후 영구 삭제</option>
-                        <option value="15">삭제 15일 후 영구 삭제</option>
-                        <option value="30">삭제 30일 후 영구 삭제</option>
-                        <option value="50">삭제 50일 후 영구 삭제</option>
-                    </select>
-                    <button id="basketButton" onclick="set_autoDeleteInfo();">
-                        <span class="tx">적용하기</span>
-                    </button>
-                </div>
-                <div class="basket_info">
-                    <ul class="lst">
-                        <li>전체 용량에 휴지통 용량도 포함됩니다.</li>
-                        <li>사용 중 용량에 공유 중 용량도 포함됩니다.</li>
-                        <li>본문 검색 사용 시, 검색 색인을 위해 MYDRIVE 저장 공간을 일부 사용합니다.</li>
-                        <li>휴지통 자동 삭제 기간을 설정하고 삭제한 항목을 자동으로 관리해 보세요.</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </body>
+			}
+			
+		</script>
+	</head>
+	<body>
+		<div class="manage_size" id="pop_content">
+			<div class="_managePop_holder">
+				<div class="sub tab">
+					<a href="#myCapacity" class="toggle _tab on">
+						<strong>내 용량 보기</strong>
+					</a>
+				</div>
+				<div class="_myFolderCapacity_holder"></div>
+				<div class="mycapacity_cont tab_cont _tab_cont" style="padding:15px 0">
+					<div class="tab_container" style="clear: both;float: left;margin: 0px 30px 0px 60px;width: 175px;">
+						<div class="tab_content" id="canvas-holder">
+							<div class="_chart_holder">
+								<canvas id="_graph" width="193" height="193" style="position: relative; width: 155px; height: 155px;"></canvas>
+							</div>
+							<!--
+							<div id="chart_percent" style="left: 261px; top: 170.316px; position: absolute; z-index: 100;">
+								<div style="text-align:center;width:60px">
+									<span id="percent" style="width:10px;font-size: 25px;font-weight:normal;">
+										76
+									</span>
+									<span style="font-size:13px;font-weight:normal;">
+										%
+									</span>
+								</div>
+							</div>-->
+						</div>
+					</div>
+					<div class="mycapacity_tbl_wrap _legend_holder" id="_legend_holder" style="padding:15px 0">
+						<table cellspacing="0" class="mycapacity_tbl" style="float: right;width: 90%;"> 
+							<caption>내 용량 정보</caption> 
+							<colgroup>
+								<col class="group"> 
+								<col class="gigabyte">  
+							</colgroup>
+							<tbody>
+								<tr class="_legend_item" data-legendid="myUsedQuota" data-idx="0"> 
+									<th scope="row" class="group fst"> 
+										<div class="thcell">  
+											<span class="rect" style="background-color:#679164">&nbsp;</span>
+											<span class="txt_tit">사진</span>
+										</div> 
+									</th> 
+									<td class=" gigabyte fst"> 
+										<div class="tdcell"><span id="capacity_image"></span> GB</div> 
+									</td> 
+								</tr>
+								<tr class="_legend_item" data-legendid="myUsedQuota" data-idx="0"> 
+									<th scope="row" class="group fst"> 
+										<div class="thcell">  
+											<span class="rect" style="background-color:#8665a3">&nbsp;</span>
+											<span class="txt_tit">동영상</span>
+										</div> 
+									</th> 
+									<td class=" gigabyte fst"> 
+										<div class="tdcell"><span id="capacity_video"></span> GB</div> 
+									</td> 
+								</tr>
+								<tr class="_legend_item" data-legendid="myUsedQuota" data-idx="0"> 
+									<th scope="row" class="group fst"> 
+										<div class="thcell">  
+											<span class="rect" style="background-color:#1f369c">&nbsp;</span>
+											<span class="txt_tit">문서</span>
+										</div> 
+									</th> 
+									<td class=" gigabyte fst"> 
+										<div class="tdcell"><span id="capacity_application"></span> GB</div> 
+									</td> 
+								</tr>
+								<tr class="_legend_item" data-legendid="myUsedQuota" data-idx="0"> 
+									<th scope="row" class="group fst"> 
+										<div class="thcell">  
+											<span class="rect" style="background-color:#F5D0A9">&nbsp;</span>
+											<span class="txt_tit">음악</span>
+										</div> 
+									</th> 
+									<td class=" gigabyte fst"> 
+										<div class="tdcell"><span id="capacity_audio"></span> GB</div> 
+									</td> 
+								</tr>
+								<!-- <tr class="_legend_item" data-legendid="myUsedQuota" data-idx="0"> 
+									<th scope="row" class="group "> 
+										<div class="thcell">  
+											<span class="rect" style="background-color:#E6E6E6">&nbsp;</span>
+											<span class="txt_tit">내 </span>
+										</div> 
+									</th> 
+									<td class=" gigabyte "> 
+										<div class="tdcell"><span id="capacity_y"></span> GB</div> 
+									</td> 
+								</tr> -->
+								<tr class="_legend_item" data-legendid="myUsedQuota" data-idx="0"> 
+									<th scope="row" class="group "> 
+										<div class="thcell">  
+											<span class="rect"style="background-color:#E6E6E6">&nbsp;</span>
+											<span class="txt_tit">휴지통</span>
+										</div> 
+									</th> 
+									<td class=" gigabyte "> 
+										<div class="tdcell"><span id="capacity_n"></span> GB</div>
+									</td> 
+								</tr>  
+								<tr class="_legend_item" data-legendid="unusedQuota" data-idx="1"> 
+									<th scope="row" class="group "> 
+										<div class="thcell">  
+											<span class="rect" style="background-color:#F5A9A9">&nbsp;</span>  
+											<span class="txt_tit">사용 가능</span>
+										</div> 
+									</th> 
+									<td class=" gigabyte "> 
+										<div class="tdcell"><span id="remain"></span> GB</div>
+									</td> 
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="myvolumn">
+				<p class="volumn">
+					사용 중 MYDRIVE 용량 
+					<strong><span id="capacity"></span> GB</strong>
+					<span>&nbsp;/&nbsp;</span>
+					<span>1000GB</span>
+				</p>
+				<p class="dsc">
+					<a href="#" onclick="preparing();">이용권을 구매하고 용량 걱정없이 MYDRIVE를 이용해보세요.
+						<span style="color: #257cfe">이용권 구매하기 &gt;</span>
+					</a>
+				</p>
+			</div>
+			<div class="_basket_holder">
+				<div class="basket">
+					<label for="basket_term">휴지통 자동 삭제 기간 설정</label>
+					<select size="1" id="basket_term">
+						<option value="0">자동 삭제 안 함</option>
+						<option value="5">삭제 5일 후 영구 삭제</option>
+						<option value="15">삭제 15일 후 영구 삭제</option>
+						<option value="30">삭제 30일 후 영구 삭제</option>
+						<option value="50">삭제 50일 후 영구 삭제</option>
+					</select>
+					<button id="basketButton" onclick="set_autoDeleteInfo();">
+						<span class="tx">적용하기</span>
+					</button>
+				</div>
+				<div class="basket_info">
+					<ul class="lst">
+						<li>전체 용량에 휴지통 용량도 포함됩니다.</li>
+						<li>사용 중 용량에 공유 중 용량도 포함됩니다.</li>
+						<li>본문 검색 사용 시, 검색 색인을 위해 MYDRIVE 저장 공간을 일부 사용합니다.</li>
+						<li>휴지통 자동 삭제 기간을 설정하고 삭제한 항목을 자동으로 관리해 보세요.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</body>
 </html>
