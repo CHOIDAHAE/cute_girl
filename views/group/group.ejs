@@ -4,6 +4,7 @@
 		<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 		<script src="https://kit.fontawesome.com/ad41bee873.js" crossorigin="anonymous"></script>
 		<link href="../css/group.css?after" rel="stylesheet" type="text/css">
+        <link href="../css/menu.css?after" rel="stylesheet" type="text/css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" />
 		<script>
             $(document).ready(function(){
@@ -273,6 +274,11 @@
 					}
 				})
             };
+
+            // 멤버초대
+            function inviteMember(){
+
+            };
 		</script>
 	</head>
 	<body>
@@ -529,7 +535,68 @@
                                                                 <strong><span class="groupNm"></span></strong> 모임을 시작합니다.
                                                             </h3>
                                                             <p class="text">MYDRIVE에 저장되어 있는 우리 아기 사진, 가족 여행 사진,<br>멋진 야경 사진 등 일상과 추억을 가족, 친구와 함께 나눠보세요!<br>멤버는 최대 200명까지 초대할 수 있습니다.</p>
-                                                            <a class="my_btn_member">멤버초대</a>
+                                                            <a class="my_btn_member" onclick="inviteMember()">멤버초대</a>
+                                                        </div>
+                                                        <div class="dh_layer pop_pht_wrap" style="width: 459px;">
+                                                            <div class="pop_header">
+                                                                <h1>멤버초대</h1>
+                                                            </div>
+                                                            <div class="ly_toge_content">
+                                                                <div class="toge_member">
+                                                                    <div class="mem_tab">
+                                                                        <a class="tab_url selected">URL로 초대하기</a>
+                                                                        <a class="tab_num">전화번호로 초대하기</a>
+                                                                    </div>
+                                                                    <div class="mem_content">
+                                                                        <div class="url_area">
+                                                                            <dl class="mem_dl">
+                                                                                <dt>모임이름</dt>
+                                                                                <dd><strong class="name"><span class="groupNm"></span></strong></dd>
+                                                                            </dl>
+                                                                            <dl class="mem_dl">
+                                                                                <dt>URL주소</dt>
+                                                                                <dd>
+                                                                                    <div class="url_address">
+                                                                                        <input class="url" readonly="" value="http://naver.me/x7raLScJ" style="cursor: pointer;">
+                                                                                        <button>복사</button>
+                                                                                    </div>
+                                                                                    <p class="url_notice">URL은 7일간 유효합니다.<br>유효기간이 만료되면 위 URL을 통해 모임에 참여할 수 없습니다.</p>
+                                                                                </dd>
+                                                                            </dl>
+                                                                            <!-- SNS 파트
+                                                                            <dl class="mem_dl">
+                                                                                <dt>SNS</dt>
+                                                                                <dd>
+                                                                                    <div>
+                                                                                        <ul class="sns_lst">
+                                                                                            <li>
+                                                                                                <a href="https://www.band.us/" target="_blank" rel="noopener noreferrer">
+                                                                                                    <img src="https://ssl.pstatic.net/static/pwe/ndrive/new_ndrive/logo_band.png" width="61" height="61" alt="밴드">
+                                                                                                    <span class="title">밴드</span>
+                                                                                                </a>
+                                                                                            </li>
+                                                                                            <li>
+                                                                                                <a href="https://cafe.naver.com/" target="_blank" rel="noopener noreferrer">
+                                                                                                    <img src="https://ssl.pstatic.net/static/pwe/ndrive/new_ndrive/img_cafe.png" width="62" height="62" alt="네이버 카페">
+                                                                                                    <span class="title">네이버 카페</span>
+                                                                                                </a>
+                                                                                            </li>
+                                                                                            <li>
+                                                                                                <a href="http://cafe.daum.net/" target="_blank" rel="noopener noreferrer">
+                                                                                                    <img src="https://ssl.pstatic.net/static/pwe/ndrive/new_ndrive/img_daum.png" width="62" height="62" alt="다음 카페">
+                                                                                                    <span class="title">다음 카페</span>
+                                                                                                </a>
+                                                                                            </li>
+                                                                                        </ul>
+                                                                                    </div>
+                                                                                </dd>
+                                                                            </dl>
+                                                                            -->
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <a class="btn_clse">닫기</a>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
