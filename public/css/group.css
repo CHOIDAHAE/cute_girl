@@ -831,9 +831,11 @@ a.more_invitation .more_invitation_bg{
     padding: 0;
 }
 
+/*
 .ly_toge_content {
     margin-bottom: 20px;
 }
+*/
 
 .my_layer_set .toge_add_group {
     padding: 0;
@@ -1506,6 +1508,7 @@ menu, ul, ol {
     line-height: 47px;
     color: #3675c7;
     font-weight: bold;
+    font-size: 15px;
 }
 
 .toge_member .mem_tab a {
@@ -1517,6 +1520,7 @@ menu, ul, ol {
     line-height: 49px;
     color: #333;
     text-decoration: none;
+    font-size: 15px;
 }
 
 .toge_member .mem_tab a.tab_num {
@@ -1531,6 +1535,7 @@ menu, ul, ol {
     float: left;
     width: 71px;
     line-height: 18px;
+    font-size: 14px;
 }
 
 .mem_dl dd {
@@ -1551,7 +1556,7 @@ menu, ul, ol {
 
 .mem_dl .url_address input.url {
     display: inline-block;
-    width: 295px;
+    width: 290px;
     height: 26px;
     border: 1px solid #d9d9d9;
     line-height: 26px;
@@ -1578,9 +1583,11 @@ menu, ul, ol {
     color: #a5a5a5;
 }
 
+/*
 .url_area .mem_dl:last-child dt {
     margin-top: 12px;
 }
+*/
 
 /**소스 주석처리한 부분 sns파트**/
 .sns_lst {
@@ -1613,3 +1620,7 @@ menu, ul, ol {
     color: #747474;
 }
 
+.pop_header > h1 {
+    margin: 0;
+    line-height: 44px;
+}
