@@ -831,9 +831,11 @@ a.more_invitation .more_invitation_bg{
     padding: 0;
 }
 
+/*
 .ly_toge_content {
     margin-bottom: 20px;
 }
+*/
 
 .my_layer_set .toge_add_group {
     padding: 0;
@@ -1484,4 +1486,141 @@ menu, ul, ol {
     height: 1px;
     overflow: hidden;
     background-color: #dedede;
+}
+
+/****************멤버초대**********************/
+.toge_member .mem_tab {
+    height: 49px;
+    padding: 0 0 0 56px;
+    border-bottom: 1px solid #e0e0e0;
+    clear: both;
+}
+
+.toge_member .mem_tab a.tab_url {
+    margin-right: 50px;
+    width: 131px;
+}
+
+.toge_member .mem_tab a.selected {
+    bottom: -1px;
+    height: 47px;
+    border-bottom: 2px solid #3675c7;
+    line-height: 47px;
+    color: #3675c7;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.toge_member .mem_tab a {
+    position: relative;
+    display: block;
+    float: left;
+    height: 49px;
+    text-align: center;
+    line-height: 49px;
+    color: #333;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+.toge_member .mem_tab a.tab_num {
+    width: 186px;
+}
+
+.mem_content {
+    padding: 37px 20px 20px 25px;
+}
+
+.mem_dl dt {
+    float: left;
+    width: 71px;
+    line-height: 18px;
+    font-size: 14px;
+}
+
+.mem_dl dd {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 16px;
+    line-height: 18px;
+}
+
+.mem_dl dd .name {
+    display: inline-block;
+    overflow: hidden;
+    width: 300px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #04b13d;
+}
+
+.mem_dl .url_address input.url {
+    display: inline-block;
+    width: 290px;
+    height: 26px;
+    border: 1px solid #d9d9d9;
+    line-height: 26px;
+    text-indent: 8px;
+    color: #666;
+}
+
+.mem_dl .url_address button {
+    width: 41px;
+    height: 28px;
+    margin-left: 5px;
+    border: 0 none;
+    background-color: #5b5b5b;
+    color: #fff;
+    font-size: 11px;
+    text-align: center;
+    line-height: 27px;
+}
+
+.url_notice {
+    margin-top: 9px;
+    font-size: 11px;
+    line-height: 17px;
+    color: #a5a5a5;
+}
+
+/*
+.url_area .mem_dl:last-child dt {
+    margin-top: 12px;
+}
+*/
+
+/**소스 주석처리한 부분 sns파트**/
+.sns_lst {
+    overflow: hidden;
+    margin-bottom: -20px;
+    text-align: left;
+    font-size: 0;
+    white-space: nowrap;
+}
+
+.sns_lst li {
+    display: inline-block;
+    width: 83px;
+    overflow: hidden;
+}
+
+.sns_lst li a {
+    display: inline-block;
+    font-size: 12px;
+    color: #333;
+    text-decoration: none;
+}
+
+.sns_lst li a .title {
+    display: block;
+    width: 61px;
+    padding: 9px 0 0 0;
+    text-align: center;
+    font-size: 11px;
+    color: #747474;
+}
+
+.pop_header > h1 {
+    margin: 0;
+    line-height: 44px;
 }
