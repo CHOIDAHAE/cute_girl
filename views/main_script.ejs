@@ -9,20 +9,19 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" />
 
 	<script>
+		//파일 우클릭시 메뉴 띄우기
 		var contextFileInfo = "";
 		var orginFileNm = "";
 		$(document).ready(function(){
 			$('#clean_file_menu').hide();
 			$(document).contextmenu(function(e){
-				console.log(e.target);
-				console.log(e);
 				//항목의 이미지 영역만 메뉴 띄우도록 설정
 				if(e.target.tagName != "IMG"){
 					$(".contextmenu").hide();
 					return;
 				}
 				var targetId = e.target.id;
-				console.log(targetId);
+				//즐겨찾기 추가여부 확인
 				if(targetId.split("_")[2] == "Y"){
 					var innerHtml = "";
 					innerHtml = '<a href="javascript:void(0);" onclick="fn_delFavor();">즐겨찾기 삭제</a>';
@@ -34,21 +33,29 @@
 
 					$('#listFavorAt').html(innerHtml);
 				}
-
+			
+				//사용여부 확인
 				if(targetId.split("_")[3] == "Y"){
 					var innerHtml = "";
 					innerHtml = '<a href="javascript:void(0);" onclick="fn_fileDelete(\'N\');">파일 삭제</a>';
 
-					$('#listUseAt').html(innerHtml);
-					$('#fileDelete').hide();
+					//파일 다운로드 태그 동적 추가
+					var downloadHtml = "";
+					var orgFileNm = $('#orgFileNm_' + e.target.id.split("_")[1]).attr('value');
+					downloadHtml = '<a href="../uploadedFiles/' + orgFileNm + '" download>파일 다운로드</a>'
 
+					$('#listUseAt').html(innerHtml);
+					$('#fileDownload').html(downloadHtml);
+					$('#fileDelete').hide();
 				}else{
 					var innerHtml = "";
 					innerHtml = '<a href="javascript:void(0);" onclick="fn_fileDelete(\'Y\');">파일 원복</a>';
 					$('#listUseAt').html(innerHtml);
+					$('#fileDownload').html('');
 					$('#fileDelete').show();
 				}
 
+				//정렬타입 확인 (파일조회인지 정리하기인지)
 				if($('#ListType').val() == "cleanUpType"){
 					$('#listFavorAt').hide();
 					$('#updateFileNm').hide();
@@ -97,7 +104,6 @@
 				}).show();
 				//Prevent browser default contextmenu.
 				contextFileInfo = e.target.id;
-				console.log(e.target.src);
 				orginFileNm = e.target.src.split("/");
 				return false;
 			});
@@ -125,7 +131,6 @@
 
 			})
 			.done(function (res) {
-				console.log(res);
 				var sideInfo_box = document.getElementById("sideInfo_box");
 				var sideEle1 = document.querySelector("#file_click");
 				var sideEle2 = document.querySelector("#file_nonClick");
@@ -152,7 +157,6 @@
 
 		//파일 삭제 (휴지통으로 이동)
 		function fn_fileDelete(useAt){
-			console.log(contextFileInfo);
 			var AtchfileSn = contextFileInfo.split("_")[1];
 			var emplyrSn = window.parent.$('#emplyrSn').val();
 			if(confirm("파일을 삭제하시겠습니까?\n그룹에 저장된 사진이 있을 경우, 자동 삭제됩니다.\n(삭제된 파일은 휴지통으로 이동됩니다.)")){
@@ -164,7 +168,6 @@
 
 				})
 				.done(function (res) {
-					console.log(res);
 					window.parent.fileSelect("Y", "ALL");
 				})
 				.fail(function (xhr, textStatus, errorThrown) {
@@ -203,7 +206,6 @@
 		function fn_addFavor(e){
 			var AtchfileSn = contextFileInfo.split("_")[1];
 			var emplyrSn = window.parent.$('#emplyrSn').val();
-			console.log("file Favorite!");
 			$.ajax({
 				url : "/insertBmFavorite",
 				type : "POST",
@@ -212,7 +214,6 @@
 
 			})
 			.done(function (res) {
-				console.log(res);
 				window.parent.fileSelect("Y", "ALL");
 			})
 			.fail(function (xhr, textStatus, errorThrown) {
@@ -227,7 +228,6 @@
 		function fn_delFavor(e){
 			var AtchfileSn = contextFileInfo.split("_")[1];
 			var emplyrSn = window.parent.$('#emplyrSn').val();
-			console.log("file Favorite!");
 			$.ajax({
 				url : "/deleteBmFavorite",
 				type : "POST",
@@ -236,7 +236,6 @@
 
 			})
 			.done(function (res) {
-				console.log(res);
 				window.parent.fileSelect("Y", "ALL");
 			})
 			.fail(function (xhr, textStatus, errorThrown) {
@@ -276,7 +275,6 @@
 
 			})
 			.done(function (res) {
-				console.log(res);
 				window.parent.fileSelect("Y", "ALL");
 			})
 			.fail(function (xhr, textStatus, errorThrown) {
@@ -303,13 +301,21 @@
 				var fileList = "";
 
 				for(var i=0; i<res.length; i++){
-					fileList += '<li class="item_fnc" id="' + res[i][5] + '" ondblclick="view_photoInfo(this)">';
-					fileList += '<img src="../uploadedFiles/' + res[i][1] + '" id="img_' + res[i][5] + '_NULL_Y" class="img_item"/>\n';
-					fileList += '<div class="item-name" id="dv_' + res[i][5] + '"> ' + res[i][2] + ' </div></li>\n';
+					var extsnNm = res[i][7].split("/")[0];
+					var fileSrc = "../uploadedFiles/" + res[i][1];
+					if(extsnNm != "image"){
+						fileSrc = "../images/Icon_" + res[i][3] + ".png";
+					}
+
+					fileList += '<li class="item_fnc" id="' + res[i][5] + '" onclick="view_photoInfo(this)">';
+					fileList += '<img src="' + fileSrc + '" id="img_' + res[i][5] + '_NULL_Y" class="img_item"/>\n';
+					fileList += '<div class="item-name" id="dv_' + res[i][5] + '"> ' + res[i][2] + ' </div>\n';
+					fileList += '<input type="hidden" id="orgFileNm_' + res[i][5] + '" value="' + res[i][1] + '"></li>\n';	//원본파일명
 				}
 
 				$(fileArea).html(fileList);      //파일 리스트
 				$(ListType).attr('value', "cleanUpType");
+				$('#fileTypeNm').attr('value', "ALL");
 			})
 			.fail(function (xhr, textStatus, errorThrown) {
 				console.log('selectBkmkList ajax 실패');
@@ -319,6 +325,7 @@
 			})
 		}
 
+		//파일 용량순 (파일 정리하기)
 		function selectFileMg(){
 			var emplyrSn = window.parent.$('#emplyrSn').val();
 
@@ -333,14 +340,22 @@
 				var fileList = "";
 
 				for(var i=0; i<res.length; i++){
+					var extsnNm = res[i][11].split("/")[0];
+					var fileSrc = "../uploadedFiles/" + res[i][1];
+					if(extsnNm != "image"){
+						fileSrc = "../images/Icon_" + res[i][3] + ".png";
+					}
+
 					fileList += '<li class="item_fnc" id="' + res[i][8]+ '" onclick="view_photoInfo(this)">';
 					/* ID : IMG_파일일련번호_즐겨찾기추가여부_사용여부 */
-					fileList += '<img src="../uploadedFiles/' + res[i][1] + '" id="img_' + res[i][8] + '_' + res[i][9] + '_' + res[i][10] + '" class="img_item"/>\n';
-					fileList += '<div class="item-name" id="dv_' + res[i][8] + '"> ' + res[i][2] + ' </div></li>\n';
+					fileList += '<img src="' + fileSrc + '" id="img_' + res[i][8] + '_' + res[i][9] + '_' + res[i][10] + '" class="img_item"/>\n';
+					fileList += '<div class="item-name" id="dv_' + res[i][8] + '"> ' + res[i][2] + ' </div>\n';
+					fileList += '<input type="hidden" id="orgFileNm_' + res[i][8] + '" value="' + res[i][1] + '"></li>\n';	//원본파일명
 				}
 
 				$('#fileList').html(fileList);      //파일 리스트
 				$('#ListType').attr('value', "selectList");
+				$('#fileTypeNm').attr('value', "ALL");
 			})
 			.fail(function (xhr, textStatus, errorThrown) {
 				console.log('selectFileMg ajax 실패');

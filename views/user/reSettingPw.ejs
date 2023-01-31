@@ -42,7 +42,9 @@
 				dataType: "TEXT", //응답받을 데이터 타입 (XML,JSON,TEXT,HTML)
 				success: function(data) {
 					// 요청받아온 캡차 세팅
-					document.getElementById("chptchaimg").src = "../images/captcha.jpg";
+					var time=new
+					Date().getTime();
+					document.getElementById("chptchaimg").src = "../images/captcha.jpg?time="+time;
 				},
 				error: function(request,status,error) {
 					console.log("error");

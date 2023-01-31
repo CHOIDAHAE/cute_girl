@@ -16,6 +16,7 @@
 				closeModal();	//모임만들기 모달 닫기
 				document.getElementById('void_btn').disabled = true;
 
+				//우클릭 메뉴 숨기기
 				$(document).click(function(){
 					$('#gridArea').contents().find(".contextmenu").hide();
 				})
@@ -49,7 +50,9 @@
 				var selectValue = sortSelect.options[sortSelect.selectedIndex].value;
 				var selectText = sortSelect.options[sortSelect.selectedIndex].text;
 
-				fileSelect("Y", "ALL", selectValue);
+				var fileType = $('#gridArea').contents().find('#fileTypeNm').attr('value');
+
+				fileSelect("Y", fileType, selectValue);
 			};
 
 			function openMenu(menuNm){
@@ -58,23 +61,6 @@
 				document.getElementById("gridArea").src = menuNm;
 			};
 			
-			//파일 선택시 사이드바 정보 띄우는 이벤트
-			function view_photoInfo(){
-				var fileInfoArea = $('#gridArea').contents().find('#file_type')
-
-				$('#gridArea').contents().find('#file_type').textContent = "종류 클릭";
-
-				var sideInfo_box = document.getElementById("sideInfo_box");
-				var sideEle1 = document.querySelector("#file_click");
-				var sideEle2 = document.querySelector("#file_nonClick");
-
-
-				//sideInfo_box.textContent = "사진을 선택하였습니다.";
-
-				sideEle1.classList.toggle("sideInfoClick");
-				sideEle2.classList.toggle("sideInfoClick");
-			};
-
 			// 대메뉴, 소메뉴 선택시 클래스 삭제
 			function unselected(gbn){
 				/* 
@@ -105,7 +91,6 @@
 				// debugger;
 				var formData = new FormData();
 				formData.append('attachment', $('#fileUpload')[0].files[0]);
-				console.log(formData);
 
 				$.ajax({
 					url : '/uploadFile',
@@ -117,6 +102,7 @@
 					dataType : "JSON",
 					data : formData,
 					success:function(result){
+						//확장자가 exe일 경우 업로드 제한
 						if(result == "exe"){
 							alert("exe 파일은 업로드할 수 없습니다!");
 						}else{
@@ -141,8 +127,16 @@
 
 			// 파일 조회 
 			function fileSelect(useAt, fileType, sortType){
-				openMenu('main');
+				//기존 조회에서 파일 정리하기 메뉴 숨기기
+				$('#gridArea').contents().find('#clean_file_menu').hide();
 				var emplyrSn = document.getElementById('emplyrSn').value;
+				
+				//iframe 주소가 main이 아닐 경우 수정해주기
+				if($('#gridArea').attr('src') != '/main'){
+					openMenu('main');
+				}
+				
+				//정렬 기준
 				var orderBy = "NULL";
 
 				if(sortType == "name"){
@@ -156,28 +150,32 @@
 					type : "POST",
 					dataType : "JSON", //"JSON"
 					data : {"emplyrSn" : emplyrSn, "useAt" : useAt, "fileType" : fileType, "orderBy" : orderBy}
-
 				})
 				.done(function (res) {
-					var fileArea = $('#gridArea').contents().find('#fileList');
-					var ListType = $('#gridArea').contents().find('#ListType');
-					
+					var fileArea = $('#gridArea').contents().find('#fileList');	//파일목록
+					var ListType = $('#gridArea').contents().find('#ListType');	//조회타입
+					var fileTypeNm = $('#gridArea').contents().find('#fileTypeNm');	//파일타입 (하단 메뉴 선택시)
+
 					var fileList = "";
 
 					for(var i=0; i<res.length; i++){
-						var fileType = res[i][11].split("/")[0];
+						//파일타입이 사진이 아닐 경우 아이콘으로 보여주기
+						var extsnNm = res[i][11].split("/")[0];
 						var fileSrc = "../uploadedFiles/" + res[i][1];
-						if(fileType != "image"){
+						if(extsnNm != "image"){
 							fileSrc = "../images/Icon_" + res[i][3] + ".png";
 						}
+
 						fileList += '<li class="item_fnc" id="' + res[i][8]+ '" onclick="view_photoInfo(this)">';
 						/* ID : IMG_파일일련번호_즐겨찾기추가여부_사용여부 */
 						fileList += '<img src="' + fileSrc + '" id="img_' + res[i][8] + '_' + res[i][9] + '_' + res[i][10] + '" class="img_item"/>\n';
-						fileList += '<div class="item-name" id="dv_' + res[i][8] + '"> ' + res[i][2] + ' </div></li>\n';
+						fileList += '<div class="item-name" id="dv_' + res[i][8] + '"> ' + res[i][2] + ' </div>\n';	//파일명
+						fileList += '<input type="hidden" id="orgFileNm_' + res[i][8] + '" value="' + res[i][1] + '"></li>\n';						//원본파일명
 					}
 
 					$(fileArea).html(fileList);      //파일 리스트
-					$(ListType).attr('value', "selectList");
+					$(ListType).attr('value', "selectList");	//조회타입 설정
+					$(fileTypeNm).attr('value', fileType);		//파일타입 설정
 				})
 				.fail(function (xhr, textStatus, errorThrown) {
 					console.log('selectFileList ajax 실패');
@@ -195,6 +193,7 @@
 
 			/* 즐겨찾기 조회 */
 			function selectBkmk(){
+				$('#gridArea').contents().find('#clean_file_menu').hide();
 				var emplyrSn = document.getElementById('emplyrSn').value;
 
 				$.ajax({
@@ -206,18 +205,27 @@
 				})
 				.done(function (res) {
 					var fileArea = $('#gridArea').contents().find('#fileList');
-					var emplyrSnArea = $('#gridArea').contents().find('#emplyrSn');
+					var ListType = $('#gridArea').contents().find('#ListType');
+					var fileTypeNm = $('#gridArea').contents().find('#fileTypeNm');
 					
 					var fileList = "";
 
 					for(var i=0; i<res.length; i++){
-						fileList += '<li class="item_fnc" id="' + res[i][0] + '" ondblclick="view_photoInfo(this)">';
-						fileList += '<img src="../uploadedFiles/' + res[i][2] + '" id="img_' + res[i][0] + '" class="img_item"/>\n';
-						fileList += '<div class="item-name" id="dv_' + res[i][0] + '"> ' + res[i][5] + ' </div></li>\n';
+						var extsnNm = res[i][6].split("/")[0];
+						var fileSrc = "../uploadedFiles/" + res[i][2];
+						if(extsnNm != "image"){
+							fileSrc = "../images/Icon_" + res[i][4] + ".png";
+						}
+
+						fileList += '<li class="item_fnc" id="' + res[i][0] + '" onclick="view_photoInfo(this)">';
+						fileList += '<img src="' + fileSrc + '" id="img_' + res[i][0] + '_Y_Y" class="img_item"/>\n';
+						fileList += '<div class="item-name" id="dv_' + res[i][0] + '"> ' + res[i][5] + ' </div>\n';
+						fileList += '<input type="hidden" id="orgFileNm_' + res[i][0] + '" value="' + res[i][2] + '"></li>\n';	//원본파일명
 					}
 
 					$(fileArea).html(fileList);      //파일 리스트
-					$(emplyrSnArea).value = emplyrSn;
+					$(ListType).attr('value', "selectList");	//조회타입 설정
+					$(fileTypeNm).attr('value', "ALL");		//파일타입 설정
 				})
 				.fail(function (xhr, textStatus, errorThrown) {
 					console.log('selectBkmkList ajax 실패');

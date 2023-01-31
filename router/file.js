@@ -629,19 +629,6 @@ module.exports = function(app){
 					console.log(err);
 					res.json("F");
 				}
-				/*
-				else{
-					let query = mybatisMapper.getStatement('IndexDAO','deleteAutoFileDtl', param, format);
-					conn.execute(query, function(err,result){
-						console.log("IndexDAO.deleteAutoFileDtl");
-						console.log(query);
-						if(err){
-							console.log(err);
-							res.json("F");
-						}
-						conn.commit();
-					});
-				}*/
 				conn.commit();
 			});
 			res.json({"emplyrSn":req.session.user.emplyrSn});
@@ -649,7 +636,7 @@ module.exports = function(app){
 		});
 	});
 
-	// 파일 정리하기 (중복)
+	// 파일 정리하기 (파일명 중복)
 	app.post("/cleanUpFiles", function(req, res){		
 		oracledb.getConnection({
 			user:dbConfig.user,
@@ -689,7 +676,7 @@ module.exports = function(app){
 				}
 
 				res.send(result.rows);
-				doRelease(conn);					
+				doRelease(conn);
 			});  
 		});
 	})
