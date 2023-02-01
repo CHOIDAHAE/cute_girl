@@ -12,13 +12,73 @@
 		<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 		
 		<script type="text/javascript">
-		   $(document).ready(function(){
+			$(document).ready(function(){
 				file_Volume();  // 파일용량 읽어오기
 				fn_selected_basket_term();
 				const emplyrSn = window.parent.$('#emplyrSn').val();
 			});
+			 //파일용량 읽어오기
+			 function file_Volume(){
+				$('#_legend_holder').show();
+				$('#_legend_holder_file').hide();
+
+				$.ajax({
+					url : "/selectFileVolume",
+					type : "POST",
+					dataType : "JSON", //"JSON"
+					data : {"emplyrSn" : window.parent.$('#emplyrSn').val()}
+				})
+				.done(function (res) {
+					document.getElementById('capacity').value = res[0];
+					
+					$("#capacity_use").text(res[0][0]);
+					$("#capacity").text(res[0][1]);        // 사용중 용량
+					$("#capacity_y").text(res[0][1]);        // 사용중 용량
+					$("#capacity_n").text(res[0][2]);        // 사용중 용량
+					$("#rest_capacity").text(res[0][3]);   // 남은 용량
+					$("#remain").text(res[0][3]);   // 남은 용량
+					graph(res[0][1], res[0][2], res[0][3]);    //사용량, 휴지통용량, 남은용량
+				})
+				.fail(function (xhr, textStatus, errorThrown) {
+					console.log('selectFileVolume ajax 실패');
+				})
+			}
+			// 용량 그래프
+			function graph(capacity_y, capacity_n, remain){
+				// chart colors
+				var colors = ['#E6E6E6', '#F5D0A9', '#F5A9A9'];
+				//             회색계열,  주황계열,   붉은계열
+				/* 3 donut charts */
+				var donutOptions = {
+					cutoutPercentage: 50, //도넛두께 : 값이 클수록 얇아짐
+					legend: {display:false, position:'bottom', padding:5, labels: {pointStyle:'circle', usePointStyle:true}}
+				};
+				// donut 1
+				var chDonutData1 = {
+					labels: ['내 MyDrive', '휴지통', '남은 용량'],
+					datasets: [
+					{
+						backgroundColor: colors.slice(0,3),
+						borderWidth: 0,
+						data: [capacity_y, capacity_n, remain]
+					}
+					]
+				};
+				var chDonut1 = document.getElementById("_graph");
+				if (chDonut1) {
+					new Chart(chDonut1, {
+						type: 'pie',
+						data: chDonutData1,
+						options: donutOptions
+					});
+				}
+			}
+			
 			//파일용량 읽어오기
-		   function file_Volume(){
+		   function fileType_Volume(){
+				$('#_legend_holder').hide();
+				$('#_legend_holder_file').show();
+
 				$.ajax({
 					url : "/selectFileMg",
 					type : "POST",
@@ -35,17 +95,17 @@
 					$("#capacity_n").text(res[4][1]);				// 휴지통
 					$("#remain").text(res[6][1]);					// 남은 용량
 					$("#capacity").text(res[5][1]);					// 사용중 용량
-					graph(res[0][1], res[1][1], res[2][1], res[3][1], res[4][1], res[6][1]);	//사진, 동영상, 문서, 음악, 휴지통, 남은용량
+					graph_file(res[0][1], res[1][1], res[2][1], res[3][1], res[4][1], res[6][1]);	//사진, 동영상, 문서, 음악, 휴지통, 남은용량
 				})
 				.fail(function (xhr, textStatus, errorThrown) {
 					console.log('selectFileVolume ajax 실패');
 				})
 			}
 			// 용량 그래프
-			function graph(capacity_image, capacity_video, capacity_application, capacity_audio, capacity_n, remain){
+			function graph_file(capacity_image, capacity_video, capacity_application, capacity_audio, capacity_n, remain){
 				// chart colors
-				var colors = ['#679164', '#8665a3', '#1f369c', '#F5D0A9', '#E6E6E6', '#F5A9A9'];
-				//             초록계열,   보라계열,   파랑계열   주황계열,   회색계열,   붉은계열
+				var colors = ['#f4909d', '#fddd00', '#53c127', '#56a6f5', '#E6E6E6', '#F5A9A9'];
+				//             분홍계열,   노랑계열,   연두계열   파랑계열,   회색계열,   붉은계열
 				/* 3 donut charts */
 				var donutOptions = {
 					cutoutPercentage: 50, //도넛두께 : 값이 클수록 얇아짐
@@ -53,12 +113,12 @@
 				};
 				// donut 1
 				var chDonutData1 = {
-					labels: ['사진', '동영상', '문서', '음악', '휴지통', '남은 용량'],
+					labels: ['문서', '사진', '동영상', '음악', '휴지통', '남은 용량'],
 					datasets: [
 					{
 						backgroundColor: colors.slice(0,6),
 						borderWidth: 0,
-						data: [capacity_image, capacity_video, capacity_application, capacity_audio, capacity_n, remain]
+						data: [capacity_application, capacity_image, capacity_video, capacity_audio, capacity_n, remain]
 					}
 					]
 				};
@@ -107,6 +167,11 @@
 					console.log('updateAutoFileInfo ajax 실패');
 				})
 			}
+
+			function setTabClass(compId, removeCompId){
+				$('#'+compId).toggleClass("on");
+				$('#'+removeCompId).toggleClass("on");
+			}
 			
 		</script>
 	</head>
@@ -114,8 +179,11 @@
 		<div class="manage_size" id="pop_content">
 			<div class="_managePop_holder">
 				<div class="sub tab">
-					<a href="#myCapacity" class="toggle _tab on">
+					<a href="#myCapacity" id="myCapacity" class="toggle _tab on" onclick="setTabClass('myCapacity', 'myFileTypeCapacity'); file_Volume();">
 						<strong>내 용량 보기</strong>
+					</a>
+					<a href="#myFileTypeCapacity" id="myFileTypeCapacity" class="toggle _tab" onclick="setTabClass('myFileTypeCapacity', 'myCapacity'); fileType_Volume();">
+						<strong>파일별 용량 보기</strong>
 					</a>
 				</div>
 				<div class="_myFolderCapacity_holder"></div>
@@ -149,29 +217,61 @@
 								<tr class="_legend_item" data-legendid="myUsedQuota" data-idx="0"> 
 									<th scope="row" class="group fst"> 
 										<div class="thcell">  
-											<span class="rect" style="background-color:#679164">&nbsp;</span>
-											<span class="txt_tit">사진</span>
+											<span class="txt_tit">사용 중</span>
 										</div> 
 									</th> 
 									<td class=" gigabyte fst"> 
-										<div class="tdcell"><span id="capacity_image"></span> GB</div> 
+										<div class="tdcell"><span id="capacity_use"></span> GB</div> 
 									</td> 
-								</tr>
+								</tr>  
 								<tr class="_legend_item" data-legendid="myUsedQuota" data-idx="0"> 
-									<th scope="row" class="group fst"> 
+									<th scope="row" class="group "> 
 										<div class="thcell">  
-											<span class="rect" style="background-color:#8665a3">&nbsp;</span>
-											<span class="txt_tit">동영상</span>
+											<span class="rect" style="background-color:#E6E6E6">&nbsp;</span>
+											<span class="txt_tit">내 MYDRIVE</span>
 										</div> 
 									</th> 
-									<td class=" gigabyte fst"> 
-										<div class="tdcell"><span id="capacity_video"></span> GB</div> 
+									<td class=" gigabyte "> 
+										<div class="tdcell"><span id="capacity_y"></span> GB</div> 
 									</td> 
 								</tr>
 								<tr class="_legend_item" data-legendid="myUsedQuota" data-idx="0"> 
+									<th scope="row" class="group "> 
+										<div class="thcell">  
+											<span class="rect"style="background-color:#F5D0A9">&nbsp;</span>
+											<span class="txt_tit">휴지통</span>
+										</div> 
+									</th> 
+									<td class=" gigabyte "> 
+										<div class="tdcell"><span id="capacity_n"></span> GB</div>
+									</td> 
+								</tr>  
+								<tr class="_legend_item" data-legendid="unusedQuota" data-idx="1"> 
+									<th scope="row" class="group "> 
+										<div class="thcell">  
+											<span class="rect" style="background-color:#F5A9A9">&nbsp;</span>  
+											<span class="txt_tit">사용 가능</span>
+										</div> 
+									</th> 
+									<td class=" gigabyte "> 
+										<div class="tdcell"><span id="remain"></span> GB</div>
+									</td> 
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="mycapacity_tbl_wrap _legend_holder" id="_legend_holder_file" style="padding:15px 0">
+						<table cellspacing="0" class="mycapacity_tbl" style="float: right;width: 90%;"> 
+							<caption>내 용량 정보</caption> 
+							<colgroup>
+								<col class="group"> 
+								<col class="gigabyte">  
+							</colgroup>
+							<tbody>
+								<tr class="_legend_item" data-legendid="myUsedQuota" data-idx="0"> 
 									<th scope="row" class="group fst"> 
 										<div class="thcell">  
-											<span class="rect" style="background-color:#1f369c">&nbsp;</span>
+											<span class="rect" style="background-color:rgb(244,144, 157)">&nbsp;</span>
 											<span class="txt_tit">문서</span>
 										</div> 
 									</th> 
@@ -182,7 +282,29 @@
 								<tr class="_legend_item" data-legendid="myUsedQuota" data-idx="0"> 
 									<th scope="row" class="group fst"> 
 										<div class="thcell">  
-											<span class="rect" style="background-color:#F5D0A9">&nbsp;</span>
+											<span class="rect" style="background-color:rgb(253, 221, 0)">&nbsp;</span>
+											<span class="txt_tit">사진</span>
+										</div> 
+									</th> 
+									<td class=" gigabyte fst"> 
+										<div class="tdcell"><span id="capacity_image"></span> GB</div> 
+									</td> 
+								</tr>
+								<tr class="_legend_item" data-legendid="myUsedQuota" data-idx="0"> 
+									<th scope="row" class="group fst"> 
+										<div class="thcell">  
+											<span class="rect" style="background-color:rgb(83, 193, 39)">&nbsp;</span>
+											<span class="txt_tit">동영상</span>
+										</div> 
+									</th> 
+									<td class=" gigabyte fst"> 
+										<div class="tdcell"><span id="capacity_video"></span> GB</div> 
+									</td> 
+								</tr>
+								<tr class="_legend_item" data-legendid="myUsedQuota" data-idx="0"> 
+									<th scope="row" class="group fst"> 
+										<div class="thcell">  
+											<span class="rect" style="background-color:rgb(86, 166, 245)">&nbsp;</span>
 											<span class="txt_tit">음악</span>
 										</div> 
 									</th> 

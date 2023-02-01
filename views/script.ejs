@@ -127,14 +127,14 @@
 
 			// 파일 조회 
 			function fileSelect(useAt, fileType, sortType){
+				//iframe 주소가 main이 아닐 경우 수정해주기
+				if($('#gridArea').attr('src') != 'main'){
+					openMenu('main');
+				}
+
 				//기존 조회에서 파일 정리하기 메뉴 숨기기
 				$('#gridArea').contents().find('#clean_file_menu').hide();
 				var emplyrSn = document.getElementById('emplyrSn').value;
-				
-				//iframe 주소가 main이 아닐 경우 수정해주기
-				if($('#gridArea').attr('src') != '/main'){
-					openMenu('main');
-				}
 				
 				//정렬 기준
 				var orderBy = "NULL";
