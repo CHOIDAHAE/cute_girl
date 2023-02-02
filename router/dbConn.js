@@ -50,6 +50,16 @@ module.exports = function(app){
 		}
 	})
 
+	// 그룹 초대를 받아 온 화면
+	app.get('/index/group', function(req, res, next){
+		console.log(req);
+		if(req.session.user == "" || req.session.user == null){
+			res.render('./user/login',{data:"group"});
+		} else {
+			res.render('./user/login',{"emplyrSn":req.session.user.emplyrSn});
+		}
+	})
+
 	// 전체 파일 용량 읽어오기
 	app.post("/selectFileVolume", function(req, res){		
 		oracledb.getConnection({

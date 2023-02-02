@@ -304,7 +304,7 @@ a, .rightmenu_layer {
 
 .together_section.writing {
     padding-bottom: 20px;
-    z-index: 30;
+    /*z-index: 30;*/
 }
 
 .together_section {
@@ -1551,7 +1551,7 @@ menu, ul, ol {
     width: 300px;
     text-overflow: ellipsis;
     white-space: nowrap;
-    color: #04b13d;
+    color: #157efd;
 }
 
 .mem_dl .url_address input.url {

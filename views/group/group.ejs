@@ -29,6 +29,9 @@
 
                 // 그룹 사진 조회
                 groupPictureList();
+
+                // 멤버초대 모달
+                $('#inviteMember').hide();
             });
             
             // 스토리/사진 탭
@@ -275,10 +278,33 @@
 				})
             };
 
-            // 멤버초대
+            // 멤버초대 열기
             function inviteMember(){
-
+                $('#inviteMember').show();
+                
+                var groupSn = $('#groupSn').val();
+                console.log("groupSn: "+groupSn);
+                // 해당 그룹의 일련번호를 value에 담는다.
+                $('#url').val = 'localhost:3000/index/group?groupSn='+groupSn;
             };
+
+            // 멤버초대 닫기
+            function out_inviteMember(){
+                $('#inviteMember').hide();
+            }
+
+            // 전화번호로 초대하기
+            function invite_phone(){
+                alert('서비스 준비중입니다.');
+            }
+
+            // 복사
+            function copyText(){
+                var copyText = document.getElementById("url");
+                copyText.select();
+                document.execCommand("copy");
+                alert("복사완료!");
+            }
 		</script>
 	</head>
 	<body>
@@ -537,7 +563,7 @@
                                                             <p class="text">MYDRIVE에 저장되어 있는 우리 아기 사진, 가족 여행 사진,<br>멋진 야경 사진 등 일상과 추억을 가족, 친구와 함께 나눠보세요!<br>멤버는 최대 200명까지 초대할 수 있습니다.</p>
                                                             <a class="my_btn_member" onclick="inviteMember()">멤버초대</a>
                                                         </div>
-                                                        <div class="dh_layer pop_pht_wrap" style="width: 459px;">
+                                                        <div id="inviteMember" class="dh_layer pop_pht_wrap" style="width: 459px;">
                                                             <div class="pop_header">
                                                                 <h1>멤버초대</h1>
                                                             </div>
@@ -545,7 +571,7 @@
                                                                 <div class="toge_member">
                                                                     <div class="mem_tab">
                                                                         <a class="tab_url selected">URL로 초대하기</a>
-                                                                        <a class="tab_num">전화번호로 초대하기</a>
+                                                                        <a class="tab_num" onclick="invite_phone();">전화번호로 초대하기</a>
                                                                     </div>
                                                                     <div class="mem_content">
                                                                         <div class="url_area">
@@ -557,8 +583,8 @@
                                                                                 <dt>URL주소</dt>
                                                                                 <dd>
                                                                                     <div class="url_address">
-                                                                                        <input class="url" readonly="" value="http://naver.me/x7raLScJ" style="cursor: pointer;">
-                                                                                        <button>복사</button>
+                                                                                        <input id="url" class="url" readonly="" value="" style="cursor: pointer;">
+                                                                                        <button onclick="copyText();">복사</button>
                                                                                     </div>
                                                                                     <p class="url_notice">URL은 7일간 유효합니다.<br>유효기간이 만료되면 위 URL을 통해 모임에 참여할 수 없습니다.</p>
                                                                                 </dd>
@@ -595,7 +621,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <a class="btn_clse">닫기</a>
+                                                                <a class="btn_clse" onclick="out_inviteMember();">닫기</a>
                                                             </div>
                                                         </div>
                                                     </div>
