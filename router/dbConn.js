@@ -50,7 +50,7 @@ module.exports = function(app){
 		}
 	})
 
-	// 그룹 초대를 받아 온 화면
+	// 그룹 초대를 받아 온 화면 
 	app.get('/index/group', function(req, res, next){
 		console.log(req);
 		if(req.session.user == "" || req.session.user == null){

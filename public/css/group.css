@@ -1218,7 +1218,7 @@ button .tx {
     vertical-align: top;
 }
 
-.wrap_pop .pop_close {
+.wrap_pop .pop_close { 
     position: absolute;
     right: 0;
     top: 0;
