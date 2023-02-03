@@ -624,13 +624,20 @@ module.exports = function(app){
 				"groupSn"	: req.body.groupSn
 			};
 
+			let query = "";
+			console.log("req.body.type: "+req.body.type);
 			//쿼리
-			let selectPictureList = mybatisMapper.getStatement('GroupDAO','selectPictureList', param, format);
+			if (req.body.type == "BK"){
+				query = mybatisMapper.getStatement('GroupDAO','selectBkmkPictureList', param, format);
+			} else {
+				query = mybatisMapper.getStatement('GroupDAO','selectPictureList', param, format);
+			}
 
+			console.log(query);
 			//쿼리문 실행
-			conn.execute(selectPictureList, function(err,result){
+			conn.execute(query, function(err,result){
 				if(err){
-					console.log("selectPictureList failed :", err);
+					console.log("query failed :", err);
 					res.json({"Status":"F"});
 					return;
 				}

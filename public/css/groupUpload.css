@@ -781,3 +781,7 @@ em, address {
     width: 130px;
     background-color: rgb(255, 255, 255);
 }
+
+.gubun_list {
+    cursor: pointer;
+}

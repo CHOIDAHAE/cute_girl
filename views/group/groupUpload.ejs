@@ -23,7 +23,7 @@
 			};
 
 			// 내사진 보기(업로드용)
-			function myPictureList(){
+			function myPictureList(type){
 				var emplyrSn = window.parent.$('#emplyrSn').val();
                 var groupSn = window.parent.$('#groupSn').val();
 				
@@ -31,28 +31,32 @@
 					url : "/myPictureList",
 					type : "POST",
 					dataType : "JSON", //"JSON"
-					data : {"emplyrSn" : emplyrSn, "groupSn": groupSn},
+					data : {"emplyrSn" : emplyrSn, "groupSn" : groupSn, "type" : type},
 					success:function(res){
+                        console.log(type);
+                        console.log(res);
 						if(res.Status == "S"){
 							document.getElementById("total_length").value = res.result.length;
-							var photo_list = $("#photo_list");
-							for(var i=0; i<res.result.length; i++){
-                                var type = "";
+							var content = "";
 
-								photo_list.append(
-									'<li class="mypicture">'
+							for(var i=0; i<res.result.length; i++){
+                                content += '<li class="mypicture">'
 									+ '<div class="item"><a><img src="..'+res.result[i][1]+'/'+res.result[i][2]
 									+ '" alt="'+res.result[i][3]+'" style="width:100%; height:100%;"></a>'
 									+ '<span class="checkbox">'
 									+ '<input type="checkbox" name="uploadChkbox" value="'+res.result[i][0]+'" id="uploadChkbox_'+i+'" onclick="check()">'
-									+ '<label for="uploadChkbox">선택</label></span></div></li>'
-                                    );
+									+ '<label for="uploadChkbox">선택</label></span></div></li>';
+							}
+                            $('#photo_list').html(content);
 
+                            // 오우 너무 안좋은 방법인거같아..
+                            for(var i=0; i<res.result.length; i++){
                                 if(res.result[i][4] == window.parent.$('#groupSn').val()){    // 해당 그룹에 등록이 되어있음
                                     var id = '#uploadChkbox_'+i;
                                     $(id).attr("disabled", true);
                                 }
-							}
+                            }
+
 						} else if(res.Status == "F"){
 							alert('사진을 불러오던 도중 오류가 발생하였습니다.');
 						}						                        
@@ -160,6 +164,13 @@
                     check('cancel');
                 }
             };
+
+            // index화면으로
+            function goHome(){
+                window.parent.document.getElementById('iframe_photo').setAttribute('style', 'visibility:hidden;');
+                window.parent.document.getElementById('iframe_story').setAttribute('style', 'visibility:hidden;');
+                window.top.document.location.href="/";
+            };
 		</script>
 	</head>
     <body style="user-select: none; -ms-user-select: none">
@@ -167,7 +178,7 @@
         <div id="mini_wrap" class="mini_wrap">
             <div class="mini_header">
                 <h1 class="mi_logo">
-                    <a href="/index">
+                    <a onclick="goHome();" style="cursor: pointer;">
                         <i class="fa-solid fa-cloud"></i>MYDRIVE
                     </a>
                 </h1>
@@ -225,12 +236,12 @@
                                             <span class="blind">모두선택</span>
                                         </label>
                                     </span>
-                                    <ul class="task_tab_list">
+                                    <ul class="task_tab_list gubun_list">
                                         <li class="selected">
-                                            <a>전체</a>
+                                            <a onclick="myPictureList('ALL')">전체</a>
                                         </li>
-                                        <li class="">
-                                            <a>즐겨찾기</a>
+                                        <li class="gubun_list">
+                                            <a onclick="myPictureList('BK')">즐겨찾기</a>
                                         </li>
                                     </ul>
                                 </div>                                
