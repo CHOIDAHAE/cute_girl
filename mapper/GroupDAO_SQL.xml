@@ -265,11 +265,15 @@
 	<!-- 그룹 정보 조회 -->
 	<select id="selectGroupInfo">
 		SELECT
-			AUTHOR_GROUP_NM,
-			TO_CHAR(FRST_REGIST_DT, 'YYYY.MM.DD') FRST_REGIST_DT	
+			GRP.AUTHOR_GROUP_NM,
+			TO_CHAR(GRP.FRST_REGIST_DT, 'YYYY.MM.DD') FRST_REGIST_DT,
+			EMP.EMPLYR_NM || '(' || EMP.EMPLYR_ID || ')'	--리더 명
 		FROM
-			TCM_AUTHOR_GROUP
-		WHERE AUTHOR_GROUP_SN = #{groupSn}
+			TCM_AUTHOR_GROUP GRP,
+			TCM_EMPLYR EMP
+		WHERE
+			GRP.GROUP_LEADER_SN = EMP.EMPLYR_SN
+		AND GRP.AUTHOR_GROUP_SN = #{groupSn}
 	</select>
 
 	<!-- 그룹 대표사진 조회 -->
@@ -328,14 +332,21 @@
 	<!-- 그룹사진 조회 -->
 	<select id="selectForGroup">
 		SELECT
-			FILE_SN,
-			FILE_STRE_COURS_NM,
-			ORGINL_FILE_NM
+			PIC.FILE_SN,
+			PIC.FILE_STRE_COURS_NM,
+			PIC.ORGINL_FILE_NM,
+			EMP.EMPLYR_NM || '(' || EMP.EMPLYR_ID || ')',
+			to_char(PIC.FRST_REGIST_DT, 'FMyyyy.mm.dd AM hh') 
+			|| ':' || to_char(PIC.FRST_REGIST_DT, 'mm') 
+			|| ' ' ||TO_CHAR(PIC.FRST_REGIST_DT, 'day')
 		FROM
-			TCM_GROUP_FILE
+			TCM_GROUP_FILE PIC,
+			TCM_EMPLYR EMP
 		WHERE
-			AUTHOR_GROUP_SN = #{groupSn}
+			PIC.EMPLYR_SN = EMP.EMPLYR_SN
+		AND	AUTHOR_GROUP_SN = #{groupSn}
 		AND MAIN_FILE_AT = 'N'
+		ORDER BY PIC.FRST_REGIST_DT DESC
 	</select>
 
 	<!-- 초대된 그룹에 가입하기 -->

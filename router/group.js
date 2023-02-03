@@ -591,7 +591,8 @@ module.exports = function(app){
 							"Status"		: "S",
 							"originalname"	: originalname,
 							"groupNm"		: resul.rows[0][0],
-							"frstRegistDt"	: resul.rows[0][1]
+							"frstRegistDt"	: resul.rows[0][1],
+							"leaderNm"		: resul.rows[0][2],
 						});
 
 					//doRelease(conn);					

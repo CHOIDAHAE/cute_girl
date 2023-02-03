@@ -58,6 +58,7 @@
 							<% if(type == 'group') { %>
 								<input type="hidden" id="groupSn_invite" name="groupSn_invite" value= <%= groupSn %> >
 							<% } %>
+							<input type="hidden" id="grouplength" name="grouplength" >
 							<input type="hidden" id="groupSn" name="groupSn" >
 							<input type="hidden" id="groupNm" name="groupNm" >
 							<input type="hidden" id="emplyrNm" name="emplyrNm" >
@@ -93,7 +94,7 @@
 											<div class="toge_add_text">
 												<p class="txt">MYDRIVE 사진, 동영상을 함께 볼 모임을 만들어 보세요.</p>
 												<div class="txt_input">
-													<input type="text" id="input_group" placeholder="모임명을 입력하세요" maxlength="15" value="" onkeyup="nextBtn();">
+													<input type="text" id="input_group" placeholder="모임명을 입력하세요" maxlength="15" value="" onkeypress="goNext()" onkeyup="nextBtn();">
 												</div>
 											</div>
 										</div>
@@ -115,7 +116,7 @@
 												<p>모임이 만들어졌습니다!</p>
 												<div class="mes">혼자만 보기 아까웠던 사진들<br>이제 친구,가족들과 모임에서 함께보세요!</div>
 											</div>
-											<div class="ly_act">
+											<div class="ly_act" onclick="goCreatedGroup();">
 												<button><strong>모임가기</strong></button>&nbsp;
 											</div>
 											<p class="ly_close" onclick="closeModal();">닫기</p>
