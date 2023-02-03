@@ -184,7 +184,8 @@ module.exports = function(app){
 
 			//내 그룹 조회
 			let selectedGouprSn = mybatisMapper.getStatement('GroupDAO','selectedGouprSn', param, format);
-
+			console.log("**********************************");
+			console.log(selectedGouprSn);
 			//쿼리문 실행
 			conn.execute(selectedGouprSn, function(err,result){
 				if(err){
@@ -201,7 +202,7 @@ module.exports = function(app){
 							"emplyrId"	: result.rows[0][3]
 						});
 
-				doRelease(conn);
+				//doRelease(conn);
 			});
 		});
 	})
@@ -265,6 +266,7 @@ module.exports = function(app){
 					
 					// 마지막 탈퇴자
 					if(cnt == 1){
+						console.log('마지막 탈퇴자');
 						// 마지막 사용자인 경우 그룹삭제
 						conn.execute(updateGroupUseAt, function(err,result){
 							if(err){
@@ -277,6 +279,7 @@ module.exports = function(app){
 							outGroup(res, req.body.emplyrSn, req.body.groupSn);						
 						});
 					} else {	// 다른 사용자가 더 남은 경우
+						console.log('다른 사용자가 더 남은 경우');
 						// 리더여부 조회
 						conn.execute(selecteLeaderYn, function(err,result){
 							if(err){
@@ -288,10 +291,12 @@ module.exports = function(app){
 							var groupLeader = result.rows[0][0];
 							
 							if(groupLeader == 'N'){	//리더가 아닌경우
+								console.log('리더가 아닌경우');
 								// 개별 그룹 테이블에서 내 일련번호 삭제하기
 								outGroup(res, req.body.emplyrSn, req.body.groupSn);
 
 							} else {	// 리더인경우
+								console.log('리더인경우');
 								// 등록일자 순으로 다음 리더 조회
 								conn.execute(selecteNextLeader, function(err,result){
 									if(err){
@@ -308,7 +313,8 @@ module.exports = function(app){
 
 									// 그룹 리더 수정
 									let updateGroupLeader = mybatisMapper.getStatement('GroupDAO','updateGroupLeader', nextParam, format);
-
+									console.log('그룹 리더 수정----------------------');
+									console.log(updateGroupLeader);
 									conn.execute(updateGroupLeader, function(err,result){
 										if(err){
 											console.log("updateGroupLeader failed :", err);
@@ -332,6 +338,7 @@ module.exports = function(app){
 
 	// 개별 그룹 테이블(TCM_EMPLYRBY_GROUP_AUTHOR)에서 내 일련번호 삭제하기
 	function outGroup(res, emplyrSn, groupSn){
+		console.log('개별 그룹 테이블(TCM_EMPLYRBY_GROUP_AUTHOR)에서 내 일련번호 삭제하기');
 		//query format
 		let format = {language: 'sql', indent: ''};
 
@@ -342,7 +349,8 @@ module.exports = function(app){
 
 		// 모임 나가기 최종
 		let outGroup = mybatisMapper.getStatement('GroupDAO','outGroup', param, format);
-
+		
+		console.log(outGroup);
 		conn.execute(outGroup, function(err,result){
 			if(err){
 				console.log("outGroup failed :", err);
@@ -532,7 +540,7 @@ module.exports = function(app){
 		});
 	})
 
-	// 대표사진 조회
+	// 대표사진 및 그룹정보(그룹명, 가입일자 등) 조회
 	app.post("/selectedGroupInfo", function(req, res){
 		oracledb.getConnection({
 			user:dbConfig.user,
@@ -550,8 +558,12 @@ module.exports = function(app){
 			//query format
 			let format = {language: 'sql', indent: ''};
 
-			//getStatement(namespace명, queryId, parameter, format);
-			let selectTopPicture = mybatisMapper.getStatement('GroupDAO','selectTopPicture', { "groupSn" : req.body.groupSn}, format);
+			var param = {"groupSn" : req.body.groupSn};
+
+			// 대표사진 조회
+			let selectTopPicture = mybatisMapper.getStatement('GroupDAO','selectTopPicture', param, format);
+			// 그룹 정보 조회
+			let selectGroupInfo = mybatisMapper.getStatement('GroupDAO','selectGroupInfo', param, format);
 
 			//쿼리문 실행
 			conn.execute(selectTopPicture, function(err,result){
@@ -560,9 +572,30 @@ module.exports = function(app){
 					res.json({"Status":"F"});
 					return;
 				}
+
+				var originalname = "";
+
+				// 대표사진이 있는경우
+				if(result.rows.length > 0){
+					originalname = result.rows[0][0];
+				}
 				
-				res.json({"Status":"S", "result" : result.rows});
-				doRelease(conn);					
+				conn.execute(selectGroupInfo, function(err,resul){
+					if(err){
+						console.log("selectGroupInfo failed :", err);
+						res.json({"Status":"F"});
+						return;
+					}
+					
+					res.json({
+							"Status"		: "S",
+							"originalname"	: originalname,
+							"groupNm"		: resul.rows[0][0],
+							"frstRegistDt"	: resul.rows[0][1]
+						});
+
+					//doRelease(conn);					
+				}); 					
 			});  
 		});
 	})
@@ -701,6 +734,58 @@ module.exports = function(app){
 				
 				res.json({"Status":"S", "result" : result.rows});
 				conn.commit();
+			});
+		});	
+	})
+
+	// 초대한 그룹에 가입하기
+	app.post("/insertInvitedGroup", function(req, res){
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(insertInvitedGroup)",err);
+			} else {
+				//console.log("Oracle Connection success(insertInvitedGroup)");
+			}
+			conn = con;
+
+			//query format
+			let format = {language: 'sql', indent: ''};
+
+			var data = {
+						"groupSn"	: req.body.groupSn,
+						"emplyrSn"	: req.body.emplyrSn
+					};
+
+			// 그룹파일에 insert
+			let groupJoinAt = mybatisMapper.getStatement('GroupDAO','groupJoinAt', data, format);
+			let insertPersonalGroup = mybatisMapper.getStatement('GroupDAO','insertPersonalGroup', data, format);
+				
+			conn.execute(groupJoinAt, function(err,result){
+				if(err){
+					console.log("groupJoinAt failed :", err);
+					res.json({"Status":"F"});
+					return;
+				}
+
+				if(result.rows[0][0] > 0){	// 이미 가입되어 있는 경우
+					res.json({"Status":"A"});
+				} else {	// 신규가입인 경우
+					conn.execute(insertPersonalGroup, function(err,result){
+						if(err){
+							console.log("insertPersonalGroup failed :", err);
+							res.json({"Status":"F"});
+							return;
+						}
+						
+						res.json({"Status":"S", "result" : result.rows});
+						conn.commit();
+					});
+				}
 			});
 		});	
 	})

@@ -32,6 +32,7 @@
 			var dataInfo = {};
 			dataInfo.id = id;
 			dataInfo.pw	= pw;
+            var groupSn = $("#groupSn").val();
 			
 			$.ajax({
 				contentType : 'application/json; charset=utf-8', 
@@ -44,7 +45,7 @@
 					if(data === "S"){
                         alert("환영합니다.");
                         fn_fileAutoDelete();
-                        document.location.href="/index";
+                        document.location.href="/index?groupSn="+groupSn;   
                     } else if (data === "I"){
                         alert("존재하지 않는 아이디입니다.");
                         $("#id").val('');
@@ -128,6 +129,8 @@
                             <ul class="panel_wrap">
                                 <li class="panel_item" style="display: block;">
                                     <div class="panel_inner" role="tabpanel">
+                                        <!-- 그룹 url로 접근한 경우 그룹일련번호를 남김-->
+                                        <input type="hidden" id="groupSn" name="groupSn" value=<%= groupSn %> >
                                         <div class="id_pw_wrap">
                                             <div class="input_row" id="id_line">
                                                 <div class="icon_cell" id="id_cell">

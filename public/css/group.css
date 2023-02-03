@@ -1163,12 +1163,14 @@ label {
     color: #666;
     line-height: 18px;
     font-size: 14px;
+    cursor: pointer;
 }
 
 .input_check, .input_radio {
     width: 13px;
     height: 13px;
     vertical-align: middle;
+    cursor: pointer;
 }
 
 .dh_layer .wrap_pop .footer {

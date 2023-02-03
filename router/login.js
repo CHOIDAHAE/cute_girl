@@ -16,20 +16,21 @@ module.exports = function(app){
     var fs = require('fs');
 
 	app.get('/join', function(req, res){
-        res.render('./user/join', {data:'join'});
+        res.render('./user/join', {"type":'join'});
     })
 
     app.get('/login', function(req, res){
-        res.render('./user/login', {data:'login'});
+        console.log(req);
+        res.render('./user/login', {"type":'login', "groupSn" : ""});
     })
     
     app.get('/findPw', function(req, res){
-        res.render('./user/findPw', {data:'findPw'});
+        res.render('./user/findPw', {"type":'findPw'});
     })
 
     /*
     app.get('/findId', function(req, res){
-        res.render('./user/findId', {data:'findId'});
+        res.render('./user/findId', {"type":'findId'});
     })*/
 
     app.post('/nextFindPw', function(req, res){

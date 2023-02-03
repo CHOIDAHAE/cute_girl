@@ -36,6 +36,7 @@
 		)
     </insert>
 
+	<!-- 그룹 가입하기 -->
 	<insert id="insertPersonalGroup">
 		INSERT INTO TCM_EMPLYRBY_GROUP_AUTHOR
 			(
@@ -56,6 +57,17 @@
 				SYSDATE
 			)
 	</insert>
+
+	<!-- 그룹 가입 여부 확인 -->
+	<select id="groupJoinAt">
+		SELECT
+			COUNT(*) CNT
+		FROM
+			TCM_EMPLYRBY_GROUP_AUTHOR
+		WHERE
+			EMPLYR_SN		= #{emplyrSn}
+		AND AUTHOR_GROUP_SN	= #{groupSn}
+	</select>
 
 	<!-- 내 그룹 리스트 -->
 	<select id="selectMyGroup">
@@ -251,18 +263,24 @@
 	</insert>
 
 	<!-- 그룹 정보 조회 -->
+	<select id="selectGroupInfo">
+		SELECT
+			AUTHOR_GROUP_NM,
+			TO_CHAR(FRST_REGIST_DT, 'YYYY.MM.DD') FRST_REGIST_DT	
+		FROM
+			TCM_AUTHOR_GROUP
+		WHERE AUTHOR_GROUP_SN = #{groupSn}
+	</select>
+
+	<!-- 그룹 대표사진 조회 -->
 	<select id="selectTopPicture">
 		SELECT
-			TGF.ORGINL_FILE_NM,
-			TO_CHAR(GRP.FRST_REGIST_DT, 'YYYY.MM.DD') FRST_REGIST_DT,
-			GRP.AUTHOR_GROUP_NM
+			ORGINL_FILE_NM
 		FROM
-			TCM_GROUP_FILE TGF,
-			TCM_AUTHOR_GROUP GRP
+			TCM_GROUP_FILE
 		WHERE
-			TGF.AUTHOR_GROUP_SN = GRP.AUTHOR_GROUP_SN 
-		AND	TGF.AUTHOR_GROUP_SN = #{groupSn}
-		AND TGF.MAIN_FILE_AT = 'Y'
+			AUTHOR_GROUP_SN = #{groupSn}
+		AND MAIN_FILE_AT = 'Y'
 	</select>
 
 	<!-- 기존 그룹 대표사진 삭제 -->
@@ -319,4 +337,9 @@
 			AUTHOR_GROUP_SN = #{groupSn}
 		AND MAIN_FILE_AT = 'N'
 	</select>
+
+	<!-- 초대된 그룹에 가입하기 -->
+	<insert id="insertInvitedGroup">
+
+	</insert>
 </mapper>

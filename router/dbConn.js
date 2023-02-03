@@ -34,29 +34,39 @@ module.exports = function(app){
 
 	var conn;
 
+	// 기본 index로 설정
 	app.get('/', function(req, res, next){
 		if(req.session.user == "" || req.session.user == null){
-			res.render('./user/login',{data:"login"});
+			res.render('./user/login',{"type":"login", "groupSn":""});
 		} else {
-			res.render('index',{"emplyrSn":req.session.user.emplyrSn});
+			res.render('index',{"type":"login", "emplyrSn":req.session.user.emplyrSn});
 		}
 	})
 
 	app.get('/index', function(req, res, next){
-		if(req.session.user == "" || req.session.user == null){
-			res.render('./user/login',{data:"login"});
+		var groupSn = req.query.groupSn;
+		var type = "";
+
+		if(groupSn != null && groupSn != ""){
+			type = "group";
 		} else {
-			res.render('index',{"emplyrSn":req.session.user.emplyrSn});
+			type = "login";
+		}
+
+		if(req.session.user == "" || req.session.user == null){
+			res.render('./user/login',{"type":type, "groupSn":groupSn});
+		} else {
+			res.render('index',{"type":type, "emplyrSn":req.session.user.emplyrSn, "groupSn":groupSn});
 		}
 	})
 
 	// 그룹 초대를 받아 온 화면 
 	app.get('/index/group', function(req, res, next){
-		console.log(req);
+		var groupSn = req.query.groupSn;
 		if(req.session.user == "" || req.session.user == null){
-			res.render('./user/login',{data:"group"});
+			res.render('./user/login',{"type":"group", "groupSn":groupSn});
 		} else {
-			res.render('./user/login',{"emplyrSn":req.session.user.emplyrSn});
+			res.render('index',{"emplyrSn":req.session.user.emplyrSn, "type":"group", "groupSn":groupSn});
 		}
 	})
 

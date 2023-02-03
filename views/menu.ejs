@@ -55,10 +55,13 @@
 								<i class="fa-sharp fa-solid fa-chevron-down ico_down"></i>
 								<span>내 그룹</span>
 							</a>
-							<input type="hidden" id="groupSn" name="groupSn" />
-							<input type="hidden" id="groupNm" name="groupNm" />
-							<input type="hidden" id="emplyrNm" name="emplyrNm" />
-							<input type="hidden" id="emplyrId" name="emplyrId" />
+							<% if(type == 'group') { %>
+								<input type="hidden" id="groupSn_invite" name="groupSn_invite" value= <%= groupSn %> >
+							<% } %>
+							<input type="hidden" id="groupSn" name="groupSn" >
+							<input type="hidden" id="groupNm" name="groupNm" >
+							<input type="hidden" id="emplyrNm" name="emplyrNm" >
+							<input type="hidden" id="emplyrId" name="emplyrId" >
 						</li>
 					</summary>
 					<div class="foldable_menu">
