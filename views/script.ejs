@@ -251,13 +251,22 @@
 				$('.next_modal').hide();
 
 				$('#input_group').focus();
+
+				document.getElementById('input_group').value = "";
+				document.getElementById('preview_group').src = "";
+
+				document.getElementById('void_btn').disabled = true;
 			};
 
 			// 모임만들기 모달 닫기
 			function closeModal() {
 				$('.modal_wrap').hide();
 				$('.next_modal').hide();
+				/*
 				document.getElementById('input_group').value = "";
+				document.getElementById('preview_group').src = "";
+
+				document.getElementById('void_btn').disabled = true;*/
 				
 				// 메뉴 selected 없애기
 				document.getElementById('sMenu30').classList.remove('selected');
@@ -270,15 +279,26 @@
 				var emplyrSn = $('#emplyrSn').val();
 				var groupNm = $('#input_group').val();
 
+				var formData = new FormData();
+				formData.append('groupImg', $('#file-input-view102')[0].files[0]);
+				formData.append('emplyrSn', emplyrSn);
+                formData.append('groupNm', groupNm);
+				formData.append('useAt', "Y");
+				
 				// 이 시점에서 그룹을 만든다.
 				$.ajax({
 					url : "/insertNewGroup",
 					type : "POST",
-					dataType : "JSON",
-					data : {"emplyrSn" : emplyrSn, "groupNm" : groupNm, "useAt" : "Y"},
+                    processData : false,
+					contentType : false,
+					async : false,
+					enctype: 'multipart/form-data',
+					dataType : "JSON", //"JSON"
+                    data : formData,
 					success:function(result){
 						if(result == "S"){
 							$('.next_modal').show();
+							$('#input_group').val('');
 							mygroup();
 						} else {
 							alert("새 모임 만들기 중 오류가 발생하였습니다.(ajax성공)");
@@ -289,6 +309,19 @@
 					}
 				})
 			};
+
+			// 그룹 대표 사진 업로드 전 미리보기(모임만들기)
+            function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById('preview_group').src = e.target.result;
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                } else {
+                    document.getElementById('preview_group').src = "";
+                }
+            }
 
 			// 다음버튼 활성화/비활성화
 			function nextBtn(){				

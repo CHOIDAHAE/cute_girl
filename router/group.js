@@ -55,7 +55,7 @@ module.exports = function(app){
 	})
 
   	// 새 모임 추가하기
-	app.post("/insertNewGroup", function(req, res){		
+	app.post("/insertNewGroup", upload.single('groupImg'),  function(req, res){
 		oracledb.getConnection({
 			user:dbConfig.user,
 			password:dbConfig.password,
@@ -71,10 +71,9 @@ module.exports = function(app){
 
 			//query format
 			let format = {language: 'sql', indent: ''};
-			var sample = { "test" : "1" };
 
-			//getStatement(namespace명, queryId, parameter, format);
-			let selectGroupSn = mybatisMapper.getStatement('GroupDAO','selectGroupSn', sample, format);
+			//그룹 일련번호 조회
+			let selectGroupSn = mybatisMapper.getStatement('GroupDAO','selectGroupSn', {}, format);
 
 			//쿼리문 실행
 			conn.execute(selectGroupSn, function(err,result){
@@ -83,9 +82,10 @@ module.exports = function(app){
 					doRelease(conn);
 					return;
 				}
-
+				
+				var groupSn = result.rows[0][0];
 				var param = {
-					groupSn	: result.rows[0][0],
+					groupSn	: groupSn,
 					emplyrSn : req.body.emplyrSn,
 					groupNm : req.body.groupNm,
 					useAt : req.body.useAt
@@ -111,13 +111,77 @@ module.exports = function(app){
 							res.json("F");
 							doRelease(conn);
 							return;
+						}						
+					})
+					
+					// 파일이 있으면 파일 업로드
+					if(typeof req.file != 'undefined'){
+						/*
+						fs.readdir('../uploadedGroupFiles', (error) => {
+							// uploads 폴더 없으면 생성
+							if (error) {
+								fs.mkdirSync('/uploadedGroupFiles');
+							}
+						});
+						*/
+
+						if(req.fileValidationError != null){
+							res.json("exe");
+							return;
 						}
+						
+						//그냥 파일명을 가져올 경우 한글이 깨지는 오류 수정
+						//var fileNm = Buffer.from(req.file.originalname, 'latin1').toString('utf8');
+						// var fileExt = req.file.originalname.split(".");
+
+						var FILE_STRE_COURS_NM = '/uploadedGroupFiles';
+						//var FILE_NM = fileNm;
+						var ORGINL_FILE_NM = req.file.filename;
+						//var FILE_EXTSN_NM = fileExt[fileExt.length - 1];
+						//var FILE_MG = req.file.size;
+						//var ORGINL_FILE_EXTSN_NM = req.file.mimetype;
+
+						//fileSn 찾아오기
+						let selectFileSn = mybatisMapper.getStatement('GroupDAO','selectFileSn', {"groupSn"	: groupSn}, format);
+
+						//fileSn Max찾아오기
+						conn.execute(selectFileSn, function(err,result){
+							if(err){
+								console.log("selectFileSn failed :", err);
+								res.json({"Status":"F"});
+								return;
+							}
+						
+							var param = {
+								"emplyrSn"		: req.session.user.emplyrSn,
+								"fileSn"		: result.rows[0][0],
+								"mainFileAt"	: 'Y',
+								"groupSn"		: groupSn,
+								"orgFileNm"		: ORGINL_FILE_NM,
+								"filePath"		: FILE_STRE_COURS_NM
+							}
+
+							//파일 등록
+							let insertGroupFile = mybatisMapper.getStatement('GroupDAO','insertGroupFile', param, format);
+
+							conn.execute(insertGroupFile, function(err,result){
+								if(err){
+									console.log(err);
+									res.json("F");
+								}
+								// 커밋
+								conn.commit();
+
+								res.json("S");
+								
+							})
+						})
+					} else {
 						// 커밋
 						conn.commit();
-					})
-					res.json("S");
-					
-					//doRelease(conn);	
+
+						res.json("S");
+					}
 				});
 			});
 		});
@@ -447,7 +511,7 @@ module.exports = function(app){
 
 						//파일 등록
 						let insertGroupFile = mybatisMapper.getStatement('GroupDAO','insertGroupFile', param, format);
-						console.log(param);
+						
 						conn.execute(insertGroupFile, function(err,result){
 							if(err){
 								console.log(err);
@@ -587,6 +651,8 @@ module.exports = function(app){
 						return;
 					}
 					
+					console.log(resul.rows[0][0]);
+
 					res.json({
 							"Status"		: "S",
 							"originalname"	: originalname,

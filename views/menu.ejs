@@ -84,11 +84,12 @@
 										<div class="toge_add_group">
 											<div class="toge_add_thum">
 												<span class="add_pho add_pho_v2 none_thum">
+													<img id="preview_group" src="" height="120" width="120">
 													<span class="add_photo_ic">사진</span>
 													<label for="file-input-view102">
 														<span class="blind">사진 선택</span>
 													</label>
-													<input type="file" id="file-input-view102">
+													<input type="file" id="file-input-view102" name="groupImg" onchange="readURL(this);">
 												</span>
 											</div>
 											<div class="toge_add_text">
