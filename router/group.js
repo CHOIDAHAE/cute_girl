@@ -51,7 +51,7 @@ module.exports = function(app){
 	
 	// 그룹 업로드 팝업(iframe)
 	app.get('/groupUpload', function(req, res, next){
-		res.render('./group/groupUpload');
+		res.render('./group/groupUpload', {"popType" : req.query.popType});
 	})
 
   	// 새 모임 추가하기
@@ -687,15 +687,16 @@ module.exports = function(app){
 			
 			var param = {
 				"emplyrSn"	: req.body.emplyrSn,
-				"groupSn"	: req.body.groupSn
+				"groupSn"	: req.body.groupSn,
+				"popType"	: req.body.popType,
 			};
 
 			let query = "";
-			console.log("req.body.type: "+req.body.type);
+
 			//쿼리
-			if (req.body.type == "BK"){
+			if (req.body.type == "BK"){	// 즐겨찾기
 				query = mybatisMapper.getStatement('GroupDAO','selectBkmkPictureList', param, format);
-			} else {
+			} else {	//전체
 				query = mybatisMapper.getStatement('GroupDAO','selectPictureList', param, format);
 			}
 

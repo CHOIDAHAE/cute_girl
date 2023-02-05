@@ -7,7 +7,8 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" />
 		<script>
             $(document).ready(function(){
-                myPictureList();    // 업로드용 내 모든사진 조회
+                var popType = $("#popType").val();
+                myPictureList('ALL', popType);    // 업로드용 내 모든사진 조회
 			});
 			
 			// 닫기 버튼
@@ -22,8 +23,17 @@
 				$('#ly_task').toggle();
 			};
 
+            function myPictureList_type(type){
+                var popType = $("#popType").val();
+                myPictureList(type, popType);
+            }
+
 			// 내사진 보기(업로드용)
-			function myPictureList(type){
+			function myPictureList(type, popType){
+                /*
+                type    : ALL(전체조회)/BK(즐겨찾기)
+                popType : image(사진업로드)
+                */
 				var emplyrSn = window.parent.$('#emplyrSn').val();
                 var groupSn = window.parent.$('#groupSn').val();
 				
@@ -31,10 +41,8 @@
 					url : "/myPictureList",
 					type : "POST",
 					dataType : "JSON", //"JSON"
-					data : {"emplyrSn" : emplyrSn, "groupSn" : groupSn, "type" : type},
+					data : {"emplyrSn" : emplyrSn, "groupSn" : groupSn, "type" : type, "popType" : popType},
 					success:function(res){
-                        console.log(type);
-                        console.log(res);
 						if(res.Status == "S"){
 							document.getElementById("total_length").value = res.result.length;
 							var content = "";
@@ -175,6 +183,7 @@
 	</head>
     <body style="user-select: none; -ms-user-select: none">
 		<input type="hidden" id="total_length" name="chk_length" value="" />
+        <input type="hidden" id="popType" name="popType" value= <%= popType %> >
         <div id="mini_wrap" class="mini_wrap">
             <div class="mini_header">
                 <h1 class="mi_logo">
@@ -238,10 +247,10 @@
                                     </span>
                                     <ul class="task_tab_list gubun_list">
                                         <li class="selected">
-                                            <a onclick="myPictureList('ALL')">전체</a>
+                                            <a onclick="myPictureList_type('ALL')">전체</a>
                                         </li>
                                         <li class="gubun_list">
-                                            <a onclick="myPictureList('BK')">즐겨찾기</a>
+                                            <a onclick="myPictureList_type('BK')">즐겨찾기</a>
                                         </li>
                                     </ul>
                                 </div>                                

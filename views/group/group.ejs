@@ -220,7 +220,7 @@
 
             // 파일 업로드 시 뜨는 팝업
             function uploadPopup(){
-                document.getElementById('iframe_photo').src = "/groupUpload";
+                document.getElementById('iframe_photo').src = "/groupUpload?popType=image";
                 // iframe(그룹 파일 업로드 팝업)
                 document.getElementById('iframe_photo').setAttribute('style', 'visibility:visible;');
             };
@@ -235,7 +235,14 @@
             // 사진 아이콘 클릭
             function uploadPicture(){
                 // iframe(그룹 파일 업로드 팝업)
-                document.getElementById('iframe_story').src = "/groupUpload";
+                document.getElementById('iframe_story').src = "/groupUpload?popType=image";
+                document.getElementById('iframe_story').setAttribute('style', 'visibility:visible;');
+            }
+
+            // 오디오 아이콘 클릭
+            function uploadAudio(){
+                // iframe(그룹 파일 업로드 팝업)
+                document.getElementById('iframe_story').src = "/groupUpload?popType=audio";
                 document.getElementById('iframe_story').setAttribute('style', 'visibility:visible;');
             }
 
@@ -499,7 +506,7 @@
                                                                         <a class="b_video">
                                                                             <span class="ic_ph"><i class="fa-solid fa-video"></i></span>동영상
                                                                         </a>    
-                                                                        <a class="b_audio">
+                                                                        <a class="b_audio" onclick="uploadAudio();">
                                                                             <span class="ic_ph"><i class="fa-solid fa-microphone"></i></span>오디오                                                                
                                                                         </a>
                                                                     </div>

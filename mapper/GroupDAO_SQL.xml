@@ -314,6 +314,7 @@
 		WHERE
 			TAD.FRST_REGISTER_SN = #{emplyrSn}
 		AND TAD.USE_AT = 'Y'
+		AND TAD.ORGINL_FILE_EXTSN_NM LIKE #{popType}||'%'
 	</select>
 
 	<!-- 그룹 업로드용 즐겨찾기 사진 조회 -->
@@ -334,8 +335,9 @@
 			TCM_EMPLYRBY_BKMK BKMK
 		WHERE
 			TAD.ATCHMNFL_SN = BKMK.ATCHMNFL_SN
-		AND	TAD.FRST_REGISTER_SN = '2022000001'
+		AND	TAD.FRST_REGISTER_SN = #{emplyrSn}
 		AND TAD.USE_AT = 'Y'
+		AND TAD.ORGINL_FILE_EXTSN_NM LIKE #{popType}||'%'
 	</select>
 
 	<!-- 그룹 업로드 시 해당 파일의 상세조회 -->
@@ -371,8 +373,4 @@
 		ORDER BY PIC.FRST_REGIST_DT DESC
 	</select>
 
-	<!-- 초대된 그룹에 가입하기 -->
-	<insert id="insertInvitedGroup">
-
-	</insert>
 </mapper>
