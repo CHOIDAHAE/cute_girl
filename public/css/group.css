@@ -1393,6 +1393,7 @@ button .tx {
     border: 1px solid #e6e6e8;
     background-color: #fff;
     min-height: 31px;
+    width: 520px;
 }
 
 .comm_input .textarea_input textarea {
@@ -1407,7 +1408,7 @@ button .tx {
 }
 
 .comm_input .textarea_input .btn_submit {
-    display: none;
+    /*display: none;*/
     position: absolute;
     right: 0;
     bottom: 0;
@@ -1419,6 +1420,10 @@ button .tx {
     border: 1px solid #c3c3c3;
     background-color: #cccccc;
     color: #fff;
+}
+
+.on_write .textarea_input .btn_submit, .over_write .textarea_input .btn_submit {
+    display: block;
 }
 
 button {

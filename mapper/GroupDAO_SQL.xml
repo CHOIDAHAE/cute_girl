@@ -360,9 +360,14 @@
 			PIC.FILE_STRE_COURS_NM,
 			PIC.ORGINL_FILE_NM,
 			EMP.EMPLYR_NM || '(' || EMP.EMPLYR_ID || ')',
-			to_char(PIC.FRST_REGIST_DT, 'FMyyyy.mm.dd AM hh') 
-			|| ':' || to_char(PIC.FRST_REGIST_DT, 'mm') 
-			|| ' ' ||TO_CHAR(PIC.FRST_REGIST_DT, 'day')
+			to_char(PIC.FRST_REGIST_DT, 'FMmm')			
+			|| '월' ||
+			to_char(PIC.FRST_REGIST_DT, 'FMdd')
+			|| '일 ' ||
+			to_char(PIC.FRST_REGIST_DT, 'FMAM hh')
+			|| ':' || to_char(PIC.FRST_REGIST_DT, 'mm')
+			|| ' ' ||
+			TO_CHAR(PIC.FRST_REGIST_DT, 'dy')
 		FROM
 			TCM_GROUP_FILE PIC,
 			TCM_EMPLYR EMP
