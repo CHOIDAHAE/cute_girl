@@ -22,6 +22,25 @@
 					</colgroup>
 					<tbody>
 						<tr>
+							<td colspan="2" class="tdImg">
+								<div class="profileBox" onclick="">
+									<img class="profileImg" id="myProfileImg" src="">
+									<label for="myProfileImgUpload">
+										<span class="blind">이미지 선택</span>
+									</label>
+									<input type="hidden" id="myProfileImgUpload" name="myProfileImgUpload" onchange="fn_preview(this);">
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">
+								<div class="thcell">닉네임</div>
+							</th>
+							<td>
+								<div id="nickName" class="tdcell"></div>
+							</td>
+						</tr>
+						<tr>
 							<th scope="row">
 								<div class="thcell"> 사용자명 </div>
 							</th>

@@ -7,6 +7,36 @@ oracledb.autoCommit = true;
 var mybatisMapper = require('mybatis-mapper');
 var crypto = require('crypto');
 
+var multer = require('multer');
+
+var storage = multer.diskStorage({
+    destination(req, file, cb){
+        cb(null, './public/uploadedFiles/');
+    },
+
+    //파일 이름 지정 (저장시 파일명이 깨지는 경우가 있는데 다시 불러올 때 DB에 저장해둔 오리지널 파일명 가져오기)
+    filename(req, file, cb){
+		var orgfileNm = Buffer.from(file.originalname, 'latin1').toString('utf8')
+        cb(null, `${Date.now()}_${orgfileNm}`);
+    },
+});
+
+var fileFilter = (req, file, cb) => {
+	var mimeType = file.mimetype.split("/")[0];
+
+	if(mimeType != "image"){
+		req.fileValidationError = "이미지 파일을 선택해주세요."
+		return cb(null, false);
+	}else{
+		cb(null, true);
+	}
+}
+
+var upload = multer({
+	storage: storage,
+	fileFilter : fileFilter
+});
+
 // Mapper Load(xml이 있는 디렉토리 주소&파일위치)
 mybatisMapper.createMapper( ['./mapper/myPageDAO_SQL.xml']);
 
@@ -52,13 +82,24 @@ module.exports = function(app){
 	})
 
 	//프로필 저장하기
-	app.post('/saveProfile', function(req, res){
+	app.post('/saveProfile', upload.single('myProfileImgUpload'), function(req, res){
 		console.log("saveProfile");
-		
+
+		if(req.fileValidationError != null){
+			res.json("not Image");
+			return;
+		}
+
+		var ORGINL_FILE_NM = req.body.filename;
+		if(req.file != null){
+			ORGINL_FILE_NM = req.file.filename;
+		}
+
 		var sEmplyrSn = req.body.sEmplyrSn;
 		var emplyrNm = req.body.emplyrNm;
 		var emplyrId = req.body.emplyrId;
 		var emailAdres = req.body.emailAdres;
+		var nickName = req.body.nickName;
 
 		
 		oracledb.getConnection({
@@ -81,7 +122,9 @@ module.exports = function(app){
 				sEmplyrSn : sEmplyrSn,
 				emplyrNm : emplyrNm,
 				emplyrId : emplyrId,
-				emailAdres : emailAdres
+				emailAdres : emailAdres,
+				profileImg : ORGINL_FILE_NM,
+				nickname : nickName
 			}
 
 			let query = mybatisMapper.getStatement('MyPageDAO','updateMyProfile', param, format);

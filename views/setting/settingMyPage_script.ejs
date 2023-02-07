@@ -120,37 +120,68 @@
 				$('#emplyrNm').html(res[0][0]);
 				$('#emplyrId').html(res[0][1]);
 				$('#emailAdres').html(res[0][3]);
+				$('#nickName').html(res[0][7]);
+				$('#myProfileImgUpload').attr('type', 'hidden');
+				var src = '../images/sample_image.jpg';
+				if(res[0][6] != null){
+					src = '../uploadedFiles/' + res[0][6];
+				}
+				$('#myProfileImg').attr('src', src);
 			})
 			.fail(function (xhr, textStatus, errorThrown) {
 				console.log('selectFileDtlData ajax 실패');
 			})
 		}
 
+		//프로필 사진 미리보기
+		function fn_preview(input){
+			if(input.files && input.files[0]){
+				var reader = new FileReader();
+				reader.onload = function(e){
+					$('#myProfileImg').attr('src', e.target.result);
+				};
+				reader.readAsDataURL(input.files[0]);
+			}else{
+				$('#myProfileImg').attr('src', '');
+			}
+		}
+
 		//프로필 수정하기
 		function updProfile(){
 			var innerHTML = "";
-			var divId = ['#emplyrNm', '#emplyrId', '#emailAdres'];
-			var divType = ['text', 'text', 'email'];
-			var inputId = ['InEmplyrNm', 'InEmplyrId', 'InEmailAdres'];
+			var divId = ['#nickName', '#emplyrNm', '#emplyrId', '#emailAdres'];
+			var divType = ['text', 'text', 'text', 'email'];
+			var inputId = ['InNickname', 'InEmplyrNm', 'InEmplyrId', 'InEmailAdres'];
 			for(var i=0; i < divId.length; i++){
 				innerHTML = '<input id="' + inputId[i] + '" type="' + divType[i] +'" value="' + $(divId[i]).html() + '">';
 				$(divId[i]).html(innerHTML);
 			}
+
+			$('#myProfileImgUpload').attr('type', 'file');
+
 			$('#updArea').hide();
 			$('#updSaveArea').show();
 		}
 
 		function saveProfile(){
+			var formData = new FormData();
+			formData.append('sEmplyrSn', window.parent.$('#emplyrSn').val());
+			formData.append('nickName', $('#InNickname').val());
+			formData.append('emplyrNm', $('#InEmplyrNm').val());
+			formData.append('emplyrId', $('#InEmplyrId').val());
+			formData.append('emailAdres', $('#InEmailAdres').val());
+			formData.append('filename', $('#myProfileImg').attr("src").split("/")[2]);
+			formData.append('myProfileImgUpload', $('#myProfileImgUpload')[0].files[0]);
+
 			$.ajax({
 				url : "/saveProfile",
 				type : "POST",
+				processData : false,
+				contentType : false,
+				async : false,
+				enctype: 'multipart/form-data',
 				dataType : "JSON", //"JSON"
-				data : {
-					"sEmplyrSn" : window.parent.$('#emplyrSn').val(),
-					"emplyrNm" : $('#InEmplyrNm').val(),
-					"emplyrId" : $('#InEmplyrId').val(),
-					"emailAdres" : $('#InEmailAdres').val()
-				}
+				data : formData
 
 			})
 			.done(function (res) {

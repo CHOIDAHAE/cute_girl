@@ -460,11 +460,16 @@ iframe {
 }
 
 .tbl_model .thcell{
-	padding: 32px 31px 32px;
+	padding:25px 31px 25px;
 }
 
 .tbl_model .tdcell{
-	padding: 32px 0 32px 30px;
+	padding: 25px 0 25px 30px;
+}
+
+.tbl_model .tdImg{
+	padding-top : 5px;
+	padding-bottom: 20px;
 }
 
 .tbl_model tr{
@@ -489,6 +494,48 @@ iframe {
 	letter-spacing: -1px;
 	border: 0;
 	border-top: #e5e5e5;
+}
+
+.profileBox{
+	margin: auto;
+	width: 120px;
+	height: 120px;
+	border-radius: 70%;
+	overflow: hidden;
+	border: #e5e5e5;
+}
+
+.profileBox label{
+	position: absolute;
+	top: 0;
+	left: 30%;
+	width: 40%;
+	height: 30%;
+	z-index: 10;
+	cursor: pointer;
+	border-radius: 50%;
+	margin: auto;
+}
+
+.profileBox input {
+    position: absolute;
+    left: -300px;
+    top: -200px;
+}
+
+.blind {
+	position: absolute;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	margin: -1px;
+	width: 1px;
+	height: 1px;
+	font-size: 0;
+}
+
+.profileImg{
+	width: 120px;
+	height: 120px;
 }
 
 .updInfoArea{

@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="MyPageDAO">
+	<!-- 내 프로필 조회 -->
 	<select id="selectMyProfile">
 		/* myPageDAO.selectMyProfile */
 		SELECT
@@ -11,10 +12,13 @@
 			, EMAIL_ADRES		/* 이메일주소 */
 			, SEXDSTN_CODE		/* 성별 */
 			, EMPLYR_MBTLNUM	/* 전화번호 */
+			, PROFILE_IMG		/* 프로필사진 */
+			, NICKNAME			/* 닉네임 */
 		FROM TCM_EMPLYR TE		/* 사용자 */
 		WHERE FRST_REGISTER_SN = #{sEmplyrSn}
 	</select>
 
+	<!-- 프로필 수정 -->
 	<update id="updateMyProfile">
 		/* MyPageDAO.updateMyProfile */
 		UPDATE TCM_EMPLYR
@@ -22,12 +26,15 @@
 			EMPLYR_NM = #{emplyrNm}
 			, EMPLYR_ID = #{emplyrId}
 			, EMAIL_ADRES = #{emailAdres}
+			, PROFILE_IMG = #{profileImg}
+			, NICKNAME = #{nickname}
 			, LAST_UPDUSR_SN = #{sEmplyrSn}
 			, LAST_UPDT_DT = SYSDATE
 		WHERE
 			FRST_REGISTER_SN = #{sEmplyrSn}
 	</update>
 
+	<!-- 비밀번호 관련 암호화키 조회 -->
 	<select id="selectSalt">
 		/* MyPageDAO.selectSalt */
 		SELECT
@@ -39,6 +46,7 @@
 			EMPLYR_SN = #{sEmplyrSn}
 	</select>
 
+	<!-- 비밀번호 수정 -->
 	<update id="updatePasswd">
 		/* MyPageDAO.updatePasswd */
 		UPDATE TCM_EMPLYR
