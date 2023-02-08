@@ -122,7 +122,7 @@
 					url : "/groupUpload",
 					type : "POST",
 					dataType : "JSON", //"JSON"
-					data : {"emplyrSn" : emplyrSn, "fileSnList" : fileSnList, "groupSn" : groupSn},
+					data : {"emplyrSn" : emplyrSn, "fileSnList" : fileSnList, "groupSn" : groupSn, "type" : "file"},
 					success:function(res){
 						if(res.Status == "S"){
 							alert('사진 업로드가 완료되었습니다.');

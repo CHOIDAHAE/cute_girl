@@ -650,8 +650,6 @@ module.exports = function(app){
 						res.json({"Status":"F"});
 						return;
 					}
-					
-					console.log(resul.rows[0][0]);
 
 					res.json({
 							"Status"		: "S",
@@ -757,25 +755,42 @@ module.exports = function(app){
 						"fileSn"	: result.rows[0][0],
 						"mainFileAt": "N",
 						"filePath"	: result.rows[0][1],
-						"orgFileNm"	: result.rows[0][2],
+						"orgFileNm"	: result.rows[0][2]
 					};
 
 					// 그룹파일에 insert
 					let insertGroupFile = mybatisMapper.getStatement('GroupDAO','insertGroupFile', insertParam, format);
-					console.log(insertGroupFile);
-					conn.execute(insertGroupFile, function(err,result){
+					
+					conn.execute(insertGroupFile, function(err,res){
 						if(err){
 							console.log("insertGroupFile failed :", err);
 							res.json({"Status":"F"});
 							return;
 						}
 
-						conn.commit();
+						var timelineParam = {
+									"emplyrSn"		: req.body.emplyrSn,
+									"groupSn"		: req.body.groupSn,
+									//"timelineDc"	: req.body.timelineDc,
+									"type"			: req.body.type,
+									"fileSn"		: result.rows[0][0]
+											};
+						// 그룹파일에 insert
+						let insertTimeline = mybatisMapper.getStatement('GroupDAO','insertTimeline', timelineParam, format);
+
+						conn.execute(insertTimeline, function(err,result){
+							if(err){
+								console.log("insertTimeline failed :", err);
+								res.json({"Status":"F"});
+								return;
+							}
+	
+							conn.commit();
+						});
 					});
 				});
 			}
 			res.json({"Status":"S"});
-			//conn.commit();
 		});
 	})
 
@@ -833,12 +848,15 @@ module.exports = function(app){
 
 			var data = {
 						"groupSn"	: req.body.groupSn,
-						"emplyrSn"	: req.body.emplyrSn
+						"emplyrSn"	: req.body.emplyrSn,
+						"type"		: 'join',
+						"fileSn"	: ''
 					};
 
 			// 그룹파일에 insert
 			let groupJoinAt = mybatisMapper.getStatement('GroupDAO','groupJoinAt', data, format);
 			let insertPersonalGroup = mybatisMapper.getStatement('GroupDAO','insertPersonalGroup', data, format);
+			let insertTimeline = mybatisMapper.getStatement('GroupDAO','insertTimeline', data, format);
 				
 			conn.execute(groupJoinAt, function(err,result){
 				if(err){
@@ -856,9 +874,18 @@ module.exports = function(app){
 							res.json({"Status":"F"});
 							return;
 						}
-						
-						res.json({"Status":"S", "result" : result.rows});
-						conn.commit();
+
+						// 타임라인 테이블에도 추가 (type:join)
+						conn.execute(insertTimeline, function(err,result){
+							if(err){
+								console.log("insertTimeline failed :", err);
+								res.json({"Status":"F"});
+								return;
+							}
+							
+							res.json({"Status":"S", "result" : result.rows});
+							conn.commit();
+						});						
 					});
 				}
 			});

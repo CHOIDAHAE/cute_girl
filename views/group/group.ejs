@@ -48,11 +48,16 @@
             // 해당 그룹의 정보 세팅
             function selectedGroupInfo(){
                 // 대표사진 및 그룹명 불러오기
+                var groupSn = window.parent.$('#groupSn').val();
+                if(groupSn == '' || groupSn == null){
+                    groupSn = window.parent.$('#groupSn_invite').val();
+                }
+
 				$.ajax({
 					url : "/selectedGroupInfo",
 					type : "POST",
 					dataType : "JSON", //"JSON"
-					data : {"groupSn" : window.parent.$('#groupSn').val()},
+					data : {"groupSn" : groupSn},
                     success:function(res){
 						if(res.Status == "S"){
                             var imgUrl = "";
@@ -273,32 +278,58 @@
                                 var story_content = "";     // 이야기 탭 타임라인
 
                                 for (var i=0; i<photo_length; i++){
-                                    photo_content += '<li class="groupPicture">'
+                                    var content = res.result[i][5];
+                                    var type = res.result[i][6];
+                                    if(content == null){
+                                        content = '';
+                                    }
+
+                                    // 파일 타임라인
+                                    if(type == 'file'){
+                                        photo_content += '<li class="groupPicture">'
                                         +'<div class="item"><a><img src="..'+res.result[i][1]+'/'+res.result[i][2]
                                         +'" style="width:100%; height:100%;"></a></div></li>\n';
 
-                                    story_content += 
-                                        '<div class="together_section"><div class="toge_story_list">'
-                                            +'<a class="user_thum"><img src="" width="55" height="55"></a>'
+                                        story_content += 
+                                            '<div class="together_section"><div class="toge_story_list">'
+                                                +'<a class="user_thum"><img src="" width="55" height="55"></a>'
+                                                +'<div class="toge_box">'
+                                                    +'<h3 class="toge_title"><strong>'+res.result[i][3]+'</strong><span class="load_time">'+res.result[i][4]+'</span></h3>'
+                                                    +'<div class="toge_content_box">'
+                                                        +'<div class="toge_content">'
+                                                            +'<p class="toge_text"><span>'+content+'</span></p>'
+                                                            +'<div class="toge_photo">'
+                                                                +'<ul class="single">'
+                                                                    +'<li class="p_lst">'
+                                                                        +'<a><img class="thumbnail load_success" src="..'+res.result[i][1]+'/'+res.result[i][2]
+                                                                            +'" style="width: 100%; height:100%;"><span class="shadow_in"></span></a></li></ul></div></div></div>'
+                                                    +'<div class="toge_comment">'
+                                                        +'<ul class="comm_list"></ul>'
+                                                        +'<div class="comm_input over_write on_write">'
+                                                            +'<div class="textarea_input">'
+                                                                +'<div class="textarea">'
+                                                                    +'<textarea id="comment_txt" placeholder="댓글을 입력하세요." rows="1" style="overflow: hidden; overflow-wrap: break-word;"></textarea></div>'
+                                                                +'<div class="btn_submit"><button onclick="writeReply()";>전송</button></div>'
+                                                            +'</div></div></div></div></div></div>'
+                                    } else if(type == 'join'){    // 가입 타임라인
+                                        story_content += 
+                                                        '<div class="together_section"><div class="notification"><div class="noti_box">'
+                                                        +'<a class="thum user_thum none_thum" style="cursor: default;"><img src="https://ssl.pstatic.net/static/pwe/photo/blank.gif" width="38" height="38" alt=""></a>'
+                                                        +'<span class="noti_text"><strong class="point_3675c7">'+res.result[i][8]+'</strong>님이 새로운 멤버가 되었습니다.</span>'
+                                                        +'</div></div></div>';
+                                                                            
+                                    } else {    // 스토리 타임라인
+                                        story_content +=
+                                        '<div class="together_section"><div class="toge_story_list"><a class="user_thum">'
+                                            +'<img src="https://phinf.pstatic.net/contact/20191208_97/1575799615169u2oGo_JPEG/2.jpg?type=f160_160" width="55" height="55"></a>'
                                             +'<div class="toge_box">'
-                                                +'<h3 class="toge_title"><strong>'+res.result[i][3]+'</strong><span class="load_time">'+res.result[i][4]+'</span></h3>'
-                                                +'<div class="toge_content_box">'
-                                                    +'<div class="toge_content">'
-                                                        +'<p class="toge_text"><span>2022.10.21, 대구시 진천동에서</span></p>'
-                                                        +'<div class="toge_photo">'
-                                                            +'<ul class="single">'
-                                                                +'<li class="p_lst">'
-                                                                    +'<a><img class="thumbnail load_success" src="..'+res.result[i][1]+'/'+res.result[i][2]
-                                                                        +'" style="width: 100%; height:100%;"><span class="shadow_in"></span></a></li></ul></div></div></div>'
-                                                +'<div class="toge_comment">'
-                                                    +'<ul class="comm_list"></ul>'
-                                                    +'<div class="comm_input over_write on_write">'
-                                                        +'<div class="textarea_input">'
-                                                            +'<label for="comment_txt">댓글을 입력하세요.</label>'
-                                                            +'<div class="textarea">'
-                                                                +'<textarea id="comment_txt" placeholder="댓글을 입력하세요." rows="1" style="overflow: hidden; overflow-wrap: break-word;"></textarea></div>'
-                                                            +'<div class="btn_submit"><button onclick="writeReply()";>전송</button></div>'
-                                                        +'</div></div></div></div></div></div>'
+                                                +'<h3 class="toge_title"><strong>다행이당</strong><span class="load_time">몇 초 전</span></h3>'
+                                                +'<div class="toge_content_box"><div class="toge_content"><p class="toge_text"><span>스토리 테스트중입니다.</span></p>'
+                                                    +'<div class="toge_audio_box"></div></div></div>'
+                                                    +'<div class="toge_comment"><ul class="comm_list"></ul><div class="comm_input"><div class="textarea_input"><div class="textarea">'
+                                                        +'<textarea id="comment_txt" placeholder="댓글을 입력하세요." rows="1" style="overflow: hidden; overflow-wrap: break-word; height: 18px;"></textarea></div>'
+                                                        +'<div class="btn_submit"><button>전송</button></div></div></div></div></div></div></div>';
+                                    }
                                 }
                                 
                                 $('#together_story_section').html(story_content);   // 조회된 사진 리스트(이야기)

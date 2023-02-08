@@ -322,6 +322,58 @@ a, .rightmenu_layer {
     top: 32px;
 }
 
+.notification {
+    min-height: 75px;
+    padding: 0 0 0 112px;
+}
+
+.notification .noti_box {
+    position: relative;
+    min-height: 75px;
+    border: 1px solid #d9d9d9;
+    background-color: #fff;
+    border-radius: 2px;
+    -webkit-box-shadow: 0 2px 1px -1px #d6d6d6;
+    box-shadow: 0 2px 1px -1px #d6d6d6;
+    white-space: nowrap;
+}
+
+.notification .thum.none_thum {
+    background: #c6c6c6 url(https://ssl.pstatic.net/static/pwe/ndrive/new_ndrive/thum_progress_comm.png) no-repeat 0 0;
+}
+
+.notification .thum {
+    position: absolute;
+    left: 20px;
+    top: 17px;
+    width: 38px;
+    height: 38px;
+    overflow: hidden;
+    display: inline-block;
+    border-radius: 19px;
+    vertical-align: middle;
+}
+
+.notification .thum.none_thum img {
+    display: none;
+}
+
+.notification .noti_text {
+    display: inline-block;
+    padding: 0 20px 0 67px;
+    vertical-align: middle;
+    color: #444;
+    font-size: 14px;
+    line-height: 18px;
+    white-space: normal;
+    word-break: break-all;
+    margin-top: 28px;
+}
+
+.point_3675c7 {
+    color: #157efd;
+}
+
 .toge_story_list .user_thum {
     position: absolute;
     overflow: hidden;

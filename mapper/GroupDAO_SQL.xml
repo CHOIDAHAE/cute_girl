@@ -262,12 +262,40 @@
 		)
 	</insert>
 
+	<!-- 타임라인에 등록 -->
+	<insert id="insertTimeline">
+        INSERT INTO TCM_TIMELINE
+		(
+			TIMELINE_SN,
+			AUTHOR_GROUP_SN,
+			TYPE,
+			FILE_SN,
+			EMPLYR_SN,
+			FRST_REGISTER_SN,
+			FRST_REGIST_DT,
+			LAST_UPDUSR_SN,
+			LAST_UPDT_DT
+		) 
+		VALUES
+		(
+			(SELECT NVL(MAX(TIMELINE_SN), 0) +1 TIMELINE_SN FROM TCM_TIMELINE LINE WHERE LINE.AUTHOR_GROUP_SN = #{groupSn}),
+			#{groupSn},
+			#{type},
+			#{fileSn},
+			#{emplyrSn},
+			#{emplyrSn},
+			SYSDATE,
+			#{emplyrSn},
+			SYSDATE
+		)
+    </insert>
+
 	<!-- 그룹 정보 조회 -->
 	<select id="selectGroupInfo">
 		SELECT
 			GRP.AUTHOR_GROUP_NM,
 			TO_CHAR(GRP.FRST_REGIST_DT, 'YYYY.MM.DD') FRST_REGIST_DT,
-			EMP.EMPLYR_NM || '(' || EMP.EMPLYR_ID || ')'	--리더 명
+			EMP.EMPLYR_NM || '(' || EMP.EMPLYR_ID || ')' LEADER_NM
 		FROM
 			TCM_AUTHOR_GROUP GRP,
 			TCM_EMPLYR EMP
@@ -367,15 +395,21 @@
 			to_char(PIC.FRST_REGIST_DT, 'FMAM hh')
 			|| ':' || to_char(PIC.FRST_REGIST_DT, 'mm')
 			|| ' ' ||
-			TO_CHAR(PIC.FRST_REGIST_DT, 'dy')
+			TO_CHAR(PIC.FRST_REGIST_DT, 'dy'),
+			NVL(LINE.TIMELINE_DC, '') TIMELINE_DC,
+			LINE.TYPE,
+			LINE.FRST_REGISTER_SN,
+			EMP.EMPLYR_NM
 		FROM
 			TCM_GROUP_FILE PIC,
+			TCM_TIMELINE LINE,
 			TCM_EMPLYR EMP
 		WHERE
-			PIC.EMPLYR_SN = EMP.EMPLYR_SN
-		AND	AUTHOR_GROUP_SN = #{groupSn}
-		AND MAIN_FILE_AT = 'N'
-		ORDER BY PIC.FRST_REGIST_DT DESC
+			LINE.EMPLYR_SN = EMP.EMPLYR_SN
+		AND LINE.AUTHOR_GROUP_SN = PIC.AUTHOR_GROUP_SN(+)
+		AND	LINE.AUTHOR_GROUP_SN = #{groupSn}
+		AND PIC.MAIN_FILE_AT(+) = 'N'
+		ORDER BY LINE.TIMELINE_SN DESC
 	</select>
 
 </mapper>
