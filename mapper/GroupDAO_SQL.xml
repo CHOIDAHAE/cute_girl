@@ -295,6 +295,34 @@
 		)
     </insert>
 
+	<!-- 댓글 등록 -->
+	<insert id="insertComment">
+        INSERT INTO TCM_COMMENT
+		(
+			COMMENT_SN,
+			TIMELINE_SN,
+			AUTHOR_GROUP_SN,
+			COMMENT_DC,
+			FRST_REGISTER_SN,
+			FRST_REGIST_DT
+		) 
+		VALUES
+		(
+			(SELECT
+				NVL(MAX(COMMENT_SN), 0) +1 COMMENT_SN 
+			FROM
+				TCM_COMMENT COMM 
+			WHERE
+				COMM.AUTHOR_GROUP_SN = #{groupSn} 
+			AND COMM.TIMELINE_SN = #{timelineSn}),
+			#{timelineSn},
+			#{groupSn},
+			#{commentDc},
+			#{emplyrSn},
+			SYSDATE
+		)
+    </insert>
+
 	<!-- 그룹 정보 조회 -->
 	<select id="selectGroupInfo">
 		SELECT
@@ -404,7 +432,8 @@
 			NVL(LINE.TIMELINE_DC, '') TIMELINE_DC,
 			LINE.TYPE,
 			LINE.FRST_REGISTER_SN,
-			EMP.EMPLYR_NM
+			EMP.EMPLYR_NM,
+			LINE.TIMELINE_SN
 		FROM
 			TCM_GROUP_FILE PIC,
 			TCM_TIMELINE LINE,

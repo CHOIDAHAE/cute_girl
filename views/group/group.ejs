@@ -350,12 +350,13 @@
                                                                         +'<a><img class="thumbnail load_success" src="..'+res.result[i][1]+'/'+res.result[i][2]
                                                                             +'" style="width: 100%; height:100%;"><span class="shadow_in"></span></a></li></ul></div></div></div>'
                                                     +'<div class="toge_comment">'
+                                                        +'<input type="hidden" name="timelineSn" id="timelineSn" value = "'+ res.result[i][9] +'"'
                                                         +'<ul class="comm_list"></ul>'
                                                         +'<div class="comm_input over_write on_write">'
                                                             +'<div class="textarea_input">'
                                                                 +'<div class="textarea">'
-                                                                    +'<textarea id="comment_txt" placeholder="댓글을 입력하세요." rows="1" style="overflow: hidden; overflow-wrap: break-word;"></textarea></div>'
-                                                                +'<div class="btn_submit"><button onclick="writeReply()";>전송</button></div>'
+                                                                    +'<textarea id="comment_txt_'+res.result[i][9]+'" placeholder="댓글을 입력하세요." rows="1" style="overflow: hidden; overflow-wrap: break-word;" onkeyup="button_control('+res.result[i][9]+');"></textarea></div>'
+                                                                +'<div class="btn_submit"><button id="button_'+res.result[i][9]+'" onclick="writeReply('+res.result[i][9]+')";>전송</button></div>'
                                                             +'</div></div></div></div></div></div>'
                                     } else if(type == 'join'){    // 가입 타임라인
                                         story_content += 
@@ -363,7 +364,7 @@
                                                         +'<a class="thum user_thum none_thum" style="cursor: default;"><img src="https://ssl.pstatic.net/static/pwe/photo/blank.gif" width="38" height="38" alt=""></a>'
                                                         +'<span class="noti_text"><strong class="point_3675c7">'+res.result[i][8]+'</strong>님이 새로운 멤버가 되었습니다.</span>'
                                                         +'</div></div></div>';
-                                                                            
+
                                     } else {    // 스토리 타임라인
                                         story_content +=
                                         '<div class="together_section"><div class="toge_story_list"><a class="user_thum">'
@@ -391,10 +392,51 @@
 				})
             };
 
+            // 댓글달기 버튼 활성화/비활성화
+            function button_control(timelineSn){
+                var id = '#comment_txt_'+timelineSn;
+                var content = $(id).val();
+                var button_id = '#button_'+timelineSn;
+
+                if(content.length > 0){
+                    $(button_id).css("background-color","#157efd");
+                } else {
+                    $(button_id).css("background-color","#cccccc");
+                }
+            };
+
             // 댓글달기 버튼 클릭 이벤트
-            function writeReply(){
-                //console.log(this);
-                alert('댓글달기');
+            function writeReply(timelineSn){
+                console.log("timelineSn: "+timelineSn);
+                var groupSn = $('#groupSn').val();
+                // 댓글내용
+                var id = '#comment_txt_'+timelineSn;
+                var commentDc = $(id).val();
+                
+
+                console.log('댓글내용: ');
+                console.log(commentDc);
+
+                if(commentDc == null || commentDc == ""){
+                    return;
+                }
+
+                $.ajax({
+					url : "/insertComment",
+					type : "POST",
+					dataType : "JSON", //"JSON"
+					data : {"groupSn" : groupSn, "timelineSn" : timelineSn, "commentDc" : commentDc},
+					success:function(res){
+                        if(res.Status == "S"){
+							// 타임라인 재조회
+                        } else if(res.Status == "F"){
+                            alert("댓글달기 도중 오류가 발생하였습니다.");
+                        }
+					},
+					error:function(e){
+						alert("댓글달기 도중 오류가 발생하였습니다.(ajax에러)");
+					}
+				})
             };
 
             // 멤버초대 열기

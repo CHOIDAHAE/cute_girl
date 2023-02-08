@@ -831,6 +831,47 @@ module.exports = function(app){
 		});
 	})
 
+	// 댓글달기
+	app.post("/insertComment", function(req, res){
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(selectForGroup)",err);
+			} else {
+				//console.log("Oracle Connection success(selectForGroup)");
+			}
+			conn = con;
+
+			//query format
+			let format = {language: 'sql', indent: ''};
+
+			let param = {
+					"groupSn"		: req.body.groupSn,
+					"timelineSn"	: req.body.timelineSn,
+					"commentDc"		: req.body.commentDc,
+					"emplyrSn"		: req.session.user.emplyrSn
+				};
+
+			// 그룹파일에 insert
+			let insertComment = mybatisMapper.getStatement('GroupDAO','insertComment', param, format);
+
+			conn.execute(insertComment, function(err,result){
+				if(err){
+					console.log("insertComment failed :", err);
+					res.json({"Status":"F"});
+					return;
+				}
+				
+				res.json({"Status":"S", "result" : result.rows});
+				conn.commit();
+			});
+		});	
+	})
+
 	// 그룹 첨부하기
 	app.post("/selectForGroup", function(req, res){
 		oracledb.getConnection({
