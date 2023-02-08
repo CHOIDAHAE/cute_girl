@@ -108,7 +108,11 @@
 						if(res.Status == "S"){
                             var member = "";
                             var length = res.result.length;
-                            
+                            var groupNm = res.result[0][3];
+
+                            $(".member_cnt").text(length);
+                            $("#member_groupNm").text(groupNm);
+                                                        
                             for( var i=0; i<length; i++){
                                 member += '<li class=""><a><span class="thumb">'
                                     +'<img src="https://phinf.pstatic.net/contact/20191208_97/1575799615169u2oGo_JPEG/2.jpg?type=f160_160" width="45" height="45" alt=""></span>'
@@ -144,7 +148,7 @@
             
             // 모임나가기 확인 버튼 클릭
             function outGroup(){
-                var groupSn = $('#emplyrSn').val();
+                var emplyrSn = $('#emplyrSn').val();
                 var groupSn = $('#groupSn').val();
                 
                 $.ajax({
@@ -470,11 +474,11 @@
                                         <div id="member_modal" class="my_layer member_width" style="display: none;">
                                             <h4 class="my_tit">
                                                 <span class="tit_txt">
-                                                    <span class="num">(<em>2</em>/200명)</span>
-                                                    <span class="txt">마이드라이브</span>
+                                                    <span class="num">(<em><span class="member_cnt"></span></em>/10명)</span>
+                                                    <span class="txt"><span id="member_groupNm"></span></span>
                                                 </span>
                                             </h4>
-                                            <ul class="my_layer_list"></ul>
+                                            <ul class="my_layer_list" style="min-height: 80px;"></ul>
                                             <a class="my_btn_member">멤버초대</a>
                                         </div>
                                     </div>
@@ -622,7 +626,7 @@
                                                                 <strong class="point_3675c7"><span class="leaderNm"></span></strong>님이&nbsp;
                                                                 <strong><span class="groupNm"></span></strong> 모임을 시작합니다.
                                                             </h3>
-                                                            <p class="text">MYDRIVE에 저장되어 있는 우리 아기 사진, 가족 여행 사진,<br>멋진 야경 사진 등 일상과 추억을 가족, 친구와 함께 나눠보세요!<br>멤버는 최대 200명까지 초대할 수 있습니다.</p>
+                                                            <p class="text">MYDRIVE에 저장되어 있는 우리 아기 사진, 가족 여행 사진,<br>멋진 야경 사진 등 일상과 추억을 가족, 친구와 함께 나눠보세요!<br>멤버는 최대 10명까지 초대할 수 있습니다.</p>
                                                             <a class="my_btn_member" onclick="inviteMember()">멤버초대</a>
                                                         </div>
                                                         <div id="inviteMember" class="dh_layer pop_pht_wrap" style="width: 459px;">
