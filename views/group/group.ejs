@@ -8,15 +8,21 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" />
 		<script>
             $(document).ready(function(){
-                var emplyrSn = window.parent.$('#emplyrSn').val();
+                // 대표사진 및 그룹명 불러오기
                 var groupSn = window.parent.$('#groupSn').val();
+                var emplyrSn = window.parent.$('#emplyrSn').val();
+
+                if(groupSn == '' || groupSn == null){
+                    groupSn = window.parent.$('#groupSn_invite').val();
+                }               
                 
                 document.getElementById("emplyrSn").value = emplyrSn;
                 document.getElementById("groupSn").value = groupSn;
 
                 // 모달 제어 (깜빡이는거 나중에 해결 예정)
-                $('.my_layer').hide(); // 설정
+                $('#setting_modal').hide(); // 설정
                 $('.out_modal_wrap').hide(); // 모임나가기
+                $('#member_modal').hide(); // 멤버
 
                 // 수정버튼 누르기전 까진 안보임
                 document.getElementById('input_title').style.display = "none";
@@ -47,11 +53,7 @@
             
             // 해당 그룹의 정보 세팅
             function selectedGroupInfo(){
-                // 대표사진 및 그룹명 불러오기
-                var groupSn = window.parent.$('#groupSn').val();
-                if(groupSn == '' || groupSn == null){
-                    groupSn = window.parent.$('#groupSn_invite').val();
-                }
+                var groupSn = $('#groupSn').val();
 
 				$.ajax({
 					url : "/selectedGroupInfo",
@@ -87,12 +89,52 @@
 				})
             }
 
-            //설정 아이콘
+            //멤버 아이콘 클릭 이벤트
+            function member(){
+                //멤버 모달
+                $('#member_modal').toggle();
+                //설정 모달
+                $('#setting_modal').hide();
+
+                var groupSn = $('#groupSn').val();
+
+                $.ajax({
+					url : "/selectGropMember",
+					type : "POST",
+					dataType : "JSON", //"JSON"
+					data : {"groupSn" : groupSn},
+                    success:function(res){
+                        console.log(res);
+						if(res.Status == "S"){
+                            var member = "";
+                            var length = res.result.length;
+                            
+                            for( var i=0; i<length; i++){
+                                member += '<li class=""><a><span class="thumb">'
+                                    +'<img src="https://phinf.pstatic.net/contact/20191208_97/1575799615169u2oGo_JPEG/2.jpg?type=f160_160" width="45" height="45" alt=""></span>'
+                                    +'<span class="tit">'+res.result[0][2]+'&nbsp;</span>'
+                                    +'</a></li>'
+                            }
+
+                            $('.my_layer_list').html(member);
+                            
+						} else if(res.Status == "F"){
+							alert("멤버 목록 조회 중 오류가 발생하였습니다.");
+						}
+					},
+					error:function(e){
+						alert("멤버 목록 조회 중 오류가 발생하였습니다.(ajax에러)");
+					}
+				})
+            }
+            //설정 아이콘 클릭 이벤트
             function setting(){
                 //설정 모달
-                $('.my_layer').toggle();
+                $('#setting_modal').toggle();
                 // 모임나가기 모달
                 $('.out_modal_wrap').hide();
+                //멤버 모달
+                $('#member_modal').hide();
             }
 
             //모임 나가기 버튼 클릭 시 확인 창
@@ -102,8 +144,8 @@
             
             // 모임나가기 확인 버튼 클릭
             function outGroup(){
-                var emplyrSn = window.parent.$('#emplyrSn').val();
-                var groupSn = window.parent.$('#groupSn').val();
+                var groupSn = $('#emplyrSn').val();
+                var groupSn = $('#groupSn').val();
                 
                 $.ajax({
 					url : "/updateGroupUseAt",
@@ -143,7 +185,7 @@
                     $('.out_modal_wrap').hide();
                 } else if (data == "setting") {
                     // 설정 모달 닫기
-                    $('.my_layer').hide();
+                    $('#setting_modal').hide();
                     
                     control_groupNm();
                 }
@@ -161,8 +203,8 @@
 
             // 그룹명, 그룹대표사진 수정 후 변경작업
             function okBtnClick(){
-                var emplyrSn = window.parent.$('#emplyrSn').val();
-                var groupSn = window.parent.$('#groupSn').val();
+                var groupSn = $('#groupSn').val();
+                var emplyrSn = $('#emplyrSn').val();
                 var data = document.getElementById("textarea").value;
 
                 var formData = new FormData();
@@ -422,15 +464,25 @@
                                         <i class="fa-sharp fa-solid fa-camera"></i>
                                     </a>
                                     <div style="display: inline-block;">
-                                        <a class="my_task member" title="멤버">
+                                        <a id="member" class="my_task member" title="멤버" onclick="member()">
                                             <i class="fa-solid fa-user-group"></i>
                                         </a>
+                                        <div id="member_modal" class="my_layer member_width" style="display: none;">
+                                            <h4 class="my_tit">
+                                                <span class="tit_txt">
+                                                    <span class="num">(<em>2</em>/200명)</span>
+                                                    <span class="txt">마이드라이브</span>
+                                                </span>
+                                            </h4>
+                                            <ul class="my_layer_list"></ul>
+                                            <a class="my_btn_member">멤버초대</a>
+                                        </div>
                                     </div>
                                     <div style="display: inline-block;">
                                         <a id="setting" class="my_task set" title="설정" onclick="setting()">
                                             <i class="fa-solid fa-gear"></i>
                                         </a>
-                                        <div class="my_layer my_layer_set" style="display: none;">
+                                        <div id="setting_modal" class="my_layer my_layer_set" style="display: none;">
                                             <h4 class="my_tit">
                                                 <span class="tit_txt">
                                                     <span class="txt">모임설정</span>

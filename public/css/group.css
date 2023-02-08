@@ -870,6 +870,10 @@ a.more_invitation .more_invitation_bg{
     font-size: 13px;
 }
 
+.member_width {
+    width: 265px;
+}
+
 .my_layer .my_tit .tit_txt {
     overflow: hidden;
     display: inline-block;
@@ -1683,3 +1687,68 @@ menu, ul, ol {
     margin: 0;
     line-height: 44px;
 }
+
+/**************멤버 현황**************/
+.my_layer .my_tit .tit_txt .num {
+    float: right;
+    font-weight: 400;
+    color: #a5a5a5;
+}
+
+.my_layer .my_tit .tit_txt .num em {
+    font-weight: 700;
+    color: #333;
+}
+
+.task_together:first-child .my_layer_list {
+    max-height: calc( 100vh - 260px);
+}
+
+.my_layer_list li {
+    float: left;
+    width: 78px;
+    height: 82px;
+    text-align: center;
+}
+
+.my_layer_list li > a {
+    position: relative;
+    width: 70px;
+    display: inline-block;
+    text-decoration: none;
+    color: #656565;
+}
+
+.my_layer_list li .thumb {
+    position: relative;
+    overflow: hidden;
+    width: 45px;
+    height: 45px;
+    border-radius: 22px;
+    margin: 0 auto;
+}
+
+.my_layer_list li span {
+    display: block;
+}
+
+.my_layer_list li .tit {
+    display: inline-block;
+    overflow: hidden;
+    max-width: 65px;
+    margin: 0 auto;
+    padding-top: 6px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 11px;
+    line-height: 16px;
+    letter-spacing: -1px;
+}
+
+/*
+.my_layer_list li .tit .me {
+    float: right;
+    padding-right: 1px;
+    margin-left: 2px;
+}
+*/

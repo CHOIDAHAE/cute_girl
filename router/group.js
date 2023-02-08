@@ -665,6 +665,44 @@ module.exports = function(app){
 		});
 	})
 
+	// 가입멤버 조회
+	app.post("/selectGropMember", function(req, res){
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(myPictureList)",err);
+			} else {
+				console.log("Oracle Connection success(myPictureList)");
+			}
+			conn = con;
+
+			//query format
+			let format = {language: 'sql', indent: ''};
+			
+			var param = {
+				"groupSn"	: req.body.groupSn
+			};
+
+			let selectGropMember = mybatisMapper.getStatement('GroupDAO','selectGropMember', param, format);
+
+			//쿼리문 실행
+			conn.execute(selectGropMember, function(err,result){
+				if(err){
+					console.log("selectGropMember failed :", err);
+					res.json({"Status":"F"});
+					return;
+				}
+				
+				res.json({"Status":"S", "result" : result.rows});
+				//doRelease(conn);
+			});
+		});
+	})
+
 	// 그룹 업로드용 내 파일 리스트 읽어오기
 	app.post("/myPictureList", function(req, res){		
 		oracledb.getConnection({
@@ -698,7 +736,6 @@ module.exports = function(app){
 				query = mybatisMapper.getStatement('GroupDAO','selectPictureList', param, format);
 			}
 
-			console.log(query);
 			//쿼리문 실행
 			conn.execute(query, function(err,result){
 				if(err){

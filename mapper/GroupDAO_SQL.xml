@@ -84,16 +84,18 @@
 			PERSONAL.AUTHOR_GROUP_SN
     </select>
 
-	<!-- 멤버 수 -->
-	<select id="selectGropMemberCnt">
-		SELECT 
-			AUTHOR_GROUP_SN,
-			COUNT(EMPLYR_SN) CNT
+	<!-- 멤버 -->
+	<select id="selectGropMember">
+		SELECT
+			GRP.AUTHOR_GROUP_SN,
+			EMP.EMPLYR_SN,
+			EMP.EMPLYR_NM 			--나중에 닉네임으로 변경할 예정
 		FROM
-			TCM_EMPLYRBY_GROUP_AUTHOR
-		WHERE
-			AUTHOR_GROUP_SN = #{groupSn}
-		GROUP BY AUTHOR_GROUP_SN
+			TCM_EMPLYRBY_GROUP_AUTHOR GRP,
+			TCM_EMPLYR EMP
+		WHERE GRP.EMPLYR_SN = EMP.EMPLYR_SN
+		AND AUTHOR_GROUP_SN = #{groupSn}
+		ORDER BY GRP.FRST_REGISTER_SN
 	</select>
 
 	<!-- 그룹 사용 여부 업데이트 (마지막 사용자인 경우 그룹삭제) -->
