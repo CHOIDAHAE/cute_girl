@@ -350,12 +350,11 @@
                                                                         +'<a><img class="thumbnail load_success" src="..'+res.result[i][1]+'/'+res.result[i][2]
                                                                             +'" style="width: 100%; height:100%;"><span class="shadow_in"></span></a></li></ul></div></div></div>'
                                                     +'<div class="toge_comment">'
-                                                        +'<input type="hidden" name="timelineSn" id="timelineSn" value = "'+ res.result[i][9] +'"'
-                                                        +'<ul class="comm_list"></ul>'
+                                                        +'<ul id="comm_list_'+res.result[i][9]+'" class="comm_list"></ul>'
                                                         +'<div class="comm_input over_write on_write">'
                                                             +'<div class="textarea_input">'
                                                                 +'<div class="textarea">'
-                                                                    +'<textarea id="comment_txt_'+res.result[i][9]+'" placeholder="댓글을 입력하세요." rows="1" style="overflow: hidden; overflow-wrap: break-word;" onkeyup="button_control('+res.result[i][9]+');"></textarea></div>'
+                                                                    +'<textarea id="comment_txt" placeholder="댓글을 입력하세요." rows="1" style="overflow: hidden; overflow-wrap: break-word;" onkeyup="button_control('+res.result[i][9]+');"></textarea></div>'
                                                                 +'<div class="btn_submit"><button id="button_'+res.result[i][9]+'" onclick="writeReply('+res.result[i][9]+')";>전송</button></div>'
                                                             +'</div></div></div></div></div></div>'
                                     } else if(type == 'join'){    // 가입 타임라인
@@ -381,6 +380,9 @@
                                 
                                 $('#together_story_section').html(story_content);   // 조회된 사진 리스트(이야기)
                                 $('#toge_photo_list').html(photo_content);          // 조회된 사진 리스트(사진/동영상)
+
+                                // 타임라인을 모두 띄운 후 댓글을 밑에 붙임
+                                selectComment();
                             }
 						} else if(res.Status == "F"){
 							alert('사진 조회 중 오류가 발생하였습니다.');
@@ -407,15 +409,10 @@
 
             // 댓글달기 버튼 클릭 이벤트
             function writeReply(timelineSn){
-                console.log("timelineSn: "+timelineSn);
                 var groupSn = $('#groupSn').val();
                 // 댓글내용
                 var id = '#comment_txt_'+timelineSn;
                 var commentDc = $(id).val();
-                
-
-                console.log('댓글내용: ');
-                console.log(commentDc);
 
                 if(commentDc == null || commentDc == ""){
                     return;
@@ -435,6 +432,47 @@
 					},
 					error:function(e){
 						alert("댓글달기 도중 오류가 발생하였습니다.(ajax에러)");
+					}
+				})
+            };
+
+            // 댓글 조회
+            function selectComment(){
+                var groupSn = $('#groupSn').val();
+
+                $.ajax({
+					url : "/selectComment",
+					type : "POST",
+					dataType : "JSON", //"JSON"
+					data : {"groupSn" : groupSn},
+					success:function(res){
+                        console.log(res);
+                        if(res.Status == "S"){
+                            for(var i=0; i<res.result.lenth; i++){  
+                                
+                                var commentCd = res.result[i][1];
+                                console.log(commentCd);
+
+                                //각자 덧붙일 ul의 id
+                                var id = '#comm_list_'+res.result[i][0];
+                                console.log(id);                
+                                var comment_content = '';
+
+                                comment_content += '<li><div class="comm_thum"><a class="thum" style="cursor: pointer;">'
+                                                +'<img src="" width="38" height="38"></a></div>'
+                                                +'<div class="comm_txt"><strong>다행이당 <em>어제 오후 3:38</em></strong><p>'+commentCd+'</p>'
+                                                    +'<a class="btn_del_comm no_view">댓글삭제</a></div></li>';
+                                
+                                console.log(comment_content);
+
+                                $(id).html(comment_content);
+                            }                            
+                        } else if(res.Status == "F"){
+                            alert("댓글 조회 도중 오류가 발생하였습니다.");
+                        }
+					},
+					error:function(e){
+						alert("댓글 조회 도중 오류가 발생하였습니다.(ajax에러)");
 					}
 				})
             };

@@ -276,6 +276,7 @@ module.exports = function(app){
 	2. 그룹 인원수 카운트해서 1이면 여부 N으로 업데이트-그룹일련번호
 	3. 1이 아니면 리더여부 조회 -> 리더라면 다음 사용자(가입순)조회 -> 리더변경
 	4. 그룹 테이블에서 내 일련번호 삭제하기
+	5. 타임라인 삭제
 	*/
 	app.post("/updateGroupUseAt", function(req, res){	
 		oracledb.getConnection({
@@ -402,7 +403,6 @@ module.exports = function(app){
 
 	// 개별 그룹 테이블(TCM_EMPLYRBY_GROUP_AUTHOR)에서 내 일련번호 삭제하기
 	function outGroup(res, emplyrSn, groupSn){
-		console.log('개별 그룹 테이블(TCM_EMPLYRBY_GROUP_AUTHOR)에서 내 일련번호 삭제하기');
 		//query format
 		let format = {language: 'sql', indent: ''};
 
@@ -413,17 +413,26 @@ module.exports = function(app){
 
 		// 모임 나가기 최종
 		let outGroup = mybatisMapper.getStatement('GroupDAO','outGroup', param, format);
+		// 타임라인 삭제
+		let deleteTimeline = mybatisMapper.getStatement('GroupDAO','deleteTimeline', param, format);
 		
-		console.log(outGroup);
 		conn.execute(outGroup, function(err,result){
 			if(err){
 				console.log("outGroup failed :", err);
 				res.json({"Status":"F"});
 				return;
 			}
-			
-			res.json({"Status":"S"});
-			conn.commit();
+
+			conn.execute(deleteTimeline, function(err,result){
+				if(err){
+					console.log("deleteTimeline failed :", err);
+					res.json({"Status":"F"});
+					return;
+				}
+
+				res.json({"Status":"S"});
+				conn.commit();
+			});			
 		});
 	}
 
@@ -866,13 +875,46 @@ module.exports = function(app){
 					return;
 				}
 				
-				res.json({"Status":"S", "result" : result.rows});
+				res.json({"Status":"S"});
 				conn.commit();
 			});
 		});	
 	})
 
-	// 그룹 첨부하기
+	// 댓글 조회
+	app.post("/selectComment", function(req, res){
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(selectForGroup)",err);
+			} else {
+				//console.log("Oracle Connection success(selectForGroup)");
+			}
+			conn = con;
+
+			//query format
+			let format = {language: 'sql', indent: ''};
+
+			// 댓글 조회
+			let selectComment = mybatisMapper.getStatement('GroupDAO','selectComment', {"groupSn" : req.body.groupSn}, format);
+
+			conn.execute(selectComment, function(err,result){
+				if(err){
+					console.log("selectComment failed :", err);
+					res.json({"Status":"F"});
+					return;
+				}
+				
+				res.json({"Status":"S", "result" : result.rows});
+			});
+		});	
+	})
+
+	// 그룹사진 조회
 	app.post("/selectForGroup", function(req, res){
 		oracledb.getConnection({
 			user:dbConfig.user,
@@ -890,7 +932,7 @@ module.exports = function(app){
 			//query format
 			let format = {language: 'sql', indent: ''};
 
-			// 그룹파일에 insert
+			// 그룹사진 조회
 			let selectForGroup = mybatisMapper.getStatement('GroupDAO','selectForGroup', {"groupSn" : req.body.groupSn}, format);
 
 			conn.execute(selectForGroup, function(err,result){
@@ -901,7 +943,7 @@ module.exports = function(app){
 				}
 				
 				res.json({"Status":"S", "result" : result.rows});
-				conn.commit();
+				//conn.commit();
 			});
 		});	
 	})

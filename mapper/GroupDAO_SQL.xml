@@ -323,6 +323,46 @@
 		)
     </insert>
 
+	<!-- 전체 타임라인 갯수 조회 -->
+	<select id="selectTimelineSn">
+		SELECT
+			TIMELINE_SN
+		FROM
+			TCM_TIMELINE
+		WHERE
+			AUTHOR_GROUP_SN = #{groupSn}
+	</select>
+
+	<!-- 모임 나가기 시 타임라인 삭제(그룹의 내가 올린 타임라인) -->
+	<delete id="deleteTimeline">
+		DELETE
+			TIMELINE_SN
+		FROM
+			TCM_TIMELINE
+		WHERE
+			AUTHOR_GROUP_SN	= #{groupSn}
+		AND	EMPLYR_SN		= #{emplyrSn}
+	</delete>
+
+	<!-- 댓글 조회 -->
+	<select id="selectComment">
+		SELECT
+			TIMELINE_SN,
+			COMMENT_DC,
+			to_char(FRST_REGIST_DT, 'FMmm')			
+			|| '월' ||
+			to_char(FRST_REGIST_DT, 'FMdd')
+			|| '일 ' ||
+			to_char(FRST_REGIST_DT, 'FMAM hh')
+			|| ':' || to_char(FRST_REGIST_DT, 'mm')
+			|| ' ' ||
+			TO_CHAR(FRST_REGIST_DT, 'dy') DAY
+		FROM
+			TCM_COMMENT
+		WHERE
+			AUTHOR_GROUP_SN	= #{groupSn}
+	</select>
+
 	<!-- 그룹 정보 조회 -->
 	<select id="selectGroupInfo">
 		SELECT
@@ -349,13 +389,13 @@
 	</select>
 
 	<!-- 기존 그룹 대표사진 삭제 -->
-	<update id="deleteTopPicture">
+	<delete id="deleteTopPicture">
 		DELETE FROM
 			TCM_GROUP_FILE
 		WHERE	
 			MAIN_FILE_AT = 'Y'
 		AND AUTHOR_GROUP_SN = #{groupSn}
-	</update>
+	</delete>
 
 	<!-- 그룹 업로드용 모든 사진 조회 -->
 	<select id="selectPictureList">
