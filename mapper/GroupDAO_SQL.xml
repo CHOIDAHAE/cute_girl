@@ -369,7 +369,7 @@
 		<if test='timelineSn != ""'>
 			AND	COMM.TIMELINE_SN = #{timelineSn}
 		</if>
-		ORDER BY COMM.COMMENT_SN DESC
+		ORDER BY COMM.COMMENT_SN
 	</select>
 
 	<!-- 댓글 삭제 -->
