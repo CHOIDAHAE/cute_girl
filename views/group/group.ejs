@@ -33,7 +33,7 @@
 				// 스토리/사진 탭 
 				changePart('story');
 
-                // 그룹 사진 조회
+                // 타임라인 조회
                 groupPictureList();
 
                 // 멤버초대 모달
@@ -41,6 +41,9 @@
 
                 // 댓글 삭제 버튼 X
                 deleteBtn_control();
+
+                // 스토리 올리기 버튼
+                submit_timeline_control();
             });
             
             // 스토리/사진 탭
@@ -301,6 +304,51 @@
                 document.getElementById('iframe_story').setAttribute('style', 'visibility:visible;');
             }
 
+            // 이야기 올리기 버튼 활성화/비활성화
+            function submit_timeline_control(){
+                var content = $('#write_area').val();
+
+                if(content.length > 0){
+                    $('#submit_timeline').css("background-color","#157efd");
+                } else {
+                    $('#submit_timeline').css("background-color","#cccccc");                    
+                    $('#submit_timeline').css("border","1px solid #cccccc");
+                }
+            };
+
+            // 이야기 올리기
+            function submit_timeline(){                
+                var timelineDc = $('#write_area').val();                
+                var groupSn = $('#groupSn').val();
+                var content = $('#write_area').val();
+
+                if(content == null || content == ""){
+                    return;
+                }
+                
+                $.ajax({
+					url : "/storyUpload",
+					type : "POST",
+					dataType : "JSON", //"JSON"
+					data : {"emplyrSn" : emplyrSn, "groupSn" : groupSn, "type" : "story", "timelineDc" : timelineDc},
+					success:function(res){
+						if(res.Status == "S"){
+							alert('업로드가 완료되었습니다.');
+
+                            // 타임라인 재조회
+                            groupPictureList();
+
+						} else if(res.Status == "F"){
+							alert('업로드 중 오류가 발생하였습니다.');
+						}						                        
+					},
+					error:function(e){
+						alert("업로드 중 오류가 발생하였습니다.(ajax에러)");
+					}
+				})
+                
+            };
+
             // 그룹 사진 조회
             function groupPictureList(){
                 var groupSn = $('#groupSn').val();
@@ -367,17 +415,19 @@
                                                         +'<span class="noti_text"><strong class="point_3675c7">'+res.result[i][8]+'</strong>님이 새로운 멤버가 되었습니다.</span>'
                                                         +'</div></div></div>';
 
-                                    } else {    // 스토리 타임라인
+                                    } else if(type == 'story') {    // 스토리 타임라인
                                         story_content +=
                                         '<div class="together_section"><div class="toge_story_list"><a class="user_thum">'
-                                            +'<img src="https://phinf.pstatic.net/contact/20191208_97/1575799615169u2oGo_JPEG/2.jpg?type=f160_160" width="55" height="55"></a>'
+                                            +'<img src="" width="55" height="55"></a>'
                                             +'<div class="toge_box">'
-                                                +'<h3 class="toge_title"><strong>다행이당</strong><span class="load_time">몇 초 전</span></h3>'
-                                                +'<div class="toge_content_box"><div class="toge_content"><p class="toge_text"><span>스토리 테스트중입니다.</span></p>'
+                                                +'<h3 class="toge_title"><strong>'+res.result[i][3]+'</strong><span class="load_time">'+res.result[i][4]+'</span></h3>'
+                                                +'<div class="toge_content_box"><div class="toge_content"><p class="toge_text"><span>'+content+'</span></p>'
                                                     +'<div class="toge_audio_box"></div></div></div>'
                                                     +'<div class="toge_comment"><ul class="comm_list"></ul><div class="comm_input"><div class="textarea_input"><div class="textarea">'
-                                                        +'<textarea id="comment_txt" placeholder="댓글을 입력하세요." rows="1" style="overflow: hidden; overflow-wrap: break-word; height: 18px;"></textarea></div>'
-                                                        +'<div class="btn_submit"><button>전송</button></div></div></div></div></div></div></div>';
+                                                        +'<textarea id="comment_txt_'+timelineSn+'" placeholder="댓글을 입력하세요." rows="1" style="overflow: hidden; overflow-wrap: break-word; height: 18px;"onkeyup="button_control('+timelineSn+');" onkeydown="enterKey('+timelineSn+');"></textarea></div>'
+                                                        +'<div class="btn_submit"><button id="button_'+timelineSn+'" onclick="writeReply('+timelineSn+')";></button></div></div></div></div></div></div></div>';
+                                    } else {
+                                        alert('잘못된 형식의 타임라인이 조회되었습니다.');
                                     }
                                 }
                                 
@@ -737,7 +787,7 @@
                                                             <div class="textarea_input">
                                                                 <!--<label for="write_area">글입력</label>-->
                                                                 <div class="textarea">
-                                                                    <textarea placeholder="멤버와 함께 나눌 이야기를 올려주세요!" id="write_area" rows="1" style="max-height: 144px; overflow-x: hidden; overflow-wrap: break-word; height: 50px;"></textarea>
+                                                                    <textarea placeholder="멤버와 함께 나눌 이야기를 올려주세요!" id="write_area" rows="1" style="max-height: 144px; overflow-x: hidden; overflow-wrap: break-word; height: 50px;" onkeyup="submit_timeline_control();"></textarea>
                                                                 </div>
                                                                 <!--<div class=""></div>-->
                                                                 <div class="write_submit">
@@ -752,8 +802,8 @@
                                                                             <span class="ic_ph"><i class="fa-solid fa-microphone"></i></span>오디오                                                                
                                                                         </a>
                                                                     </div>
-                                                                    <button class="write_type cancel">취소</button>
-                                                                    <button class="write_type up">올리기</button>
+                                                                    <!--<button class="write_type cancel">취소</button>-->
+                                                                    <button id="submit_timeline" class="write_type up" onclick="submit_timeline();">올리기</button>
                                                                 </div>
                                                             </div>
                                                         </div>

@@ -817,7 +817,7 @@ module.exports = function(app){
 						var timelineParam = {
 									"emplyrSn"		: req.body.emplyrSn,
 									"groupSn"		: req.body.groupSn,
-									//"timelineDc"	: req.body.timelineDc,
+									"timelineDc"	: '',
 									"type"			: req.body.type,
 									"fileSn"		: result.rows[0][0]
 											};
@@ -840,6 +840,49 @@ module.exports = function(app){
 		});
 	})
 
+	// 이야기 업로드 하기
+	app.post("/storyUpload", function(req, res){
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(storyUpload)",err);
+			} else {
+				//console.log("Oracle Connection success(storyUpload)");
+			}
+			conn = con;
+
+			//query format
+			let format = {language: 'sql', indent: ''};
+			
+			console.log('이야기 업로드 하기');
+			var timelineParam = {
+				"emplyrSn"	: req.body.emplyrSn,
+				"groupSn"	: req.body.groupSn,
+				"timelineDc": req.body.timelineDc,
+				"fileSn"	: '',
+				"type"		:  req.body.type
+			};
+
+			// 타임라인에 insert
+			let insertTimeline = mybatisMapper.getStatement('GroupDAO','insertTimeline', timelineParam, format);
+
+			conn.execute(insertTimeline, function(err,result){
+				if(err){
+					console.log("insertTimeline failed :", err);
+					res.json({"Status":"F"});
+					return;
+				}
+
+				res.json({"Status":"S"});
+				conn.commit();
+			});
+		});
+	})
+
 	// 댓글달기
 	app.post("/insertComment", function(req, res){
 		oracledb.getConnection({
@@ -849,9 +892,9 @@ module.exports = function(app){
 			externalAuth  : dbConfig.externalAuth
 		},function(err,con){
 			if(err){
-				console.log("Oracle Connection failed(selectForGroup)",err);
+				console.log("Oracle Connection failed(insertComment)",err);
 			} else {
-				//console.log("Oracle Connection success(selectForGroup)");
+				//console.log("Oracle Connection success(insertComment)");
 			}
 			conn = con;
 
@@ -890,9 +933,9 @@ module.exports = function(app){
 			externalAuth  : dbConfig.externalAuth
 		},function(err,con){
 			if(err){
-				console.log("Oracle Connection failed(selectForGroup)",err);
+				console.log("Oracle Connection failed(selectComment)",err);
 			} else {
-				//console.log("Oracle Connection success(selectForGroup)");
+				//console.log("Oracle Connection success(selectComment)");
 			}
 			conn = con;
 
@@ -912,7 +955,7 @@ module.exports = function(app){
 
 			// 댓글 조회
 			let selectComment = mybatisMapper.getStatement('GroupDAO','selectComment', param, format);
-			
+
 			conn.execute(selectComment, function(err,result){
 				if(err){
 					console.log("selectComment failed :", err);
@@ -934,9 +977,9 @@ module.exports = function(app){
 			externalAuth  : dbConfig.externalAuth
 		},function(err,con){
 			if(err){
-				console.log("Oracle Connection failed(selectForGroup)",err);
+				console.log("Oracle Connection failed(deleteComment)",err);
 			} else {
-				//console.log("Oracle Connection success(selectForGroup)");
+				//console.log("Oracle Connection success(deleteComment)");
 			}
 			conn = con;
 
@@ -985,7 +1028,7 @@ module.exports = function(app){
 
 			// 그룹사진 조회
 			let selectForGroup = mybatisMapper.getStatement('GroupDAO','selectForGroup', {"groupSn" : req.body.groupSn}, format);
-
+			
 			conn.execute(selectForGroup, function(err,result){
 				if(err){
 					console.log("selectForGroup failed :", err);
@@ -1021,7 +1064,8 @@ module.exports = function(app){
 						"groupSn"	: req.body.groupSn,
 						"emplyrSn"	: req.body.emplyrSn,
 						"type"		: 'join',
-						"fileSn"	: ''
+						"fileSn"	: '',
+						"timelineDc": ''
 					};
 
 			// 그룹파일에 insert
