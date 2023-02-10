@@ -358,7 +358,8 @@
 			|| ':' || to_char(COMM.FRST_REGIST_DT, 'mm')
 			|| ' ' ||
 			TO_CHAR(COMM.FRST_REGIST_DT, 'dy') DAY,
-			EMP.EMPLYR_NM
+			EMP.EMPLYR_NM,
+			EMP.EMPLYR_SN
 		FROM
 			TCM_COMMENT COMM,
 			TCM_EMPLYR EMP
@@ -368,8 +369,18 @@
 		<if test='timelineSn != ""'>
 			AND	COMM.TIMELINE_SN = #{timelineSn}
 		</if>
-		ORDER BY COMM.COMMENT_SN
+		ORDER BY COMM.COMMENT_SN DESC
 	</select>
+
+	<!-- 댓글 삭제 -->
+	<delete id="deleteComment">
+		DELETE FROM
+			TCM_COMMENT
+		WHERE
+			COMMENT_SN = #{commentSn}
+		AND TIMELINE_SN = #{timelineSn}
+		AND AUTHOR_GROUP_SN = #{groupSn}
+	</delete>
 
 	<!-- 그룹 정보 조회 -->
 	<select id="selectGroupInfo">

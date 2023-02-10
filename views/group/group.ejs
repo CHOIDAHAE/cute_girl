@@ -38,6 +38,9 @@
 
                 // 멤버초대 모달
                 $('#inviteMember').hide();
+
+                // 댓글 삭제 버튼 X
+                deleteBtn_control();
             });
             
             // 스토리/사진 탭
@@ -253,8 +256,8 @@
             // textarea 내에서 엔터키 제한
             function chkEnter(){
                 if(event.keyCode == 13){
+                    //event.returnValue = false;
                     okBtnClick();
-                    event.returnValue = false;
                 }
             }
             
@@ -354,7 +357,7 @@
                                                         +'<div class="comm_input over_write on_write">'
                                                             +'<div class="textarea_input">'
                                                                 +'<div class="textarea">'
-                                                                    +'<textarea id="comment_txt_'+timelineSn+'" placeholder="댓글을 입력하세요." rows="1" style="overflow: hidden; overflow-wrap: break-word;" onkeyup="button_control('+timelineSn+');"></textarea></div>'
+                                                                    +'<textarea id="comment_txt_'+timelineSn+'" placeholder="댓글을 입력하세요." rows="1" style="overflow: hidden; overflow-wrap: break-word;" onkeyup="button_control('+timelineSn+');" onkeydown="enterKey('+timelineSn+');"></textarea></div>'
                                                                 +'<div class="btn_submit"><button id="button_'+timelineSn+'" onclick="writeReply('+timelineSn+')";>전송</button></div>'
                                                             +'</div></div></div></div></div></div>'
                                     } else if(type == 'join'){    // 가입 타임라인
@@ -407,6 +410,14 @@
                 }
             };
 
+            // 댓글달기 엔터
+            function enterKey(timelineSn){
+                if(event.keyCode == 13){
+                    writeReply(timelineSn);
+                    return;
+                }
+            }
+
             // 댓글달기 버튼 클릭 이벤트
             function writeReply(timelineSn){
                 var groupSn = $('#groupSn').val();
@@ -454,20 +465,24 @@
                         if(res.Status == "S"){
                             var tmp_id = "";
                             var comment_content = '';
-                            for(var i=0; i<res.result.length; i++){               
+                            for(var i=0; i<res.result.length; i++){
+                                var commentSn = res.result[i][0];
+                                var timelineSn = res.result[i][1];
                                 var commentCd = res.result[i][2];
+                                var registerDt = res.result[i][3];
                                 var emplyrNm = res.result[i][4];
+                                var emplyrSn = res.result[i][5];    // 코멘트 단 사람의 일련번호
 
                                 //각자 덧붙일 ul의 id
-                                var id = '#comm_list_'+res.result[i][1];
+                                var id = '#comm_list_'+timelineSn;
                                 if(tmp_id != id){
                                     comment_content = '';
-                                }                               
+                                }
 
-                                comment_content += '<li><div class="comm_thum"><a class="thum" style="cursor: pointer;">'
+                                comment_content += '<li onMouseOut="deleteBtn_out('+timelineSn+','+commentSn+')" onMouseOver="deleteBtn_control('+emplyrSn+','+timelineSn+','+commentSn+');"><div class="comm_thum"><a class="thum" style="cursor: pointer;">'
                                                 +'<img src="" width="38" height="38"></a></div>'
-                                                +'<div class="comm_txt"><strong>'+emplyrNm+'<em>'+res.result[i][3]+'</em></strong><p>'+commentCd+'</p>'
-                                                    +'<a id="comm_'+res.result[i][0]+'" class="btn_del_comm no_view">댓글삭제</a></div></li>';
+                                                +'<div class="comm_txt"><strong>'+emplyrNm+'<em>'+registerDt+'</em></strong><p>'+commentCd+'</p>'
+                                                +'<a id="comm_'+timelineSn+'_'+commentSn+'" class="btn_del_comm" onclick="delete_comment('+timelineSn+','+commentSn+');"><i class="fa-solid fa-x"></i></a></div></li>';
                                 tmp_id = id;
                                 $(id).html(comment_content);
                             }                            
@@ -479,6 +494,55 @@
 						alert("댓글 조회 도중 오류가 발생하였습니다.(ajax에러)");
 					}
 				})
+            };
+
+            // 삭제버튼 마우스오버
+            function deleteBtn_control(commentEmplyrSn, timelineSn, commentSn){
+                var emplyrSn = $('#emplyrSn').val();    // 로그인 사용자
+                var commentId = '#comm_'+timelineSn +'_'+commentSn;
+
+                if (commentEmplyrSn != emplyrSn){
+                    // 삭제버튼이 안뜬다.
+                    $(commentId).css('display', 'none');
+                } else {
+                    // 삭제버튼이 뜨도록 css
+                    $(commentId).css('display', 'block');
+                }
+            };
+
+            // 삭제버튼 마우스아웃
+            function deleteBtn_out(timelineSn, commentSn){
+                var commentId = '#comm_'+timelineSn +'_'+commentSn;
+                // 삭제버튼이 안뜬다.
+                $(commentId).css('display', 'none');
+                
+            };
+            
+            // 댓글 삭제 클릭
+            function delete_comment(timelineSn, commentSn){                
+                var groupSn = $('#groupSn').val();      // 그룹일련번호
+                
+                if(confirm("삭제하시겠습니까?")){
+                    $.ajax({
+                        url : "/deleteComment",
+                        type : "POST",
+                        dataType : "JSON", //"JSON"
+                        data : {"groupSn" : groupSn, "timelineSn" : timelineSn, "commentSn" : commentSn},
+                        success:function(res){
+                            if(res.Status == "S"){
+                                // 댓글 부분 재조회
+                                selectComment(timelineSn);
+                            } else if(res.Status == "F"){
+                                alert("댓글삭제 도중 오류가 발생하였습니다.");
+                            }
+                        },
+                        error:function(e){
+                            alert("댓글삭제 도중 오류가 발생하였습니다.(ajax에러)");
+                        }
+                    })
+                } else {
+                    return;
+                }
             };
 
             // 멤버초대 열기

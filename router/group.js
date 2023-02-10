@@ -912,7 +912,7 @@ module.exports = function(app){
 
 			// 댓글 조회
 			let selectComment = mybatisMapper.getStatement('GroupDAO','selectComment', param, format);
-
+			
 			conn.execute(selectComment, function(err,result){
 				if(err){
 					console.log("selectComment failed :", err);
@@ -921,6 +921,46 @@ module.exports = function(app){
 				}
 				
 				res.json({"Status":"S", "result" : result.rows});
+			});
+		});	
+	})
+
+	// 댓글달기
+	app.post("/deleteComment", function(req, res){
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(selectForGroup)",err);
+			} else {
+				//console.log("Oracle Connection success(selectForGroup)");
+			}
+			conn = con;
+
+			//query format
+			let format = {language: 'sql', indent: ''};
+
+			let param = {
+					"groupSn"		: req.body.groupSn,
+					"timelineSn"	: req.body.timelineSn,
+					"commentSn"		: req.body.commentSn
+				};
+
+			// 그룹파일에 insert
+			let deleteComment = mybatisMapper.getStatement('GroupDAO','deleteComment', param, format);
+
+			conn.execute(deleteComment, function(err,result){
+				if(err){
+					console.log("deleteComment failed :", err);
+					res.json({"Status":"F"});
+					return;
+				}
+				
+				res.json({"Status":"S"});
+				conn.commit();
 			});
 		});	
 	})

@@ -1467,10 +1467,11 @@ button .tx {
     font-size: 12px;
     font-weight: normal;
     color: #a5a5a5;
+    margin-left: 5px;
 }
 
-.comm_list li .btn_del_comm {
-    display: block;
+.btn_del_comm {
+    display: none;
     overflow: hidden;
     position: absolute;
     right: 12px;
@@ -1478,7 +1479,7 @@ button .tx {
     width: 18px;
     height: 18px;
     background-position: -186px -144px;
-    text-indent: -500px;
+    color: #a5a5a5;
 }
 
 .comm_input {
