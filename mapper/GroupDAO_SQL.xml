@@ -347,20 +347,28 @@
 	<!-- 댓글 조회 -->
 	<select id="selectComment">
 		SELECT
-			TIMELINE_SN,
-			COMMENT_DC,
-			to_char(FRST_REGIST_DT, 'FMmm')			
+			COMM.COMMENT_SN,
+			COMM.TIMELINE_SN,
+			COMM.COMMENT_DC,
+			to_char(COMM.FRST_REGIST_DT, 'FMmm')			
 			|| '월' ||
-			to_char(FRST_REGIST_DT, 'FMdd')
+			to_char(COMM.FRST_REGIST_DT, 'FMdd')
 			|| '일 ' ||
-			to_char(FRST_REGIST_DT, 'FMAM hh')
-			|| ':' || to_char(FRST_REGIST_DT, 'mm')
+			to_char(COMM.FRST_REGIST_DT, 'FMAM hh')
+			|| ':' || to_char(COMM.FRST_REGIST_DT, 'mm')
 			|| ' ' ||
-			TO_CHAR(FRST_REGIST_DT, 'dy') DAY
+			TO_CHAR(COMM.FRST_REGIST_DT, 'dy') DAY,
+			EMP.EMPLYR_NM
 		FROM
-			TCM_COMMENT
+			TCM_COMMENT COMM,
+			TCM_EMPLYR EMP
 		WHERE
-			AUTHOR_GROUP_SN	= #{groupSn}
+			COMM.FRST_REGISTER_SN = EMP.EMPLYR_SN
+		AND	COMM.AUTHOR_GROUP_SN = #{groupSn}
+		<if test='timelineSn != ""'>
+			AND	COMM.TIMELINE_SN = #{timelineSn}
+		</if>
+		ORDER BY COMM.COMMENT_SN
 	</select>
 
 	<!-- 그룹 정보 조회 -->

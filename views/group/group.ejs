@@ -308,7 +308,6 @@
 					dataType : "JSON", //"JSON"
 					data : {"groupSn" : groupSn},
 					success:function(res){
-
 						if(res.Status == "S"){
                             var photo_length = res.result.length;
 							if (photo_length == 0){
@@ -326,6 +325,7 @@
                                 for (var i=0; i<photo_length; i++){
                                     var content = res.result[i][5];
                                     var type = res.result[i][6];
+                                    var timelineSn = res.result[i][9];
                                     if(content == null){
                                         content = '';
                                     }
@@ -350,12 +350,12 @@
                                                                         +'<a><img class="thumbnail load_success" src="..'+res.result[i][1]+'/'+res.result[i][2]
                                                                             +'" style="width: 100%; height:100%;"><span class="shadow_in"></span></a></li></ul></div></div></div>'
                                                     +'<div class="toge_comment">'
-                                                        +'<ul id="comm_list_'+res.result[i][9]+'" class="comm_list"></ul>'
+                                                        +'<ul id="comm_list_'+timelineSn+'" class="comm_list"></ul>'
                                                         +'<div class="comm_input over_write on_write">'
                                                             +'<div class="textarea_input">'
                                                                 +'<div class="textarea">'
-                                                                    +'<textarea id="comment_txt" placeholder="댓글을 입력하세요." rows="1" style="overflow: hidden; overflow-wrap: break-word;" onkeyup="button_control('+res.result[i][9]+');"></textarea></div>'
-                                                                +'<div class="btn_submit"><button id="button_'+res.result[i][9]+'" onclick="writeReply('+res.result[i][9]+')";>전송</button></div>'
+                                                                    +'<textarea id="comment_txt_'+timelineSn+'" placeholder="댓글을 입력하세요." rows="1" style="overflow: hidden; overflow-wrap: break-word;" onkeyup="button_control('+timelineSn+');"></textarea></div>'
+                                                                +'<div class="btn_submit"><button id="button_'+timelineSn+'" onclick="writeReply('+timelineSn+')";>전송</button></div>'
                                                             +'</div></div></div></div></div></div>'
                                     } else if(type == 'join'){    // 가입 타임라인
                                         story_content += 
@@ -425,7 +425,12 @@
 					data : {"groupSn" : groupSn, "timelineSn" : timelineSn, "commentDc" : commentDc},
 					success:function(res){
                         if(res.Status == "S"){
-							// 타임라인 재조회
+							// 댓글 부분 재조회
+                            selectComment(timelineSn);
+                            
+                            // 댓글 창 제어
+                            $(id).val("");
+                            button_control(timelineSn);
                         } else if(res.Status == "F"){
                             alert("댓글달기 도중 오류가 발생하였습니다.");
                         }
@@ -437,34 +442,33 @@
             };
 
             // 댓글 조회
-            function selectComment(){
+            function selectComment(timelineSn){                
                 var groupSn = $('#groupSn').val();
 
                 $.ajax({
 					url : "/selectComment",
 					type : "POST",
 					dataType : "JSON", //"JSON"
-					data : {"groupSn" : groupSn},
+					data : {"groupSn" : groupSn, "timelineSn" : timelineSn},
 					success:function(res){
-                        console.log(res);
                         if(res.Status == "S"){
-                            for(var i=0; i<res.result.lenth; i++){  
-                                
-                                var commentCd = res.result[i][1];
-                                console.log(commentCd);
+                            var tmp_id = "";
+                            var comment_content = '';
+                            for(var i=0; i<res.result.length; i++){               
+                                var commentCd = res.result[i][2];
+                                var emplyrNm = res.result[i][4];
 
                                 //각자 덧붙일 ul의 id
-                                var id = '#comm_list_'+res.result[i][0];
-                                console.log(id);                
-                                var comment_content = '';
+                                var id = '#comm_list_'+res.result[i][1];
+                                if(tmp_id != id){
+                                    comment_content = '';
+                                }                               
 
                                 comment_content += '<li><div class="comm_thum"><a class="thum" style="cursor: pointer;">'
                                                 +'<img src="" width="38" height="38"></a></div>'
-                                                +'<div class="comm_txt"><strong>다행이당 <em>어제 오후 3:38</em></strong><p>'+commentCd+'</p>'
-                                                    +'<a class="btn_del_comm no_view">댓글삭제</a></div></li>';
-                                
-                                console.log(comment_content);
-
+                                                +'<div class="comm_txt"><strong>'+emplyrNm+'<em>'+res.result[i][3]+'</em></strong><p>'+commentCd+'</p>'
+                                                    +'<a id="comm_'+res.result[i][0]+'" class="btn_del_comm no_view">댓글삭제</a></div></li>';
+                                tmp_id = id;
                                 $(id).html(comment_content);
                             }                            
                         } else if(res.Status == "F"){

@@ -899,8 +899,19 @@ module.exports = function(app){
 			//query format
 			let format = {language: 'sql', indent: ''};
 
+			var timelineSn = "";
+
+			if(req.body.timelineSn != null && req.body.timelineSn != ''){
+				timelineSn = req.body.timelineSn;
+			}
+
+			let param = {
+						"groupSn" : req.body.groupSn,
+						"timelineSn" : timelineSn
+						};
+
 			// 댓글 조회
-			let selectComment = mybatisMapper.getStatement('GroupDAO','selectComment', {"groupSn" : req.body.groupSn}, format);
+			let selectComment = mybatisMapper.getStatement('GroupDAO','selectComment', param, format);
 
 			conn.execute(selectComment, function(err,result){
 				if(err){
