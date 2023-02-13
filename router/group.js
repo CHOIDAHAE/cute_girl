@@ -683,9 +683,9 @@ module.exports = function(app){
 			externalAuth  : dbConfig.externalAuth
 		},function(err,con){
 			if(err){
-				console.log("Oracle Connection failed(myPictureList)",err);
+				console.log("Oracle Connection failed(selectGropMember)",err);
 			} else {
-				console.log("Oracle Connection success(myPictureList)");
+				console.log("Oracle Connection success(selectGropMember)");
 			}
 			conn = con;
 
@@ -733,7 +733,7 @@ module.exports = function(app){
 			var param = {
 				"emplyrSn"	: req.body.emplyrSn,
 				"groupSn"	: req.body.groupSn,
-				"popType"	: req.body.popType,
+				"popType"	: req.body.popType
 			};
 
 			let query = "";
@@ -829,9 +829,9 @@ module.exports = function(app){
 								console.log("insertTimeline failed :", err);
 								res.json({"Status":"F"});
 								return;
-							}
-	
-							conn.commit();
+							}							
+							
+							conn.commit();							
 						});
 					});
 				});
@@ -858,7 +858,6 @@ module.exports = function(app){
 			//query format
 			let format = {language: 'sql', indent: ''};
 			
-			console.log('이야기 업로드 하기');
 			var timelineParam = {
 				"emplyrSn"	: req.body.emplyrSn,
 				"groupSn"	: req.body.groupSn,
@@ -968,7 +967,7 @@ module.exports = function(app){
 		});	
 	})
 
-	// 댓글달기
+	// 댓글삭제
 	app.post("/deleteComment", function(req, res){
 		oracledb.getConnection({
 			user:dbConfig.user,
@@ -998,6 +997,47 @@ module.exports = function(app){
 			conn.execute(deleteComment, function(err,result){
 				if(err){
 					console.log("deleteComment failed :", err);
+					res.json({"Status":"F"});
+					return;
+				}
+				
+				res.json({"Status":"S"});
+				conn.commit();
+			});
+		});	
+	})
+
+	// 타임라인 삭제
+	app.post("/deleteTimeline", function(req, res){
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(deleteTimeline)",err);
+			} else {
+				//console.log("Oracle Connection success(deleteTimeline)");
+			}
+			conn = con;
+
+			//query format
+			let format = {language: 'sql', indent: ''};
+
+			let param = {
+					"emplyrSn"		: req.body.emplyrSn,
+					"groupSn"		: req.body.groupSn,
+					"timelineSn"	: req.body.timelineSn,
+					"fileSn"		: req.body.fileSn
+				};
+
+			// 그룹파일에 delete
+			let deleteGroupFile = mybatisMapper.getStatement('GroupDAO','deleteGroupFile', param, format);
+
+			conn.execute(deleteGroupFile, function(err,result){
+				if(err){
+					console.log("deleteGroupFile failed :", err);
 					res.json({"Status":"F"});
 					return;
 				}

@@ -110,7 +110,6 @@
 					dataType : "JSON", //"JSON"
 					data : {"groupSn" : groupSn},
                     success:function(res){
-                        console.log(res);
 						if(res.Status == "S"){
                             var member = "";
                             var length = res.result.length;
@@ -321,6 +320,7 @@
                 var timelineDc = $('#write_area').val();                
                 var groupSn = $('#groupSn').val();
                 var content = $('#write_area').val();
+                var emplyrSn = $('#emplyrSn').val();
 
                 if(content == null || content == ""){
                     return;
@@ -337,6 +337,9 @@
 
                             // 타임라인 재조회
                             groupPictureList();
+
+                            // textarea 비우기
+                            $('#write_area').val('');
 
 						} else if(res.Status == "F"){
 							alert('업로드 중 오류가 발생하였습니다.');
@@ -374,9 +377,15 @@
                                 var story_content = "";     // 이야기 탭 타임라인
 
                                 for (var i=0; i<photo_length; i++){
+                                    var fileSn = res.result[i][0];
                                     var content = res.result[i][5];
                                     var type = res.result[i][6];
-                                    var timelineSn = res.result[i][9];
+                                    var emplyrSn =  res.result[i][7];
+                                    var timelineSn = res.result[i][9];                                    
+
+                                    console.log("emplyrSn: "+emplyrSn);
+                                    console.log("timelineSn: "+timelineSn);
+
                                     if(content == null){
                                         content = '';
                                     }
@@ -391,7 +400,7 @@
                                             '<div class="together_section"><div class="toge_story_list">'
                                                 +'<a class="user_thum"><img src="" width="55" height="55"></a>'
                                                 +'<div class="toge_box">'
-                                                    +'<h3 class="toge_title"><strong>'+res.result[i][3]+'</strong><span class="load_time">'+res.result[i][4]+'</span></h3>'
+                                                    +'<h3 class="toge_title" onMouseOut="delete_timeline_control('+timelineSn+')" onMouseOver="delete_timeline_control('+timelineSn+','+emplyrSn+')"><strong>'+res.result[i][3]+'</strong><span class="load_time">'+res.result[i][4]+'</span><i id="x-icon_'+timelineSn+'" class="fa-solid fa-x x-icon" style="display:none;" onclick="delete_timeline('+timelineSn+','+fileSn+')"></i></h3>'
                                                     +'<div class="toge_content_box">'
                                                         +'<div class="toge_content">'
                                                             +'<p class="toge_text"><span>'+content+'</span></p>'
@@ -408,7 +417,7 @@
                                                                     +'<textarea id="comment_txt_'+timelineSn+'" placeholder="댓글을 입력하세요." rows="1" style="overflow: hidden; overflow-wrap: break-word;" onkeyup="button_control('+timelineSn+');" onkeydown="enterKey('+timelineSn+');"></textarea></div>'
                                                                 +'<div class="btn_submit"><button id="button_'+timelineSn+'" onclick="writeReply('+timelineSn+')";>전송</button></div>'
                                                             +'</div></div></div></div></div></div>'
-                                    } else if(type == 'join'){    // 가입 타임라인
+                                    } else if(type == 'join') {    // 가입 타임라인
                                         story_content += 
                                                         '<div class="together_section"><div class="notification"><div class="noti_box">'
                                                         +'<a class="thum user_thum none_thum" style="cursor: default;"><img src="https://ssl.pstatic.net/static/pwe/photo/blank.gif" width="38" height="38" alt=""></a>'
@@ -420,12 +429,12 @@
                                         '<div class="together_section"><div class="toge_story_list"><a class="user_thum">'
                                             +'<img src="" width="55" height="55"></a>'
                                             +'<div class="toge_box">'
-                                                +'<h3 class="toge_title"><strong>'+res.result[i][3]+'</strong><span class="load_time">'+res.result[i][4]+'</span></h3>'
+                                                +'<h3 class="toge_title" onMouseOut="delete_timeline_control('+timelineSn+')" onMouseOver="delete_timeline_control('+timelineSn+','+emplyrSn+')"><strong>'+res.result[i][3]+'</strong><span class="load_time">'+res.result[i][4]+'</span><i id="x-icon_'+timelineSn+'" class="fa-solid fa-x x-icon" style="display:none;" onclick="delete_timeline('+timelineSn+','+fileSn+')"></i></h3>'
                                                 +'<div class="toge_content_box"><div class="toge_content"><p class="toge_text"><span>'+content+'</span></p>'
                                                     +'<div class="toge_audio_box"></div></div></div>'
-                                                    +'<div class="toge_comment"><ul class="comm_list"></ul><div class="comm_input"><div class="textarea_input"><div class="textarea">'
-                                                        +'<textarea id="comment_txt_'+timelineSn+'" placeholder="댓글을 입력하세요." rows="1" style="overflow: hidden; overflow-wrap: break-word; height: 18px;"onkeyup="button_control('+timelineSn+');" onkeydown="enterKey('+timelineSn+');"></textarea></div>'
-                                                        +'<div class="btn_submit"><button id="button_'+timelineSn+'" onclick="writeReply('+timelineSn+')";></button></div></div></div></div></div></div></div>';
+                                                    +'<div class="toge_comment"><ul id="comm_list_'+timelineSn+'" class="comm_list"></ul><div class="comm_input"><div class="textarea_input"><div class="textarea">'
+                                                        +'<textarea id="comment_txt_'+timelineSn+'" placeholder="댓글을 입력하세요." rows="1" style="overflow: hidden; overflow-wrap: break-word;" onkeyup="button_control('+timelineSn+');" onkeydown="enterKey('+timelineSn+');"></textarea></div>'
+                                                        +'<div class="btn_submit"><button id="button_'+timelineSn+'" onclick="writeReply('+timelineSn+')";>전송</button></div></div></div></div></div></div></div>';
                                     } else {
                                         alert('잘못된 형식의 타임라인이 조회되었습니다.');
                                     }
@@ -512,6 +521,7 @@
 					dataType : "JSON", //"JSON"
 					data : {"groupSn" : groupSn, "timelineSn" : timelineSn},
 					success:function(res){
+                        console.log(res);
                         if(res.Status == "S"){
                             var tmp_id = "";
                             var comment_content = '';
@@ -546,6 +556,53 @@
 				})
             };
 
+            // 타임라인 마우스 오버/아웃(삭제버튼 컨트롤)
+            function delete_timeline_control(timelineSn, timelineEmplyrSn){
+                var emplyrSn = $('#emplyrSn').val();    // 로그인 사용자
+
+                // 마우스아웃
+                if(typeof timelineSn == 'undefined'){ 
+                    $('.x-icon').css('display', 'none');
+                } else { //마우스 오버
+                    var timelineId = "#x-icon_"+timelineSn;
+                    if (timelineEmplyrSn != emplyrSn){
+                        // 삭제버튼이 안뜬다.
+                        $(timelineId).css('display', 'none');
+                    } else {
+                        // 삭제버튼이 뜨도록 css
+                        $(timelineId).css('display', 'block');
+                    }
+                }
+            };
+
+            // 타임라인 삭제
+            function delete_timeline(timelineSn, fileSn){
+                var groupSn = $('#groupSn').val();      // 그룹일련번호
+                var emplyrSn = $('#emplyrSn').val();    // 로그인 사용자
+
+                if(confirm("삭제하시겠습니까?")){
+                    $.ajax({
+                        url : "/deleteTimeline",
+                        type : "POST",
+                        dataType : "JSON", //"JSON"
+                        data : {"emplyrSn" : emplyrSn, "groupSn" : groupSn, "timelineSn" : timelineSn, "fileSn" : fileSn},
+                        success:function(res){
+                            if(res.Status == "S"){
+                                // 댓글 부분 재조회
+                                selectComment(timelineSn);
+                            } else if(res.Status == "F"){
+                                alert("댓글삭제 도중 오류가 발생하였습니다.");
+                            }
+                        },
+                        error:function(e){
+                            alert("댓글삭제 도중 오류가 발생하였습니다.(ajax에러)");
+                        }
+                    })
+                } else {
+                    return;
+                }
+            };
+
             // 삭제버튼 마우스오버
             function deleteBtn_control(commentEmplyrSn, timelineSn, commentSn){
                 var emplyrSn = $('#emplyrSn').val();    // 로그인 사용자
@@ -564,8 +621,7 @@
             function deleteBtn_out(timelineSn, commentSn){
                 var commentId = '#comm_'+timelineSn +'_'+commentSn;
                 // 삭제버튼이 안뜬다.
-                $(commentId).css('display', 'none');
-                
+                $(commentId).css('display', 'none');                
             };
             
             // 댓글 삭제 클릭
@@ -795,7 +851,7 @@
                                                                         <a class="b_photo" onclick="upload('image');">
                                                                             <span class="ic_ph"><i class="fa-solid fa-camera"></i></span>사진
                                                                         </a>
-                                                                        <a class="b_video">
+                                                                        <a class="b_video" onclick="upload('video');">
                                                                             <span class="ic_ph"><i class="fa-solid fa-video"></i></span>동영상
                                                                         </a>    
                                                                         <a class="b_audio" onclick="upload('audio');">

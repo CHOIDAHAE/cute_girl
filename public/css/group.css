@@ -1603,6 +1603,14 @@ menu, ul, ol {
     background-color: #dedede;
 }
 
+.x-icon{
+    float: right;
+    margin-right: 30px;
+    color: gray;
+    font-size: 13px;
+    cursor: pointer;
+}
+
 /****************멤버초대**********************/
 .toge_member .mem_tab {
     height: 49px;
