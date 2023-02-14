@@ -381,13 +381,13 @@
                                     var content = res.result[i][5];
                                     var type = res.result[i][6];
                                     var emplyrSn =  res.result[i][7];
-                                    var timelineSn = res.result[i][9];                                    
-
-                                    console.log("emplyrSn: "+emplyrSn);
-                                    console.log("timelineSn: "+timelineSn);
+                                    var timelineSn = res.result[i][9];  
 
                                     if(content == null){
                                         content = '';
+                                    } else {
+                                        // 줄바꿈
+                                        content = content.replace(/(?:\r\n|\r|\n)/g, '<br>');
                                     }
 
                                     // 파일 타임라인
@@ -589,7 +589,7 @@
                         success:function(res){
                             if(res.Status == "S"){
                                 alert('삭제되었습니다.');
-                                
+
                                 // 타임라인 재조회
                                 groupPictureList();
 
@@ -715,7 +715,6 @@
                             <div class="task_together">
                                 <div class="together_menu">
                                     <ul>
-                                        <!--<li class="menu_story selected"><a>이야기</a></li>-->
                                         <li class="menu_story" onclick="changePart('story')">이야기</li>
                                         <li class="menu_photo" onclick="changePart('picture')">사진/동영상</li>
                                     </ul>
@@ -786,16 +785,14 @@
                                                             <fieldset>
                                                                 <legend>안내 메세지</legend>
                                                                 <div class="content">
-                                                                    <span class="bu_q">
-                                                                    </span>
+                                                                    <span class="bu_q"></span>
                                                                     <h1>
                                                                         <span class="ellipsis"><span class="groupNm"></span></span> 모임에서 정말 나가시겠습니까?
                                                                     </h1>
                                                                     <div class="desc3">
                                                                         <span class="emplyrNm"></span>
                                                                         <span class="emplyrId"></span> 님이<br>
-                                                                        우리 <span class="groupNm"></span> 모임에 올린<br>모든 파일과 게시글이 삭제되고,
-                                                                        <br>더 이상 이 모임에 들어오실 수 없습니다.<br>댓글은 삭제되지 않습니다.
+                                                                        우리 <span class="groupNm"></span> 모임에 올린<br>모든 파일과 게시글이 삭제됩니다.
                                                                     </div>
                                                                     <div class="desc4">
                                                                         <input type="checkbox" class="input_check" id="confirm_apply" onchange="chkBtn()">
@@ -1011,6 +1008,64 @@
                                 </ul>
                                 <ul id="toge_photo_list" class="toge_photo_list"></ul>
                                 <div class="reload_area"></div>
+                                <div class="viewer_wrap" style="display: block;">
+                                    <div class="viewer bb-photoviewer">
+                                        <div class="v_content">
+                                            <div class="v_header hide_header">
+                                                <a class="v_btn_close">나가기</a>
+                                                <div class="v_task">
+                                                    <ul class="v_task_lst">
+                                                        <li class="v_bar" style="display: inline-block;"></li>
+                                                        <li class="v_ta_dw">
+                                                            <a class="cursor_pointer">
+                                                                <span class="blind">다운로드</span>
+                                                            </a>
+                                                            <span class="label">다운로드</span>
+                                                        </li>
+                                                        <li class="v_ta_del">
+                                                            <a><span class="blind">삭제</span></a>
+                                                            <span class="label">삭제</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="v_photo_box">
+                                                    <div class="v_photo_img">
+                                                        <div class="v_photo_thumb">
+                                                            <img src="https://thumb2.photo.mybox.naver.com/3472495530724238924?type=m1280_1280_2&amp;nocache=4636120301" style="opacity: 1; width: 593.25px; height: 791px; top: 0px; left: 0px; position: relative; max-width: none; max-height: none; transform: translate(0px, 0px) scale(1);">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="v_info">
+                                                <div class="v_info_area">
+                                                    <h3 class="info_tit"></h3>
+                                                    <div class="info_lst">
+                                                        <ul>
+                                                            <li class="camera_info">
+                                                                <div class="cont"><strong class="tit">파일정보</strong>
+                                                                    <ul class="sub_lst">
+                                                                        <li><em>파일 크기</em><span></span></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </li>
+                                                            <li class="camera_info">
+                                                                <div class="cont"><strong class="tit">촬영정보</strong>
+                                                                    <ul class="sub_lst">
+                                                                        <li><em>촬영일시</em><span></span></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="bg_ground" style="position: fixed;"></div>
+                                            <div class="toast_container toast_viewer fadeOut" style="z-index: 10020; display: none;">
+                                                <div class="tip_layer_edit"><strong class="title"></strong></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
