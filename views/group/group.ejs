@@ -588,8 +588,11 @@
                         data : {"emplyrSn" : emplyrSn, "groupSn" : groupSn, "timelineSn" : timelineSn, "fileSn" : fileSn},
                         success:function(res){
                             if(res.Status == "S"){
-                                // 댓글 부분 재조회
-                                selectComment(timelineSn);
+                                alert('삭제되었습니다.');
+                                
+                                // 타임라인 재조회
+                                groupPictureList();
+
                             } else if(res.Status == "F"){
                                 alert("댓글삭제 도중 오류가 발생하였습니다.");
                             }
