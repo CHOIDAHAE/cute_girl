@@ -340,13 +340,14 @@
 
 	<!-- 모임 나가기 시 타임라인 삭제(그룹의 내가 올린 타임라인) -->
 	<delete id="deleteTimeline">
-		DELETE
-			TIMELINE_SN
-		FROM
+		DELETE FROM		
 			TCM_TIMELINE
 		WHERE
 			AUTHOR_GROUP_SN	= #{groupSn}
 		AND	EMPLYR_SN		= #{emplyrSn}
+		<if test='timelineSn != ""'>
+			AND TIMELINE_SN		= #{timelineSn}
+		</if>
 	</delete>
 
 	<!-- 댓글 조회 -->
@@ -382,8 +383,10 @@
 		DELETE FROM
 			TCM_COMMENT
 		WHERE
-			COMMENT_SN = #{commentSn}
-		AND TIMELINE_SN = #{timelineSn}
+			TIMELINE_SN = #{timelineSn}
+		<if test='commentSn != ""'>
+		AND COMMENT_SN = #{commentSn}
+		</if>
 		AND AUTHOR_GROUP_SN = #{groupSn}
 	</delete>
 

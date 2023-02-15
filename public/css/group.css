@@ -95,7 +95,7 @@ img, fieldset {
     flex: 0 0 auto;
     display: block;
     position: relative;
-    z-index: 20;
+    z-index: 10;
     background-color: #fff;
     padding: 0 25px;
 }
@@ -1812,3 +1812,12 @@ menu, ul, ol {
     margin-left: 2px;
 }
 */
+
+/******사진 상세보기*********/
+.photo_wrap {
+    position: fixed;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background-color: gray;
+}

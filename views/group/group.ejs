@@ -381,13 +381,13 @@
                                     var content = res.result[i][5];
                                     var type = res.result[i][6];
                                     var emplyrSn =  res.result[i][7];
-                                    var timelineSn = res.result[i][9];                                    
-
-                                    console.log("emplyrSn: "+emplyrSn);
-                                    console.log("timelineSn: "+timelineSn);
+                                    var timelineSn = res.result[i][9];  
 
                                     if(content == null){
                                         content = '';
+                                    } else {
+                                        // 줄바꿈
+                                        content = content.replace(/(?:\r\n|\r|\n)/g, '<br>');
                                     }
 
                                     // 파일 타임라인
@@ -588,8 +588,11 @@
                         data : {"emplyrSn" : emplyrSn, "groupSn" : groupSn, "timelineSn" : timelineSn, "fileSn" : fileSn},
                         success:function(res){
                             if(res.Status == "S"){
-                                // 댓글 부분 재조회
-                                selectComment(timelineSn);
+                                alert('삭제되었습니다.');
+
+                                // 타임라인 재조회
+                                groupPictureList();
+
                             } else if(res.Status == "F"){
                                 alert("댓글삭제 도중 오류가 발생하였습니다.");
                             }
@@ -712,7 +715,6 @@
                             <div class="task_together">
                                 <div class="together_menu">
                                     <ul>
-                                        <!--<li class="menu_story selected"><a>이야기</a></li>-->
                                         <li class="menu_story" onclick="changePart('story')">이야기</li>
                                         <li class="menu_photo" onclick="changePart('picture')">사진/동영상</li>
                                     </ul>
@@ -783,16 +785,14 @@
                                                             <fieldset>
                                                                 <legend>안내 메세지</legend>
                                                                 <div class="content">
-                                                                    <span class="bu_q">
-                                                                    </span>
+                                                                    <span class="bu_q"></span>
                                                                     <h1>
                                                                         <span class="ellipsis"><span class="groupNm"></span></span> 모임에서 정말 나가시겠습니까?
                                                                     </h1>
                                                                     <div class="desc3">
                                                                         <span class="emplyrNm"></span>
                                                                         <span class="emplyrId"></span> 님이<br>
-                                                                        우리 <span class="groupNm"></span> 모임에 올린<br>모든 파일과 게시글이 삭제되고,
-                                                                        <br>더 이상 이 모임에 들어오실 수 없습니다.<br>댓글은 삭제되지 않습니다.
+                                                                        우리 <span class="groupNm"></span> 모임에 올린<br>모든 파일과 게시글이 삭제됩니다.
                                                                     </div>
                                                                     <div class="desc4">
                                                                         <input type="checkbox" class="input_check" id="confirm_apply" onchange="chkBtn()">
@@ -1008,6 +1008,11 @@
                                 </ul>
                                 <ul id="toge_photo_list" class="toge_photo_list"></ul>
                                 <div class="reload_area"></div>
+                                <div id="photo_wrap" class="photo_wrap">
+                                    <div class="photo_detail">
+                                        <img src="https://nphotogroup-phinf.pstatic.net/20221123_287/4555084_1669186348727S1Vmq_PNG/group_cover_a.png?type=ff120_120" width="70%">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

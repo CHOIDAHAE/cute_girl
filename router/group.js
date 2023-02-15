@@ -1029,21 +1029,48 @@ module.exports = function(app){
 					"emplyrSn"		: req.body.emplyrSn,
 					"groupSn"		: req.body.groupSn,
 					"timelineSn"	: req.body.timelineSn,
-					"fileSn"		: req.body.fileSn
+					"commentSn"		: ''
 				};
 
-			// 그룹파일에 delete
-			let deleteGroupFile = mybatisMapper.getStatement('GroupDAO','deleteGroupFile', param, format);
-
-			conn.execute(deleteGroupFile, function(err,result){
+			// 타임라인 삭제
+			let deleteTimeline = mybatisMapper.getStatement('GroupDAO','deleteTimeline', param, format);
+			// 댓글 삭제
+			let deleteComment = mybatisMapper.getStatement('GroupDAO','deleteComment', param, format);
+			console.log(deleteTimeline);
+			console.log(deleteComment);
+			conn.execute(deleteTimeline, function(err,result){
 				if(err){
-					console.log("deleteGroupFile failed :", err);
+					console.log("deleteTimeline failed :", err);
 					res.json({"Status":"F"});
 					return;
 				}
-				
-				res.json({"Status":"S"});
-				conn.commit();
+
+				conn.execute(deleteComment, function(err,result){
+					if(err){
+						console.log("deleteComment failed :", err);
+						res.json({"Status":"F"});
+						return;
+					}
+					
+					if (req.body.fileSn != null && req.body.fileSn != ''){
+						// 파일 삭제
+						let deleteGroupFile = mybatisMapper.getStatement('GroupDAO','deleteGroupFile', param, format);
+						console.log(deleteGroupFile);
+						conn.execute(deleteGroupFile, function(err,result){
+							if(err){
+								console.log("deleteGroupFile failed :", err);
+								res.json({"Status":"F"});
+								return;
+							}
+
+							res.json({"Status":"S"});
+							conn.commit();
+						});
+					} else {
+						res.json({"Status":"S"});
+						conn.commit();
+					}
+				});
 			});
 		});	
 	})
