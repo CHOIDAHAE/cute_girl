@@ -1815,9 +1815,22 @@ menu, ul, ol {
 
 /******사진 상세보기*********/
 .photo_wrap {
-    position: fixed;
     top: 0;
-    height: 100%;
+    left: -5px;
     width: 100%;
-    background-color: gray;
+    background-color: black;
+    position: absolute;
+}
+
+.photo_detail{
+    /*height: 100%;*/
+    text-align: center;
+}
+
+.detail_x-icon{
+    color: white;
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    cursor: pointer;
 }
