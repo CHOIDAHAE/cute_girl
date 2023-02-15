@@ -25,6 +25,32 @@
 				invitedGroup();
 			};
 
+			$(document).on('change', '#allUncheck', function(e){
+				if($('#allUncheck').is(':checked')){
+					$('#gridArea').contents().find('.fileChkBox').prop("checked", true);
+					$('#gridArea').contents().find('.fileChkBox').attr("id", "chk_file_Y");
+				}else{
+					$('#gridArea').contents().find('.fileChkBox').prop("checked", false);
+					$('#gridArea').contents().find('.fileChkBox').attr("id", "chk_file");
+				}
+
+				fn_setCheckText();
+			});
+
+			//체크 갯수 표현
+			function fn_setCheckText(){
+				var checkCnt = $('#gridArea').contents().find('.fileChkBox:checked').length;
+				$('#checkCnt').html(checkCnt);
+
+				if(checkCnt == 0){
+					$('#checkArea').css('display', 'none');
+					$('#allUncheck').prop("checked", false);
+				}else{
+					$('#checkArea').css('display', 'inline-block');
+					$('#allUncheck').prop("checked", true);
+				}
+			}
+
 			//파일용량 읽어오기
 			function file_Volume(){
 				var emplyrSn = $('#emplyrSn').val();
@@ -91,6 +117,11 @@
 
 			/* 파일 업로드 */
 			function fileUpload(){
+				$('#fileUpload').click();
+			};
+
+			/* 올린 파일 등록 */
+			function fileInsert(){
 				// debugger;
 				var formData = new FormData();
 				formData.append('attachment', $('#fileUpload')[0].files[0]);
@@ -126,7 +157,7 @@
 						console.log(e);
 					}
 				});
-			};
+			}
 
 			// 파일 조회 
 			function fileSelect(useAt, fileType, sortType){
@@ -171,9 +202,16 @@
 
 						fileList += '<li class="item_fnc" id="' + res[i][8]+ '" onclick="view_photoInfo(this)">';
 						/* ID : IMG_파일일련번호_즐겨찾기추가여부_사용여부 */
-						fileList += '<img src="' + fileSrc + '" id="img_' + res[i][8] + '_' + res[i][9] + '_' + res[i][10] + '" class="img_item"/>\n';
+						fileList += '<div class="item_bor"><img src="' + fileSrc + '" id="img_' + res[i][8] + '_' + res[i][9] + '_' + res[i][10] + '" class="img_item"/>\n';
+						fileList += '<input type="checkbox" id="chk_file" class="fileChkBox"/>';
+						//즐겨찾기 여부에 따른 즐겨찾기 버튼 상태 변경
+						if(res[i][9] == "Y"){
+							fileList += '<button type="button" id="btn_bkmk_Y" class="btnBkmk fa-solid fa-star" onclick="fn_delFavor('+ res[i][8] +')"></button>\n';
+						}else{
+							fileList += '<button type="button" id="btn_bkmk" class="btnBkmk fa-regular fa-star" onclick="fn_addFavor('+ res[i][8] +')"></button>\n';
+						}
 						fileList += '<div class="item-name" id="dv_' + res[i][8] + '"> ' + res[i][2] + ' </div>\n';	//파일명
-						fileList += '<input type="hidden" id="orgFileNm_' + res[i][8] + '" value="' + res[i][1] + '"></li>\n';						//원본파일명
+						fileList += '<input type="hidden" id="orgFileNm_' + res[i][8] + '" value="' + res[i][1] + '"></div></li>\n';						//원본파일명
 					}
 
 					$(fileArea).html(fileList);      //파일 리스트
@@ -220,10 +258,12 @@
 							fileSrc = "../images/Icon_" + res[i][4] + ".png";
 						}
 
-						fileList += '<li class="item_fnc" id="' + res[i][0] + '" onclick="view_photoInfo(this)">';
+						fileList += '<div class="item_bor"><li class="item_fnc" id="' + res[i][0] + '" onclick="view_photoInfo(this)">';
 						fileList += '<img src="' + fileSrc + '" id="img_' + res[i][0] + '_Y_Y" class="img_item"/>\n';
+						fileList += '<button type="button" id="btn_bkmk" class="btnBkmk fa-solid fa-star" title="즐겨찾기 추가" onclick="fn_delFavor('+ res[i][8] +')"></button>\n';
+						fileList += '<input type="checkbox" id="chk_file"/>';
 						fileList += '<div class="item-name" id="dv_' + res[i][0] + '"> ' + res[i][5] + ' </div>\n';
-						fileList += '<input type="hidden" id="orgFileNm_' + res[i][0] + '" value="' + res[i][2] + '"></li>\n';	//원본파일명
+						fileList += '<input type="hidden" id="orgFileNm_' + res[i][0] + '" value="' + res[i][2] + '"></div></li>\n';	//원본파일명
 					}
 
 					$(fileArea).html(fileList);      //파일 리스트

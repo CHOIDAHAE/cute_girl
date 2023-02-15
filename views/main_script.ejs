@@ -8,7 +8,7 @@
 	<link href="../css/grid.css?after" rel="stylesheet" type="text/css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" />
 
-	<script>
+	<script type="text/javascript">
 		//파일 우클릭시 메뉴 띄우기
 		var contextFileInfo = "";
 		var orginFileNm = "";
@@ -24,12 +24,12 @@
 				//즐겨찾기 추가여부 확인
 				if(targetId.split("_")[2] == "Y"){
 					var innerHtml = "";
-					innerHtml = '<a href="javascript:void(0);" onclick="fn_delFavor();">즐겨찾기 삭제</a>';
+					innerHtml = '<a href="javascript:void(0);" onclick="fn_delFavor('+ targetId.split("_")[1] +');">즐겨찾기 삭제</a>';
 
 					$('#listFavorAt').html(innerHtml);
 				}else{
 					var innerHtml = "";
-					innerHtml = '<a href="javascript:void(0);" onclick="fn_addFavor();">즐겨찾기 추가</a>';
+					innerHtml = '<a href="javascript:void(0);" onclick="fn_addFavor('+ targetId.split("_")[1] +');">즐겨찾기 추가</a>';
 
 					$('#listFavorAt').html(innerHtml);
 				}
@@ -40,12 +40,9 @@
 					innerHtml = '<a href="javascript:void(0);" onclick="fn_fileDelete(\'N\');">파일 삭제</a>';
 
 					//파일 다운로드 태그 동적 추가
-					var downloadHtml = "";
-					var orgFileNm = $('#orgFileNm_' + e.target.id.split("_")[1]).attr('value');
-					downloadHtml = '<a href="../uploadedFiles/' + orgFileNm + '" download>파일 다운로드</a>'
+					fn_fileDownload(targetId);
 
 					$('#listUseAt').html(innerHtml);
-					$('#fileDownload').html(downloadHtml);
 					$('#fileDelete').hide();
 				}else{
 					var innerHtml = "";
@@ -115,7 +112,34 @@
 			$('.cleanLi').click(function(){
 				$('.cleanLi').removeClass('cleanMenuSelected');
 				$(this).toggleClass('cleanMenuSelected');
+			});
+
+			$('.btnBkmk').on('click', function(e){
+				alert("클릭");
+				console.log(e.target.id.split("_")[1]);
 			})
+		});
+
+		$(document).on('dblclick', '.img_item', function(e){
+			fn_fileDownload(e.target.id);
+			$('#fileDown_a').get(0).click();
+		});
+
+		//체크박스 체크 및 체크해제 이벤트
+		$(document).on('change', '#chk_file', function(e){
+			if($('#chk_file').is(":checked")){
+				e.target.id = 'chk_file_Y';
+			}
+
+			window.parent.fn_setCheckText();
+		});
+
+		$(document).on('change', '#chk_file_Y', function(e){
+			if(!$('#chk_file_Y').is(":checked")){
+				e.target.id = 'chk_file';
+			}
+
+			window.parent.fn_setCheckText();
 		});
 
 		//파일 선택시 사이드바 정보 띄우는 이벤트
@@ -205,8 +229,7 @@
 		}
 
 		//즐겨찾기 추가
-		function fn_addFavor(e){
-			var AtchfileSn = contextFileInfo.split("_")[1];
+		function fn_addFavor(AtchfileSn){
 			var emplyrSn = window.parent.$('#emplyrSn').val();
 			$.ajax({
 				url : "/insertBmFavorite",
@@ -227,8 +250,7 @@
 		}
 
 		//즐겨찾기 삭제
-		function fn_delFavor(e){
-			var AtchfileSn = contextFileInfo.split("_")[1];
+		function fn_delFavor(AtchfileSn){
 			var emplyrSn = window.parent.$('#emplyrSn').val();
 			$.ajax({
 				url : "/deleteBmFavorite",
@@ -310,9 +332,14 @@
 					}
 
 					fileList += '<li class="item_fnc" id="' + res[i][5] + '" onclick="view_photoInfo(this)">';
-					fileList += '<img src="' + fileSrc + '" id="img_' + res[i][5] + '_NULL_Y" class="img_item"/>\n';
+					fileList += '<div class="item_bor"><img src="' + fileSrc + '" id="img_' + res[i][5] + '_'+ res[i][8] +'_Y" class="img_item"/>\n';
+					if(res[i][8] == "Y"){
+						fileList += '<button type="button" id="btn_bkmk" class="btnBkmk fa-solid fa-star" onclick="fn_delFavor('+ res[i][5] +')"></button>\n';
+					}else{
+						fileList += '<button type="button" id="btn_bkmk" class="btnBkmk fa-regular fa-star" onclick="fn_addFavor('+ res[i][5] +')"></button>\n';
+					}
 					fileList += '<div class="item-name" id="dv_' + res[i][5] + '"> ' + res[i][2] + ' </div>\n';
-					fileList += '<input type="hidden" id="orgFileNm_' + res[i][5] + '" value="' + res[i][1] + '"></li>\n';	//원본파일명
+					fileList += '<input type="hidden" id="orgFileNm_' + res[i][5] + '" value="' + res[i][1] + '"></div></li>\n';	//원본파일명
 				}
 
 				$(fileArea).html(fileList);      //파일 리스트
@@ -350,9 +377,14 @@
 
 					fileList += '<li class="item_fnc" id="' + res[i][8]+ '" onclick="view_photoInfo(this)">';
 					/* ID : IMG_파일일련번호_즐겨찾기추가여부_사용여부 */
-					fileList += '<img src="' + fileSrc + '" id="img_' + res[i][8] + '_' + res[i][9] + '_' + res[i][10] + '" class="img_item"/>\n';
+					fileList += '<div class="item_bor"><img src="' + fileSrc + '" id="img_' + res[i][8] + '_' + res[i][9] + '_' + res[i][10] + '" class="img_item"/>\n';
+					if(res[i][9] == "Y"){
+						fileList += '<button type="button" id="btn_bkmk" class="btnBkmk fa-solid fa-star" onclick="fn_delFavor('+ res[i][8] +')"></button>\n';
+					}else{
+						fileList += '<button type="button" id="btn_bkmk" class="btnBkmk fa-regular fa-star" onclick="fn_addFavor('+ res[i][8] +')"></button>\n';
+					}
 					fileList += '<div class="item-name" id="dv_' + res[i][8] + '"> ' + res[i][2] + ' </div>\n';
-					fileList += '<input type="hidden" id="orgFileNm_' + res[i][8] + '" value="' + res[i][1] + '"></li>\n';	//원본파일명
+					fileList += '<input type="hidden" id="orgFileNm_' + res[i][8] + '" value="' + res[i][1] + '"></div></li>\n';	//원본파일명
 				}
 
 				$('#fileList').html(fileList);      //파일 리스트
@@ -365,6 +397,14 @@
 				console.log('textStatus'+textStatus);
 				console.log('errorThrown'+errorThrown);
 			})
+		}
+
+		//파일 다운로드
+		function fn_fileDownload(fileId){
+			var downloadHtml = "";
+			var orgFileNm = $('#orgFileNm_' + fileId.split("_")[1]).attr('value');
+			downloadHtml = '<a id="fileDown_a" href="../uploadedFiles/' + orgFileNm + '" download>파일 다운로드</a>';
+			$('#fileDownload').html(downloadHtml);
 		}
 	</script>
 </head>
