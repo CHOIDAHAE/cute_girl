@@ -107,14 +107,6 @@ body{
     text-align: center;
 }
 
-/* 버튼스타일 */
-.button-wrap{
-    margin-top : 5px;
-    margin-right:10px;
-    float:right;
-    /*display: none;*/
-}
-
 .btnStyle {
     position: relative;
     -webkit-box-flex: 0;
@@ -149,6 +141,68 @@ body{
     color: #fff;
 }
 
+.btn_UploadStyle::before{
+    background-image: linear-gradient(transparent, transparent), url(https://ssl.pstatic.net/static/pwe/cloud/img/sprite/sp_cloudsvg_ef3264f5.svg);
+    background-size: 1057px 1023px;
+    background-position: -778px -742px;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 4px;
+    content: '';
+}
+
+.btn_DownloadStyle{
+    position: relative;
+    -webkit-box-flex: 0;
+    -ms-flex: none;
+    flex: none;
+    height: 32px;
+    padding: 0 10px;
+    margin-left: 8px;
+    border: 0;
+    border-radius: 4px;
+    background-color: #f1f3f9;
+    font-weight: 700;
+    vertical-align: top;
+    line-height: normal;
+    color: #000;
+}
+
+.btn_DownloadStyle::after{
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.04);
+    -webkit-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+    opacity: 0;
+    border-radius: 4px;
+    content: '';
+}
+
+.task_text {
+    margin-left : 15px;
+    font-size: 13px;
+    line-height: 14px;
+    color: #000;
+}
+
+.task_text.select {
+    -webkit-box-flex: 0;
+    -ms-flex: none;
+    flex: none;
+    font-weight: 700;
+    color: #9398a0;
+}
+
+/* #checkArea {
+    position: absolute;
+} */
+
 .button-wrap form,
 .button-wrap a{
     display : inline;
@@ -164,4 +218,24 @@ body{
 .frameBox {
     width :85%;
     height : 85%;
+}
+
+.fileBtnArea{
+    padding-top:16px;
+}
+
+.fileBtnArea button{
+    margin-top : -5px;
+}
+
+.Alluncheck{
+    transform: scale(1.5);
+}
+
+#checkArea{
+    display:none;
+}
+
+#fileUpload{
+    display:none;
 }
