@@ -44,6 +44,9 @@
 
                 // 스토리 올리기 버튼
                 submit_timeline_control();
+
+                // 사진 상세보기 끔
+                photo_big_close();
             });
             
             // 스토리/사진 탭
@@ -82,6 +85,7 @@
 
                             $(".groupNm").text(res.groupNm);
                             $(".leaderNm").text(res.leaderNm);
+                            $(".nickname").text(res.nickname);
                             $(".emplyrNm").text(window.parent.$('#emplyrNm').val());
                             $(".emplyrId").text(window.parent.$('#emplyrId').val());
                             $(".frstDt").text(res.frstRegistDt);
@@ -381,7 +385,9 @@
                                     var content = res.result[i][5];
                                     var type = res.result[i][6];
                                     var emplyrSn =  res.result[i][7];
-                                    var timelineSn = res.result[i][9];  
+                                    var timelineSn = res.result[i][9];
+                                    var nickname = res.result[i][10];
+                                    var src = res.result[i][1]+'/'+res.result[i][2];
 
                                     if(content == null){
                                         content = '';
@@ -393,14 +399,14 @@
                                     // 파일 타임라인
                                     if(type == 'file'){
                                         photo_content += '<li class="groupPicture">'
-                                        +'<div class="item"><a><img src="..'+res.result[i][1]+'/'+res.result[i][2]
+                                        +'<div class="item"><a onclick="photo_big(\"'+src+'");"><img src="..'+res.result[i][1]+'/'+res.result[i][2]
                                         +'" style="width:100%; height:100%;"></a></div></li>\n';
 
                                         story_content += 
                                             '<div class="together_section"><div class="toge_story_list">'
                                                 +'<a class="user_thum"><img src="" width="55" height="55"></a>'
                                                 +'<div class="toge_box">'
-                                                    +'<h3 class="toge_title" onMouseOut="delete_timeline_control('+timelineSn+')" onMouseOver="delete_timeline_control('+timelineSn+','+emplyrSn+')"><strong>'+res.result[i][3]+'</strong><span class="load_time">'+res.result[i][4]+'</span><i id="x-icon_'+timelineSn+'" class="fa-solid fa-x x-icon" style="display:none;" onclick="delete_timeline('+timelineSn+','+fileSn+')"></i></h3>'
+                                                    +'<h3 class="toge_title" onMouseOut="delete_timeline_control('+timelineSn+')" onMouseOver="delete_timeline_control('+timelineSn+','+emplyrSn+')"><strong>'+nickname+'</strong><span class="load_time">'+res.result[i][4]+'</span><i id="x-icon_'+timelineSn+'" class="fa-solid fa-x x-icon" style="display:none;" onclick="delete_timeline('+timelineSn+','+fileSn+')"></i></h3>'
                                                     +'<div class="toge_content_box">'
                                                         +'<div class="toge_content">'
                                                             +'<p class="toge_text"><span>'+content+'</span></p>'
@@ -421,7 +427,7 @@
                                         story_content += 
                                                         '<div class="together_section"><div class="notification"><div class="noti_box">'
                                                         +'<a class="thum user_thum none_thum" style="cursor: default;"><img src="https://ssl.pstatic.net/static/pwe/photo/blank.gif" width="38" height="38" alt=""></a>'
-                                                        +'<span class="noti_text"><strong class="point_3675c7">'+res.result[i][8]+'</strong>님이 새로운 멤버가 되었습니다.</span>'
+                                                        +'<span class="noti_text"><strong class="point_3675c7">'+nickname+'</strong>님이 새로운 멤버가 되었습니다.</span>'
                                                         +'</div></div></div>';
 
                                     } else if(type == 'story') {    // 스토리 타임라인
@@ -429,7 +435,7 @@
                                         '<div class="together_section"><div class="toge_story_list"><a class="user_thum">'
                                             +'<img src="" width="55" height="55"></a>'
                                             +'<div class="toge_box">'
-                                                +'<h3 class="toge_title" onMouseOut="delete_timeline_control('+timelineSn+')" onMouseOver="delete_timeline_control('+timelineSn+','+emplyrSn+')"><strong>'+res.result[i][3]+'</strong><span class="load_time">'+res.result[i][4]+'</span><i id="x-icon_'+timelineSn+'" class="fa-solid fa-x x-icon" style="display:none;" onclick="delete_timeline('+timelineSn+','+fileSn+')"></i></h3>'
+                                                +'<h3 class="toge_title" onMouseOut="delete_timeline_control('+timelineSn+')" onMouseOver="delete_timeline_control('+timelineSn+','+emplyrSn+')"><strong>'+nickname+'</strong><span class="load_time">'+res.result[i][4]+'</span><i id="x-icon_'+timelineSn+'" class="fa-solid fa-x x-icon" style="display:none;" onclick="delete_timeline('+timelineSn+','+fileSn+')"></i></h3>'
                                                 +'<div class="toge_content_box"><div class="toge_content"><p class="toge_text"><span>'+content+'</span></p>'
                                                     +'<div class="toge_audio_box"></div></div></div>'
                                                     +'<div class="toge_comment"><ul id="comm_list_'+timelineSn+'" class="comm_list"></ul><div class="comm_input"><div class="textarea_input"><div class="textarea">'
@@ -454,6 +460,20 @@
 						alert("사진 조회 중 오류가 발생하였습니다.(ajax에러)");
 					}
 				})
+            };
+
+            // 사진 크게보기
+            function photo_big(fileSn){
+                console.log(fileSn);
+                // 사진 띄우기
+                $('#photo_wrap').show();
+            };
+
+            // 사진 크게보기 나가기 버튼
+            function photo_big_close(){
+                // var groupSn = $('#groupSn').val();
+                // 사진 띄우기
+                $('#photo_wrap').hide();
             };
 
             // 댓글달기 버튼 활성화/비활성화
@@ -521,7 +541,6 @@
 					dataType : "JSON", //"JSON"
 					data : {"groupSn" : groupSn, "timelineSn" : timelineSn},
 					success:function(res){
-                        console.log(res);
                         if(res.Status == "S"){
                             var tmp_id = "";
                             var comment_content = '';
@@ -532,6 +551,7 @@
                                 var registerDt = res.result[i][3];
                                 var emplyrNm = res.result[i][4];
                                 var emplyrSn = res.result[i][5];    // 코멘트 단 사람의 일련번호
+                                var nickname = res.result[i][6];
 
                                 //각자 덧붙일 ul의 id
                                 var id = '#comm_list_'+timelineSn;
@@ -541,7 +561,7 @@
 
                                 comment_content += '<li onMouseOut="deleteBtn_out('+timelineSn+','+commentSn+')" onMouseOver="deleteBtn_control('+emplyrSn+','+timelineSn+','+commentSn+');"><div class="comm_thum"><a class="thum" style="cursor: pointer;">'
                                                 +'<img src="" width="38" height="38"></a></div>'
-                                                +'<div class="comm_txt"><strong>'+emplyrNm+'<em>'+registerDt+'</em></strong><p>'+commentCd+'</p>'
+                                                +'<div class="comm_txt"><strong>'+nickname+'<em>'+registerDt+'</em></strong><p>'+commentCd+'</p>'
                                                 +'<a id="comm_'+timelineSn+'_'+commentSn+'" class="btn_del_comm" onclick="delete_comment('+timelineSn+','+commentSn+');"><i class="fa-solid fa-x"></i></a></div></li>';
                                 tmp_id = id;
                                 $(id).html(comment_content);
@@ -877,7 +897,7 @@
                                                             <p><img src="https://ssl.pstatic.net/static/pwe/cloud/pc/group_welcome.png" height="145" alt=""></p>
                                                             <p class="date"><span class="frstDt"></span></p>
                                                             <h3 class="title">
-                                                                <strong class="point_3675c7"><span class="leaderNm"></span></strong>님이&nbsp;
+                                                                <strong class="point_3675c7"><span class="nickname"></span></strong>님이&nbsp;
                                                                 <strong><span class="groupNm"></span></strong> 모임을 시작합니다.
                                                             </h3>
                                                             <p class="text">MYDRIVE에 저장되어 있는 우리 아기 사진, 가족 여행 사진,<br>멋진 야경 사진 등 일상과 추억을 가족, 친구와 함께 나눠보세요!<br>멤버는 최대 10명까지 초대할 수 있습니다.</p>
@@ -1009,8 +1029,9 @@
                                 <ul id="toge_photo_list" class="toge_photo_list"></ul>
                                 <div class="reload_area"></div>
                                 <div id="photo_wrap" class="photo_wrap">
+                                    <i id="detail_x-icon" class="fa-solid fa-x detail_x-icon" onclick="photo_big_close()"></i>
                                     <div class="photo_detail">
-                                        <img src="https://nphotogroup-phinf.pstatic.net/20221123_287/4555084_1669186348727S1Vmq_PNG/group_cover_a.png?type=ff120_120" width="70%">
+                                        <img src="https://nphotogroup-phinf.pstatic.net/20221123_287/4555084_1669186348727S1Vmq_PNG/group_cover_a.png?type=ff120_120" width="80%">
                                     </div>
                                 </div>
                             </div>

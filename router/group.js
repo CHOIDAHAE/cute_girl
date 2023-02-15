@@ -666,6 +666,7 @@ module.exports = function(app){
 							"groupNm"		: resul.rows[0][0],
 							"frstRegistDt"	: resul.rows[0][1],
 							"leaderNm"		: resul.rows[0][2],
+							"nickname"		: resul.rows[0][3],
 						});
 
 					//doRelease(conn);					
