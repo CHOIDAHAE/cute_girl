@@ -220,8 +220,10 @@ module.exports = function(app){
 		console.log("updateFileUseAt");
 		
 		var useAt = req.body.useAt;
-		var AtchfileSn = req.body.AtchfileSn;
+		var AtchfileSnArr = req.body.AtchfileSn;
 		var emplyrSn = req.session.user.emplyrSn;
+
+		console.log(AtchfileSnArr);
 		
 		oracledb.getConnection({
 			user:dbConfig.user,
@@ -238,34 +240,39 @@ module.exports = function(app){
 				
 			//query format
 			let format = {language: 'sql', indent: ''};
-			
-			var param = {
-				useAt : useAt
-				, emplyrSn : emplyrSn
-				, AtchfileSn : AtchfileSn
+
+			for(var i=0; i<AtchfileSnArr.length; i++){
+				var param = {
+					useAt : useAt
+					, emplyrSn : emplyrSn
+					, AtchfileSn : AtchfileSnArr[i]
+				}
+
+				console.log(param);
+	
+				let query = mybatisMapper.getStatement('IndexDAO','updateFileUseAt', param, format);
+				conn.execute(query, function(err,result){
+					console.log("IndexDAO.updateFileUseAt");
+					console.log(query);
+					if(err){
+						console.log(err);
+						res.json("F");
+					}
+				});
+	
+				//그룹에 저장된 파일 삭제
+				query = mybatisMapper.getStatement('IndexDAO','deleteGroupFile', param, format);
+				conn.execute(query, function(err,result){
+					console.log("IndexDAO.deleteGroupFile");
+					console.log(query);
+					if(err){
+						console.log(err);
+						res.json("F");
+					}
+				});
 			}
-
-			let query = mybatisMapper.getStatement('IndexDAO','updateFileUseAt', param, format);
-			conn.execute(query, function(err,result){
-				console.log("IndexDAO.updateFileUseAt");
-				console.log(query);
-				if(err){
-					console.log(err);
-					res.json("F");
-				}
-			});
-
-			//그룹에 저장된 파일 삭제
-			query = mybatisMapper.getStatement('IndexDAO','deleteGroupFile', param, format);
-			conn.execute(query, function(err,result){
-				console.log("IndexDAO.deleteGroupFile");
-				console.log(query);
-				if(err){
-					console.log(err);
-					res.json("F");
-				}
-				conn.commit();
-			});
+			
+			conn.commit();
 			res.json({"emplyrSn":req.session.user.emplyrSn});
 			//doRelease(conn);
 		});

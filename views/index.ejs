@@ -5,6 +5,7 @@
 				<% include ./header %>
 			</div>
 			<div id="main" class="main-part">
+				<input type="hidden" id="btnAreaType" value="checkArea"/>
 				<form class="formBox">
 					<select name="ListType" id="sortSbBox" class="listSbBox" onChange="selectNayeol()">
 						<option value="none"> 정렬 기준 </option>
@@ -21,7 +22,7 @@
 						올리기
 					</button>
 					<span id="checkArea">
-						<button class="btn_DownloadStyle" onclick="fileDownload();">
+						<button class="btn_DownloadStyle" onclick="fn_checkFileDownload();">
 							<!-- <img src='../images/icon_download.png' width="20px" height="20px" alt="다운로드 아이콘"> -->
 							내려받기
 						</button>
@@ -29,12 +30,24 @@
 							<!-- <img src='../images/icon_download.png' width="20px" height="20px" alt="다운로드 아이콘"> -->
 							공유
 						</button>
-						<button class="btn_DownloadStyle" onclick="fileDelete();">
+						<button class="btn_DownloadStyle" onclick="fn_checkFileDelete('N');">
 							<!-- <img src='../images/icon_download.png' width="20px" height="20px" alt="다운로드 아이콘"> -->
 							삭제
 						</button>
 						<span class="task_text select">
-							<em id="checkCnt"></em>
+							<em class="checkCnt"></em>
+							개 선택
+						</span>
+					</span>
+					<span id="trashArea">
+						<button class="btn_DownloadStyle" onclick="fn_checkFileDeleteOut();">
+							삭제
+						</button>
+						<button id="btn_reUpload" class="btn_DownloadStyle" onclick="fn_checkFileDelete('Y');">
+							복원
+						</button>
+						<span class="task_text select">
+							<em class="checkCnt"></em>
 							개 선택
 						</span>
 					</span>

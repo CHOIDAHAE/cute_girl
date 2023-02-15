@@ -39,14 +39,15 @@
 
 			//체크 갯수 표현
 			function fn_setCheckText(){
+				var btnAreaType = $('#btnAreaType').val();
 				var checkCnt = $('#gridArea').contents().find('.fileChkBox:checked').length;
-				$('#checkCnt').html(checkCnt);
+				$('.checkCnt').html(checkCnt);
 
 				if(checkCnt == 0){
-					$('#checkArea').css('display', 'none');
+					$('#' + btnAreaType).css('display', 'none');
 					$('#allUncheck').prop("checked", false);
 				}else{
-					$('#checkArea').css('display', 'inline-block');
+					$('#' + btnAreaType).css('display', 'inline-block');
 					$('#allUncheck').prop("checked", true);
 				}
 			}
@@ -166,6 +167,14 @@
 					openMenu('main');
 				}
 
+				//휴지통 오픈할 경우 체크박스용 버튼 타입 변경
+				if(useAt == "Y"){
+					$('#btnAreaType').attr('value', 'checkArea');
+				}else{
+					$('#btnAreaType').attr('value', 'trashArea');
+					$('#btn_reUpload').show();
+				}
+
 				//기존 조회에서 파일 정리하기 메뉴 숨기기
 				$('#gridArea').contents().find('#clean_file_menu').hide();
 				var emplyrSn = document.getElementById('emplyrSn').value;
@@ -283,6 +292,8 @@
 				$('#gridArea').contents().find('#clean_file_menu').show();
 				$('#gridArea').contents().find('#fileNmDup').click();
 				$('#gridArea').contents().find('#fileNmDupLi').toggleClass('cleanMenuSelected');
+				$('#btnAreaType').attr('value', 'trashArea');
+				$('#btn_reUpload').hide();
 			}
 				
 			// 모임만들기 모달 열기
@@ -491,6 +502,34 @@
 						}
 					})
 				}			
+			}
+
+			//체크박스 파일 다운로드
+			function fn_checkFileDownload(){
+				var checkFileArr = $('#gridArea').contents().find('.fileChkBox:checked');
+
+				for(var i=0; i < checkFileArr.length; i++){
+					var fileId = checkFileArr[i].previousElementSibling.id;
+					$('#gridArea').get(0).contentWindow.fn_fileDownload(fileId);
+					$('#gridArea').contents().find('#fileDown_a').get(0).click();
+				}
+			}
+
+			//체크박스 파일 삭제
+			function fn_checkFileDelete(useAt){
+				var checkFileArr = $('#gridArea').contents().find('.fileChkBox:checked');
+				var fileSnArr = [];
+
+				for(var i=0; i< checkFileArr.length; i++){
+					fileSnArr.push(checkFileArr[i].previousElementSibling.id.split("_")[1]);
+				}
+
+				$('#gridArea').get(0).contentWindow.fn_fileDeleteAjax(useAt, fileSnArr);
+			}
+
+			function fn_checkFileDeleteOut(){
+				console.log('checkDelete Out');
+
 			}
 		</script>
 	</head>
