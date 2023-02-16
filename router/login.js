@@ -20,7 +20,7 @@ module.exports = function(app){
     })
 
     app.get('/login', function(req, res){
-        console.log(req);
+        // console.log(req);
         res.render('./user/login', {"type":'login', "groupSn" : ""});
     })
     

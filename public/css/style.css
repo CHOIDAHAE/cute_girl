@@ -232,10 +232,6 @@ body{
     transform: scale(1.5);
 }
 
-#checkArea, #trashArea{
-    display:none;
-}
-
-#fileUpload{
+#checkArea, #trashArea, #fileUpload, #btn_emptyTrash{
     display:none;
 }

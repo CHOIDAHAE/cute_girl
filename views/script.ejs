@@ -170,9 +170,11 @@
 				//휴지통 오픈할 경우 체크박스용 버튼 타입 변경
 				if(useAt == "Y"){
 					$('#btnAreaType').attr('value', 'checkArea');
+					$('#btn_emptyTrash').css('display', 'none');
 				}else{
 					$('#btnAreaType').attr('value', 'trashArea');
 					$('#btn_reUpload').show();
+					$('#btn_emptyTrash').css('display', 'inline-block');
 				}
 
 				//기존 조회에서 파일 정리하기 메뉴 숨기기
@@ -195,37 +197,23 @@
 					data : {"emplyrSn" : emplyrSn, "useAt" : useAt, "fileType" : fileType, "orderBy" : orderBy}
 				})
 				.done(function (res) {
-					var fileArea = $('#gridArea').contents().find('#fileList');	//파일목록
-					var ListType = $('#gridArea').contents().find('#ListType');	//조회타입
-					var fileTypeNm = $('#gridArea').contents().find('#fileTypeNm');	//파일타입 (하단 메뉴 선택시)
-
-					var fileList = "";
+					var dataList = new Array();
 
 					for(var i=0; i<res.length; i++){
-						//파일타입이 사진이 아닐 경우 아이콘으로 보여주기
-						var extsnNm = res[i][11].split("/")[0];
-						var fileSrc = "../uploadedFiles/" + res[i][1];
-						if(extsnNm != "image"){
-							fileSrc = "../images/Icon_" + res[i][3] + ".png";
-						}
+						var dataMap = new Map([
+							["orginlFileExtsnNm", res[i][11]]
+							, ["orginlFileNm", res[i][1]]
+							, ["fileExtsnNm", res[i][3]]
+							, ["atchmflSn", res[i][8]]
+							, ["bkmkAt", res[i][9]]
+							, ["useAt", res[i][10]]
+							, ["fileNm", res[i][2]]
+						]);
 
-						fileList += '<li class="item_fnc" id="' + res[i][8]+ '" onclick="view_photoInfo(this)">';
-						/* ID : IMG_파일일련번호_즐겨찾기추가여부_사용여부 */
-						fileList += '<div class="item_bor"><img src="' + fileSrc + '" id="img_' + res[i][8] + '_' + res[i][9] + '_' + res[i][10] + '" class="img_item"/>\n';
-						fileList += '<input type="checkbox" id="chk_file" class="fileChkBox"/>';
-						//즐겨찾기 여부에 따른 즐겨찾기 버튼 상태 변경
-						if(res[i][9] == "Y"){
-							fileList += '<button type="button" id="btn_bkmk_Y" class="btnBkmk fa-solid fa-star" onclick="fn_delFavor('+ res[i][8] +')"></button>\n';
-						}else{
-							fileList += '<button type="button" id="btn_bkmk" class="btnBkmk fa-regular fa-star" onclick="fn_addFavor('+ res[i][8] +')"></button>\n';
-						}
-						fileList += '<div class="item-name" id="dv_' + res[i][8] + '"> ' + res[i][2] + ' </div>\n';	//파일명
-						fileList += '<input type="hidden" id="orgFileNm_' + res[i][8] + '" value="' + res[i][1] + '"></div></li>\n';						//원본파일명
+						dataList.push(dataMap);
 					}
 
-					$(fileArea).html(fileList);      //파일 리스트
-					$(ListType).attr('value', "selectList");	//조회타입 설정
-					$(fileTypeNm).attr('value', fileType);		//파일타입 설정
+					fn_setFileGrid(dataList, fileType);
 				})
 				.fail(function (xhr, textStatus, errorThrown) {
 					console.log('selectFileList ajax 실패');
@@ -234,6 +222,50 @@
 					console.log('errorThrown'+errorThrown);
 				})
 			};
+
+			//파일 목록 생성
+			function fn_setFileGrid(dlt_fileList, fileType){
+				//파일 조회시 체크박스용 버튼 전체 숨김 및 체크박스 해제
+				$('#checkArea').css('display', 'none');
+				$('#trashArea').css('display', 'none');
+				$('#allUncheck').prop("checked", false);
+
+				var fileArea = $('#gridArea').contents().find('#fileList');	//파일목록
+				var ListType = $('#gridArea').contents().find('#ListType');	//조회타입
+				var fileTypeNm = $('#gridArea').contents().find('#fileTypeNm');	//파일타입 (하단 메뉴 선택시)
+
+				var fileList = "";
+
+				for(var i=0; i<dlt_fileList.length; i++){
+					var dma_fileData = dlt_fileList[i];
+					var fileSn = dma_fileData.get("atchmflSn");
+
+					//파일타입이 사진이 아닐 경우 아이콘으로 보여주기
+					var extsnNm = dma_fileData.get("orginlFileExtsnNm").split("/")[0];
+					var fileSrc = "../uploadedFiles/" + dma_fileData.get("orginlFileNm");
+					if(extsnNm != "image"){
+						fileSrc = "../images/Icon_" + dma_fileData.get("fileExtsnNm") + ".png";
+					}
+
+					fileList += '<li class="item_fnc" id="' + fileSn+ '" onclick="view_photoInfo(this)">';
+					fileList += '<div class="item_bor">';
+					/* ID : IMG_파일일련번호_즐겨찾기추가여부_사용여부 */
+					fileList += '<img src="' + fileSrc + '" id="img_' + fileSn + '_' + dma_fileData.get("bkmkAt") + '_' + dma_fileData.get("useAt") + '" class="img_item"/>\n';
+					fileList += '<input type="checkbox" id="chk_file" class="fileChkBox"/>';
+					//즐겨찾기 여부에 따른 즐겨찾기 버튼 상태 변경
+					if(dma_fileData.get("bkmkAt") == "Y"){
+						fileList += '<button type="button" id="btn_bkmk_Y" class="btnBkmk fa-solid fa-star" onclick="fn_delFavor('+ fileSn +')"></button>\n';
+					}else{
+						fileList += '<button type="button" id="btn_bkmk" class="btnBkmk fa-regular fa-star" onclick="fn_addFavor('+ fileSn +')"></button>\n';
+					}
+					fileList += '<div class="item-name" id="dv_' + fileSn + '"> ' + dma_fileData.get("fileNm") + ' </div>\n';	//파일명
+					fileList += '<input type="hidden" id="orgFileNm_' + fileSn + '" value="' + dma_fileData.get("orginlFileNm") + '"></div></li>\n';	//원본파일명
+				}
+
+				$(fileArea).html(fileList);      //파일 리스트
+				$(ListType).attr('value', "selectList");	//조회타입 설정
+				$(fileTypeNm).attr('value', fileType);		//파일타입 설정
+			}
 
 			// 환경설정 팝업
 			function openWindowPop(url, name){
@@ -254,36 +286,26 @@
 
 				})
 				.done(function (res) {
-					var fileArea = $('#gridArea').contents().find('#fileList');
-					var ListType = $('#gridArea').contents().find('#ListType');
-					var fileTypeNm = $('#gridArea').contents().find('#fileTypeNm');
-					
-					var fileList = "";
+					var dataList = new Array();
 
 					for(var i=0; i<res.length; i++){
-						var extsnNm = res[i][6].split("/")[0];
-						var fileSrc = "../uploadedFiles/" + res[i][2];
-						if(extsnNm != "image"){
-							fileSrc = "../images/Icon_" + res[i][4] + ".png";
-						}
+						var dataMap = new Map([
+							["orginlFileExtsnNm", res[i][6]]
+							, ["orginlFileNm", res[i][2]]
+							, ["fileExtsnNm", res[i][4]]
+							, ["atchmflSn", res[i][0]]
+							, ["bkmkAt", "Y"]
+							, ["useAt", "Y"]
+							, ["fileNm", res[i][5]]
+						]);
 
-						fileList += '<div class="item_bor"><li class="item_fnc" id="' + res[i][0] + '" onclick="view_photoInfo(this)">';
-						fileList += '<img src="' + fileSrc + '" id="img_' + res[i][0] + '_Y_Y" class="img_item"/>\n';
-						fileList += '<button type="button" id="btn_bkmk" class="btnBkmk fa-solid fa-star" title="즐겨찾기 추가" onclick="fn_delFavor('+ res[i][8] +')"></button>\n';
-						fileList += '<input type="checkbox" id="chk_file"/>';
-						fileList += '<div class="item-name" id="dv_' + res[i][0] + '"> ' + res[i][5] + ' </div>\n';
-						fileList += '<input type="hidden" id="orgFileNm_' + res[i][0] + '" value="' + res[i][2] + '"></div></li>\n';	//원본파일명
+						dataList.push(dataMap);
 					}
 
-					$(fileArea).html(fileList);      //파일 리스트
-					$(ListType).attr('value', "selectList");	//조회타입 설정
-					$(fileTypeNm).attr('value', "ALL");		//파일타입 설정
+					fn_setFileGrid(dataList, "ALL");
 				})
-				.fail(function (xhr, textStatus, errorThrown) {
+				.fail(function () {
 					console.log('selectBkmkList ajax 실패');
-					console.log('xhr'+xhr);
-					console.log('textStatus'+textStatus);
-					console.log('errorThrown'+errorThrown);
 				})
 			};
 
@@ -528,8 +550,36 @@
 			}
 
 			function fn_checkFileDeleteOut(){
-				console.log('checkDelete Out');
+				var checkFileArr = $('#gridArea').contents().find('.fileChkBox:checked');
+				var fileSnArr = new Array();
+				var orgnFilenmArr = new Array();
 
+				for(var i=0; i< checkFileArr.length; i++){
+					var fileSn = checkFileArr[i].previousElementSibling.id.split("_")[1];
+					fileSnArr.push(fileSn);
+					orgnFilenmArr.push($('#gridArea').contents().find('#orgFileNm_'+fileSn).val());
+				}
+
+				$('#gridArea').get(0).contentWindow.fn_fileDeleteOutAjax(fileSnArr, orgnFilenmArr);
+			}
+
+			function fn_setEmptyTrash(){
+				var emplyrSn = $('#emplyrSn').val();
+				if(confirm("정말 휴지통을 비우시겠습니까?")){
+					$.ajax({
+						url : "/deleteAllTrashFile",
+						type : "POST",
+						dataType : "JSON", //"JSON"
+						data : {"sEmplyrSn":emplyrSn},
+						success:function(result){
+							fileSelect("Y", "ALL");
+							file_Volume();
+						},
+						error:function(e){
+							alert("휴지통을 비우던 도중 오류가 발생했습니다.");
+						}
+					})
+				}
 			}
 		</script>
 	</head>

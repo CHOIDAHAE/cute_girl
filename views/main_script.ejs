@@ -122,6 +122,7 @@
 
 		//체크박스 체크 및 체크해제 이벤트
 		$(document).on('change', '#chk_file', function(e){
+			console.log(e);
 			if($('#chk_file').is(":checked")){
 				e.target.id = 'chk_file_Y';
 			}
@@ -221,17 +222,27 @@
 		//파일 완전히 삭제
 		function fn_fileDeleteOut(){
 			var AtchfileSn = contextFileInfo.split("_")[1];
-			var emplyrSn = window.parent.$('#emplyrSn').val();
 			var orgnFileNm = orginFileNm[orginFileNm.length - 1];
 
-			console.log(orgnFileNm);
+			fn_fileDeleteOutAjax([AtchfileSn], [orgnFileNm]);
+		}
 
-			if(confirm("파일을 완전히 삭제하시겠습니까?")){
+		function fn_fileDeleteOutAjax(AtchfileSnArr, orgnFileNmArr){
+			var emplyrSn = window.parent.$('#emplyrSn').val();
+			var msg = "파일을 완전히 삭제하시겠습니까?";
+
+			if(AtchfileSnArr.length == 1){
+				msg = $('#dv_'+AtchfileSnArr[0]).html() + msg;
+			}else{
+				msg = AtchfileSnArr.length + '개의 ' + msg;
+			}
+
+			if(confirm(msg)){
 				$.ajax({
 					url : "/deleteFileUseAt",
 					type : "POST",
 					dataType : "JSON", //"JSON"
-					data : {"AtchfileSn" : AtchfileSn, "emplyrSn" : emplyrSn, "orgnFileNm" : orgnFileNm}
+					data : {"AtchfileSn" : AtchfileSnArr, "emplyrSn" : emplyrSn, "orgnFileNm" : orgnFileNmArr}
 
 				})
 				.done(function (res) {
@@ -333,33 +344,24 @@
 				data : {"cleanType":"findDupNm"}
 			})
 			.done(function (res) {
-				var fileArea = $('#fileList');
-				var ListType = $('#ListType');
-				
-				var fileList = "";
+				var dataList = new Array();
 
 				for(var i=0; i<res.length; i++){
-					var extsnNm = res[i][7].split("/")[0];
-					var fileSrc = "../uploadedFiles/" + res[i][1];
-					if(extsnNm != "image"){
-						fileSrc = "../images/Icon_" + res[i][3] + ".png";
-					}
+					var dataMap = new Map([
+						["orginlFileExtsnNm", res[i][7]]
+						, ["orginlFileNm", res[i][1]]
+						, ["fileExtsnNm", res[i][3]]
+						, ["atchmflSn", res[i][5]]
+						, ["bkmkAt", res[i][8]]
+						, ["useAt", "Y"]
+						, ["fileNm", res[i][2]]
+					]);
 
-					fileList += '<li class="item_fnc" id="' + res[i][5] + '" onclick="view_photoInfo(this)">';
-					fileList += '<div class="item_bor"><img src="' + fileSrc + '" id="img_' + res[i][5] + '_'+ res[i][8] +'_Y" class="img_item"/>\n';
-					fileList += '<input type="checkbox" id="chk_file" class="fileChkBox"/>';
-					if(res[i][8] == "Y"){
-						fileList += '<button type="button" id="btn_bkmk" class="btnBkmk fa-solid fa-star" onclick="fn_delFavor('+ res[i][5] +')"></button>\n';
-					}else{
-						fileList += '<button type="button" id="btn_bkmk" class="btnBkmk fa-regular fa-star" onclick="fn_addFavor('+ res[i][5] +')"></button>\n';
-					}
-					fileList += '<div class="item-name" id="dv_' + res[i][5] + '"> ' + res[i][2] + ' </div>\n';
-					fileList += '<input type="hidden" id="orgFileNm_' + res[i][5] + '" value="' + res[i][1] + '"></div></li>\n';	//원본파일명
+					dataList.push(dataMap);
 				}
 
-				$(fileArea).html(fileList);      //파일 리스트
-				$(ListType).attr('value', "cleanUpType");
-				$('#fileTypeNm').attr('value', "ALL");
+				window.parent.fn_setFileGrid(dataList, "ALL");
+				$('#ListType').attr('value', "cleanUpType");
 			})
 			.fail(function (xhr, textStatus, errorThrown) {
 				console.log('selectBkmkList ajax 실패');
@@ -381,31 +383,24 @@
 
 			})
 			.done(function (res) {
-				var fileList = "";
+				var dataList = new Array();
 
 				for(var i=0; i<res.length; i++){
-					var extsnNm = res[i][11].split("/")[0];
-					var fileSrc = "../uploadedFiles/" + res[i][1];
-					if(extsnNm != "image"){
-						fileSrc = "../images/Icon_" + res[i][3] + ".png";
-					}
+					var dataMap = new Map([
+						["orginlFileExtsnNm", res[i][11]]
+						, ["orginlFileNm", res[i][1]]
+						, ["fileExtsnNm", res[i][3]]
+						, ["atchmflSn", res[i][8]]
+						, ["bkmkAt", res[i][9]]
+						, ["useAt", res[i][10]]
+						, ["fileNm", res[i][2]]
+					]);
 
-					fileList += '<li class="item_fnc" id="' + res[i][8]+ '" onclick="view_photoInfo(this)">';
-					/* ID : IMG_파일일련번호_즐겨찾기추가여부_사용여부 */
-					fileList += '<div class="item_bor"><img src="' + fileSrc + '" id="img_' + res[i][8] + '_' + res[i][9] + '_' + res[i][10] + '" class="img_item"/>\n';
-					fileList += '<input type="checkbox" id="chk_file" class="fileChkBox"/>';
-					if(res[i][9] == "Y"){
-						fileList += '<button type="button" id="btn_bkmk" class="btnBkmk fa-solid fa-star" onclick="fn_delFavor('+ res[i][8] +')"></button>\n';
-					}else{
-						fileList += '<button type="button" id="btn_bkmk" class="btnBkmk fa-regular fa-star" onclick="fn_addFavor('+ res[i][8] +')"></button>\n';
-					}
-					fileList += '<div class="item-name" id="dv_' + res[i][8] + '"> ' + res[i][2] + ' </div>\n';
-					fileList += '<input type="hidden" id="orgFileNm_' + res[i][8] + '" value="' + res[i][1] + '"></div></li>\n';	//원본파일명
+					dataList.push(dataMap);
 				}
 
-				$('#fileList').html(fileList);      //파일 리스트
+				window.parent.fn_setFileGrid(dataList, "ALL");
 				$('#ListType').attr('value', "selectList");
-				$('#fileTypeNm').attr('value', "ALL");
 			})
 			.fail(function (xhr, textStatus, errorThrown) {
 				console.log('selectFileMg ajax 실패');

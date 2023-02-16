@@ -282,7 +282,8 @@ module.exports = function(app){
 	app.post('/deleteFileUseAt', upload.single('attachment'), function(req, res){
 		console.log("deleteFileUseAt");
 		
-		var AtchfileSn = req.body.AtchfileSn;
+		var AtchfileSnArr = req.body.AtchfileSn;
+		var orgnFileNmArr = req.body.orgnFileNm;
 		var emplyrSn = req.session.user.emplyrSn;
 
 		oracledb.getConnection({
@@ -300,42 +301,36 @@ module.exports = function(app){
 				
 			//query format
 			let format = {language: 'sql', indent: ''};
-			
-			var param = {
-				emplyrSn : emplyrSn
-				, AtchfileSn : AtchfileSn
-			}
 
-			let query = mybatisMapper.getStatement('IndexDAO','selectFileDtlData', param, format);
-			conn.execute(query, function(err,result){
-				console.log("IndexDAO.selectFileDtlData");
-				console.log(query);
-				if(err){
-					console.log(err);
-					res.json("F");
+			for(var i=0; i<AtchfileSnArr.length; i++){
+				var param = {
+					emplyrSn : emplyrSn
+					, AtchfileSn : AtchfileSnArr[i]
 				}
 
-				var orgnFileNm = result.rows[0][5];
-				
+				var orgnFileNm = orgnFileNmArr[i].trim();
+					
 				fs.unlink(`./public/uploadedFiles/${orgnFileNm}`, function(err){
+					console.log('unlink');
 					if(err != null){
 						console.log('파일 삭제 에러!!');
 						console.log("er : ", err);
 						res.json("F");
 					}
 				})
-			});
-			
-			query = mybatisMapper.getStatement('IndexDAO','deleteFileUseAtDtl', param, format);
-			conn.execute(query, function(err,result){
-				console.log("IndexDAO.deleteFileUseAtDtl");
-				console.log(query);
-				if(err){
-					console.log(err);
-					res.json("F");
-				}
-				conn.commit();
-			});
+				
+				query = mybatisMapper.getStatement('IndexDAO','deleteFileUseAtDtl', param, format);
+				conn.execute(query, function(err,result){
+					console.log("IndexDAO.deleteFileUseAtDtl");
+					console.log(query);
+					if(err){
+						console.log(err);
+						res.json("F");
+					}
+				});
+			}
+
+			conn.commit();
 
 			res.json({"emplyrSn":req.session.user.emplyrSn});
 			//doRelease(conn);
@@ -687,6 +682,46 @@ module.exports = function(app){
 			});  
 		});
 	})
+
+	//휴지통 비우기
+	app.post('/deleteAllTrashFile', function(req, res){
+		console.log("deleteAllTrashFile");
+
+		var sEmplyrSn = req.body.sEmplyrSn;
+		
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(/deleteAllTrashFile)",err);
+			} else {
+				console.log("Oracle Connection success(/deleteAllTrashFile)");
+			}
+			conn = con;
+				
+			//query format
+			let format = {language: 'sql', indent: ''};
+			
+			var param = {
+				sEmplyrSn : sEmplyrSn
+			}
+
+			let query = mybatisMapper.getStatement('IndexDAO','deleteAllTrashFile', param, format);
+			conn.execute(query, function(err,result){
+				console.log("IndexDAO.deleteAllTrashFile");
+				console.log(query);
+				if(err){
+					console.log(err);
+					res.json("F");
+				}
+				conn.commit();
+			});
+			res.json({"emplyrSn":req.session.user.emplyrSn});
+		});
+	});
 
 	function doRelease(conn){
 		conn.close(function(err){

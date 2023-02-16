@@ -282,36 +282,16 @@
 	<update id="deleteAutoFile">
 		/* IndexDAO.deleteAutoFile */
 		<![CDATA[
-		UPDATE TCM_ATCHMNFL_DETAIL
-		SET
-			USE_AT = 'N',
-			LAST_UPDT_DT = SYSDATE,
-			LAST_UPDUSR_SN = #{sEmplyrSn}
-		WHERE FRST_REGISTER_SN = #{sEmplyrSn}
-		AND FRST_REGIST_DT < SYSDATE - 
-			(
+		DELETE FROM TCM_ATCHMNFL_DETAIL
+		WHERE
+			USE_AT = 'N'
+			AND FRST_REGIST_DT < SYSDATE - (
 				SELECT AUTO_DELETE_INFO
-				FROM TCM_EMPLYR
+				FROM TCM_EMPLYR TE
 				WHERE EMPLYR_SN = #{sEmplyrSn}
 			)
 		]]>
 	</update>
-
-	<!-- 파일 자동삭제 
-	<delete id="deleteAutoFileDtl">
-		<![CDATA[
-		/* IndexDAO.deleteAutoFileDtl */
-		DELETE FROM TCM_ATCHMNFL_DETAIL TAD		/* 첨부파일 상세 */
-		WHERE FRST_REGISTER_SN = #{sEmplyrSn}
-		AND FRST_REGIST_DT < SYSDATE - 
-			(
-				SELECT AUTO_DELETE_INFO
-				FROM TCM_EMPLYR
-				WHERE EMPLYR_SN = #{sEmplyrSn}
-			)
-			]]>
-	</delete>
-	-->
 
 	<!-- 파일명 중복 리스트 조회 -->
 	<select id="selectDupList">
@@ -342,4 +322,12 @@
 		WHERE A.CNT > 1
 		]]>
 	</select>
+
+	<!-- 휴지통 비우기 -->
+	<delete id="deleteAllTrashFile">
+		/* IndexDAO.deleteAllTrashFile */
+		DELETE FROM TCM_ATCHMNFL_DETAIL
+		WHERE USE_AT = 'N'
+		AND FRST_REGISTER_SN = #{sEmplyrSn}
+	</delete>
 </mapper>
