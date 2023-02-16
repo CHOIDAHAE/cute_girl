@@ -388,6 +388,12 @@
                                     var timelineSn = res.result[i][9];
                                     var nickname = res.result[i][10];
                                     var src = res.result[i][1]+'/'+res.result[i][2];
+                                    var profile = '../images/sample_image.jpg';
+
+                                    if(res.result[i][11] != nul){
+                                        profile = '../uploadedFiles/'+res.result[i][11];
+                                    }
+                                    
 
                                     if(content == null){
                                         content = '';
@@ -399,12 +405,12 @@
                                     // 파일 타임라인
                                     if(type == 'file'){
                                         photo_content += '<li class="groupPicture">'
-                                        +'<div class="item"><a onclick="photo_big(\"'+src+'");"><img src="..'+res.result[i][1]+'/'+res.result[i][2]
+                                        +'<div class="item"><a onclick="photo_big(\"'+src+'");"><img src="..'+src
                                         +'" style="width:100%; height:100%;"></a></div></li>\n';
 
                                         story_content += 
                                             '<div class="together_section"><div class="toge_story_list">'
-                                                +'<a class="user_thum"><img src="" width="55" height="55"></a>'
+                                                +'<a class="user_thum"><img src="'+profile+'" width="55" height="55"></a>'
                                                 +'<div class="toge_box">'
                                                     +'<h3 class="toge_title" onMouseOut="delete_timeline_control('+timelineSn+')" onMouseOver="delete_timeline_control('+timelineSn+','+emplyrSn+')"><strong>'+nickname+'</strong><span class="load_time">'+res.result[i][4]+'</span><i id="x-icon_'+timelineSn+'" class="fa-solid fa-x x-icon" style="display:none;" onclick="delete_timeline('+timelineSn+','+fileSn+')"></i></h3>'
                                                     +'<div class="toge_content_box">'
@@ -426,14 +432,14 @@
                                     } else if(type == 'join') {    // 가입 타임라인
                                         story_content += 
                                                         '<div class="together_section"><div class="notification"><div class="noti_box">'
-                                                        +'<a class="thum user_thum none_thum" style="cursor: default;"><img src="https://ssl.pstatic.net/static/pwe/photo/blank.gif" width="38" height="38" alt=""></a>'
+                                                        +'<a class="thum user_thum none_thum" style="cursor: default;"><img src="'+profile+'" width="38" height="38" alt=""></a>'
                                                         +'<span class="noti_text"><strong class="point_3675c7">'+nickname+'</strong>님이 새로운 멤버가 되었습니다.</span>'
                                                         +'</div></div></div>';
 
                                     } else if(type == 'story') {    // 스토리 타임라인
                                         story_content +=
                                         '<div class="together_section"><div class="toge_story_list"><a class="user_thum">'
-                                            +'<img src="" width="55" height="55"></a>'
+                                            +'<img src="'+profile+'" width="55" height="55"></a>'
                                             +'<div class="toge_box">'
                                                 +'<h3 class="toge_title" onMouseOut="delete_timeline_control('+timelineSn+')" onMouseOver="delete_timeline_control('+timelineSn+','+emplyrSn+')"><strong>'+nickname+'</strong><span class="load_time">'+res.result[i][4]+'</span><i id="x-icon_'+timelineSn+'" class="fa-solid fa-x x-icon" style="display:none;" onclick="delete_timeline('+timelineSn+','+fileSn+')"></i></h3>'
                                                 +'<div class="toge_content_box"><div class="toge_content"><p class="toge_text"><span>'+content+'</span></p>'
