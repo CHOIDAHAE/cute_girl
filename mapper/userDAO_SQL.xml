@@ -44,6 +44,7 @@
 				EMPLYR_SN,
 				EMPLYR_NM,
 				EMPLYR_ID,
+				NICKNAME,
 				EMPLYR_PASSWORD,
 				SALT,
 				SEXDSTN_CODE,
@@ -56,6 +57,7 @@
 			)VALUES(
 				#{emplyrSn},
 				#{name},
+				#{id},
 				#{id},
 				#{pw},
 				#{salt},

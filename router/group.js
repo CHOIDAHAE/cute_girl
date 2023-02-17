@@ -13,7 +13,9 @@ var mybatisMapper = require('mybatis-mapper');
 mybatisMapper.createMapper( ['./mapper/GroupDAO_SQL.xml']);
 mybatisMapper.createMapper( ['./mapper/IndexDAO_SQL.xml']);
 
-const fs = require('fs');
+//const fs = require('fs');
+const ffmpeg = require("fluent-ffmpeg");
+const ffprobe = require('ffprobe');
 
 var storage = multer.diskStorage({
 	destination(req, file, cb){
@@ -117,12 +119,7 @@ module.exports = function(app){
 					// 파일이 있으면 파일 업로드
 					if(typeof req.file != 'undefined'){
 						/*
-						fs.readdir('../uploadedGroupFiles', (error) => {
-							// uploads 폴더 없으면 생성
-							if (error) {
-								fs.mkdirSync('/uploadedGroupFiles');
-							}
-						});
+						// uploads 폴더 없으면 생성
 						*/
 
 						if(req.fileValidationError != null){
@@ -458,12 +455,7 @@ module.exports = function(app){
 			// 파일이 있으면 파일 업로드 및 제목 수정
 			if(typeof req.file != 'undefined'){
 				/*
-				fs.readdir('../uploadedGroupFiles', (error) => {
-					// uploads 폴더 없으면 생성
-					if (error) {
-						fs.mkdirSync('/uploadedGroupFiles');
-					}
-				});
+				// uploads 폴더 없으면 생성
 				*/
 
 				if(req.fileValidationError != null){
@@ -797,13 +789,21 @@ module.exports = function(app){
 					}
 
 					var insertParam = {
-						"emplyrSn"	: req.body.emplyrSn,
-						"groupSn"	: req.body.groupSn,
-						"fileSn"	: result.rows[0][0],
-						"mainFileAt": "N",
-						"filePath"	: result.rows[0][1],
-						"orgFileNm"	: result.rows[0][2]
+						"emplyrSn"		: req.body.emplyrSn,
+						"groupSn"		: req.body.groupSn,
+						"fileSn"		: result.rows[0][0],
+						"mainFileAt"	: "N",
+						"filePath"		: result.rows[0][1],
+						"orgFileNm"		: result.rows[0][2],
+						"orgFileExtsnNm": result.rows[0][3],
 					};
+					
+					var fileType = result.rows[0][3].split('/')[0];
+					
+					// 썸네일 저장을 위한 리스트(url, fileNm)
+					if(fileType == 'video'){
+						// 
+					}
 
 					// 그룹파일에 insert
 					let insertGroupFile = mybatisMapper.getStatement('GroupDAO','insertGroupFile', insertParam, format);
@@ -832,11 +832,12 @@ module.exports = function(app){
 								return;
 							}							
 							
-							conn.commit();							
+							conn.commit();
 						});
 					});
 				});
 			}
+
 			res.json({"Status":"S"});
 		});
 	})
@@ -1030,7 +1031,8 @@ module.exports = function(app){
 					"emplyrSn"		: req.body.emplyrSn,
 					"groupSn"		: req.body.groupSn,
 					"timelineSn"	: req.body.timelineSn,
-					"commentSn"		: ''
+					"commentSn"		: '',
+					"fileSn"		: req.body.fileSn,
 				};
 
 			// 타임라인 삭제
@@ -1174,6 +1176,48 @@ module.exports = function(app){
 			});
 		});	
 	})
+
+	/****************** 비디오 썸네일 ******************/
+	app.post("/thumbnail", (req, res) => {
+		let thumbsFilePath = "";
+		let fileDuration = "";
+	  
+		 // 비디오 전체 정보 추출
+		ffmpeg.ffprobe(req.body.url, function (err, metadata) {
+			console.dir('metadata******************');
+			console.dir(metadata);
+		  	console.log(metadata.format.duration);
+	  
+		  fileDuration = metadata.format.duration;
+		});
+	  
+		//썸네일 생성, 비디오 길이 추출
+		ffmpeg(req.body.url)
+		  .on("filenames", function (filenames) {
+			console.log("Will generate " + filenames.join(", "));
+			thumbsFilePath = "uploads/thumbnails/" + filenames[0];
+		  })
+		  .on("end", function () {
+			console.log("Screenshots taken");
+			return res.json({
+			  success: true,
+			  thumbsFilePath: thumbsFilePath,
+			  fileDuration: fileDuration,
+			});
+		  })
+		  .on("error", function (err) {
+			console.error(err);
+			return res.json({ success: false, err });
+		  })
+		  .screenshots({
+			// Will take screens at 20%, 40%, 60% and 80% of the video
+			count: 1,
+			folder: "uploads/thumbnails",
+			size: "320x200",
+			// %b input basename ( filename w/o extension )
+			filename: "thumbnail-%b.png",
+		  });
+	  });
 
 	function doRelease(conn){
 		conn.close(function(err){

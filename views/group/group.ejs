@@ -118,13 +118,18 @@
                             var member = "";
                             var length = res.result.length;
                             var groupNm = res.result[0][3];
+                            var profile = '../images/sample_image.jpg';
 
                             $(".member_cnt").text(length);
                             $("#member_groupNm").text(groupNm);
                                                         
                             for( var i=0; i<length; i++){
+                                if(res.result[i][4] != null){
+                                    profile = '../uploadedFiles/'+res.result[i][4];
+                                }
+
                                 member += '<li class=""><a><span class="thumb">'
-                                    +'<img src="https://phinf.pstatic.net/contact/20191208_97/1575799615169u2oGo_JPEG/2.jpg?type=f160_160" width="45" height="45" alt=""></span>'
+                                    +'<img src="'+profile+'" width="45" height="45" alt=""></span>'
                                     +'<span class="tit">'+res.result[0][2]+'&nbsp;</span>'
                                     +'</a></li>'
                             }
@@ -390,11 +395,10 @@
                                     var src = res.result[i][1]+'/'+res.result[i][2];
                                     var profile = '../images/sample_image.jpg';
 
-                                    if(res.result[i][11] != nul){
+                                    if(res.result[i][11] != null){
                                         profile = '../uploadedFiles/'+res.result[i][11];
                                     }
                                     
-
                                     if(content == null){
                                         content = '';
                                     } else {
@@ -558,6 +562,11 @@
                                 var emplyrNm = res.result[i][4];
                                 var emplyrSn = res.result[i][5];    // 코멘트 단 사람의 일련번호
                                 var nickname = res.result[i][6];
+                                var profile = '../images/sample_image.jpg';
+
+                                if(res.result[i][7] != null){
+                                    profile = '../uploadedFiles/'+res.result[i][7];
+                                }
 
                                 //각자 덧붙일 ul의 id
                                 var id = '#comm_list_'+timelineSn;
@@ -566,7 +575,7 @@
                                 }
 
                                 comment_content += '<li onMouseOut="deleteBtn_out('+timelineSn+','+commentSn+')" onMouseOver="deleteBtn_control('+emplyrSn+','+timelineSn+','+commentSn+');"><div class="comm_thum"><a class="thum" style="cursor: pointer;">'
-                                                +'<img src="" width="38" height="38"></a></div>'
+                                                +'<img src="'+profile+'" width="38" height="38"></a></div>'
                                                 +'<div class="comm_txt"><strong>'+nickname+'<em>'+registerDt+'</em></strong><p>'+commentCd+'</p>'
                                                 +'<a id="comm_'+timelineSn+'_'+commentSn+'" class="btn_del_comm" onclick="delete_comment('+timelineSn+','+commentSn+');"><i class="fa-solid fa-x"></i></a></div></li>';
                                 tmp_id = id;
@@ -714,30 +723,9 @@
         <div>
             <input multiple="" type="file" autocomplete="off" tabindex="-1" style="display: none;">
             <div id="content" style="left: 200px;">
-                <div class="drag_layer" style="display: none; left: 0px;">
-                    <div class="drag_cont">
-                        <div class="drag_img">
-                            <img class="left-doodle" src="https://ssl.pstatic.net/static/pwe/ndrive/deskhome/upload_img1.png">
-                            <img class="right-doodle" src="https://ssl.pstatic.net/static/pwe/ndrive/deskhome/upload_img2.png">
-                        </div>
-                        <p class="drag_txt">
-                            <span class="blind">파일을 여기에 끌어다 놓으면 파일 올리기가 바로 시작됩니다</span>
-                        </p>
-                    </div>
-                </div>
                 <div class="together_cont side_none">
                     <div class="task_area_wrap">
                         <div class="task_area">
-                            <div class="cmn_promotion_image">
-                                <a class="link_banner">
-                                    <!--<img width="464" height="49" title="폴더 링크 공유로 공동 작업하기" src="https://ssl.pstatic.net/static/MYBOX/mybox_pc_banner_linkshare.png">
-                                    <img width="36" height="36" title="자세히 보기" alt="자세히 보기" src="https://ssl.pstatic.net/static/MYBOX/Rectangle.png">-->
-                                </a>
-                                <p class="closing_area">
-                                    <!--<input id="check_later_type2" type="checkbox">
-                                    <label for="check_later_type2">7일 동안 보지 않음</label>-->
-                                </p>
-                            </div>
                             <div class="task_together">
                                 <div class="together_menu">
                                     <ul>
