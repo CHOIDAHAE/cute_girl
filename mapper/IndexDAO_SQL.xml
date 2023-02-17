@@ -63,6 +63,7 @@
 			TO_NUMBER(NVL(MAX(ATCHMNFL_SN), TO_CHAR(SYSDATE, 'YYYYMMDD') || '00000')) + 1 FILE_SN
 		FROM
 			TCM_ATCHMNFL_DETAIL
+		WHERE ATCHMNFL_SN LIKE TO_CHAR(SYSDATE, 'YYYYMMDD')||'%'
 	</select>
 
 	<!-- 첨부파일 등록 -->
@@ -162,24 +163,24 @@
 		SET
 			USE_AT = #{useAt},
 			LAST_UPDT_DT = SYSDATE,
-			LAST_UPDUSR_SN = #{emplyrSn}
+			LAST_UPDUSR_SN = #{sEmplyrSn}
 		WHERE 
-			ATCHMNFL_SN = #{AtchfileSn}
+			ATCHMNFL_SN = #{atchfileSn}
 	</update>
 
 	<!-- 그룹파일 삭제 -->
 	<delete id="deleteGroupFile">
 		/* IndexDAO.deleteGroupFile */
 		DELETE TCM_GROUP_FILE
-		WHERE FILE_SN = #{AtchfileSn}
-		AND EMPLYR_SN = #{emplyrSn}
+		WHERE FILE_SN = #{atchfileSn}
+		AND EMPLYR_SN = #{sEmplyrSn}
 	</delete>
 
 	<!-- 파일 완전히 삭제 -->
 	<delete id="deleteFileUseAtDtl">
 		/* IndexDAO.deleteFileUseAtDtl */
 		DELETE TCM_ATCHMNFL_DETAIL
-		WHERE ATCHMNFL_SN = #{AtchfileSn}
+		WHERE ATCHMNFL_SN = #{atchfileSn}
 	</delete>
 
 	<!-- 첨부파일 즐겨찾기 추가 -->
@@ -197,7 +198,7 @@
 		VALUES
 		(
 			#{sEmplyrSn},
-			#{atchmnflSn},
+			#{atchfileSn},
 			#{sEmplyrSn},
 			SYSDATE,
 			#{sEmplyrSn},
@@ -210,7 +211,7 @@
 		/* IndexDAO.deleteBmFavorite */
 		DELETE FROM TCM_EMPLYRBY_BKMK
 		WHERE EMPLYR_SN = #{sEmplyrSn}
-		AND ATCHMNFL_SN = #{atchmnflSn}
+		AND ATCHMNFL_SN = #{atchfileSn}
 	</delete>
 
 	<!--즐겨찾기 목록 조회-->
@@ -263,23 +264,30 @@
 		WHERE EMPLYR_SN = #{sEmplyrSn}
 	</update>
 
-	<!-- 파일 자동삭제 (현재 안 쓰는 쿼리)-->
-	<select id="selectAutoFileTest">
-		<![CDATA[
-		/* IndexDAO.selectAutoFileTest */
-		SELECT * FROM TCM_ATCHMNFL TA		/* 첨부파일 */
-		WHERE FRST_REGISTER_SN = #{sEmplyrSn}
-		AND FRST_REGIST_DT < SYSDATE - 
-			(
+	<!-- 파일 자동삭제 관련하여 원본 파일명 조회 -->
+	<select id="selectAutoFileList">
+		/* IndexDAO.selectAutoFileList */
+		
+		SELECT ORGINL_FILE_NM
+		FROM TCM_ATCHMNFL_DETAIL TAD
+		WHERE
+			USE_AT = 'N'
+			<if test='deleteType == "auto"'>
+			<![CDATA[
+			AND FRST_REGIST_DT < SYSDATE - (
 				SELECT AUTO_DELETE_INFO
-				FROM TCM_EMPLYR
+				FROM TCM_EMPLYR TE
 				WHERE EMPLYR_SN = #{sEmplyrSn}
 			)
-		]]>
+			]]>
+			</if>
+			<if test='deleteType=="trash"'>
+			AND FRST_REGISTER_SN = #{sEmplyrSn}
+			</if>
 	</select>
 
 	<!-- 파일 자동 삭제(휴지통으로 이동) -->
-	<update id="deleteAutoFile">
+	<delete id="deleteAutoFile">
 		/* IndexDAO.deleteAutoFile */
 		<![CDATA[
 		DELETE FROM TCM_ATCHMNFL_DETAIL
@@ -291,7 +299,7 @@
 				WHERE EMPLYR_SN = #{sEmplyrSn}
 			)
 		]]>
-	</update>
+	</delete>
 
 	<!-- 파일명 중복 리스트 조회 -->
 	<select id="selectDupList">

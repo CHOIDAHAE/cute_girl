@@ -105,9 +105,9 @@ module.exports = function(app){
         var resultCode = 404;
 
         const date = Date.now().toString();
-        const uri = "ncp:sms:kr:295911194516:mydrive";
-        const secretKey = "ilF01AWBVA02VVg6gWL9RFt27hO84P0DnOw4ZyOg";
-        const accessKey = "I7DYV8jfHb6f9Z8dSfun";
+        const uri = "ncp:sms:kr:261625782943:mydrive";
+        const secretKey = "N21ys76SDtut86S8LlG5ciTHq61ERf9VOIPaK6aY";
+        const accessKey = "fZy4jBmE5Bf8AhQ9B6qv";
         const method = "POST";
         const space = " ";
         const newLine = "\n";
@@ -141,7 +141,7 @@ module.exports = function(app){
                 body: {
                     type: "SMS",
                     countryCode: "82",
-                    from: "01067110861",
+                    from: "01064227828",
                     content: `[MYDRIVE] 인증번호는 ${user_auth_number} 입니다.`,
                     messages: [
                     {
