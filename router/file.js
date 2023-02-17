@@ -244,8 +244,8 @@ module.exports = function(app){
 			for(var i=0; i<AtchfileSnArr.length; i++){
 				var param = {
 					useAt : useAt
-					, emplyrSn : emplyrSn
-					, AtchfileSn : AtchfileSnArr[i]
+					, sEmplyrSn : emplyrSn
+					, atchfileSn : AtchfileSnArr[i]
 				}
 
 				console.log(param);
@@ -253,6 +253,16 @@ module.exports = function(app){
 				let query = mybatisMapper.getStatement('IndexDAO','updateFileUseAt', param, format);
 				conn.execute(query, function(err,result){
 					console.log("IndexDAO.updateFileUseAt");
+					console.log(query);
+					if(err){
+						console.log(err);
+						res.json("F");
+					}
+				});
+
+				query = mybatisMapper.getStatement('IndexDAO','deleteBmFavorite', param, format);
+				conn.execute(query, function(err,result){
+					console.log("IndexDAO.deleteBmFavorite");
 					console.log(query);
 					if(err){
 						console.log(err);
@@ -305,19 +315,10 @@ module.exports = function(app){
 			for(var i=0; i<AtchfileSnArr.length; i++){
 				var param = {
 					emplyrSn : emplyrSn
-					, AtchfileSn : AtchfileSnArr[i]
+					, atchfileSn : AtchfileSnArr[i]
 				}
 
-				var orgnFileNm = orgnFileNmArr[i].trim();
-					
-				fs.unlink(`./public/uploadedFiles/${orgnFileNm}`, function(err){
-					console.log('unlink');
-					if(err != null){
-						console.log('파일 삭제 에러!!');
-						console.log("er : ", err);
-						res.json("F");
-					}
-				})
+				fn_deleteFile([[orgnFileNmArr[i]]]);
 				
 				query = mybatisMapper.getStatement('IndexDAO','deleteFileUseAtDtl', param, format);
 				conn.execute(query, function(err,result){
@@ -407,7 +408,7 @@ module.exports = function(app){
 			
 			var param = {
 				sEmplyrSn : emplyrSn
-				, atchmnflSn : AtchfileSn
+				, atchfileSn : AtchfileSn
 			}
 
 			let query = mybatisMapper.getStatement('IndexDAO','insertBmFavorite', param, format);
@@ -451,7 +452,7 @@ module.exports = function(app){
 			
 			var param = {
 				sEmplyrSn : emplyrSn
-				, atchmnflSn : AtchfileSn
+				, atchfileSn : AtchfileSn
 			}
 
 			let query = mybatisMapper.getStatement('IndexDAO','deleteBmFavorite', param, format);
@@ -621,9 +622,22 @@ module.exports = function(app){
 			
 			var param = {
 				sEmplyrSn : sEmplyrSn
+				, deleteType : "auto"
 			}
 
-			let query = mybatisMapper.getStatement('IndexDAO','deleteAutoFile', param, format);
+			let query = mybatisMapper.getStatement('IndexDAO','selectAutoFileList', param, format);
+			conn.execute(query, function(err,result){
+				console.log("IndexDAO.selectAutoFileList");
+				console.log(query);
+				if(err){
+					console.log(err);
+					res.json("F");
+				}
+
+				fn_deleteFile(result.rows);
+			});
+
+			query = mybatisMapper.getStatement('IndexDAO','deleteAutoFile', param, format);
 			conn.execute(query, function(err,result){
 				console.log("IndexDAO.deleteAutoFile");
 				console.log(query);
@@ -633,6 +647,7 @@ module.exports = function(app){
 				}
 				conn.commit();
 			});
+			
 			res.json({"emplyrSn":req.session.user.emplyrSn});
 			// doRelease(conn);
 		});
@@ -707,9 +722,22 @@ module.exports = function(app){
 			
 			var param = {
 				sEmplyrSn : sEmplyrSn
+				, deleteType : "trash"
 			}
 
-			let query = mybatisMapper.getStatement('IndexDAO','deleteAllTrashFile', param, format);
+			let query = mybatisMapper.getStatement('IndexDAO','selectAutoFileList', param, format);
+			conn.execute(query, function(err,result){
+				console.log("IndexDAO.selectAutoFileList");
+				console.log(query);
+				if(err){
+					console.log(err);
+					res.json("F");
+				}
+
+				fn_deleteFile(result.rows);
+			});
+
+			query = mybatisMapper.getStatement('IndexDAO','deleteAllTrashFile', param, format);
 			conn.execute(query, function(err,result){
 				console.log("IndexDAO.deleteAllTrashFile");
 				console.log(query);
@@ -722,6 +750,23 @@ module.exports = function(app){
 			res.json({"emplyrSn":req.session.user.emplyrSn});
 		});
 	});
+
+	function fn_deleteFile(orgnFileNmArr){
+		console.log(orgnFileNmArr);
+		for(var i=0; i<orgnFileNmArr.length; i++){
+			var orgnFileNm = orgnFileNmArr[i][0].trim();
+			console.log("원본파일명 >>>>", orgnFileNm);
+
+			fs.unlink(`./public/uploadedFiles/${orgnFileNm}`, function(err){
+				console.log('unlink');
+				if(err != null){
+					console.log('파일 삭제 에러!!');
+					console.log("er : ", err);
+					res.json("F");
+				}
+			})
+		}
+	};
 
 	function doRelease(conn){
 		conn.close(function(err){
