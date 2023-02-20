@@ -2,70 +2,9 @@ menu, ul, ol {
     list-style: none;
 }
 
-.drag_layer {
-    display: none;
-    position: absolute;
-    left: 250px;
-    top: 55px;
-    bottom: 30px;
-    right: 0;
-    width: auto;
-    height: auto;
-    border: 4px solid #60a9f1;
-    z-index: 500;
-    background-color: rgba(255, 255, 255, 0.9);
-}
-
-.drag_layer .drag_cont {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 392px;
-    height: 210px;
-    margin: -105px 0 0 -190px;
-}
-
-.drag_layer .drag_img {
-    text-align: center;
-    padding: 0 0 30px 0;
-}
-
-.drag_layer .left-doodle {
-    margin-right: -20px;
-    z-index: 51;
-    -webkit-transform: rotate(-2deg);
-    -ms-transform: rotate(-2deg);
-    transform: rotate(-2deg);
-    -webkit-animation: wave-left .4s ease-out infinite alternate;
-    animation: wave-left .4s ease-out infinite alternate;
-}
-
-.drag_layer .left-doodle, .drag_layer .right-doodle {
-    position: relative;
-    display: inline-block;
-    outline: 1px solid transparent;
-    will-change: -webkit-transform, -ms-transform, transform, -webkit-animation, animation;
-}
-
 img, fieldset {
     border: 0;
     vertical-align: top;
-}
-
-.drag_layer .right-doodle {
-    margin-left: -20px;
-    z-index: 50;
-    -webkit-transform: rotate(2deg);
-    -ms-transform: rotate(2deg);
-    transform: rotate(2deg);
-    -webkit-animation: wave-right .4s ease-out infinite alternate;
-    animation: wave-right .4s ease-out infinite alternate;
-}
-
-.drag_layer .drag_txt {
-    width: 390px;
-    height: 44px;
-    background: url(https://ssl.pstatic.net/static/pwe/ndrive/deskhome/drag_txt.png) no-repeat 50% 0;
 }
 
 .blind, legend {
@@ -104,59 +43,6 @@ img, fieldset {
     position: relative;
     border-bottom: 1px solid #ebebeb;
     background-color: #fff;
-}
-
-.cmn_promotion_image, .cmn_promotion_volume {
-    overflow: hidden;
-    position: relative;
-    padding-right: 110px;
-    background-color: #F4F6F9;
-    text-align: center;
-    zoom: 1;
-}
-
-.cmn_promotion_image, .cmn_promotion_volume, .cmn_promotion_banner {
-    margin: 0 -25px;
-}
-
-.cmn_promotion_image .link_banner, .cmn_promotion_volume .link_banner {
-    display: block;
-    position: relative;
-    margin-right: -80px;
-    text-align: center;
-}
-
-.cmn_promotion_image .link_banner, .cmn_promotion_volume .link_banner, .cmn_promotion_banner .link_banner {
-    display: block;
-}
-
-.cmn_promotion_image .link_banner img, .cmn_promotion_volume .link_banner img {
-    vertical-align: middle;
-}
-
-.cmn_promotion_image .closing_area, .cmn_promotion_volume .closing_area {
-    top: 13px;
-    right: 20px;
-}
-
-.closing_area {
-    position: absolute;
-    margin: 0;
-    padding: 0;
-}
-
-.cmn_promotion_image .closing_area input, .cmn_promotion_volume .closing_area input {
-    display: none;
-}
-
-.cmn_promotion_image .closing_area label, .cmn_promotion_volume .closing_area label {
-    display: block;
-    padding: 5px 2px 4px 3px;
-    font-size: 11px;
-    line-height: 13px;
-    letter-spacing: -0.5px;
-    cursor: pointer;
-    color: #8a8a8e;
 }
 
 .task_together {
@@ -1418,6 +1304,23 @@ button .tx {
     border: 1px solid #000;
     opacity: .1;
     filter: alpha(opacity=10);
+}
+
+.ic_video.size_84 {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: -42px 0 0 -42px;
+    width: 84px;
+    height: 84px;
+    background-position: 0 0;
+}
+
+.ic_video {
+    overflow: hidden;
+    text-indent: -500px;
+    background-image: url(https://ssl.pstatic.net/static/pwe/ndrive/new_ndrive/ic_video_160818.png);
+    background-repeat: no-repeat;
 }
 
 .toge_comment {

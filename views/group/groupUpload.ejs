@@ -124,7 +124,6 @@
 					dataType : "JSON", //"JSON"
 					data : {"emplyrSn" : emplyrSn, "fileSnList" : fileSnList, "groupSn" : groupSn, "type" : "file"},
 					success:function(res){
-                        console.log(res);
 						if(res.Status == "S"){
 							alert('사진 업로드가 완료되었습니다.');
 
@@ -137,9 +136,6 @@
                             // 업로드 한 사진 재조회
                             window.parent.groupPictureList();
 
-                            // 썸네일 저장
-                            saveThumbNail();
-
 						} else if(res.Status == "F"){
 							alert('첨부 도중 오류가 발생하였습니다.');
 						}						                        
@@ -149,23 +145,6 @@
 					}
 				})
 			}
-
-            // 썸네일 저장
-            function saveThumbNail(){
-                console.log('썸네일 저장');
-                $.ajax({
-					url : "/thumbnail",
-					type : "POST",
-					dataType : "JSON", //"JSON"
-					data : {"url" : '../uploadedFiles/1676620065240_상수도포탈시연자료_3초(최종).mp4'},
-					success:function(res){
-                        console.log(res);
-                    },
-					error:function(e){
-						alert("첨부 도중 오류가 발생하였습니다.(ajax에러)");
-					}
-                })
-            }
 
             // 전체 선택
             function check_all(){

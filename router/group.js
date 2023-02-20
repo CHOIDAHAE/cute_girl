@@ -802,7 +802,11 @@ module.exports = function(app){
 					
 					// 썸네일 저장을 위한 리스트(url, fileNm)
 					if(fileType == 'video'){
-						// 
+						var data = {};
+						data.url = './public'+result.rows[0][1] +'/'+ result.rows[0][2];
+						data.fileName = result.rows[0][2];
+
+						savethumbnail(data);
 					}
 
 					// 그룹파일에 insert
@@ -811,7 +815,7 @@ module.exports = function(app){
 					conn.execute(insertGroupFile, function(err,res){
 						if(err){
 							console.log("insertGroupFile failed :", err);
-							res.json({"Status":"F"});
+							//res.json({"Status":"F"});
 							return;
 						}
 
@@ -1039,8 +1043,7 @@ module.exports = function(app){
 			let deleteTimeline = mybatisMapper.getStatement('GroupDAO','deleteTimeline', param, format);
 			// 댓글 삭제
 			let deleteComment = mybatisMapper.getStatement('GroupDAO','deleteComment', param, format);
-			console.log(deleteTimeline);
-			console.log(deleteComment);
+			
 			conn.execute(deleteTimeline, function(err,result){
 				if(err){
 					console.log("deleteTimeline failed :", err);
@@ -1058,7 +1061,7 @@ module.exports = function(app){
 					if (req.body.fileSn != null && req.body.fileSn != ''){
 						// 파일 삭제
 						let deleteGroupFile = mybatisMapper.getStatement('GroupDAO','deleteGroupFile', param, format);
-						console.log(deleteGroupFile);
+						
 						conn.execute(deleteGroupFile, function(err,result){
 							if(err){
 								console.log("deleteGroupFile failed :", err);
@@ -1178,46 +1181,48 @@ module.exports = function(app){
 	})
 
 	/****************** 비디오 썸네일 ******************/
-	app.post("/thumbnail", (req, res) => {
+	//app.post("/thumbnail", (req, res) => {
+	function savethumbnail(data){
+		/*
 		let thumbsFilePath = "";
 		let fileDuration = "";
 	  
 		 // 비디오 전체 정보 추출
-		ffmpeg.ffprobe(req.body.url, function (err, metadata) {
-			console.dir('metadata******************');
-			console.dir(metadata);
-		  	console.log(metadata.format.duration);
+		ffmpeg.ffprobe(data.url, function (err, metadata) {
+			//console.dir(metadata);
+		  	//console.log(metadata.format.duration);
 	  
 		  fileDuration = metadata.format.duration;
 		});
-	  
+	    */
 		//썸네일 생성, 비디오 길이 추출
-		ffmpeg(req.body.url)
+		ffmpeg(data.url)
 		  .on("filenames", function (filenames) {
 			console.log("Will generate " + filenames.join(", "));
-			thumbsFilePath = "uploads/thumbnails/" + filenames[0];
+			thumbsFilePath = "./public/uploadedGroupFiles/thumbnails/" + filenames[0];
 		  })
 		  .on("end", function () {
 			console.log("Screenshots taken");
+			/*
 			return res.json({
 			  success: true,
 			  thumbsFilePath: thumbsFilePath,
 			  fileDuration: fileDuration,
-			});
+			});*/
 		  })
 		  .on("error", function (err) {
 			console.error(err);
-			return res.json({ success: false, err });
+			//return res.json({ success: false, err });
 		  })
 		  .screenshots({
 			// Will take screens at 20%, 40%, 60% and 80% of the video
-			count: 1,
-			folder: "uploads/thumbnails",
+			count: 1,	// 1장
+			folder: "./public/uploadedGroupFiles/thumbnails",
 			size: "320x200",
 			// %b input basename ( filename w/o extension )
 			filename: "thumbnail-%b.png",
 		  });
-	  });
+	  };
 
 	function doRelease(conn){
 		conn.close(function(err){

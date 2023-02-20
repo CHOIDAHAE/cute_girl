@@ -393,7 +393,15 @@
                                     var timelineSn = res.result[i][9];
                                     var nickname = res.result[i][10];
                                     var src = res.result[i][1]+'/'+res.result[i][2];
-                                    var profile = '../images/sample_image.jpg';
+
+                                    // 썸네일이 있는 경우(동영상)
+                                    if(res.result[i][12] != null){
+                                        src = '/uploadedGroupFiles/thumbnails/'+res.result[i][12];
+                                        // 동영상재생 아이콘 보이게/안보이게
+                                    }
+
+                                    // 프로필사진
+                                    var profile = '../images/sample_image.jpg'; //기본
 
                                     if(res.result[i][11] != null){
                                         profile = '../uploadedFiles/'+res.result[i][11];
@@ -423,8 +431,12 @@
                                                             +'<div class="toge_photo">'
                                                                 +'<ul class="single">'
                                                                     +'<li class="p_lst">'
-                                                                        +'<a><img class="thumbnail load_success" src="..'+res.result[i][1]+'/'+res.result[i][2]
-                                                                            +'" style="width: 100%; height:100%;"><span class="shadow_in"></span></a></li></ul></div></div></div>'
+                                                                        +'<a><img class="thumbnail load_success" src="..'+src
+                                                                            +'" style="width: 100%; height:100%;"><span class="shadow_in"></span>';
+                                                    if(res.result[i][12] != null){
+                                                        story_content +='<span class="ic_video size_84">동영상</span>';
+                                                    }
+                                                    story_content += '</a></li></ul></div></div></div>'
                                                     +'<div class="toge_comment">'
                                                         +'<ul id="comm_list_'+timelineSn+'" class="comm_list"></ul>'
                                                         +'<div class="comm_input over_write on_write">'
