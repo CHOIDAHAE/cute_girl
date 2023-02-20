@@ -1323,6 +1323,14 @@ button .tx {
     background-repeat: no-repeat;
 }
 
+.ic_video.t_photo {
+    position: absolute;
+    margin: 11% 0 0 -17%;
+    width: 56px;
+    height: 56px;
+    background-position: 0 -287px;
+}
+
 .toge_comment {
     padding: 14px 20px 8px 19px;
     border-top: 1px solid #e7e7e7;
