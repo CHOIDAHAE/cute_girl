@@ -127,6 +127,9 @@
 			AND TAD.USE_AT = #{useAt}
 			AND TAD.FRST_REGISTER_SN = #{emplyrSn}
 			AND (ORGINL_FILE_EXTSN_NM LIKE #{fileType}||'%' OR #{fileType} = 'ALL')
+		<if test='recentAt == "Y"'>
+			AND TAD.LAST_UPDT_DT > SYSDATE - 20
+		</if>
 		<if test='orderBy == "fileMg"'>
 			AND FILE_MG > 5000
 			ORDER BY TAD.FILE_MG DESC

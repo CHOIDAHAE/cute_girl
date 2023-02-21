@@ -834,3 +834,7 @@ fieldset {
 .int_box{
 	display:block
 }
+
+.checkIdDup{
+	margin-left : 5px;
+}

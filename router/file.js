@@ -147,10 +147,18 @@ module.exports = function(app){
 			}
 			conn = con;
 
+			var fileType = req.body.fileType;
+			var recentAt = "N";
+			if(fileType == "recentAt"){
+				fileType = null;
+				recentAt = "Y";
+			}
+
 			var param = {
 				emplyrSn : req.body.emplyrSn
 				, useAt : req.body.useAt
-				, fileType : req.body.fileType
+				, fileType : fileType
+				, recentAt : recentAt
 				, orderBy : req.body.orderBy
 			}
 
@@ -223,8 +231,6 @@ module.exports = function(app){
 		var AtchfileSnArr = req.body.AtchfileSn;
 		var emplyrSn = req.session.user.emplyrSn;
 
-		console.log(AtchfileSnArr);
-		
 		oracledb.getConnection({
 			user:dbConfig.user,
 			password:dbConfig.password,
@@ -248,8 +254,6 @@ module.exports = function(app){
 					, atchfileSn : AtchfileSnArr[i]
 				}
 
-				console.log(param);
-	
 				let query = mybatisMapper.getStatement('IndexDAO','updateFileUseAt', param, format);
 				conn.execute(query, function(err,result){
 					console.log("IndexDAO.updateFileUseAt");
