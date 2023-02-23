@@ -16,6 +16,7 @@ mybatisMapper.createMapper( ['./mapper/IndexDAO_SQL.xml']);
 //const fs = require('fs');
 const ffmpeg = require("fluent-ffmpeg");
 const ffprobe = require('ffprobe');
+var mime = require('mime');
 
 var storage = multer.diskStorage({
 	destination(req, file, cb){
@@ -54,6 +55,46 @@ module.exports = function(app){
 	// 그룹 업로드 팝업(iframe)
 	app.get('/groupUpload', function(req, res, next){
 		res.render('./group/groupUpload', {"popType" : req.query.popType});
+	})
+
+	
+	// 다운로드
+	app.get("/download/:fileSn", function(req, res){
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(download)",err);
+			} else {
+				console.log("Oracle Connection success(download)");
+			}
+			conn = con;
+
+			//query format
+			let format = {language: 'sql', indent: ''};
+		
+			//그룹 일련번호 조회
+			let selectGroupSn = mybatisMapper.getStatement('GroupDAO','picturesForUpload', {"fileSn":req.params.fileSn, "emplyrSn":req.session.user.emplyrSn}, format);
+			
+			//쿼리문 실행
+			conn.execute(selectGroupSn, function(err,result){
+				if(err){
+					console.log("selectGroupSn failed :", err);
+					res.json("F");
+					return;
+				}
+				
+				var savePath = result.rows[0][1];
+				var origFileNm = result.rows[0][2];
+
+				var file = './public/'+savePath + '/' + origFileNm;
+				
+				res.download(file, origFileNm );
+			});
+		});
 	})
 
   	// 새 모임 추가하기

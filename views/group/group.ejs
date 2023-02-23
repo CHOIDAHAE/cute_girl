@@ -57,6 +57,7 @@
 				} else if (part == "picture"){
 					$('#story_part').hide();
 					$('#picture_part').show();
+                    $('#photo_wrap').hide();
 				}
 			}
             
@@ -416,11 +417,12 @@
                                     // 파일 타임라인
                                     if(type == 'file'){
                                         photo_content += '<li class="groupPicture">'
-                                        +'<div class="item"><a onclick="photo_big(\"'+src+'");"><img src="..'+src
-                                        +'" style="width:100%; height:100%;"></a></div></li>\n'
+                                        +'<div class="item"><a onclick="photo_big(\''+src+'\','+timelineSn+','+fileSn+')"><img src="..'+src
+                                        +'" style="width:100%; height:100%;">';
                                         if(res.result[i][12] != null){
                                             photo_content += '<span class="ic_video t_photo">동영상</span>';
                                         }
+                                        photo_content +='</a></div></li>\n';
 
                                         story_content += 
                                             '<div class="together_section"><div class="toge_story_list">'
@@ -487,18 +489,57 @@
             };
 
             // 사진 크게보기
-            function photo_big(fileSn){
-                console.log(fileSn);
+            function photo_big(src, timelineSn, fileSn){                
+                $('#photo_big_src').val(src);
+                $('#photo_big_timelineSn').val(timelineSn);
+                $('#photo_big_fileSn').val(fileSn);
+
+                // 상세보기에 사진 세팅
+                $("#photo_detail").attr("src", src);
+                
+                // 썸네일 폴더에서 가지고온다(=영상)
+                if(src.split('/')[2]=='thumbnails'){
+                    var img = '<span class="ic_video t_video">동영상</span>';
+                    $('#photo_detail_video').html(img);
+                } else {
+                    $('#photo_detail_video').html('');
+                }
                 // 사진 띄우기
                 $('#photo_wrap').show();
             };
 
             // 사진 크게보기 나가기 버튼
             function photo_big_close(){
-                // var groupSn = $('#groupSn').val();
+                $('#photo_big_timelineSn').val('');
+                $('#photo_big_fileSn').val('');
+
                 // 사진 띄우기
                 $('#photo_wrap').hide();
             };
+
+            // 내 앨범에 저장(개발중)
+            function saveMyAlbum(){
+                alert('개발중');
+                var timelineSn = $('#photo_big_timelineSn').val();
+                var fileSn = $('#photo_big_fileSn').val();
+                var src =  $('#photo_big_src').val();
+                
+            };
+
+            // 파일 다운로드
+            function fn_fileDownload(){
+                var fileSn = $('#photo_big_fileSn').val();
+
+                location.href='download/'+fileSn;
+            }
+
+            // 파일상세조회의 삭제(=타임라인 삭제)
+            function fn_deleteDetail(){
+                var timelineSn = $('#photo_big_timelineSn').val();
+                var fileSn = $('#photo_big_fileSn').val();
+
+                delete_timeline(timelineSn, fileSn);
+            }
 
             // 댓글달기 버튼 활성화/비활성화
             function button_control(timelineSn){
@@ -642,12 +683,15 @@
                                 // 타임라인 재조회
                                 groupPictureList();
 
+                                // 사진 상세조회 창 닫기
+                                photo_big_close();
+
                             } else if(res.Status == "F"){
-                                alert("댓글삭제 도중 오류가 발생하였습니다.");
+                                alert("타임라인 삭제 도중 오류가 발생하였습니다.");
                             }
                         },
                         error:function(e){
-                            alert("댓글삭제 도중 오류가 발생하였습니다.(ajax에러)");
+                            alert("타임라인 삭제 도중 오류가 발생하였습니다.(ajax에러)");
                         }
                     })
                 } else {
@@ -1036,10 +1080,29 @@
                                 </ul>
                                 <ul id="toge_photo_list" class="toge_photo_list"></ul>
                                 <div class="reload_area"></div>
-                                <div id="photo_wrap" class="photo_wrap">
-                                    <i id="detail_x-icon" class="fa-solid fa-x detail_x-icon" onclick="photo_big_close()"></i>
+                                <div id="photo_wrap" class="photo_wrap">                                    
+                                    <div class="v_header">
+                                    <i id="detail_x-icon" class="fa-solid fa-arrow-left detail_x-icon" onclick="photo_big_close()"></i>
+                                    <input type="hidden" id="photo_big_timelineSn" name="photo_big_timelineSn" value="">
+                                    <input type="hidden" id="photo_big_fileSn" name="photo_big_timelineSn" value="">
+                                    <input type="hidden" id="photo_big_src" name="photo_big_timelineSn" value="">
+                                        <div class="v_task">
+                                            <ul class="v_task_lst">
+                                                <li class="v_ta_alb">
+                                                    <a title="내 앨범에 저장" onclick="saveMyAlbum()"><i class="fa-solid fa-file-import detail_icon"></i></a>
+                                                </li>
+                                                <li class="v_ta_dw">
+                                                    <a title="다운로드" onclick="fn_fileDownload()"class="cursor_pointer"><i class="fa-solid fa-cloud-arrow-down detail_icon"></i></a>
+                                                </li>
+                                                <li class="v_ta_del">
+                                                    <a title="삭제" onclick="fn_deleteDetail()"><i class="fa-solid fa-trash detail_icon"></i></a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                     <div class="photo_detail">
-                                        <img src="https://nphotogroup-phinf.pstatic.net/20221123_287/4555084_1669186348727S1Vmq_PNG/group_cover_a.png?type=ff120_120" width="80%">
+                                        <img src="" id="photo_detail" width="80%" height="80%" style="position: absolute; top: 10%; left: 10%;">
+                                        <div id="photo_detail_video"></div>
                                     </div>
                                 </div>
                             </div>
