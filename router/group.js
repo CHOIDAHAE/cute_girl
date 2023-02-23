@@ -1221,21 +1221,13 @@ module.exports = function(app){
 		});	
 	})
 
+	// 내 앨범으로 저장(파일 업로드필요)
+	app.post("/saveToMyAlbum", function(req, res){
+
+	});
+
 	/****************** 비디오 썸네일 ******************/
-	//app.post("/thumbnail", (req, res) => {
 	function savethumbnail(data){
-		/*
-		let thumbsFilePath = "";
-		let fileDuration = "";
-	  
-		 // 비디오 전체 정보 추출
-		ffmpeg.ffprobe(data.url, function (err, metadata) {
-			//console.dir(metadata);
-		  	//console.log(metadata.format.duration);
-	  
-		  fileDuration = metadata.format.duration;
-		});
-	    */
 		//썸네일 생성, 비디오 길이 추출
 		ffmpeg(data.url)
 		  .on("filenames", function (filenames) {
