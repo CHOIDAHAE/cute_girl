@@ -177,7 +177,7 @@ module.exports = function(app){
 						var ORGINL_FILE_NM = req.file.filename;
 						//var FILE_EXTSN_NM = fileExt[fileExt.length - 1];
 						//var FILE_MG = req.file.size;
-						//var ORGINL_FILE_EXTSN_NM = req.file.mimetype;
+						var ORGINL_FILE_EXTSN_NM = req.file.mimetype;
 
 						//fileSn 찾아오기
 						let selectFileSn = mybatisMapper.getStatement('GroupDAO','selectFileSn', {"groupSn"	: groupSn}, format);
@@ -191,11 +191,12 @@ module.exports = function(app){
 							}
 						
 							var param = {
-								"emplyrSn"		: req.session.user.emplyrSn,
+								"emplyrSn"		: req.body.emplyrSn,
 								"fileSn"		: result.rows[0][0],
 								"mainFileAt"	: 'Y',
 								"groupSn"		: groupSn,
 								"orgFileNm"		: ORGINL_FILE_NM,
+								"orgFileExtsnNm": ORGINL_FILE_EXTSN_NM,
 								"filePath"		: FILE_STRE_COURS_NM
 							}
 
