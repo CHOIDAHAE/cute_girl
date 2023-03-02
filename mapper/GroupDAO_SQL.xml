@@ -65,8 +65,10 @@
 		FROM
 			TCM_EMPLYRBY_GROUP_AUTHOR
 		WHERE
-			EMPLYR_SN		= #{emplyrSn}
-		AND AUTHOR_GROUP_SN	= #{groupSn}
+			AUTHOR_GROUP_SN	= #{groupSn}
+		<if test='emplyrSn != "" && emplyrSn != null'>
+		AND EMPLYR_SN		= #{emplyrSn}
+		</if>
 	</select>
 
 	<!-- 내 그룹 리스트 -->
