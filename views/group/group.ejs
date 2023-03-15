@@ -123,19 +123,20 @@
 
                             $(".member_cnt").text(length);
                             $("#member_groupNm").text(groupNm);
-                                                        
+                            
                             for( var i=0; i<length; i++){
                                 if(res.result[i][4] != null){
                                     profile = '../uploadedFiles/'+res.result[i][4];
                                 }
 
-                                member += '<li class=""><a><span class="thumb">'
+                                member += '<li><a><span class="thumb">'
                                     +'<img src="'+profile+'" width="45" height="45" alt=""></span>'
                                     +'<span class="tit">'+res.result[0][2]+'&nbsp;</span>'
                                     +'</a></li>'
                             }
 
                             $('.my_layer_list').html(member);
+                            $('.my_layer_list').css('height', (length/3)*85);
                             
 						} else if(res.Status == "F"){
 							alert("멤버 목록 조회 중 오류가 발생하였습니다.");
@@ -799,7 +800,7 @@
                                         <a id="member" class="my_task member" title="멤버" onclick="member()">
                                             <i class="fa-solid fa-user-group"></i>
                                         </a>
-                                        <div id="member_modal" class="my_layer member_width" style="display: none;">
+                                        <div id="member_modal" class="my_layer member_width" style="right:50px; top:64px; display: none;">
                                             <h4 class="my_tit">
                                                 <span class="tit_txt">
                                                     <span class="num">(<em><span class="member_cnt"></span></em>/10명)</span>
@@ -814,41 +815,6 @@
                                         <a id="setting" class="my_task set" title="설정" onclick="setting()">
                                             <i class="fa-solid fa-gear"></i>
                                         </a>
-                                        <div id="setting_modal" class="my_layer my_layer_set" style="display: none;">
-                                            <h4 class="my_tit">
-                                                <span class="tit_txt">
-                                                    <span class="txt">모임설정</span>
-                                                </span>
-                                            </h4>
-                                            <div class="ly_toge_content">
-                                                <div class="toge_add_group">
-                                                    <div class="toge_add_thum">
-                                                        <span class="add_pho add_pho_v2">
-                                                            <img id="preview" src="" height="120" width="120">
-                                                            <span class="add_photo_ic">사진</span>
-                                                            <label for="fileUpload">
-                                                                <span class="blind">사진 선택</span>
-                                                            </label>
-                                                            <input type="file" id="fileUpload" name="groupImg" onchange="readURL(this);">
-                                                        </span>
-                                                    </div>
-                                                    <div class="toge_add_edit">
-                                                        <div class="edit_box" onclick="edit_box()">
-                                                            <span class="title_text" id="title_text"><span class="groupNm"></span><em class="ic_edit"></em></span>
-                                                            <span class="input_title" id="input_title" style="display: none;">
-                                                                <textarea maxlength="15" id="textarea" onkeypress="chkEnter()"></textarea>
-                                                                <span class="line"></span>
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                    <a class="btn_mem_out" onclick="outGroupBtn()">모임 나가기</a>
-                                                </div>
-                                                <div class="btn_area">
-                                                    <button type="button" onclick="okBtnClick()"><strong>확인</strong></button>
-                                                    <button type="button" onclick="cancelBtn('setting')">취소</button>
-                                                </div>
-                                            </div>
-                                        </div>
                                         <div class="out_modal_wrap" style="display: none; user-select: none; line-height: 716px; transition: line-height 100ms ease-out 0s;">
                                             <div class="dh_layer" style="min-width: 300px;">
                                                 <div class="type_c">
@@ -894,6 +860,41 @@
                                 </div>
                             </div>
                         </div>
+                        <div id="setting_modal" class="my_layer my_layer_set" style=" right:77px; top:80px; display: none;">
+                            <h4 class="my_tit">
+                                <span class="tit_txt">
+                                    <span class="txt">모임설정</span>
+                                </span>
+                            </h4>
+                            <div class="ly_toge_content">
+                                <div class="toge_add_group">
+                                    <div class="toge_add_thum">
+                                        <span class="add_pho add_pho_v2">
+                                            <img id="preview" src="" height="120" width="120">
+                                            <span class="add_photo_ic">사진</span>
+                                            <label for="fileUpload">
+                                                <span class="blind">사진 선택</span>
+                                            </label>
+                                            <input type="file" id="fileUpload" name="groupImg" onchange="readURL(this);">
+                                        </span>
+                                    </div>
+                                    <div class="toge_add_edit">
+                                        <div class="edit_box" onclick="edit_box()">
+                                            <span class="title_text" id="title_text"><span class="groupNm"></span><em class="ic_edit"></em></span>
+                                            <span class="input_title" id="input_title" style="display: none;">
+                                                <textarea maxlength="15" id="textarea" onkeypress="chkEnter()"></textarea>
+                                                <span class="line"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <a class="btn_mem_out" onclick="outGroupBtn()">모임 나가기</a>
+                                </div>
+                                <div class="btn_area">
+                                    <button type="button" onclick="okBtnClick()"><strong>확인</strong></button>
+                                    <button type="button" onclick="cancelBtn('setting')">취소</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <!-- 이야기 -->
                     <div id="story_part" class="content_box _together_scroll">
@@ -903,7 +904,7 @@
                             </p>
                             <div class="together_wrap">
                                 <div class="together_area" style="opacity: 1;">
-                                    <div class="together_group">
+                                    <div class="together_group">                                       
                                         <div id="together_layout" class="together_layout">
                                             <div class="together_section writing">
                                                 <div class="toge_story_list">

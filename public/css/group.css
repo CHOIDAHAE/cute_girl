@@ -34,7 +34,7 @@ img, fieldset {
     flex: 0 0 auto;
     display: block;
     position: relative;
-    z-index: 10;
+    z-index: 20;
     background-color: #fff;
     padding: 0 25px;
 }
@@ -190,7 +190,7 @@ a, .rightmenu_layer {
 
 .together_section.writing {
     padding-bottom: 20px;
-    /*z-index: 30;*/
+    z-index: 30;
 }
 
 .together_section {
@@ -715,12 +715,12 @@ a.more_invitation .more_invitation_bg{
 
 /*************모달창(설정)***************/
 .my_layer_set {
-    width: 350px;
-    right: -34px;
+    /*width: 350px;
+    right: -34px;*/
 }
 
 .my_layer {
-    display: none;
+    /*display: none;*/
     position: absolute;
     right: 8px;
     top: 64px;
@@ -757,7 +757,8 @@ a.more_invitation .more_invitation_bg{
 }
 
 .member_width {
-    width: 265px;
+    /*width: 265px;*/
+    width: 300px;
 }
 
 .my_layer .my_tit .tit_txt {

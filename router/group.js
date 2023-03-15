@@ -48,15 +48,19 @@ var upload = multer({
 
 module.exports = function(app){
 	// 그룹화면
-	app.get('/group', function(req, res, next){
+	app.get('/group', function(req, res){
         res.render('./group/group');
     })
 	
 	// 그룹 업로드 팝업(iframe)
-	app.get('/groupUpload', function(req, res, next){
+	app.get('/groupUpload', function(req, res){
 		res.render('./group/groupUpload', {"popType" : req.query.popType});
 	})
 
+	// 멤버 모달 팝업(iframe)
+	app.get('/memberModal', function(req, res){
+		res.render('./group/memberModal');
+	})
 	
 	// 다운로드
 	app.get("/download/:fileSn", function(req, res){
@@ -1185,6 +1189,7 @@ module.exports = function(app){
 
 			// 그룹파일에 insert
 			let groupJoinAt = mybatisMapper.getStatement('GroupDAO','groupJoinAt', data, format);
+			let groupMemberCnt = mybatisMapper.getStatement('GroupDAO','groupJoinAt', {"groupSn" : req.body.groupSn, "emplyrSn" : ""}, format);
 			let insertPersonalGroup = mybatisMapper.getStatement('GroupDAO','insertPersonalGroup', data, format);
 			let insertTimeline = mybatisMapper.getStatement('GroupDAO','insertTimeline', data, format);
 				
@@ -1198,24 +1203,39 @@ module.exports = function(app){
 				if(result.rows[0][0] > 0){	// 이미 가입되어 있는 경우
 					res.json({"Status":"A"});
 				} else {	// 신규가입인 경우
-					conn.execute(insertPersonalGroup, function(err,result){
+					conn.execute(groupMemberCnt, function(err,groupMemberCntresult){
 						if(err){
-							console.log("insertPersonalGroup failed :", err);
+							console.log("groupMemberCnt failed :", err);
 							res.json({"Status":"F"});
 							return;
 						}
+						console.log(groupMemberCnt);
+						console.log(groupMemberCntresult.rows[0][0]);
+						// 10명 초과 시 가입 불가능
+						if (groupMemberCntresult.rows[0][0] > 10){
+							res.json({"Status":"O"});
+							return;
+						}
 
-						// 타임라인 테이블에도 추가 (type:join)
-						conn.execute(insertTimeline, function(err,result){
+						conn.execute(insertPersonalGroup, function(err,result){
 							if(err){
-								console.log("insertTimeline failed :", err);
+								console.log("insertPersonalGroup failed :", err);
 								res.json({"Status":"F"});
 								return;
 							}
-							
-							res.json({"Status":"S", "result" : result.rows});
-							conn.commit();
-						});						
+
+							// 타임라인 테이블에도 추가 (type:join)
+							conn.execute(insertTimeline, function(err,result){
+								if(err){
+									console.log("insertTimeline failed :", err);
+									res.json({"Status":"F"});
+									return;
+								}
+								
+								res.json({"Status":"S", "result" : result.rows});
+								conn.commit();
+							});						
+						});
 					});
 				}
 			});
