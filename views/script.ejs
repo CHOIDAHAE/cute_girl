@@ -498,7 +498,7 @@
 			// 그룹 초대로 들어온 경우는 이미 화면 켤때부터 groupSn(groupSn_invite)이 존재
 			function invitedGroup(){
 				if ($('#groupSn_invite').val() != "" && $('#groupSn_invite').val() != null){
-					// 바로 그룹 가입이 되고 , 그룹 화면이 켜져야됨
+					// 바로 그룹 가입이 되고 , 그룹 화면 표출
 					var emplyrSn = $('#emplyrSn').val();
 					var groupSn = $('#groupSn_invite').val();
 
@@ -509,14 +509,14 @@
 						dataType : "JSON",
 						data : {"emplyrSn" : emplyrSn, "groupSn" : groupSn, "useAt" : "Y"},
 						success:function(result){
-							console.log(result.Status);
+							console.log('Status: '+result.Status);
 							if(result.Status == "S"){
 								mygroup();			// 메뉴에 새로 추가된 그룹 표출
 								openMenu('group');	// 방금 추가된 그룹을 선택
 							} else if(result.Status == "A") {
 								alert("이미 가입되어있는 그룹입니다.");
 								document.location.href="/index";
-							} else if(result.Status == "OverCnt") {
+							} else if(result.Status == "O") {
 								alert("10명초과 시 그룹에 가입 할 수 없습니다.");
 							} else {
 								alert("초대된 그룹에 가입하는 도중 오류가 발생하였습니다.(ajax성공)");

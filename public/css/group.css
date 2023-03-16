@@ -190,7 +190,7 @@ a, .rightmenu_layer {
 
 .together_section.writing {
     padding-bottom: 20px;
-    z-index: 30;
+    /*z-index: 30;*/
 }
 
 .together_section {

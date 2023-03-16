@@ -166,7 +166,7 @@
 	</delete>
 
 	<!-- 그룹의 인원수 조회 -->
-	<select id="selecteGoupCnt">
+	<select id="selecteGroupCnt">
 		SELECT
 			COUNT(EMPLYR_SN) CNT
 		FROM

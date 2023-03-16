@@ -291,8 +291,7 @@ module.exports = function(app){
 
 			//내 그룹 조회
 			let selectedGouprSn = mybatisMapper.getStatement('GroupDAO','selectedGouprSn', param, format);
-			console.log("**********************************");
-			console.log(selectedGouprSn);
+			
 			//쿼리문 실행
 			conn.execute(selectedGouprSn, function(err,result){
 				if(err){
@@ -346,7 +345,7 @@ module.exports = function(app){
 			// 사용자가 올린 모든 파일 삭제
 			let deleteGroupFile = mybatisMapper.getStatement('GroupDAO','deleteGroupFile', param, format);
 			// 그룹 인원수 카운트
-			let selecteGoupCnt = mybatisMapper.getStatement('GroupDAO','selecteGoupCnt', param, format);
+			let selecteGroupCnt = mybatisMapper.getStatement('GroupDAO','selecteGroupCnt', param, format);
 			// 마지막 사용자인 경우 그룹삭제
 			let updateGroupUseAt = mybatisMapper.getStatement('GroupDAO','updateGroupUseAt', param, format);
 			// 리더여부 조회
@@ -361,17 +360,18 @@ module.exports = function(app){
 					res.json({"Status":"F"});
 					return;
 				}
-
+				
 				//그룹 인원수 카운트
-				conn.execute(selecteGoupCnt, function(err,result){
+				conn.execute(selecteGroupCnt, function(err,result){
 					if(err){
-						console.log("selecteGoupCnt failed :", err);
+						console.log("selecteGroupCnt failed :", err);
 						res.json({"Status":"F"});
 						return;
 					}
+					console.log(selecteGroupCnt);
 					
 					var cnt = result.rows[0][0];
-					
+					console.log(cnt);
 					// 마지막 탈퇴자
 					if(cnt == 1){
 						console.log('마지막 탈퇴자');
@@ -478,6 +478,45 @@ module.exports = function(app){
 			});			
 		});
 	}
+
+	// 선택된 그룹 일련번호
+	app.post("/selecteGroupCnt", function(req, res, next){
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(selecteGroupCnt)",err);
+			} else {
+				//console.log("Oracle Connection success(selecteGroupCnt)");
+			}
+			conn = con;
+
+			//query format
+			let format = {language: 'sql', indent: ''};
+
+			var param = {
+				"groupSn"	: req.body.groupSn
+			}
+
+			//내 그룹 조회
+			let selecteGroupCnt = mybatisMapper.getStatement('GroupDAO','selecteGroupCnt', param, format);
+			
+			//쿼리문 실행
+			conn.execute(selecteGroupCnt, function(err,result){
+				if(err){
+					console.log("selecteGroupCnt failed :", err);
+					res.json({"Status":"F"});
+					return;
+				}
+				
+				// 그룹정보 넘기기
+				res.json({"Status":"S", "result": result});
+			});
+		});
+	})
 
 	/******************그룹 파일 업로드******************/
 	// 그룹명 수정, 그룹 대표사진 수정
@@ -1163,6 +1202,7 @@ module.exports = function(app){
 
 	// 초대한 그룹에 가입하기
 	app.post("/insertInvitedGroup", function(req, res){
+		console.log('/insertInvitedGroup');
 		oracledb.getConnection({
 			user:dbConfig.user,
 			password:dbConfig.password,
@@ -1182,14 +1222,14 @@ module.exports = function(app){
 			var data = {
 						"groupSn"	: req.body.groupSn,
 						"emplyrSn"	: req.body.emplyrSn,
-						"type"		: 'join',
-						"fileSn"	: '',
-						"timelineDc": ''
+						"type"		: "join",
+						"fileSn"	: "",
+						"timelineDc": ""
 					};
 
 			// 그룹파일에 insert
 			let groupJoinAt = mybatisMapper.getStatement('GroupDAO','groupJoinAt', data, format);
-			let groupMemberCnt = mybatisMapper.getStatement('GroupDAO','groupJoinAt', {"groupSn" : req.body.groupSn, "emplyrSn" : ""}, format);
+			let selecteGroupCnt = mybatisMapper.getStatement('GroupDAO','selecteGroupCnt', {"groupSn" : req.body.groupSn}, format);
 			let insertPersonalGroup = mybatisMapper.getStatement('GroupDAO','insertPersonalGroup', data, format);
 			let insertTimeline = mybatisMapper.getStatement('GroupDAO','insertTimeline', data, format);
 				
@@ -1203,16 +1243,16 @@ module.exports = function(app){
 				if(result.rows[0][0] > 0){	// 이미 가입되어 있는 경우
 					res.json({"Status":"A"});
 				} else {	// 신규가입인 경우
-					conn.execute(groupMemberCnt, function(err,groupMemberCntresult){
+					
+					conn.execute(selecteGroupCnt, function(err,groupMemberCntresult){
 						if(err){
-							console.log("groupMemberCnt failed :", err);
+							console.log("selecteGroupCnt failed :", err);
 							res.json({"Status":"F"});
 							return;
 						}
-						console.log(groupMemberCnt);
-						console.log(groupMemberCntresult.rows[0][0]);
+						console.log('cnt: '+groupMemberCntresult.rows[0][0]);
 						// 10명 초과 시 가입 불가능
-						if (groupMemberCntresult.rows[0][0] > 10){
+						if (groupMemberCntresult.rows[0][0] >= 10){
 							res.json({"Status":"O"});
 							return;
 						}
