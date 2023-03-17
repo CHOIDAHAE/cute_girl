@@ -1250,7 +1250,7 @@ module.exports = function(app){
 							res.json({"Status":"F"});
 							return;
 						}
-						console.log('cnt: '+groupMemberCntresult.rows[0][0]);
+						
 						// 10명 초과 시 가입 불가능
 						if (groupMemberCntresult.rows[0][0] >= 10){
 							res.json({"Status":"O"});

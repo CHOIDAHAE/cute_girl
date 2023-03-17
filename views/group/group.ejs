@@ -519,13 +519,19 @@
                 $('#photo_wrap').hide();
             };
 
-            // 내 앨범에 저장(개발중)
+            // 내 앨범에 저장
             function saveMyAlbum(){
-                alert('개발중');
                 var timelineSn = $('#photo_big_timelineSn').val();
                 var fileSn = $('#photo_big_fileSn').val();
-                var src =  $('#photo_big_src').val();
-                
+                var src =  $('#photo_big_src').val();                
+
+                $.ajax({
+					url : "/saveMyAlbum",
+					type : "POST",
+					dataType : "JSON", //"JSON"
+					data : {"groupSn" : groupSn},
+					success:function(res){
+                    })
             };
 
             // 파일 다운로드
@@ -1041,41 +1047,6 @@
                                                 </div>
                                             </div>
                                             <div class="reload_area"></div>
-                                        </div>
-                                    </div>
-                                    <div class="together_right">
-                                        <div class="invitation_side_wrap">
-                                            <div class="invitation_side fixed">
-                                                <div class="invitation_box">
-                                                    <h3 class="invitation_tit"><strong>'<em><span class="groupNm">TEST</span></em>'&nbsp;</strong>멤버와 이 사진을 함께 보세요.</h3>
-                                                    <div>
-                                                        <div>
-                                                            <h4><a href="#/photo/all">최근 올린 사진 (5)</a></h4>
-                                                            <a class="more_invitation" href="#/photo/all">
-                                                                <ul class="invitation_photo layout5">
-                                                                    <li class="item grid0">
-                                                                        <img src="https://thumb1.photo.mybox.naver.com/3472495530733629005?type=ff52_43&amp;nocache=5236120301">
-                                                                    </li>
-                                                                    <li class="item grid1">
-                                                                        <img src="https://thumb1.photo.mybox.naver.com/3472495530733427532?type=ff52_43&amp;nocache=4636120301">
-                                                                    </li>
-                                                                    <li class="item grid2">
-                                                                        <img src="https://thumb1.photo.mybox.naver.com/3472495530724238924?type=ff52_43&amp;nocache=4636120301">
-                                                                    </li>
-                                                                    <li class="item grid3">
-                                                                        <img src="https://thumb1.photo.mybox.naver.com/3472495530717829453?type=ff52_43&amp;nocache=4036120301">
-                                                                    </li>
-                                                                    <li class="item grid4">
-                                                                        <img src="https://thumb1.photo.mybox.naver.com/3472495530717653836?type=ff104_87&amp;nocache=3836120301">
-                                                                    </li>
-                                                                </ul>
-                                                                <span class="more_invitation_bg">더보기</span>
-                                                            </a>
-                                                            <a class="invi_btn"><span class="i_m"></span>함께보기</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
