@@ -224,10 +224,6 @@ a, .rightmenu_layer {
     white-space: nowrap;
 }
 
-.notification .thum.none_thum {
-    background: #c6c6c6 url(https://ssl.pstatic.net/static/pwe/ndrive/new_ndrive/thum_progress_comm.png) no-repeat 0 0;
-}
-
 .notification .thum {
     position: absolute;
     left: 20px;
@@ -238,10 +234,6 @@ a, .rightmenu_layer {
     display: inline-block;
     border-radius: 19px;
     vertical-align: middle;
-}
-
-.notification .thum.none_thum img {
-    display: none;
 }
 
 .notification .noti_text {

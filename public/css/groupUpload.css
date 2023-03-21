@@ -478,7 +478,6 @@ a {
 
 .ly_task > ul .selected a {
     position: relative;
-    padding-right: 35px;
     font-weight: 700;
     color: #4078ff;
 }

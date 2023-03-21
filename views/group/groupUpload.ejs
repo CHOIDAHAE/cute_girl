@@ -24,8 +24,18 @@
 			};
 
             function myPictureList_type(type){
+                // selected 클래스
+                $('.forSelected').toggleClass('selected');
+
                 var popType = $("#popType").val();
                 myPictureList(type, popType);
+            }
+
+            // 조회 년도 선택
+            function toggleSelected(e){
+                // selected 클래스
+                $('.yearSelected').removeClass('selected');
+                $(e).addClass('selected');
             }
 
 			// 내사진 보기(업로드용)
@@ -246,10 +256,10 @@
                                         </label>
                                     </span>
                                     <ul class="task_tab_list gubun_list">
-                                        <li class="selected">
+                                        <li class="selected forSelected">
                                             <a onclick="myPictureList_type('ALL')">전체</a>
                                         </li>
-                                        <li class="gubun_list">
+                                        <li class="gubun_list forSelected">
                                             <a onclick="myPictureList_type('BK')">즐겨찾기</a>
                                         </li>
                                     </ul>
@@ -269,13 +279,13 @@
                                 <a class="btn_sort" title="전체 년도" onclick="sortBtn();" >전체 년도</a>
                                 <div id="ly_task" class="ly_task" style="display : none;">
                                     <ul class="sort_list">
-                                        <li class="selected">
+                                        <li class="yearSelected selected" onclick="toggleSelected(this)">
                                             <a>전체</a>
                                         </li>
-                                        <li class=""><a>2023년</a></li>
-                                        <li class=""><a>2022년</a></li>
-                                        <li class=""><a>2021년</a></li>
-                                        <li class=""><a>2020년</a></li>
+                                        <li class="yearSelected" onclick="toggleSelected(this);"><a>2023년</a></li>
+                                        <li class="yearSelected" onclick="toggleSelected(this);"><a>2022년</a></li>
+                                        <li class="yearSelected" onclick="toggleSelected(this);"><a>2021년</a></li>
+                                        <li class="yearSelected" onclick="toggleSelected(this);"><a>2020년</a></li>
                                     </ul>
                                 </div>
                             </div>

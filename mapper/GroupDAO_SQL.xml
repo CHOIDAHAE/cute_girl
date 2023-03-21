@@ -87,7 +87,7 @@
     </select>
 
 	<!-- 멤버 -->
-	<select id="selectGropMember">
+	<select id="selectGroupMember">
 		SELECT
 			GRP.AUTHOR_GROUP_SN,
 			EMP.EMPLYR_SN,
@@ -402,7 +402,7 @@
 		SELECT
 			GRP.AUTHOR_GROUP_NM,
 			TO_CHAR(GRP.FRST_REGIST_DT, 'YYYY.MM.DD') FRST_REGIST_DT,
-			EMP.EMPLYR_NM || '(' || EMP.EMPLYR_ID || ')' LEADER_NM,
+			EMP.EMPLYR_NM LEADER_NM,
 			EMP.NICKNAME
 		FROM
 			TCM_AUTHOR_GROUP GRP,
@@ -501,7 +501,7 @@
 			PIC.FILE_SN,
 			PIC.FILE_STRE_COURS_NM,
 			PIC.ORGINL_FILE_NM,
-			EMP.EMPLYR_NM || '(' || EMP.EMPLYR_ID || ')',
+			EMP.EMPLYR_NM,
 			to_char(LINE.FRST_REGIST_DT, 'FMmm')			
 			|| '월' ||
 			to_char(LINE.FRST_REGIST_DT, 'FMdd')

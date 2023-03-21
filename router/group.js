@@ -539,10 +539,6 @@ module.exports = function(app){
 
 			// 파일이 있으면 파일 업로드 및 제목 수정
 			if(typeof req.file != 'undefined'){
-				/*
-				// uploads 폴더 없으면 생성
-				*/
-
 				if(req.fileValidationError != null){
 					res.json("exe");
 					return;
@@ -719,7 +715,7 @@ module.exports = function(app){
 			//쿼리문 실행
 			conn.execute(selectTopPicture, function(err,result){
 				if(err){
-					console.log("selectedGroupInfo failed :", err);
+					console.log("selectTopPicture failed :", err);
 					res.json({"Status":"F"});
 					return;
 				}
@@ -754,7 +750,7 @@ module.exports = function(app){
 	})
 
 	// 가입멤버 조회
-	app.post("/selectGropMember", function(req, res){
+	app.post("/selectGroupMember", function(req, res){
 		oracledb.getConnection({
 			user:dbConfig.user,
 			password:dbConfig.password,
@@ -762,9 +758,9 @@ module.exports = function(app){
 			externalAuth  : dbConfig.externalAuth
 		},function(err,con){
 			if(err){
-				console.log("Oracle Connection failed(selectGropMember)",err);
+				console.log("Oracle Connection failed(selectGroupMember)",err);
 			} else {
-				// console.log("Oracle Connection success(selectGropMember)");
+				// console.log("Oracle Connection success(selectGroupMember)");
 			}
 			conn = con;
 
@@ -775,12 +771,12 @@ module.exports = function(app){
 				"groupSn"	: req.body.groupSn
 			};
 
-			let selectGropMember = mybatisMapper.getStatement('GroupDAO','selectGropMember', param, format);
+			let selectGroupMember = mybatisMapper.getStatement('GroupDAO','selectGroupMember', param, format);
 
 			//쿼리문 실행
-			conn.execute(selectGropMember, function(err,result){
+			conn.execute(selectGroupMember, function(err,result){
 				if(err){
-					console.log("selectGropMember failed :", err);
+					console.log("selectGroupMember failed :", err);
 					res.json({"Status":"F"});
 					return;
 				}

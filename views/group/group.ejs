@@ -110,7 +110,7 @@
                 var groupSn = $('#groupSn').val();
 
                 $.ajax({
-					url : "/selectGropMember",
+					url : "/selectGroupMember",
 					type : "POST",
 					dataType : "JSON", //"JSON"
 					data : {"groupSn" : groupSn},
@@ -311,8 +311,10 @@
 
             // 사진/오디오 아이콘 클릭
             function upload(data){
-                document.getElementById('iframe_story').src = "/groupUpload?popType="+data;
-                document.getElementById('iframe_story').setAttribute('style', 'visibility:visible;');
+                    document.getElementById('iframe_story').src = "/groupUpload?popType="+data;
+                    document.getElementById('iframe_photo').src = "/groupUpload?popType="+data;
+                    document.getElementById('iframe_story').setAttribute('style', 'visibility:visible;');                    
+                    document.getElementById('iframe_photo').setAttribute('style', 'visibility:visible;');
             }
 
             // 이야기 올리기 버튼 활성화/비활성화
