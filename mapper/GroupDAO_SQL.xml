@@ -482,12 +482,17 @@
 			ATCHMNFL_SN,
 			FILE_STRE_COURS_NM,
 			ORGINL_FILE_NM,
-			ORGINL_FILE_EXTSN_NM
+			ORGINL_FILE_EXTSN_NM,
+			FILE_EXTSN_NM,
+			FILE_NM,
+			FILE_MG
 		FROM
 			TCM_ATCHMNFL_DETAIL
 		WHERE
 			ATCHMNFL_SN  = #{fileSn}
-		AND FRST_REGISTER_SN = #{emplyrSn}
+		<if test='emplyrSn != "" && emplyrSn != null'>
+			AND FRST_REGISTER_SN = #{emplyrSn}
+		</if>
 	</select>
 
 	<!-- 그룹사진 조회 -->

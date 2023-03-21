@@ -523,15 +523,25 @@
             function saveMyAlbum(){
                 var timelineSn = $('#photo_big_timelineSn').val();
                 var fileSn = $('#photo_big_fileSn').val();
-                var src =  $('#photo_big_src').val();                
+                var src =  $('#photo_big_src').val();
+                var emplyrSn = $('#emplyrSn').val();
 
                 $.ajax({
 					url : "/saveMyAlbum",
 					type : "POST",
 					dataType : "JSON", //"JSON"
-					data : {"groupSn" : groupSn},
+					data : {"fileSn" : fileSn, "emplyrSn" : emplyrSn},
 					success:function(res){
-                    })
+                        if(res.Status == "S"){
+							alert("저장이 완료되었습니다.");
+                        } else if(res.Status == "F"){
+                            alert("내 앨범에 저장 도중 오류가 발생하였습니다.");
+                        }
+					},
+					error:function(e){
+						alert("내 앨범에 저장 도중 오류가 발생하였습니다.(ajax에러)");
+					}
+                })
             };
 
             // 파일 다운로드

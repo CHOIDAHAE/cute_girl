@@ -1,6 +1,6 @@
 var multer = require('multer');
-
 var crypto = require('crypto');
+var ncp = require('ncp').ncp;
 
 var oracledb = require("oracledb");
 var dbConfig = require("./dbConfig.js");
@@ -1202,7 +1202,6 @@ module.exports = function(app){
 
 	// 초대한 그룹에 가입하기
 	app.post("/insertInvitedGroup", function(req, res){
-		console.log('/insertInvitedGroup');
 		oracledb.getConnection({
 			user:dbConfig.user,
 			password:dbConfig.password,
@@ -1282,9 +1281,96 @@ module.exports = function(app){
 		});	
 	})
 
-	// 내 앨범으로 저장(파일 업로드필요)
-	app.post("/saveToMyAlbum", function(req, res){
+	// 내 앨범으로 저장(서버 파일 복제)
+	app.post("/saveMyAlbum", function(req, res){
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(saveMyAlbum)",err);
+			} else {
+				//console.log("Oracle Connection success(saveMyAlbum)");
+			}
+			conn = con;
 
+			//query format
+			let format = {language: 'sql', indent: ''};
+
+			var data = {
+						"fileSn"	: req.body.fileSn,
+						"emplyrSn"	: ""
+					};
+
+			// 선택한 이미지 정보
+			let picturesForUpload = mybatisMapper.getStatement('GroupDAO','picturesForUpload', data, format);
+				
+			conn.execute(picturesForUpload, function(err, pictureResult){
+				if(err){
+					console.log("picturesForUpload failed :", err);
+					res.json({"Status":"F"});
+					return;
+				}
+
+				var FILE_STRE_COURS_NM = pictureResult.rows[0][1];
+				var ORGINL_FILE_NM = pictureResult.rows[0][2];
+				var RANDOM_STR = Math.random().toString(16).substring(2,8);
+				var DEST_FILE_NM = ORGINL_FILE_NM.split('.')[0] + '_' + RANDOM_STR + '.'+ ORGINL_FILE_NM.split('.')[1];
+
+				//파일 일련번호
+				var selectFileSn = mybatisMapper.getStatement('IndexDAO','selectFileSn', data, format);
+				
+				conn.execute(selectFileSn, function(err, fileSnResult){
+					if(err){
+						console.log("selectFileSn failed :", err);
+						res.json({"Status":"F"});
+						return;
+					}
+					
+					var param = {
+						filePath : FILE_STRE_COURS_NM,
+						fileNm : '_복사본',
+						orgFileNm : DEST_FILE_NM,
+						fileExtsnNm : pictureResult.rows[0][4],
+						fileSize : pictureResult.rows[0][6],
+						emplyrSn : req.body.emplyrSn,
+						fileSn : fileSnResult.rows[0][0],
+						orgFileExtsnNm : pictureResult.rows[0][3]
+					}
+	
+					//파일 등록
+					var insertAtchFileDtl = mybatisMapper.getStatement('IndexDAO','insertAtchFileDtl', param, format);
+	
+					conn.execute(insertAtchFileDtl, function(err, result){
+						if(err){
+							console.log("insertAtchFileDtl failed :", err);
+							res.json({"Status":"F"});
+							return;
+						}
+						
+						// 서버 이미지 파일 복제
+						ncp.limit = 16;
+						var source='./public'+FILE_STRE_COURS_NM+'/'+ORGINL_FILE_NM;
+						var destination = './public'+FILE_STRE_COURS_NM+'/'+DEST_FILE_NM;
+						
+						const options = {
+								clobber : false
+							};
+				
+						ncp(source, destination, options, function (err) {
+							if (err) {
+								return console.error(err);
+							}
+							console.log('saveMyAlbum complete!');
+						});
+						
+						res.json({"Status":"S"});
+					})
+				})
+			})
+		});
 	});
 
 	/****************** 비디오 썸네일 ******************/
