@@ -557,7 +557,7 @@ module.exports = function(app){
 				var ORGINL_FILE_NM = req.file.filename;
 				//var FILE_EXTSN_NM = fileExt[fileExt.length - 1];
 				//var FILE_MG = req.file.size;
-				//var ORGINL_FILE_EXTSN_NM = req.file.mimetype;
+				var ORGINL_FILE_EXTSN_NM = req.file.mimetype;
 
 				var fileParam = {
 								"groupSn"	: req.body.groupSn,
@@ -592,6 +592,7 @@ module.exports = function(app){
 							"groupSn"		: req.body.groupSn,
 							"data"			: req.body.data,
 							"orgFileNm"		: ORGINL_FILE_NM,
+							"orgFileExtsnNm": ORGINL_FILE_EXTSN_NM,
 							"filePath"		: FILE_STRE_COURS_NM
 						}
 
@@ -763,7 +764,7 @@ module.exports = function(app){
 			if(err){
 				console.log("Oracle Connection failed(selectGropMember)",err);
 			} else {
-				console.log("Oracle Connection success(selectGropMember)");
+				// console.log("Oracle Connection success(selectGropMember)");
 			}
 			conn = con;
 
