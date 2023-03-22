@@ -805,10 +805,17 @@ module.exports = function(app){
 			//query format
 			let format = {language: 'sql', indent: ''};
 			
+			var year = req.body.year;
+			if(typeof year == 'undefined' || year == '0'){
+				year = '';
+			}
+
 			var param = {
 				"emplyrSn"	: req.body.emplyrSn,
 				"groupSn"	: req.body.groupSn,
-				"popType"	: req.body.popType
+				"popType"	: req.body.popType,
+				"year"		: year,
+				"orderBy"	: req.body.orderBy
 			};
 
 			let query = "";
@@ -1369,6 +1376,45 @@ module.exports = function(app){
 			})
 		});
 	});
+
+	// 내 사진여부 체크
+	app.post("/chkMyphoto", function(req, res){
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(chkMyphoto)",err);
+			} else {
+				//console.log("Oracle Connection success(chkMyphoto)");
+			}
+			conn = con;
+
+			//query format
+			let format = {language: 'sql', indent: ''};
+
+			let param = {
+						"emplyrSn"	: req.body.emplyrSn,
+						"fileSn"	: req.body.fileSn
+						};
+
+			// 그룹사진 조회
+			let chkMyphoto = mybatisMapper.getStatement('GroupDAO','chkMyphoto', param, format);
+			
+			conn.execute(chkMyphoto, function(err,result){
+				if(err){
+					console.log("chkMyphoto failed :", err);
+					res.json({"Status":"F"});
+					return;
+				}
+				
+				res.json({"Status":"S", "result" : result.rows});
+				//conn.commit();
+			});
+		});	
+	})
 
 	/****************** 비디오 썸네일 ******************/
 	function savethumbnail(data){

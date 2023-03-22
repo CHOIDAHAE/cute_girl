@@ -451,6 +451,15 @@
 			TAD.FRST_REGISTER_SN = #{emplyrSn}
 		AND TAD.USE_AT = 'Y'
 		AND TAD.ORGINL_FILE_EXTSN_NM LIKE #{popType}||'%'
+		<if test='year != "" && year != null'>
+			AND TO_CHAR(TAD.FRST_REGIST_DT, 'YYYY') = #{year}
+		</if>
+		<if test='orderBy == "asc"'>
+			ORDER BY TAD.FRST_REGIST_DT ASC
+		</if>
+		<if test='orderBy == "desc"'>
+			ORDER BY TAD.FRST_REGIST_DT DESC
+		</if>
 	</select>
 
 	<!-- 그룹 업로드용 즐겨찾기 사진 조회 -->
@@ -464,7 +473,7 @@
 				FROM TCM_GROUP_FILE TGF
 				WHERE TAD.FRST_REGISTER_SN = TGF.EMPLYR_SN
 				AND TAD.ATCHMNFL_SN = TGF.FILE_SN
-				AND TGF.AUTHOR_GROUP_SN = '11'
+				AND TGF.AUTHOR_GROUP_SN = #{groupSn}
 				AND MAIN_FILE_AT = 'N') AUTHOR_GROUP_SN
 		FROM
 			TCM_ATCHMNFL_DETAIL TAD,
@@ -474,6 +483,15 @@
 		AND	TAD.FRST_REGISTER_SN = #{emplyrSn}
 		AND TAD.USE_AT = 'Y'
 		AND TAD.ORGINL_FILE_EXTSN_NM LIKE #{popType}||'%'
+		<if test='year != "" && year != null'>
+			AND TO_CHAR(TAD.FRST_REGIST_DT, 'YYYY') = #{year}
+		</if>
+		<if test='orderBy == "asc"'>
+			ORDER BY TAD.FRST_REGIST_DT ASC
+		</if>
+		<if test='orderBy == "desc"'>
+			ORDER BY TAD.FRST_REGIST_DT DESC
+		</if>
 	</select>
 
 	<!-- 그룹 업로드 시 해당 파일의 상세조회 -->
@@ -534,4 +552,14 @@
 		ORDER BY LINE.TIMELINE_SN DESC
 	</select>
 
+	<!-- 내 사진여부 체크 -->
+	<select id="chkMyphoto">
+		SELECT
+			NVL(MIN('Y'), 'N') YN
+		FROM
+			TCM_ATCHMNFL_DETAIL
+		WHERE
+			ATCHMNFL_SN			= #{fileSn} 
+		AND FRST_REGISTER_SN	= #{emplyrSn}
+	</select>
 </mapper>

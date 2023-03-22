@@ -31,7 +31,8 @@
                 selectedGroupInfo();
 
 				// 스토리/사진 탭 
-				changePart('story');
+                $('#story_part').show();
+				$('#picture_part').hide();
 
                 // 타임라인 조회
                 groupPictureList();
@@ -51,6 +52,8 @@
             
             // 스토리/사진 탭
 			function changePart(part){
+                $('.menuSelected').toggleClass('selected');
+
 				if(part == "story"){
 					$('#story_part').show();
 					$('#picture_part').hide();
@@ -493,7 +496,34 @@
             };
 
             // 사진 크게보기
-            function photo_big(src, timelineSn, fileSn){                
+            function photo_big(src, timelineSn, fileSn){
+                // 내가 업로드한 사진인지 확인
+                var emplyrSn = $('#emplyrSn').val();
+                
+                $.ajax({
+					url : "/chkMyphoto",
+					type : "POST",
+					dataType : "JSON", //"JSON"
+					data : {"fileSn" : fileSn, "emplyrSn" : emplyrSn},
+					success:function(res){
+                        console.log(res.result);
+						if(res.Status == "S"){
+                            if(res.result == "Y"){
+                                // 휴지통 아이콘 유지
+                                $('.v_ta_del').show();
+                            } else if (res.result == "N") {
+                                // 휴지통 아이콘 삭제
+                                $('.v_ta_del').hide();
+                            }
+						} else if(res.Status == "F"){
+							alert('오류가 발생하였습니다.');
+						}						                        
+					},
+					error:function(e){
+						alert("오류가 발생하였습니다.(ajax에러)");
+					}
+				})
+
                 $('#photo_big_src').val(src);
                 $('#photo_big_timelineSn').val(timelineSn);
                 $('#photo_big_fileSn').val(fileSn);
@@ -827,8 +857,8 @@
                             <div class="task_together">
                                 <div class="together_menu">
                                     <ul>
-                                        <li class="menu_story" onclick="changePart('story')">이야기</li>
-                                        <li class="menu_photo" onclick="changePart('picture')">사진/동영상</li>
+                                        <li class="menu_story menuSelected selected" onclick="changePart('story')"><a>이야기</a></li>
+                                        <li class="menu_photo menuSelected" onclick="changePart('picture')"><a>사진/동영상</a></li>
                                     </ul>
                                 </div>
                                 <div class="together_my">
@@ -947,7 +977,8 @@
                                             <div class="together_section writing">
                                                 <div class="toge_story_list">
                                                     <div class="user_thum">
-                                                        <img id="smallPicture" width="55" height="55" src="../uploadedGroupFiles/1673919149954_ë³ìì 3276 íë°±.jpg">
+                                                        <!--<img id="smallPicture" width="55" height="55" src="../uploadedGroupFiles/1673919149954_ë³ìì 3276 íë°±.jpg">-->
+                                                        <img id="smallPicture" width="55" height="55" src="">
                                                     </div>
                                                     <div class="together_writing">
                                                         <div class="write_box">
@@ -1083,7 +1114,7 @@
                                     </li>
                                 </ul>
                                 <ul id="toge_photo_list" class="toge_photo_list"></ul>
-                                <div class="reload_area"></div>
+                                <!--<div class="reload_area"></div>-->
                                 <div id="photo_wrap" class="photo_wrap">                                    
                                     <div class="v_header">
                                     <i id="detail_x-icon" class="fa-solid fa-arrow-left detail_x-icon" onclick="photo_big_close()"></i>

@@ -74,6 +74,7 @@ img, fieldset {
 
 .together_menu li.selected a {
     color: #000;
+    border-bottom: 4px solid #60a9f1;
 }
 
 .together_menu li a {
@@ -87,6 +88,7 @@ img, fieldset {
     text-decoration: none;
     text-align: center;
     font-weight: bold;
+    background-color: white;
 }
 
 .menu_story, .menu_photo {

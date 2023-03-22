@@ -7,8 +7,7 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" />
 		<script>
             $(document).ready(function(){
-                var popType = $("#popType").val();
-                myPictureList('ALL', popType);    // 업로드용 내 모든사진 조회
+                myPictureList();    // 업로드용 내 모든사진 조회
 			});
 			
 			// 닫기 버튼
@@ -23,27 +22,53 @@
 				$('#ly_task').toggle();
 			};
 
+            // 전체조회 or 즐겨찾기
             function myPictureList_type(type){
                 // selected 클래스
                 $('.forSelected').toggleClass('selected');
 
-                var popType = $("#popType").val();
-                myPictureList(type, popType);
+                // ALL(전체조회)/BK(즐겨찾기) listType에 저장
+                $('#listType').val(type);
+
+                // 조회
+                myPictureList();
             }
 
-            // 조회 년도 선택
-            function toggleSelected(e){
+            // 년도별 조회
+            function yearSelected(e){
                 // selected 클래스
                 $('.yearSelected').removeClass('selected');
                 $(e).addClass('selected');
+
+                var year = $(e).val();
+                $('#year').val(year);
+
+                // 조회
+                myPictureList();
             }
 
-			// 내사진 보기(업로드용)
-			function myPictureList(type, popType){
+            // 정렬 선택
+            function orderSelected(e){
+                var orderBy = $(e).val();
+                $('#orderBy').val(orderBy);
+
+                myPictureList();
+            }
+
+			// 업로드용 사진 조회
+			function myPictureList(){
                 /*
                 type    : ALL(전체조회)/BK(즐겨찾기)
-                popType : image(사진업로드)
+                popType : image, video, audio
+                year    : 선택한 년도
+                orderBy : 선택한 정렬기준
                 */
+
+                var type = $('#listType').val();
+                var popType = $("#popType").val();
+                var year = $("#year").val();
+                var orderBy = $("#orderBy").val();
+
 				var emplyrSn = window.parent.$('#emplyrSn').val();
                 var groupSn = window.parent.$('#groupSn').val();
 				
@@ -51,7 +76,7 @@
 					url : "/myPictureList",
 					type : "POST",
 					dataType : "JSON", //"JSON"
-					data : {"emplyrSn" : emplyrSn, "groupSn" : groupSn, "type" : type, "popType" : popType},
+					data : {"emplyrSn" : emplyrSn, "groupSn" : groupSn, "type" : type, "popType" : popType, "year" : year, "orderBy" : orderBy},
 					success:function(res){
 						if(res.Status == "S"){
 							document.getElementById("total_length").value = res.result.length;
@@ -192,8 +217,13 @@
 		</script>
 	</head>
     <body style="user-select: none; -ms-user-select: none">
-		<input type="hidden" id="total_length" name="chk_length" value="" />
+		<!-- hidden part -->
+        <input type="hidden" id="total_length" name="chk_length" value="" />
         <input type="hidden" id="popType" name="popType" value= <%= popType %> >
+        <input type="hidden" id="listType" name="listType" value= "ALL" >
+        <input type="hidden" id="year" name="year" value= "" >
+        <input type="hidden" id="orderBy" name="orderBy" value= "asc" >
+
         <div id="mini_wrap" class="mini_wrap">
             <div class="mini_header">
                 <h1 class="mi_logo">
@@ -208,42 +238,6 @@
                 </div>
             </div>
             <div class="mini_container">
-                <!--
-                <div id="nav_lnb" style="width: 190px;">
-                    <div class="nav_lnb_scroll" style="display: block;">
-                        <div class="lnb_area">
-                            <div class="lnb_box">
-                                <ul class="lnb_list">
-                                    <li class="">
-                                        <a class="menu_item">사진
-                                            <span class="ico_fold">
-                                                <span class="blind">목록 닫기</span>
-                                            </span>
-                                        </a>
-                                        <div class="foldable_menu">
-                                            <ul class="lnb_list photo">
-                                                <li class="">
-                                                    <a class="all menu_item">모든 사진</a>
-                                                </li>
-                                                <li class="selected">
-                                                    <a class="album menu_item">앨범</a>
-                                                </li>
-                                                <li class="">
-                                                    <a class="folder menu_item">사진 폴더</a>
-                                                </li>
-                                                <li class="">
-                                                    <a class="special menu_item">스토리</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="split_bar " style="z-index: 100; cursor: pointer;"></div>
-                </div>
-                <div id="content" style="left: 190px;">-->
                 <div id="content">
                     <div class="task_area_wrap">
                         <div class="task_area">
@@ -279,23 +273,23 @@
                                 <a class="btn_sort" title="전체 년도" onclick="sortBtn();" >전체 년도</a>
                                 <div id="ly_task" class="ly_task" style="display : none;">
                                     <ul class="sort_list">
-                                        <li class="yearSelected selected" onclick="toggleSelected(this)">
+                                        <li class="yearSelected selected" onclick="yearSelected(this)" value="">
                                             <a>전체</a>
                                         </li>
-                                        <li class="yearSelected" onclick="toggleSelected(this);"><a>2023년</a></li>
-                                        <li class="yearSelected" onclick="toggleSelected(this);"><a>2022년</a></li>
-                                        <li class="yearSelected" onclick="toggleSelected(this);"><a>2021년</a></li>
-                                        <li class="yearSelected" onclick="toggleSelected(this);"><a>2020년</a></li>
+                                        <li class="yearSelected" onclick="yearSelected(this);" value="2023"><a>2023년</a></li>
+                                        <li class="yearSelected" onclick="yearSelected(this);" value="2022"><a>2022년</a></li>
+                                        <li class="yearSelected" onclick="yearSelected(this);" value="2021"><a>2021년</a></li>
+                                        <li class="yearSelected" onclick="yearSelected(this);" value="2020"><a>2020년</a></li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
                         <div class="array_cover">
                             <div class="array_cover">
-                                <select name="orderBy" id="sortSbBox" class="listSbBox">
+                                <select name="orderBy" id="sortSbBox" class="listSbBox" onchange="orderSelected(this);">
                                   <option value="asc" selected="selected">등록일-최신순</option>
                                   <option value="desc">등록일-오래된순</option>
-                                  <option value="name">이름순</option>
+                                  <!--<option value="name">이름순</option>-->
                                 </select>
                             </div>
                         </div>
@@ -305,7 +299,7 @@
                             <div class="lst_pt"><div class="all_photo_list_area year">
                                 <div class="all_photo_box">
                                     <h4 class="photo_title">
-                                        <input type="checkbox" class="chk" id="2022">
+                                        <!--<input type="checkbox" class="chk" id="2022">-->
                                         <label for="2022" class="chk_label">2022년</label>
                                     </h4>
                                     <div style="margin-bottom: 10px;">
