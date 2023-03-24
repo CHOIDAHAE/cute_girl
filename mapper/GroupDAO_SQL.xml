@@ -562,4 +562,16 @@
 			ATCHMNFL_SN			= #{fileSn} 
 		AND FRST_REGISTER_SN	= #{emplyrSn}
 	</select>
+
+	<!-- 년도 조회하기 -->
+	<select id="selectYear">
+		SELECT
+			TO_CHAR(FRST_REGIST_DT, 'YYYY') YEAR
+		FROM
+			TCM_ATCHMNFL_DETAIL
+		WHERE
+			FRST_REGISTER_SN = #{emplyrSn}
+		GROUP BY TO_CHAR(FRST_REGIST_DT, 'YYYY')
+		ORDER BY YEAR
+	</select>
 </mapper>
