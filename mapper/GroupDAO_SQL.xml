@@ -564,14 +564,15 @@
 	</select>
 
 	<!-- 년도 조회하기 -->
-	<select id="selectYear">
+	<select id="photoYears">
 		SELECT
 			TO_CHAR(FRST_REGIST_DT, 'YYYY') YEAR
 		FROM
 			TCM_ATCHMNFL_DETAIL
 		WHERE
 			FRST_REGISTER_SN = #{emplyrSn}
+		AND ORGINL_FILE_EXTSN_NM LIKE #{popType}||'%'
 		GROUP BY TO_CHAR(FRST_REGIST_DT, 'YYYY')
-		ORDER BY YEAR
-	</select>
+		ORDER BY YEAR DESC
+	</select>	
 </mapper>

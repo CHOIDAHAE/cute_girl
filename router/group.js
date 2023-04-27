@@ -1416,6 +1416,39 @@ module.exports = function(app){
 		});	
 	})
 
+	// 년도 선택이 해당사용자의 게시글에 매핑되는 년도까지만 조회되도록 수정
+	app.post("/photoYears", function(req, res){
+		oracledb.getConnection({
+			user:dbConfig.user,
+			password:dbConfig.password,
+			connectString:dbConfig.connectString,
+			externalAuth  : dbConfig.externalAuth
+		},function(err,con){
+			if(err){
+				console.log("Oracle Connection failed(photoYears)",err);
+			}
+			conn = con;
+
+			//query format
+			let format = {language: 'sql', indent: ''};			
+
+			// 그룹사진 조회
+			let photoYears = mybatisMapper.getStatement('GroupDAO','photoYears', {"emplyrSn" : req.body.emplyrSn, "popType"	: req.body.popType}, format);
+			
+			conn.execute(photoYears, function(err,result){
+				if(err){
+					console.log("photoYears failed :", err);
+					res.json({"Status":"F"});
+					return;
+				}
+				
+				res.json({"Status":"S", "result" : result.rows});
+				//conn.commit();
+			});
+		});	
+	})
+
+
 	/****************** 비디오 썸네일 ******************/
 	function savethumbnail(data){
 		//썸네일 생성, 비디오 길이 추출

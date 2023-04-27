@@ -8,6 +8,7 @@
 		<script>
             $(document).ready(function(){
                 myPictureList();    // 업로드용 내 모든사진 조회
+                photoYears(); // 있는 년도만큼 조회되도록 수정
 			});
 			
 			// 닫기 버튼
@@ -214,6 +215,36 @@
                 window.parent.document.getElementById('iframe_story').setAttribute('style', 'visibility:hidden;');
                 window.top.document.location.href="/";
             };
+
+            // 년도 선택이 해당사용자의 게시글에 매핑되는 년도만 조회되도록 수정
+            function photoYears(){
+                var emplyrSn = window.parent.$('#emplyrSn').val();
+                var popType = $("#popType").val();
+
+                $.ajax({
+					url : "/photoYears",
+					type : "POST",
+					dataType : "JSON", //"JSON"
+					data : {"emplyrSn" : emplyrSn, "popType" : popType},
+					success:function(res){
+						if(res.Status == "S"){
+                            content = '<li class="yearSelected selected" onclick="yearSelected(this)" value=""><a>전체</a></li>';
+
+                            for(var i=0; i<res.result.length; i++){
+                                content += '<li class="yearSelected" onclick="yearSelected(this);" value="'+res.result[i][0]+'"><a>'+res.result[i][0]+'년</a></li>';
+                            }
+
+                            $('#sort_list').html(content);
+
+						} else if(res.Status == "F"){
+							alert('년도조회 도중 오류가 발생하였습니다.');
+						}						                        
+					},
+					error:function(e){
+						alert("년도조회 도중 오류가 발생하였습니다.(ajax에러)");
+					}
+				})
+            };
 		</script>
 	</head>
     <body style="user-select: none; -ms-user-select: none">
@@ -272,15 +303,7 @@
                             <div class="sort_cover open">
                                 <a class="btn_sort" title="전체 년도" onclick="sortBtn();" >전체 년도</a>
                                 <div id="ly_task" class="ly_task" style="display : none;">
-                                    <ul class="sort_list">
-                                        <li class="yearSelected selected" onclick="yearSelected(this)" value="">
-                                            <a>전체</a>
-                                        </li>
-                                        <li class="yearSelected" onclick="yearSelected(this);" value="2023"><a>2023년</a></li>
-                                        <li class="yearSelected" onclick="yearSelected(this);" value="2022"><a>2022년</a></li>
-                                        <li class="yearSelected" onclick="yearSelected(this);" value="2021"><a>2021년</a></li>
-                                        <li class="yearSelected" onclick="yearSelected(this);" value="2020"><a>2020년</a></li>
-                                    </ul>
+                                    <ul id="sort_list" class="sort_list"></ul>
                                 </div>
                             </div>
                         </div>
